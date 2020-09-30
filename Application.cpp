@@ -66,17 +66,18 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
     }
 
 	// Initialize the world matrix
-	XMStoreFloat4x4(&_world, XMMatrixIdentity());
+	XMStoreFloat4x4(&_world1, XMMatrixIdentity());
+	XMStoreFloat4x4(&_world2, XMMatrixIdentity());
 
     // Initialize the view matrix
-	XMVECTOR Eye = XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f);
+	XMVECTOR Eye = XMVectorSet(0.0f, 0.0f, -15.0f, 0.0f);
 	XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
 	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(Eye, At, Up));
 
     // Initialize the projection matrix
-	XMStoreFloat4x4(&_projection, XMMatrixPerspectiveFovLH(XM_PIDIV2, _WindowWidth / (FLOAT) _WindowHeight, 0.01f, 100.0f));
+	XMStoreFloat4x4(&_projection, XMMatrixPerspectiveFovLH(XM_PIDIV2, (FLOAT) _WindowWidth / (FLOAT) _WindowHeight, 0.01f, 100.0f));
 
 	return S_OK;
 }
@@ -402,7 +403,6 @@ HRESULT Application::InitDevice()
 void Application::Cleanup()
 {
     if (_pImmediateContext) _pImmediateContext->ClearState();
-
     if (_pConstantBuffer) _pConstantBuffer->Release();
     if (_pVertexBuffer) _pVertexBuffer->Release();
     if (_pIndexBuffer) _pIndexBuffer->Release();
@@ -438,41 +438,57 @@ void Application::Update()
     //
     // Animate the cube
     //
-	XMStoreFloat4x4(&_world, XMMatrixRotationY(t));
+    XMStoreFloat4x4(&_world1, XMMatrixRotationY(t));
+	XMStoreFloat4x4(&_world2, XMMatrixMultiply( XMMatrixRotationY(t * 1.5f), XMMatrixTranslation(10.0f, 0.0f, 0.0f) ) );
+	XMStoreFloat4x4(&_world3, XMMatrixMultiply( XMMatrixRotationY(t * 0.5f), XMMatrixTranslation(-10.0f, 0.0f, 0.0f) ) );
 }
 
 void Application::Draw()
 {
-    //
     // Clear the back buffer
-    //
     float ClearColor[4] = {0.0f, 0.125f, 0.3f, 1.0f}; // red,green,blue,alpha
     _pImmediateContext->ClearRenderTargetView(_pRenderTargetView, ClearColor);
 
-	XMMATRIX world = XMLoadFloat4x4(&_world);
+    // Setup shaders
+    _pImmediateContext->VSSetShader(_pVertexShader, nullptr, 0);
+    _pImmediateContext->VSSetConstantBuffers(0, 1, &_pConstantBuffer);
+    _pImmediateContext->PSSetConstantBuffers(0, 1, &_pConstantBuffer);
+    _pImmediateContext->PSSetShader(_pPixelShader, nullptr, 0);
+
+    // Matrices
+	XMMATRIX world1 = XMLoadFloat4x4(&_world1);
+	XMMATRIX world2 = XMLoadFloat4x4(&_world2);
+	XMMATRIX world3 = XMLoadFloat4x4(&_world3);
 	XMMATRIX view = XMLoadFloat4x4(&_view);
 	XMMATRIX projection = XMLoadFloat4x4(&_projection);
-    //
-    // Update variables
-    //
+    
+    // First cube
     ConstantBuffer cb;
-	cb.mWorld = XMMatrixTranspose(world);
+	cb.mWorld = XMMatrixTranspose(world1);
 	cb.mView = XMMatrixTranspose(view);
 	cb.mProjection = XMMatrixTranspose(projection);
 
 	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-
-    //
-    // Renders a triangle
-    //
-	_pImmediateContext->VSSetShader(_pVertexShader, nullptr, 0);
-	_pImmediateContext->VSSetConstantBuffers(0, 1, &_pConstantBuffer);
-    _pImmediateContext->PSSetConstantBuffers(0, 1, &_pConstantBuffer);
-	_pImmediateContext->PSSetShader(_pPixelShader, nullptr, 0);
 	_pImmediateContext->DrawIndexed(36, 0, 0);
 
-    //
+    // Second cube
+    ConstantBuffer cb2;
+    cb2.mWorld = XMMatrixTranspose(world2);
+    cb2.mView = XMMatrixTranspose(view);
+    cb2.mProjection = XMMatrixTranspose(projection);
+
+    _pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb2, 0, 0);
+    _pImmediateContext->DrawIndexed(36, 0, 0);
+
+    // Third cube
+    ConstantBuffer cb3;
+    cb3.mWorld = XMMatrixTranspose(world3);
+    cb3.mView = XMMatrixTranspose(view);
+    cb3.mProjection = XMMatrixTranspose(projection);
+
+    _pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb3, 0, 0);
+    _pImmediateContext->DrawIndexed(36, 0, 0);
+
     // Present our back buffer to our front buffer
-    //
     _pSwapChain->Present(0, 0);
 }
