@@ -68,6 +68,7 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
 	// Initialize the world matrix
 	XMStoreFloat4x4(&_world1, XMMatrixIdentity());
 	XMStoreFloat4x4(&_world2, XMMatrixIdentity());
+	XMStoreFloat4x4(&_world3, XMMatrixIdentity());
 
     // Initialize the view matrix
 	XMVECTOR Eye = XMVectorSet(0.0f, 0.0f, -15.0f, 0.0f);
@@ -427,7 +428,7 @@ void Application::Update()
     else
     {
         static DWORD dwTimeStart = 0;
-        DWORD dwTimeCur = GetTickCount();
+        DWORD dwTimeCur = GetTickCount64();
 
         if (dwTimeStart == 0)
             dwTimeStart = dwTimeCur;
@@ -435,12 +436,10 @@ void Application::Update()
         t = (dwTimeCur - dwTimeStart) / 1000.0f;
     }
 
-    //
     // Animate the cube
-    //
     XMStoreFloat4x4(&_world1, XMMatrixRotationY(t));
-	XMStoreFloat4x4(&_world2, XMMatrixMultiply( XMMatrixRotationY(t * 1.5f), XMMatrixTranslation(10.0f, 0.0f, 0.0f) ) );
-	XMStoreFloat4x4(&_world3, XMMatrixMultiply( XMMatrixRotationY(t * 0.5f), XMMatrixTranslation(-10.0f, 0.0f, 0.0f) ) );
+	XMStoreFloat4x4(&_world2, XMMatrixMultiply( XMMatrixRotationZ(t * 1.5f), XMMatrixTranslation(10.0f, 0.0f, 0.0f) ) );
+	XMStoreFloat4x4(&_world3, XMMatrixMultiply( XMMatrixRotationX(t * 0.5f), XMMatrixTranslation(-10.0f, 0.0f, 0.0f) ) );
 }
 
 void Application::Draw()
@@ -474,8 +473,8 @@ void Application::Draw()
     // Second cube
     ConstantBuffer cb2;
     cb2.mWorld = XMMatrixTranspose(world2);
-    cb2.mView = XMMatrixTranspose(view);
-    cb2.mProjection = XMMatrixTranspose(projection);
+    cb2.mView = cb.mView;
+    cb2.mProjection = cb.mProjection;
 
     _pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb2, 0, 0);
     _pImmediateContext->DrawIndexed(36, 0, 0);
@@ -483,8 +482,8 @@ void Application::Draw()
     // Third cube
     ConstantBuffer cb3;
     cb3.mWorld = XMMatrixTranspose(world3);
-    cb3.mView = XMMatrixTranspose(view);
-    cb3.mProjection = XMMatrixTranspose(projection);
+    cb3.mView = cb.mView;
+    cb3.mProjection = cb.mProjection;
 
     _pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb3, 0, 0);
     _pImmediateContext->DrawIndexed(36, 0, 0);
