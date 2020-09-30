@@ -157,12 +157,13 @@ HRESULT Application::InitVertexBuffer()
         { XMFLOAT3( 1.0f, 1.0f, 0.0f ), XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f ) },
         { XMFLOAT3( -1.0f, -1.0f, 0.0f ), XMFLOAT4( 0.0f, 1.0f, 1.0f, 1.0f ) },
         { XMFLOAT3( 1.0f, -1.0f, 0.0f ), XMFLOAT4( 1.0f, 0.0f, 0.0f, 1.0f ) },
+        { XMFLOAT3( 0.0f, 2.0f, 0.0f ), XMFLOAT4( 1.0f, 1.0f, 0.0f, 1.0f ) },
     };
 
     D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(SimpleVertex) * 4;
+    bd.ByteWidth = sizeof(SimpleVertex) * 5;
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -187,6 +188,7 @@ HRESULT Application::InitIndexBuffer()
     {
         0,1,2,
         2,1,3,
+        4,1,0
     };
 
 
@@ -195,7 +197,7 @@ HRESULT Application::InitIndexBuffer()
 	ZeroMemory(&bd, sizeof(bd));
 
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(WORD) * 6;
+    bd.ByteWidth = sizeof(WORD) * 9;
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -457,7 +459,7 @@ void Application::Draw()
 	_pImmediateContext->VSSetConstantBuffers(0, 1, &_pConstantBuffer);
     _pImmediateContext->PSSetConstantBuffers(0, 1, &_pConstantBuffer);
 	_pImmediateContext->PSSetShader(_pPixelShader, nullptr, 0);
-	_pImmediateContext->DrawIndexed(6, 0, 0);
+	_pImmediateContext->DrawIndexed(9, 0, 0);
 
     //
     // Present our back buffer to our front buffer
