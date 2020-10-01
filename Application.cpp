@@ -46,8 +46,11 @@ Application::~Application()
 	Cleanup();
 }
 
-HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow)
+HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow, int windowWidth, int windowHeight)
 {
+    this->_WindowWidth = windowWidth;
+    this->_WindowHeight = windowHeight;
+
     if (FAILED(InitWindow(hInstance, nCmdShow)))
 	{
         return E_FAIL;
@@ -155,20 +158,20 @@ HRESULT Application::InitVertexBuffer()
     // Create vertex buffer
     SimpleVertex vertices[] =
     {
-        { XMFLOAT3( -3.0f, 3.0f, -3.0f ),   XMFLOAT4( 0.0f, 0.0f, 1.0f, 1.0f ), },
-        { XMFLOAT3( 3.0f, 3.0f, -3.0f ),    XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f ), },
-        { XMFLOAT3( -3.0f, -3.0f, -3.0f ),  XMFLOAT4( 1.0f, 0.0f, 0.0f, 1.0f ), },
-        { XMFLOAT3( 3.0f, -3.0f, -3.0f ),   XMFLOAT4( 0.0f, 1.0f, 1.0f, 1.0f ), },
-        { XMFLOAT3( -3.0f, 3.0f, 3.0f ),    XMFLOAT4( 0.0f, 0.0f, 1.0f, 1.0f ), },
-        { XMFLOAT3( 3.0f, 3.0f, 3.0f ),     XMFLOAT4( 1.0f, 0.0f, 0.0f, 1.0f ), },
-        { XMFLOAT3( -3.0f, -3.0f, 3.0f ),   XMFLOAT4( 0.0f, 1.0f, 0.0f, 1.0f ), },
-        { XMFLOAT3( 3.0f, -3.0f, 3.0f ),    XMFLOAT4( 0.0f, 1.0f, 1.0f, 1.0f ), }
+        { { -3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
+        { {  3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+        { { -3.0f, -3.0f, -3.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
+        { {  3.0f, -3.0f, -3.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+        { { -3.0f,  3.0f,  3.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+        { {  3.0f,  3.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+        { { -3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+        { {  3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }
     };
 
     D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(SimpleVertex) * 8;
+    bd.ByteWidth = sizeof(SimpleVertex) * ARRAYSIZE( vertices );
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -209,7 +212,7 @@ HRESULT Application::InitIndexBuffer()
 	ZeroMemory(&bd, sizeof(bd));
 
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(WORD) * 36;
+    bd.ByteWidth = sizeof(WORD) * ARRAYSIZE( indices );
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
@@ -244,16 +247,36 @@ HRESULT Application::InitWindow(HINSTANCE hInstance, int nCmdShow)
         return E_FAIL;
 
     // Create window
+    int centerScreenX = GetSystemMetrics( SM_CXSCREEN ) / 2 - this->_WindowWidth / 2;
+    int centerScreenY = GetSystemMetrics( SM_CYSCREEN ) / 2 - this->_WindowHeight / 2;
+
+    RECT rc = { 0 };
+    rc.left = centerScreenX;
+    rc.top = centerScreenY;
+    rc.right = rc.left + this->_WindowWidth;
+    rc.bottom = rc.top + this->_WindowHeight;
+    AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
+
     _hInst = hInstance;
-    RECT rc = {0, 0, 640, 480};
-    AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-    _hWnd = CreateWindow(L"TutorialWindowClass", L"DX11 Framework", WS_OVERLAPPEDWINDOW,
-                         CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
-                         nullptr);
+    _hWnd = CreateWindow(
+        L"TutorialWindowClass",
+        L"DX11 Framework",
+        WS_OVERLAPPEDWINDOW,
+        rc.left,
+        rc.top,
+        rc.right - rc.left,
+        rc.bottom - rc.top,
+        nullptr,
+        nullptr,
+        hInstance,
+        nullptr
+    );
     if (!_hWnd)
 		return E_FAIL;
 
-    ShowWindow(_hWnd, nCmdShow);
+    ShowWindow( _hWnd, nCmdShow );
+    SetForegroundWindow( _hWnd );
+    SetFocus( _hWnd );
 
     return S_OK;
 }

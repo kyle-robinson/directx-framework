@@ -6,7 +6,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     Application theApp;
-	if (FAILED(theApp.Initialise(hInstance, nCmdShow)))
+	if (FAILED(theApp.Initialise(hInstance, nCmdShow, 800, 600)))
 	{
 		return -1;
 	}

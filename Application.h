@@ -61,7 +61,7 @@ public:
 	Application();
 	~Application();
 
-	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
+	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow, int windowWidth, int windowHeight);
 
 	void Update();
 	void Draw();
