@@ -463,12 +463,9 @@ void Application::Update()
     }
 
     // Animate the cube
-    for ( int i = 0; i < 3; i++ )
-    {
-        XMStoreFloat4x4(&_worldMatrices[i = 0], XMMatrixRotationY(t));
-        XMStoreFloat4x4(&_worldMatrices[i = 1], XMMatrixMultiply(XMMatrixRotationZ(t * 1.5f), XMMatrixTranslation(10.0f, 0.0f, 0.0f)));
-        XMStoreFloat4x4(&_worldMatrices[i = 2], XMMatrixMultiply(XMMatrixRotationX(t * 0.5f), XMMatrixTranslation(-10.0f, 0.0f, 0.0f)));
-    }
+    XMStoreFloat4x4(&_worldMatrices[0], XMMatrixRotationY(t));
+    XMStoreFloat4x4(&_worldMatrices[1], XMMatrixMultiply(XMMatrixRotationZ(t * 1.5f), XMMatrixTranslation(10.0f, 0.0f, 0.0f)));
+    XMStoreFloat4x4(&_worldMatrices[2], XMMatrixMultiply(XMMatrixRotationX(t * 0.5f), XMMatrixTranslation(-10.0f, 0.0f, 0.0f)));
 }
 
 void Application::Draw()
