@@ -1,5 +1,5 @@
 #pragma once
-
+#include <vector>
 #include <windows.h>
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
@@ -39,9 +39,7 @@ private:
 	ID3D11Buffer*           _pVertexBuffer;
 	ID3D11Buffer*           _pIndexBuffer;
 	ID3D11Buffer*           _pConstantBuffer;
-	XMFLOAT4X4              _world1;
-	XMFLOAT4X4              _world2;
-	XMFLOAT4X4              _world3;
+	std::vector<XMFLOAT4X4> _worldMatrices;
 	XMFLOAT4X4              _view;
 	XMFLOAT4X4              _projection;
 

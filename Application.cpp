@@ -69,9 +69,12 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow, int windowWid
     }
 
 	// Initialize the world matrix
-	XMStoreFloat4x4(&_world1, XMMatrixIdentity());
-	XMStoreFloat4x4(&_world2, XMMatrixIdentity());
-	XMStoreFloat4x4(&_world3, XMMatrixIdentity());
+    for (int i = 0; i < 3; i++)
+    {
+        XMFLOAT4X4 world;
+        XMStoreFloat4x4(&world, XMMatrixIdentity());
+        _worldMatrices.push_back(world);
+    }
 
     // Initialize the view matrix
 	XMVECTOR Eye = XMVectorSet(0.0f, 0.0f, -15.0f, 0.0f);
@@ -460,9 +463,12 @@ void Application::Update()
     }
 
     // Animate the cube
-    XMStoreFloat4x4(&_world1, XMMatrixRotationY(t));
-	XMStoreFloat4x4(&_world2, XMMatrixMultiply( XMMatrixRotationZ(t * 1.5f), XMMatrixTranslation(10.0f, 0.0f, 0.0f) ) );
-	XMStoreFloat4x4(&_world3, XMMatrixMultiply( XMMatrixRotationX(t * 0.5f), XMMatrixTranslation(-10.0f, 0.0f, 0.0f) ) );
+    for ( int i = 0; i < 3; i++ )
+    {
+        XMStoreFloat4x4(&_worldMatrices[i = 0], XMMatrixRotationY(t));
+        XMStoreFloat4x4(&_worldMatrices[i = 1], XMMatrixMultiply(XMMatrixRotationZ(t * 1.5f), XMMatrixTranslation(10.0f, 0.0f, 0.0f)));
+        XMStoreFloat4x4(&_worldMatrices[i = 2], XMMatrixMultiply(XMMatrixRotationX(t * 0.5f), XMMatrixTranslation(-10.0f, 0.0f, 0.0f)));
+    }
 }
 
 void Application::Draw()
@@ -478,38 +484,19 @@ void Application::Draw()
     _pImmediateContext->PSSetShader(_pPixelShader, nullptr, 0);
 
     // Matrices
-	XMMATRIX world1 = XMLoadFloat4x4(&_world1);
-	XMMATRIX world2 = XMLoadFloat4x4(&_world2);
-	XMMATRIX world3 = XMLoadFloat4x4(&_world3);
+    ConstantBuffer cb;
 	XMMATRIX view = XMLoadFloat4x4(&_view);
 	XMMATRIX projection = XMLoadFloat4x4(&_projection);
-    
-    // First cube
-    ConstantBuffer cb;
-	cb.mWorld = XMMatrixTranspose(world1);
-	cb.mView = XMMatrixTranspose(view);
-	cb.mProjection = XMMatrixTranspose(projection);
+    for ( int i = 0; i < 3; i++ )
+    {
+        XMMATRIX world = XMLoadFloat4x4(&_worldMatrices[i]);
+        cb.mWorld = XMMatrixTranspose(world);
+        cb.mView = XMMatrixTranspose(view);
+        cb.mProjection = XMMatrixTranspose(projection);
 
-	_pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
-	_pImmediateContext->DrawIndexed(36, 0, 0);
-
-    // Second cube
-    ConstantBuffer cb2;
-    cb2.mWorld = XMMatrixTranspose(world2);
-    cb2.mView = cb.mView;
-    cb2.mProjection = cb.mProjection;
-
-    _pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb2, 0, 0);
-    _pImmediateContext->DrawIndexed(36, 0, 0);
-
-    // Third cube
-    ConstantBuffer cb3;
-    cb3.mWorld = XMMatrixTranspose(world3);
-    cb3.mView = cb.mView;
-    cb3.mProjection = cb.mProjection;
-
-    _pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb3, 0, 0);
-    _pImmediateContext->DrawIndexed(36, 0, 0);
+        _pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+        _pImmediateContext->DrawIndexed(36, 0, 0);
+    }
 
     // Present our back buffer to our front buffer
     _pSwapChain->Present(0, 0);
