@@ -47,6 +47,9 @@
     <ClCompile Include="Keyboard.cpp">
       <Filter>Source\Keyboard</Filter>
     </ClCompile>
+    <ClCompile Include="StringConverter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
@@ -60,6 +63,9 @@
     </ClInclude>
     <ClInclude Include="Keyboard.h">
       <Filter>Headers\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="StringConverter.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
