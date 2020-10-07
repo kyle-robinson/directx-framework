@@ -50,6 +50,9 @@
     <ClCompile Include="StringConverter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="ErrorLogger.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
@@ -65,6 +68,9 @@
       <Filter>Headers\Keyboard</Filter>
     </ClInclude>
     <ClInclude Include="StringConverter.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorLogger.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
