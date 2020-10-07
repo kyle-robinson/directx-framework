@@ -492,9 +492,15 @@ void Application::Update()
     }
 
     // Animate the cube
-    XMStoreFloat4x4(&_worldMatrices[0], XMMatrixScaling(1.5f, 1.5f, 1.5f) * XMMatrixRotationZ(t * 0.5f));
-    XMStoreFloat4x4(&_worldMatrices[1], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(10.0f, 0.0f, 0.0f) * XMMatrixRotationY(t * 1.5f));
-    XMStoreFloat4x4(&_worldMatrices[2], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(15.0f, 0.0f, 0.0f) * XMMatrixRotationZ(t));
+    static float multiplier = 1.0f;
+    if ( GetAsyncKeyState( VK_UP ) )
+        multiplier += 0.1f;
+    if ( GetAsyncKeyState( VK_DOWN ) )
+        multiplier -= 0.1f;
+
+    XMStoreFloat4x4(&_worldMatrices[0], XMMatrixScaling(1.5f, 1.5f, 1.5f) * XMMatrixRotationZ(t * 0.5f * multiplier));
+    XMStoreFloat4x4(&_worldMatrices[1], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(10.0f, 0.0f, 0.0f) * XMMatrixRotationY(t * 1.5f * multiplier));
+    XMStoreFloat4x4(&_worldMatrices[2], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(15.0f, 0.0f, 0.0f) * XMMatrixRotationZ(t * multiplier));
 }
 
 void Application::Draw()

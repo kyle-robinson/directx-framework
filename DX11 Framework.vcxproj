@@ -395,6 +395,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="DX11 Framework.cpp" />
+    <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DX11 Framework.fx" />
@@ -402,6 +403,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <CLInclude Include="resource.h" />
+    <ClInclude Include="Vector3D.h" />
     <ResourceCompile Include="DX11 Framework.rc" />
   </ItemGroup>
   <ItemGroup>
