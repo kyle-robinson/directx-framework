@@ -1,4 +1,5 @@
 #include "Application.h"
+D3D11_RASTERIZER_DESC rasterizerDesc;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -370,6 +371,24 @@ HRESULT Application::InitDevice()
     if (FAILED(hr))
         return hr;
 
+    // create depth stencil
+    D3D11_TEXTURE2D_DESC depthStencilDesc;
+    ZeroMemory( &depthStencilDesc, sizeof( D3D11_TEXTURE2D_DESC ) );
+    depthStencilDesc.Width = this->_WindowWidth;
+    depthStencilDesc.Height = this->_WindowHeight;
+    depthStencilDesc.MipLevels = 1;
+    depthStencilDesc.ArraySize = 1;
+    depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    depthStencilDesc.SampleDesc.Count = 1;
+    depthStencilDesc.SampleDesc.Quality = 0;
+    depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+    depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    depthStencilDesc.CPUAccessFlags = 0;
+    depthStencilDesc.MiscFlags = 0;
+
+    this->_pd3dDevice->CreateTexture2D( &depthStencilDesc, NULL, &_depthStencilBuffer );
+    this->_pd3dDevice->CreateDepthStencilView( _depthStencilBuffer, NULL, &_depthStencilView );
+
     // Create a render target view
     ID3D11Texture2D* pBackBuffer = nullptr;
     hr = _pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
@@ -383,7 +402,7 @@ HRESULT Application::InitDevice()
     if (FAILED(hr))
         return hr;
 
-    _pImmediateContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
+    _pImmediateContext->OMSetRenderTargets(1, &_pRenderTargetView, _depthStencilView);
 
     // Setup the viewport
     D3D11_VIEWPORT vp;
@@ -394,6 +413,13 @@ HRESULT Application::InitDevice()
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
     _pImmediateContext->RSSetViewports(1, &vp);
+
+    // setup rasterizer state
+    ZeroMemory( &rasterizerDesc, sizeof( D3D11_RASTERIZER_DESC ) );
+    rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
+    rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+    rasterizerDesc.CullMode = D3D11_CULL_NONE;
+    hr = this->_pd3dDevice->CreateRasterizerState( &rasterizerDesc, &_rasterizerState );
 
 	InitShadersAndInputLayout();
 
@@ -440,6 +466,9 @@ void Application::Cleanup()
     if (_pSwapChain) _pSwapChain->Release();
     if (_pImmediateContext) _pImmediateContext->Release();
     if (_pd3dDevice) _pd3dDevice->Release();
+    if (_depthStencilView) _depthStencilView->Release();
+    if (_depthStencilBuffer) _depthStencilBuffer->Release();
+    if (_rasterizerState) _rasterizerState->Release();
 }
 
 void Application::Update()
@@ -463,9 +492,9 @@ void Application::Update()
     }
 
     // Animate the cube
-    XMStoreFloat4x4(&_worldMatrices[0], XMMatrixRotationY(t));
-    XMStoreFloat4x4(&_worldMatrices[1], XMMatrixMultiply(XMMatrixRotationZ(t * 1.5f), XMMatrixTranslation(10.0f, 0.0f, 0.0f)));
-    XMStoreFloat4x4(&_worldMatrices[2], XMMatrixMultiply(XMMatrixRotationX(t * 0.5f), XMMatrixTranslation(-10.0f, 0.0f, 0.0f)));
+    XMStoreFloat4x4(&_worldMatrices[0], XMMatrixScaling(1.5f, 1.5f, 1.5f) * XMMatrixRotationZ(t * 0.5f));
+    XMStoreFloat4x4(&_worldMatrices[1], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(10.0f, 0.0f, 0.0f) * XMMatrixRotationY(t * 1.5f));
+    XMStoreFloat4x4(&_worldMatrices[2], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(15.0f, 0.0f, 0.0f) * XMMatrixRotationZ(t));
 }
 
 void Application::Draw()
@@ -473,6 +502,16 @@ void Application::Draw()
     // Clear the back buffer
     float ClearColor[4] = {0.0f, 0.125f, 0.3f, 1.0f}; // red,green,blue,alpha
     _pImmediateContext->ClearRenderTargetView(_pRenderTargetView, ClearColor);
+    _pImmediateContext->ClearDepthStencilView( _depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
+
+    // Setup render state
+    if (GetAsyncKeyState(VK_SPACE))
+        rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+    if (GetAsyncKeyState(VK_LSHIFT))
+        rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+
+    _pd3dDevice->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
+    _pImmediateContext->RSSetState(_rasterizerState);
 
     // Setup shaders
     _pImmediateContext->VSSetShader(_pVertexShader, nullptr, 0);

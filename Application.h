@@ -39,6 +39,9 @@ private:
 	ID3D11Buffer*           _pVertexBuffer;
 	ID3D11Buffer*           _pIndexBuffer;
 	ID3D11Buffer*           _pConstantBuffer;
+	ID3D11DepthStencilView* _depthStencilView;
+	ID3D11Texture2D*		_depthStencilBuffer;
+	ID3D11RasterizerState*	_rasterizerState;
 	std::vector<XMFLOAT4X4> _worldMatrices;
 	XMFLOAT4X4              _view;
 	XMFLOAT4X4              _projection;
