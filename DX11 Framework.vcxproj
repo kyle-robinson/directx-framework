@@ -395,9 +395,6 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="DX11 Framework.cpp" />
-    <ClCompile Include="ErrorLogger.cpp" />
-    <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="StringConverter.cpp" />
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -405,10 +402,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
-    <ClInclude Include="ErrorLogger.h" />
-    <ClInclude Include="Keyboard.h" />
     <CLInclude Include="resource.h" />
-    <ClInclude Include="StringConverter.h" />
     <ClInclude Include="Vector3D.h" />
     <ResourceCompile Include="DX11 Framework.rc" />
   </ItemGroup>

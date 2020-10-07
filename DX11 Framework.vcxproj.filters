@@ -15,24 +15,6 @@
     <Filter Include="Source">
       <UniqueIdentifier>{fb5d534f-0b9e-4e5f-973c-5eabb3cd2b6e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers\Graphics">
-      <UniqueIdentifier>{16093f1a-886b-4d0c-822b-d80fec3cb7f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Graphics">
-      <UniqueIdentifier>{878e87c6-632d-4313-a0fc-fac596442936}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Mouse">
-      <UniqueIdentifier>{0befccab-df65-4b10-b9d9-988887e6c9ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Keyboard">
-      <UniqueIdentifier>{60e3b08d-c211-4880-b469-011d147c25ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Mouse">
-      <UniqueIdentifier>{bd6cdf6b-defc-4844-bef5-c19070752446}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Keyboard">
-      <UniqueIdentifier>{c8bd3c11-849f-4ef7-b6d0-573b9d4f5827}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11 Framework.cpp">
@@ -44,15 +26,6 @@
     <ClCompile Include="Vector3D.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>Source\Keyboard</Filter>
-    </ClCompile>
-    <ClCompile Include="StringConverter.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="ErrorLogger.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
@@ -62,15 +35,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Vector3D.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Keyboard.h">
-      <Filter>Headers\Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="StringConverter.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ErrorLogger.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
