@@ -11,8 +11,8 @@ bool RenderWindow::Initialize( WindowContainer* pWindowContainer, HINSTANCE hIns
 	this->windowClass = windowClass;
 	this->windowClass_Wide = StringConverter::StringToWide( windowClass );
 
-	//hHandNormal = LoadCursor( this->hInstance, (LPCWSTR)IDI_ANICURSOR1 );
-	//hHandSelect = LoadCursor( this->hInstance, (LPCWSTR)IDI_ANICURSOR2 );
+	hHandNormal = LoadCursor( this->hInstance, (LPCWSTR)IDR_ANICURSOR1 );
+	hHandSelect = LoadCursor( this->hInstance, (LPCWSTR)IDR_ANICURSOR2 );
 
 	this->RegisterWindowClass();
 
@@ -82,7 +82,7 @@ LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 	{
 		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>( lParam );
 		WindowContainer* pWindow = reinterpret_cast<WindowContainer*>( pCreate->lpCreateParams );
-		if (pWindow == nullptr)
+		if ( pWindow == nullptr )
 		{
 			ErrorLogger::Log( "ERROR::Pointer to window container is null during WM_NCCREATE!" );
 			exit( -1 );
@@ -135,12 +135,12 @@ void RenderWindow::RegisterWindowClass() noexcept
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
-	wc.hIcon = LoadIcon( hInstance, (LPCTSTR)IDI_TUTORIAL1 ); //static_cast<HICON>( LoadImage( this->hInstance, MAKEINTRESOURCE( IDI_ICON1 ), IMAGE_ICON, 32, 32, 0 ) );
-    wc.hCursor = LoadCursor( NULL, IDC_ARROW ); //hHandNormal;
-    wc.hbrBackground = (HBRUSH)( COLOR_WINDOW + 1 ); //NULL;
+	wc.hIcon = LoadIcon( hInstance, (LPCTSTR)IDI_TUTORIAL1 );
+    wc.hCursor = hHandNormal;
+    wc.hbrBackground = (HBRUSH)( COLOR_WINDOW + 1 );
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = windowClass_Wide.c_str();
-	wc.hIconSm = LoadIcon( wc.hInstance, (LPCTSTR)IDI_TUTORIAL1 ); //static_cast<HICON>( LoadImage( this->hInstance, MAKEINTRESOURCE( IDI_ICON1 ), IMAGE_ICON, 16, 16, 0 ) );
+	wc.hIconSm = LoadIcon( wc.hInstance, (LPCTSTR)IDI_TUTORIAL1 );
 	RegisterClassEx( &wc );
 }
 

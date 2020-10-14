@@ -43,10 +43,21 @@ LRESULT CALLBACK WindowContainer::WindowProc( HWND hWnd, UINT uMsg, WPARAM wPara
 		switch ( wParam )
 		{
 		case VK_ESCAPE:
-			DestroyWindow( renderWindow.GetHWND() );
 			PostQuitMessage( 0 );
+			exit( -1 );
 			return 0;
 		}
+		return 0;
+	}
+	// Mouse Events
+	case WM_LBUTTONDOWN:
+	{
+		SetCursor( renderWindow.hHandSelect );
+		return 0;
+	}
+	case WM_LBUTTONUP:
+	{
+		SetCursor( renderWindow.hHandNormal );
 		return 0;
 	}
 	default:

@@ -480,8 +480,12 @@
     <ResourceCompile Include="DX11 Framework.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="anicurso.bin" />
+    <None Include="res\cursors\Link Select.ani" />
+    <None Include="res\cursors\Normal Select.ani" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="directx.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

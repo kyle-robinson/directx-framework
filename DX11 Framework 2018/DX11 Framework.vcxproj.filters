@@ -30,6 +30,9 @@
     <Filter Include="Resource Files\Resources">
       <UniqueIdentifier>{a275d0c4-06d8-43d5-9f84-c6e7579c81f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Cursors">
+      <UniqueIdentifier>{e4e9f4f8-2051-4a3d-9911-5fec71e0f763}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graphics\Vector3D.cpp">
@@ -119,5 +122,21 @@
     <ResourceCompile Include="DX11 Framework.rc">
       <Filter>Resource Files\Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\cursors\Normal Select.ani">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\cursors\Link Select.ani">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="anicurso.bin">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="directx.ico">
+      <Filter>Resource Files\Resources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -16,10 +16,10 @@ public:
 	);
 	bool ProcessMessages() noexcept;
 	HWND GetHWND() const noexcept;
-	~RenderWindow();
+	~RenderWindow() noexcept;
 public:
-	//HCURSOR hHandNormal = NULL;
-	//HCURSOR hHandSelect = NULL;
+	HCURSOR hHandNormal = NULL;
+	HCURSOR hHandSelect = NULL;
 private:
 	void RegisterWindowClass() noexcept;
 	HWND hWnd = NULL;
