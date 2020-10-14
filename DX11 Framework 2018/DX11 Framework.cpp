@@ -6,19 +6,20 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     UNREFERENCED_PARAMETER( lpCmdLine );
 
     Application theApp;
-	if (FAILED(theApp.Initialise(hInstance, nCmdShow, 800, 600)))
+	if ( FAILED( theApp.Initialise( hInstance, nCmdShow, 800, 600 ) ) )
 	{
-		return -1;
+        ErrorLogger::Log( "Failed to initialize application!" );
+        return -1;
 	}
 
     MSG msg;
-    ZeroMemory( &msg, sizeof(msg) );
-    while (WM_QUIT != msg.message)
+    ZeroMemory( &msg, sizeof( msg ) );
+    while ( WM_QUIT != msg.message )
     {
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        if ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
         {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+            TranslateMessage( &msg );
+            DispatchMessage( &msg );
         }
         else
         {

@@ -1,6 +1,7 @@
 #pragma once
 #include "graphics\\Vertex.h"
 #include "graphics\\ConstantBufferTypes.h"
+#include "utility\\ErrorLogger.h"
 #include "resource.h"
 #include <vector>
 #include <windows.h>
@@ -17,7 +18,7 @@ using namespace DirectX;
 class Application
 {
 public:
-	Application();
+	Application() {};
 	HRESULT Initialise( HINSTANCE hInstance, int nCmdShow, int windowWidth, int windowHeight );
 	void Update();
 	void Draw();
@@ -31,8 +32,8 @@ private:
 private:
 	HINSTANCE _hInst;
 	HWND _hWnd;
-	D3D_DRIVER_TYPE _driverType;
-	D3D_FEATURE_LEVEL _featureLevel;
+	D3D_DRIVER_TYPE _driverType = D3D_DRIVER_TYPE_NULL;
+	D3D_FEATURE_LEVEL _featureLevel = D3D_FEATURE_LEVEL_11_0;
 	Microsoft::WRL::ComPtr<ID3D11Device> _pd3dDevice;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> _pImmediateContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> _pSwapChain;
@@ -57,8 +58,8 @@ private:
 	std::vector<XMFLOAT4X4> _worldMatricesPyramid;
 private:
 	float gTime;
-	UINT _WindowHeight;
 	UINT _WindowWidth;
+	UINT _WindowHeight;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 };
 
