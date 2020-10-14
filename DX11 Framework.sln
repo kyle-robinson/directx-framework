@@ -1,33 +1,36 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DX11 Framework", "DX11 Framework.vcxproj", "{B8FF81B5-9B26-4931-8353-07795FDC4043}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DX11 Framework", "DX11 Framework 2018\DX11 Framework.vcxproj", "{B8FF81B5-9B26-4931-8353-07795FDC4043}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
-		Profile|Win32 = Profile|Win32
+		Debug|x86 = Debug|x86
 		Profile|x64 = Profile|x64
-		Release|Win32 = Release|Win32
+		Profile|x86 = Profile|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Debug|Win32.Build.0 = Debug|Win32
 		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Debug|x64.ActiveCfg = Debug|x64
 		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Debug|x64.Build.0 = Debug|x64
-		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Profile|Win32.ActiveCfg = Profile|Win32
-		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Profile|Win32.Build.0 = Profile|Win32
+		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Debug|x86.ActiveCfg = Debug|Win32
+		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Debug|x86.Build.0 = Debug|Win32
 		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Profile|x64.ActiveCfg = Profile|x64
 		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Profile|x64.Build.0 = Profile|x64
-		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Release|Win32.ActiveCfg = Release|Win32
-		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Release|Win32.Build.0 = Release|Win32
+		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Profile|x86.ActiveCfg = Profile|Win32
+		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Profile|x86.Build.0 = Profile|Win32
 		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Release|x64.ActiveCfg = Release|x64
 		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Release|x64.Build.0 = Release|x64
+		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Release|x86.ActiveCfg = Release|Win32
+		{B8FF81B5-9B26-4931-8353-07795FDC4043}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF0CF6EA-1770-487E-9007-F621655B3564}
 	EndGlobalSection
 EndGlobal

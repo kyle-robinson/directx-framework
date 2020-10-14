@@ -1,5 +1,4 @@
 #include "Application.h"
-D3D11_RASTERIZER_DESC rasterizerDesc;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -37,14 +36,11 @@ Application::Application()
 	_pVertexShader = nullptr;
 	_pPixelShader = nullptr;
 	_pVertexLayout = nullptr;
-	_pVertexBuffer = nullptr;
-	_pIndexBuffer = nullptr;
+	_pVertexBufferCube = nullptr;
+	_pIndexBufferCube = nullptr;
+    _pVertexBufferPyramid = nullptr;
+    _pIndexBufferPyramid = nullptr;
 	_pConstantBuffer = nullptr;
-}
-
-Application::~Application()
-{
-	Cleanup();
 }
 
 HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow, int windowWidth, int windowHeight)
@@ -52,10 +48,8 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow, int windowWid
     this->_WindowWidth = windowWidth;
     this->_WindowHeight = windowHeight;
 
-    if (FAILED(InitWindow(hInstance, nCmdShow)))
-	{
+    if ( FAILED( InitWindow( hInstance, nCmdShow ) ) )
         return E_FAIL;
-	}
 
     RECT rc;
     GetClientRect(_hWnd, &rc);
@@ -63,18 +57,15 @@ HRESULT Application::Initialise(HINSTANCE hInstance, int nCmdShow, int windowWid
     _WindowHeight = rc.bottom - rc.top;
 
     if (FAILED(InitDevice()))
-    {
-        Cleanup();
-
         return E_FAIL;
-    }
 
 	// Initialize the world matrix
     for (int i = 0; i < 3; i++)
     {
         XMFLOAT4X4 world;
         XMStoreFloat4x4(&world, XMMatrixIdentity());
-        _worldMatrices.push_back(world);
+        _worldMatricesCube.push_back(world);
+        _worldMatricesPyramid.push_back(world);
     }
 
     // Initialize the view matrix
@@ -96,7 +87,7 @@ HRESULT Application::InitShadersAndInputLayout()
 
     // Compile the vertex shader
     ID3DBlob* pVSBlob = nullptr;
-    hr = CompileShaderFromFile(L"DX11 Framework.fx", "VS", "vs_4_0", &pVSBlob);
+    hr = CompileShaderFromFile(L"res\\shaders\\DX11 Framework.fx", "VS", "vs_5_0", &pVSBlob);
 
     if (FAILED(hr))
     {
@@ -116,7 +107,7 @@ HRESULT Application::InitShadersAndInputLayout()
 
 	// Compile the pixel shader
 	ID3DBlob* pPSBlob = nullptr;
-    hr = CompileShaderFromFile(L"DX11 Framework.fx", "PS", "ps_4_0", &pPSBlob);
+    hr = CompileShaderFromFile(L"res\\shaders\\DX11 Framework.fx", "PS", "ps_5_0", &pPSBlob);
 
     if (FAILED(hr))
     {
@@ -150,7 +141,7 @@ HRESULT Application::InitShadersAndInputLayout()
         return hr;
 
     // Set the input layout
-    _pImmediateContext->IASetInputLayout(_pVertexLayout);
+    _pImmediateContext->IASetInputLayout(_pVertexLayout.Get());
 
 	return hr;
 }
@@ -160,7 +151,7 @@ HRESULT Application::InitVertexBuffer()
 	HRESULT hr;
 
     // Create vertex buffer
-    SimpleVertex vertices[] =
+    Vertex_Pos_Col verticesCube[] =
     {
         { { -3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
         { {  3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
@@ -175,15 +166,39 @@ HRESULT Application::InitVertexBuffer()
     D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(SimpleVertex) * ARRAYSIZE( vertices );
+    bd.ByteWidth = sizeof(Vertex_Pos_Col) * ARRAYSIZE( verticesCube );
     bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
     D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
-    InitData.pSysMem = vertices;
+    InitData.pSysMem = verticesCube;
 
-    hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pVertexBuffer);
+    hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pVertexBufferCube);
+
+    if (FAILED(hr))
+        return hr;
+
+    // Create vertex buffer
+    Vertex_Pos_Col verticesPyramid[] =
+    {
+        { { -3.0f, 0.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+        { { 3.0f,  0.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+        { { -3.0f, 0.0f, -3.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+        { { 3.0f,  0.0f, -3.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+        { { 0.0f,  7.0f,  0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
+    };
+
+	ZeroMemory(&bd, sizeof(bd));
+    bd.Usage = D3D11_USAGE_DEFAULT;
+    bd.ByteWidth = sizeof(Vertex_Pos_Col) * ARRAYSIZE( verticesPyramid );
+    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+
+	ZeroMemory(&InitData, sizeof(InitData));
+    InitData.pSysMem = verticesPyramid;
+
+    hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pVertexBufferPyramid);
 
     if (FAILED(hr))
         return hr;
@@ -196,7 +211,7 @@ HRESULT Application::InitIndexBuffer()
 	HRESULT hr;
 
     // Create index buffer
-    WORD indices[] =
+    WORD indicesCube[] =
     {
         0, 1, 2,    // side 1
         2, 1, 3,
@@ -216,14 +231,39 @@ HRESULT Application::InitIndexBuffer()
 	ZeroMemory(&bd, sizeof(bd));
 
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(WORD) * ARRAYSIZE( indices );
+    bd.ByteWidth = sizeof(WORD) * ARRAYSIZE( indicesCube );
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
-    InitData.pSysMem = indices;
-    hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pIndexBuffer);
+    InitData.pSysMem = indicesCube;
+    hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pIndexBufferCube);
+
+    if (FAILED(hr))
+        return hr;
+
+    // Create index buffer
+    WORD indicesPyramid[] =
+    {
+        0, 2, 1,    // base
+        1, 2, 3,
+        0, 1, 4,    // sides
+        1, 3, 4,
+        3, 2, 4,
+        2, 0, 4,
+    };
+
+	ZeroMemory(&bd, sizeof(bd));
+
+    bd.Usage = D3D11_USAGE_DEFAULT;
+    bd.ByteWidth = sizeof(WORD) * ARRAYSIZE( indicesPyramid );
+    bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bd.CPUAccessFlags = 0;
+
+	ZeroMemory(&InitData, sizeof(InitData));
+    InitData.pSysMem = indicesPyramid;
+    hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pIndexBufferPyramid);
 
     if (FAILED(hr))
         return hr;
@@ -362,8 +402,20 @@ HRESULT Application::InitDevice()
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
         _driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain(nullptr, _driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
-                                           D3D11_SDK_VERSION, &sd, &_pSwapChain, &_pd3dDevice, &_featureLevel, &_pImmediateContext);
+        hr = D3D11CreateDeviceAndSwapChain(
+            nullptr,
+            _driverType,
+            nullptr,
+            createDeviceFlags,
+            featureLevels,
+            numFeatureLevels,
+            D3D11_SDK_VERSION,
+            &sd,
+            _pSwapChain.GetAddressOf(),
+            _pd3dDevice.GetAddressOf(),
+            &_featureLevel,
+            _pImmediateContext.GetAddressOf()
+        );
         if (SUCCEEDED(hr))
             break;
     }
@@ -387,22 +439,22 @@ HRESULT Application::InitDevice()
     depthStencilDesc.MiscFlags = 0;
 
     this->_pd3dDevice->CreateTexture2D( &depthStencilDesc, NULL, &_depthStencilBuffer );
-    this->_pd3dDevice->CreateDepthStencilView( _depthStencilBuffer, NULL, &_depthStencilView );
+    this->_pd3dDevice->CreateDepthStencilView( _depthStencilBuffer.Get(), NULL, _depthStencilView.GetAddressOf() );
 
     // Create a render target view
-    ID3D11Texture2D* pBackBuffer = nullptr;
-    hr = _pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
+    hr = _pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)pBackBuffer.GetAddressOf());
 
     if (FAILED(hr))
         return hr;
 
-    hr = _pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pRenderTargetView);
-    pBackBuffer->Release();
+    hr = _pd3dDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, _pRenderTargetView.GetAddressOf());
+    //pBackBuffer->Release();
 
     if (FAILED(hr))
         return hr;
 
-    _pImmediateContext->OMSetRenderTargets(1, &_pRenderTargetView, _depthStencilView);
+    _pImmediateContext->OMSetRenderTargets(1, _pRenderTargetView.GetAddressOf(), _depthStencilView.Get());
 
     // Setup the viewport
     D3D11_VIEWPORT vp;
@@ -419,21 +471,12 @@ HRESULT Application::InitDevice()
     rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
     rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
     rasterizerDesc.CullMode = D3D11_CULL_NONE;
-    hr = this->_pd3dDevice->CreateRasterizerState( &rasterizerDesc, &_rasterizerState );
+    hr = this->_pd3dDevice->CreateRasterizerState( &rasterizerDesc, _rasterizerState.GetAddressOf() );
 
 	InitShadersAndInputLayout();
 
-	InitVertexBuffer();
-
-    // Set vertex buffer
-    UINT stride = sizeof(SimpleVertex);
-    UINT offset = 0;
-    _pImmediateContext->IASetVertexBuffers(0, 1, &_pVertexBuffer, &stride, &offset);
-
+    InitVertexBuffer();
 	InitIndexBuffer();
-
-    // Set index buffer
-    _pImmediateContext->IASetIndexBuffer(_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
     // Set primitive topology
     _pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -442,33 +485,15 @@ HRESULT Application::InitDevice()
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(ConstantBuffer);
+	bd.ByteWidth = sizeof(CB_VS_vertexshader);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.CPUAccessFlags = 0;
-    hr = _pd3dDevice->CreateBuffer(&bd, nullptr, &_pConstantBuffer);
+    hr = _pd3dDevice->CreateBuffer(&bd, nullptr, _pConstantBuffer.GetAddressOf());
 
     if (FAILED(hr))
         return hr;
 
     return S_OK;
-}
-
-void Application::Cleanup()
-{
-    if (_pImmediateContext) _pImmediateContext->ClearState();
-    if (_pConstantBuffer) _pConstantBuffer->Release();
-    if (_pVertexBuffer) _pVertexBuffer->Release();
-    if (_pIndexBuffer) _pIndexBuffer->Release();
-    if (_pVertexLayout) _pVertexLayout->Release();
-    if (_pVertexShader) _pVertexShader->Release();
-    if (_pPixelShader) _pPixelShader->Release();
-    if (_pRenderTargetView) _pRenderTargetView->Release();
-    if (_pSwapChain) _pSwapChain->Release();
-    if (_pImmediateContext) _pImmediateContext->Release();
-    if (_pd3dDevice) _pd3dDevice->Release();
-    if (_depthStencilView) _depthStencilView->Release();
-    if (_depthStencilBuffer) _depthStencilBuffer->Release();
-    if (_rasterizerState) _rasterizerState->Release();
 }
 
 void Application::Update()
@@ -498,17 +523,21 @@ void Application::Update()
     if ( GetAsyncKeyState( VK_DOWN ) )
         multiplier -= 0.1f;
 
-    XMStoreFloat4x4(&_worldMatrices[0], XMMatrixScaling(1.5f, 1.5f, 1.5f) * XMMatrixRotationZ(t * 0.5f * multiplier));
-    XMStoreFloat4x4(&_worldMatrices[1], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(10.0f, 0.0f, 0.0f) * XMMatrixRotationY(t * 1.5f * multiplier));
-    XMStoreFloat4x4(&_worldMatrices[2], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(15.0f, 0.0f, 0.0f) * XMMatrixRotationZ(t * multiplier));
+    XMStoreFloat4x4(&_worldMatricesCube[0], XMMatrixScaling(1.5f, 1.5f, 1.5f) * XMMatrixRotationZ(t * 0.5f * multiplier));
+    XMStoreFloat4x4(&_worldMatricesCube[1], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(10.0f, 0.0f, 0.0f) * XMMatrixRotationY(t * 1.5f * multiplier));
+    XMStoreFloat4x4(&_worldMatricesCube[2], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(15.0f, 0.0f, 0.0f) * XMMatrixRotationZ(t * multiplier));
+
+    XMStoreFloat4x4(&_worldMatricesPyramid[0], XMMatrixScaling(1.5f, 1.5f, 1.5f) * XMMatrixRotationZ(t * 0.5f * multiplier));
+    XMStoreFloat4x4(&_worldMatricesPyramid[1], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixRotationY(t * 1.5f * multiplier));
+    XMStoreFloat4x4(&_worldMatricesPyramid[2], XMMatrixScaling(0.5f, 0.5f, 0.5f) * XMMatrixTranslation(5.0f, 0.0f, 0.0f) * XMMatrixRotationZ(t * multiplier));
 }
 
 void Application::Draw()
 {
     // Clear the back buffer
     float ClearColor[4] = {0.0f, 0.125f, 0.3f, 1.0f}; // red,green,blue,alpha
-    _pImmediateContext->ClearRenderTargetView(_pRenderTargetView, ClearColor);
-    _pImmediateContext->ClearDepthStencilView( _depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
+    _pImmediateContext->ClearRenderTargetView(_pRenderTargetView.Get(), ClearColor);
+    _pImmediateContext->ClearDepthStencilView( _depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
 
     // Setup render state
     if (GetAsyncKeyState(VK_SPACE))
@@ -516,28 +545,60 @@ void Application::Draw()
     if (GetAsyncKeyState(VK_LSHIFT))
         rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
 
-    _pd3dDevice->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
-    _pImmediateContext->RSSetState(_rasterizerState);
+    /*   CUBE OBJECT   */
+    // Setup buffers
+    UINT stride = sizeof(Vertex_Pos_Col);
+    UINT offset = 0;
+    _pImmediateContext->IASetVertexBuffers(0, 1, _pVertexBufferCube.GetAddressOf(), &stride, &offset);
+    _pImmediateContext->IASetIndexBuffer(_pIndexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+    _pd3dDevice->CreateRasterizerState(&rasterizerDesc, _rasterizerState.GetAddressOf());
+    _pImmediateContext->RSSetState(_rasterizerState.Get());
 
     // Setup shaders
-    _pImmediateContext->VSSetShader(_pVertexShader, nullptr, 0);
-    _pImmediateContext->VSSetConstantBuffers(0, 1, &_pConstantBuffer);
-    _pImmediateContext->PSSetConstantBuffers(0, 1, &_pConstantBuffer);
-    _pImmediateContext->PSSetShader(_pPixelShader, nullptr, 0);
+    _pImmediateContext->VSSetShader(_pVertexShader.Get(), nullptr, 0);
+    _pImmediateContext->VSSetConstantBuffers(0, 1, _pConstantBuffer.GetAddressOf());
+    _pImmediateContext->PSSetConstantBuffers(0, 1, _pConstantBuffer.GetAddressOf());
+    _pImmediateContext->PSSetShader(_pPixelShader.Get(), nullptr, 0);
 
     // Matrices
-    ConstantBuffer cb;
+    CB_VS_vertexshader cb;
 	XMMATRIX view = XMLoadFloat4x4(&_view);
 	XMMATRIX projection = XMLoadFloat4x4(&_projection);
     for ( int i = 0; i < 3; i++ )
     {
-        XMMATRIX world = XMLoadFloat4x4(&_worldMatrices[i]);
+        XMMATRIX world = XMLoadFloat4x4(&_worldMatricesCube[i]);
         cb.mWorld = XMMatrixTranspose(world);
         cb.mView = XMMatrixTranspose(view);
         cb.mProjection = XMMatrixTranspose(projection);
 
-        _pImmediateContext->UpdateSubresource(_pConstantBuffer, 0, nullptr, &cb, 0, 0);
+        _pImmediateContext->UpdateSubresource(_pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
         _pImmediateContext->DrawIndexed(36, 0, 0);
+    }
+
+    /*   PYRAMID OBJECT   */
+    // Setup buffers
+    offset = 0;
+    _pImmediateContext->IASetVertexBuffers(0, 1, _pVertexBufferPyramid.GetAddressOf(), &stride, &offset);
+    _pImmediateContext->IASetIndexBuffer(_pIndexBufferPyramid.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+    // Setup shaders
+    _pImmediateContext->VSSetConstantBuffers(0, 1, _pConstantBuffer.GetAddressOf());
+    _pImmediateContext->PSSetConstantBuffers(0, 1, _pConstantBuffer.GetAddressOf());
+
+    // Matrices
+    CB_VS_vertexshader cb2;
+    view = XMLoadFloat4x4(&_view);
+    projection = XMLoadFloat4x4(&_projection);
+    for ( int i = 0; i < 3; i++ )
+    {
+        XMMATRIX world = XMLoadFloat4x4(&_worldMatricesPyramid[i]);
+        cb2.mWorld = XMMatrixTranspose(world);
+        cb2.mView = XMMatrixTranspose(view);
+        cb2.mProjection = XMMatrixTranspose(projection);
+
+        _pImmediateContext->UpdateSubresource(_pConstantBuffer.Get(), 0, nullptr, &cb2, 0, 0);
+        _pImmediateContext->DrawIndexed(18, 0, 0);
     }
 
     // Present our back buffer to our front buffer
