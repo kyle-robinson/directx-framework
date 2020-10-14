@@ -1,0 +1,32 @@
+#pragma once
+#include "../utility/ErrorLogger.h"
+#include "../resource.h"
+
+class WindowContainer;
+class RenderWindow
+{
+public:
+	bool Initialize(
+		WindowContainer* windowContainer,
+		HINSTANCE hInstance,
+		const std::string& windowTitle,
+		const std::string& windowClass,
+		int width,
+		int height
+	);
+	bool ProcessMessages() noexcept;
+	HWND GetHWND() const noexcept;
+	~RenderWindow();
+public:
+	//HCURSOR hHandNormal = NULL;
+	//HCURSOR hHandSelect = NULL;
+private:
+	void RegisterWindowClass() noexcept;
+	HWND hWnd = NULL;
+	HINSTANCE hInstance = NULL;
+	std::string windowTitle = "";
+	std::wstring windowTitle_Wide = L"";
+	std::string windowClass = "";
+	std::wstring windowClass_Wide = L"";
+	int width, height;
+};

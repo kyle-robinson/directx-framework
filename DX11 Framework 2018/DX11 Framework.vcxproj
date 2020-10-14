@@ -451,19 +451,32 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="DX11 Framework.cpp" />
+    <ClCompile Include="graphics\Graphics.cpp" />
+    <ClCompile Include="graphics\IndexBuffer.cpp" />
+    <ClCompile Include="graphics\Shaders.cpp" />
     <ClCompile Include="graphics\Vector3D.cpp" />
+    <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="utility\ErrorLogger.cpp" />
     <ClCompile Include="utility\StringConverter.cpp" />
+    <ClCompile Include="window\RenderWindow.cpp" />
+    <ClCompile Include="window\WindowContainer.cpp" />
+    <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\ConstantBufferTypes.h" />
+    <ClInclude Include="graphics\Graphics.h" />
+    <ClInclude Include="graphics\IndexBuffer.h" />
+    <ClInclude Include="graphics\Shaders.h" />
     <ClInclude Include="graphics\Vector3D.h" />
     <ClInclude Include="graphics\Vertex.h" />
+    <ClInclude Include="graphics\VertexBuffer.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="utility\ErrorLogger.h" />
     <ClInclude Include="utility\StringConverter.h" />
+    <ClInclude Include="window\RenderWindow.h" />
+    <ClInclude Include="window\WindowContainer.h" />
     <ResourceCompile Include="DX11 Framework.rc" />
   </ItemGroup>
   <ItemGroup>

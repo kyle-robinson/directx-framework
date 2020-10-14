@@ -6,5 +6,9 @@ struct CB_VS_vertexshader
 	DirectX::XMMATRIX mWorld;
 	DirectX::XMMATRIX mView;
 	DirectX::XMMATRIX mProjection;
-	float gTime = 1.0f;
+};
+
+struct CB_PS_pixelshader
+{
+	float alpha = 1.0f;
 };

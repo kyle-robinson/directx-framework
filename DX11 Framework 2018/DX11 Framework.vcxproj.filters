@@ -5,10 +5,6 @@
       <UniqueIdentifier>{8e114980-c1a3-4ada-ad7c-83caadf5daeb}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{2c3d4c8c-5d1a-459a-a05a-a4e4b608a44e}</UniqueIdentifier>
-      <Extensions>fx;fxh;hlsl</Extensions>
-    </Filter>
     <Filter Include="Headers">
       <UniqueIdentifier>{bb7976b9-f324-45dd-ad45-a20ed3505093}</UniqueIdentifier>
     </Filter>
@@ -27,11 +23,15 @@
     <Filter Include="Source\Utility">
       <UniqueIdentifier>{833c8a3b-dae4-4bdd-a141-840c1913b0c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{2c3d4c8c-5d1a-459a-a05a-a4e4b608a44e}</UniqueIdentifier>
+      <Extensions>fx;fxh;hlsl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Resources">
+      <UniqueIdentifier>{a275d0c4-06d8-43d5-9f84-c6e7579c81f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DX11 Framework.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\Vector3D.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
@@ -44,11 +44,29 @@
     <ClCompile Include="utility\ErrorLogger.cpp">
       <Filter>Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Graphics.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="window\WindowContainer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="window\RenderWindow.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\VertexBuffer.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Shaders.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\IndexBuffer.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CLInclude Include="resource.h">
-      <Filter>Resource Files</Filter>
-    </CLInclude>
     <ClInclude Include="graphics\Vector3D.h">
       <Filter>Headers\Graphics</Filter>
     </ClInclude>
@@ -67,15 +85,39 @@
     <ClInclude Include="utility\ErrorLogger.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="DX11 Framework.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <CLInclude Include="resource.h">
+      <Filter>Resource Files\Resources</Filter>
+    </CLInclude>
+    <ClInclude Include="graphics\Graphics.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="window\RenderWindow.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="window\WindowContainer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\VertexBuffer.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Shaders.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\IndexBuffer.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ConstantBuffer.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\shaders\DX11 Framework.fx">
-      <Filter>Shaders</Filter>
+      <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DX11 Framework.rc">
+      <Filter>Resource Files\Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
