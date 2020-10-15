@@ -63,21 +63,23 @@ void Graphics::BeginFrame( float clearColor[4] )
 
 void Graphics::RenderFrame()
 {
+    cb_vs_vertexshader.data.gTime = gTime;
+
+    // Load matrices
+	DirectX::XMMATRIX viewMatrix = DirectX::XMLoadFloat4x4( &reinterpret_cast<DirectX::XMFLOAT4X4&>( view ) );
+	DirectX::XMMATRIX projectionMatrix = DirectX::XMLoadFloat4x4( &reinterpret_cast<DirectX::XMFLOAT4X4&>( projection ) );
+    cb_vs_vertexshader.data.mView = DirectX::XMMatrixTranspose( viewMatrix );
+    cb_vs_vertexshader.data.mProjection = DirectX::XMMatrixTranspose( projectionMatrix );
+
     /*   CUBE OBJECT   */
     // Setup buffers
     UINT offset = 0;
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
     this->context->IASetIndexBuffer( this->indexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0 );
-
-    // Load matrices
-	DirectX::XMMATRIX viewMatrix = DirectX::XMLoadFloat4x4( &reinterpret_cast<DirectX::XMFLOAT4X4&>( view ) );
-	DirectX::XMMATRIX projectionMatrix = DirectX::XMLoadFloat4x4( &reinterpret_cast<DirectX::XMFLOAT4X4&>( projection ) );
     for ( int i = 0; i < 3; i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
         cb_vs_vertexshader.data.mWorld = XMMatrixTranspose( worldMatrix );
-        cb_vs_vertexshader.data.mView = XMMatrixTranspose( viewMatrix );
-        cb_vs_vertexshader.data.mProjection = XMMatrixTranspose( projectionMatrix );
 
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
@@ -90,16 +92,10 @@ void Graphics::RenderFrame()
     offset = 0;
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferPyramid.GetAddressOf(), vertexBufferPyramid.StridePtr(), &offset );
     this->context->IASetIndexBuffer( this->indexBufferPyramid.Get(), DXGI_FORMAT_R16_UINT, 0 );
-
-    // Load matrices
-    viewMatrix = DirectX::XMLoadFloat4x4( &reinterpret_cast<DirectX::XMFLOAT4X4&>( view ) );
-    projectionMatrix = DirectX::XMLoadFloat4x4( &reinterpret_cast<DirectX::XMFLOAT4X4&>( projection ) );
     for ( int i = 0; i < 3; i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesPyramid[i] );
         cb_vs_vertexshader.data.mWorld = XMMatrixTranspose( worldMatrix );
-        cb_vs_vertexshader.data.mView = XMMatrixTranspose( viewMatrix );
-        cb_vs_vertexshader.data.mProjection = XMMatrixTranspose( projectionMatrix );
 
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;

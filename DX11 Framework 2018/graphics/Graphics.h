@@ -18,6 +18,7 @@ public:
 	void RenderFrame();
 	void EndFrame();
 public:
+	float gTime;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
@@ -50,7 +51,6 @@ private:
 	DirectX::XMFLOAT4X4 view;
 	DirectX::XMFLOAT4X4 projection;
 private:
-	float gTime;
 	UINT windowWidth;
 	UINT windowHeight;
 };

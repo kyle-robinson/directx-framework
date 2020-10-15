@@ -23,11 +23,11 @@ bool Application::ProcessMessages() noexcept
 
 void Application::Update()
 {
-    static float t = 0.0f;
+    static float timer = 0.0f;
 
     if ( gfx.driverType == D3D_DRIVER_TYPE_REFERENCE )
     {
-        t += DirectX::XM_PI * 0.0125f;
+        timer += DirectX::XM_PI * 0.0125f;
     }
     else
     {
@@ -37,7 +37,7 @@ void Application::Update()
         if ( dwTimeStart == 0 )
             dwTimeStart = dwTimeCur;
 
-        t = ( dwTimeCur - dwTimeStart ) / 1000.0f;
+        timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
     }
 
     // Setup render state
@@ -56,32 +56,35 @@ void Application::Update()
     // cube transformations
     DirectX::XMStoreFloat4x4( &gfx.worldMatricesCube[0],
         DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
-        DirectX::XMMatrixRotationZ( t * 0.5f * multiplier )
+        DirectX::XMMatrixRotationZ( timer * 0.5f * multiplier )
     );
     DirectX::XMStoreFloat4x4( &gfx.worldMatricesCube[1],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
         DirectX::XMMatrixTranslation( 10.0f, 0.0f, 0.0f ) *
-        DirectX::XMMatrixRotationY( t * 1.5f * multiplier )
+        DirectX::XMMatrixRotationY( timer * 1.5f * multiplier )
     );
     DirectX::XMStoreFloat4x4( &gfx.worldMatricesCube[2],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
         DirectX::XMMatrixTranslation( 15.0f, 0.0f, 0.0f ) *
-        DirectX::XMMatrixRotationZ( t * multiplier )
+        DirectX::XMMatrixRotationZ( timer * multiplier )
     );
+    gfx.gTime = timer;
 
     // pyramid transformations
     DirectX::XMStoreFloat4x4( &gfx.worldMatricesPyramid[0],
         DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
-        DirectX::XMMatrixRotationZ( t * 0.5f * multiplier )
+        DirectX::XMMatrixTranslation( 5.0f, 10.0f, 0.0f ) *
+        DirectX::XMMatrixRotationZ( timer * 0.5f * multiplier )
     );
     DirectX::XMStoreFloat4x4( &gfx.worldMatricesPyramid[1],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
-        DirectX::XMMatrixRotationY( t * 1.5f * multiplier )
+        DirectX::XMMatrixTranslation( -10.0f, 0.0f, 0.0f ) *
+        DirectX::XMMatrixRotationY( timer * 1.5f * multiplier )
     );
     DirectX::XMStoreFloat4x4( &gfx.worldMatricesPyramid[2],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
-        DirectX::XMMatrixTranslation( 5.0f, 0.0f, 0.0f ) *
-        DirectX::XMMatrixRotationZ( t * multiplier )
+        DirectX::XMMatrixTranslation( -10.0f, 0.0f, 0.0f ) *
+        DirectX::XMMatrixRotationZ( timer * multiplier )
     );
 }
 
