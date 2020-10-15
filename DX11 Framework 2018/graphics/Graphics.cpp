@@ -22,9 +22,15 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         worldMatricesCube.push_back( worldMatrix );
         worldMatricesPyramid.push_back( worldMatrix );
     }
+    for ( int i = 0; i < 1000; i++ )
+    {
+        DirectX::XMFLOAT4X4 worldMatrix;
+        DirectX::XMStoreFloat4x4( &worldMatrix, DirectX::XMMatrixIdentity() );
+        worldMatricesQuad.push_back( worldMatrix );
+    }
 
     // Initialize the view matrix
-	DirectX::XMVECTOR Eye = DirectX::XMVectorSet( 0.0f, 0.0f, -15.0f, 0.0f );
+	DirectX::XMVECTOR Eye = DirectX::XMVectorSet( 0.0f, 0.0f, -25.0f, 0.0f );
 	DirectX::XMVECTOR At  = DirectX::XMVectorSet( 0.0f, 0.0f,  0.0f,  0.0f );
 	DirectX::XMVECTOR Up  = DirectX::XMVectorSet( 0.0f, 1.0f,  0.0f,  0.0f );
 
@@ -76,7 +82,7 @@ void Graphics::RenderFrame()
     UINT offset = 0;
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
     this->context->IASetIndexBuffer( this->indexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    for ( int i = 0; i < 3; i++ )
+    for ( int i = 0; i < worldMatricesCube.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
         cb_vs_vertexshader.data.mWorld = XMMatrixTranspose( worldMatrix );
@@ -92,7 +98,7 @@ void Graphics::RenderFrame()
     offset = 0;
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferPyramid.GetAddressOf(), vertexBufferPyramid.StridePtr(), &offset );
     this->context->IASetIndexBuffer( this->indexBufferPyramid.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    for ( int i = 0; i < 3; i++ )
+    for ( int i = 0; i < worldMatricesPyramid.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesPyramid[i] );
         cb_vs_vertexshader.data.mWorld = XMMatrixTranspose( worldMatrix );
@@ -101,6 +107,22 @@ void Graphics::RenderFrame()
 		    return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferPyramid.BufferSize(), 0, 0 );
+    }
+
+    /*   QUAD OBJECT   */
+    // Setup buffers
+    offset = 0;
+    this->context->IASetVertexBuffers( 0, 1, this->vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
+    this->context->IASetIndexBuffer( this->indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    for ( int i = 0; i < worldMatricesQuad.size(); i++ )
+    {
+        DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesQuad[i] );
+        cb_vs_vertexshader.data.mWorld = XMMatrixTranspose( worldMatrix );
+
+        if ( !cb_vs_vertexshader.ApplyChanges() )
+		    return;
+        this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
+        this->context->DrawIndexed( this->indexBufferQuad.BufferSize(), 0, 0 );
     }
 }
 
@@ -345,6 +367,33 @@ HRESULT Graphics::InitializeScene()
 		ErrorLogger::Log( hr, "Failed to create pyramid index buffer!" );
 		return hr;
 	}
+
+    // quad vertices and indices
+    Vertex_Pos_Col verticesQuad[] =
+    {
+        { { -3.0f,  3.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+        { {  3.0f,  3.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+        { { -3.0f, -3.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+        { {  3.0f, -3.0f, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } }
+    };
+    hr = this->vertexBufferQuad.Initialize( this->device.Get(), verticesQuad, ARRAYSIZE( verticesQuad ) );
+    if ( FAILED( hr ) )
+    {
+        ErrorLogger::Log( hr, "Failed to create quad vertex buffer!" );
+        return hr;
+    }
+
+    WORD indicesQuad[] =
+    {
+        0, 1, 2,
+        1, 3, 2
+    };
+    hr = this->indexBufferQuad.Initialize( this->device.Get(), indicesQuad, ARRAYSIZE( indicesQuad ) );
+    if ( FAILED( hr ) )
+    {
+        ErrorLogger::Log( hr, "Failed to create quad index buffer!" );
+        return hr;
+    }
 
     // setup constant buffers
     hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );

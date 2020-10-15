@@ -86,6 +86,27 @@ void Application::Update()
         DirectX::XMMatrixTranslation( -10.0f, 0.0f, 0.0f ) *
         DirectX::XMMatrixRotationZ( timer * multiplier )
     );
+
+    // quad transformations
+    int count = 0;
+    static int offset = 6;
+    static int widthLimit = 20;
+    static int heightLimit = 20;
+    for ( int width = 0; width < 20; width++ )
+    {
+        for ( int height = 0; height < 20; height++ )
+        {
+            DirectX::XMStoreFloat4x4( &gfx.worldMatricesQuad[count],
+                DirectX::XMMatrixRotationX( 1.5708f ) *
+                DirectX::XMMatrixTranslation(
+                    ( width * offset ) - ( widthLimit + heightLimit ),
+                    -5.0f,
+                    ( height * offset ) - heightLimit
+                )
+            );
+            count++;
+        }
+    }
 }
 
 void Application::Render()

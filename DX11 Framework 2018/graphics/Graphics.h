@@ -21,6 +21,7 @@ public:
 	float gTime;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
+	std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesPyramid;
 private:
@@ -47,6 +48,8 @@ private:
 	IndexBuffer indexBufferCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferPyramid;
 	IndexBuffer indexBufferPyramid;
+	VertexBuffer<Vertex_Pos_Col> vertexBufferQuad;
+	IndexBuffer indexBufferQuad;
 private:
 	DirectX::XMFLOAT4X4 view;
 	DirectX::XMFLOAT4X4 projection;
