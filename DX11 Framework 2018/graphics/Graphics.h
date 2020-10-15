@@ -1,18 +1,14 @@
+#include <vector>
+#include <windows.h>
+#include <directxcolors.h>
 #include "Vertex.h"
 #include "Shaders.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "ConstantBuffer.h"
 #include "ConstantBufferTypes.h"
-#include <vector>
-#include <windows.h>
-#include <d3d11_1.h>
-#include <wrl/client.h>
-#include <d3dcompiler.h>
-#include <directxcolors.h>
 #pragma comment( lib, "DXGI.lib" )
 #pragma comment( lib, "d3d11.lib" )
-#pragma comment( lib, "D3DCompiler.lib" )
 
 class Graphics
 {

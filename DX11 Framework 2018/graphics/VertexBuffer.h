@@ -1,7 +1,7 @@
 #pragma once
+#include <memory>
 #include <d3d11.h>
 #include <wrl/client.h>
-#include <memory>
 
 template<class T>
 class VertexBuffer

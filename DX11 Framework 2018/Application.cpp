@@ -27,7 +27,7 @@ void Application::Update()
 
     if ( gfx.driverType == D3D_DRIVER_TYPE_REFERENCE )
     {
-        t += (float) DirectX::XM_PI * 0.0125f;
+        t += DirectX::XM_PI * 0.0125f;
     }
     else
     {

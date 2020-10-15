@@ -1,5 +1,4 @@
 #include "Graphics.h"
-#include "../utility/ErrorLogger.h"
 #include "../resource.h"
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
@@ -51,7 +50,6 @@ void Graphics::BeginFrame( float clearColor[4] )
 	this->context->ClearDepthStencilView( this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
 
 	// set render state
-	this->context->IASetInputLayout( this->vertexShader.GetInputLayout() );
 	this->context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	this->context->OMSetDepthStencilState( this->depthStencilState.Get(), 0 );
     this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState.GetAddressOf() );
@@ -59,6 +57,7 @@ void Graphics::BeginFrame( float clearColor[4] )
 
 	// setup shaders
 	this->context->VSSetShader( this->vertexShader.GetShader(), NULL, 0 );
+	this->context->IASetInputLayout( this->vertexShader.GetInputLayout() );
 	this->context->PSSetShader( this->pixelShader.GetShader(), NULL, 0 );
 }
 
