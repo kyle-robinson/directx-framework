@@ -35,9 +35,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="graphics\Vector3D.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -68,11 +65,14 @@
     <ClCompile Include="graphics\IndexBuffer.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="utility\Vector3D.cpp">
+      <Filter>Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\Matrix.cpp">
+      <Filter>Source\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graphics\Vector3D.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\ConstantBufferTypes.h">
       <Filter>Headers\Graphics</Filter>
     </ClInclude>
@@ -111,6 +111,12 @@
     </ClInclude>
     <ClInclude Include="graphics\ConstantBuffer.h">
       <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\Vector3D.h">
+      <Filter>Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\Matrix.h">
+      <Filter>Headers\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

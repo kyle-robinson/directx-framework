@@ -454,10 +454,11 @@
     <ClCompile Include="graphics\Graphics.cpp" />
     <ClCompile Include="graphics\IndexBuffer.cpp" />
     <ClCompile Include="graphics\Shaders.cpp" />
-    <ClCompile Include="graphics\Vector3D.cpp" />
     <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="utility\ErrorLogger.cpp" />
+    <ClCompile Include="utility\Matrix.cpp" />
     <ClCompile Include="utility\StringConverter.cpp" />
+    <ClCompile Include="utility\Vector3D.cpp" />
     <ClCompile Include="window\RenderWindow.cpp" />
     <ClCompile Include="window\WindowContainer.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -469,12 +470,13 @@
     <ClInclude Include="graphics\Graphics.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />
     <ClInclude Include="graphics\Shaders.h" />
-    <ClInclude Include="graphics\Vector3D.h" />
     <ClInclude Include="graphics\Vertex.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="utility\ErrorLogger.h" />
+    <ClInclude Include="utility\Matrix.h" />
     <ClInclude Include="utility\StringConverter.h" />
+    <ClInclude Include="utility\Vector3D.h" />
     <ClInclude Include="window\RenderWindow.h" />
     <ClInclude Include="window\WindowContainer.h" />
     <ResourceCompile Include="DX11 Framework.rc" />
