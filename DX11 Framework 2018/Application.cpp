@@ -91,7 +91,7 @@ void Application::Update()
     int count = 0;
     static int offset = 6;
     static int widthLimit = 20;
-    static int heightLimit = 20;
+    static int heightLimit = 30;
     for ( int width = 0; width < 20; width++ )
     {
         for ( int height = 0; height < 20; height++ )
@@ -100,7 +100,7 @@ void Application::Update()
                 DirectX::XMMatrixRotationX( 1.5708f ) *
                 DirectX::XMMatrixTranslation(
                     ( width * offset ) - ( widthLimit + heightLimit ),
-                    -5.0f,
+                    -20.0f,
                     ( height * offset ) - heightLimit
                 )
             );

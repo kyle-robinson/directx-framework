@@ -43,7 +43,8 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
             DirectX::XM_PIDIV2,
             static_cast<FLOAT>( windowWidth ) / static_cast<FLOAT>( windowHeight ),
             0.01f,
-            100.0f )
+            100.0f
+        )
     );
 
 	return true;
