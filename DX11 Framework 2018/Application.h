@@ -16,6 +16,8 @@ public:
 	void Update();
 	void Render();
 private:
+	float multiplier = 1.0f;
+	SYSTEM_INFO siSysInfo;
 	Timer timer;
 };
 

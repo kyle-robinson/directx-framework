@@ -9,6 +9,7 @@ bool Application::Initialize(
 	int height )
 {
     timer.Start();
+	GetSystemInfo( &siSysInfo );
 
 	if ( !this->renderWindow.Initialize( this, hInstance, windowTitle, windowClass, width, height ) )
 		return false;
@@ -77,20 +78,7 @@ void Application::Update()
 	if ( keyboard.KeyIsPressed( VK_SHIFT ) )
 		this->gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, -cameraSpeed * dt, 0.0f ) );
 
-    // Setup render state
-    if ( keyboard.KeyIsPressed( VK_F1 ) )
-        gfx.rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    if ( keyboard.KeyIsPressed( VK_F2 ) )
-        gfx.rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
-
-    // Animate the cube
-    static float multiplier = 1.0f;
-    if ( keyboard.KeyIsPressed( VK_UP ) )
-        multiplier += 0.01f;
-    if ( keyboard.KeyIsPressed( VK_DOWN ) )
-        multiplier -= 0.01f;
 	gfx.multiplier = multiplier;
-
     gfx.Update();
 }
 
@@ -103,7 +91,33 @@ void Application::Render()
 
 	if( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
 	{
-
+		if ( ImGui::CollapsingHeader( "Scene Parameters" ) )
+		{
+			ImGui::ColorEdit3( "Clear Colour", clearColor );
+			ImGui::DragFloat( "Rotation Multiplier", &multiplier, 0.01f, -1.0f, 1.0f );
+			static int fillGroup = 0;
+			if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
+				gfx.rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+			ImGui::SameLine();
+			if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
+				gfx.rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+		}
+		if ( ImGui::CollapsingHeader( "Application Info" ) )
+		{
+			ImGui::Text( "Processor Type: %u", siSysInfo.dwProcessorType );
+			ImGui::Text( "Processor Count: %u", siSysInfo.dwNumberOfProcessors );
+			ImGui::Text( "OEM ID: %u", siSysInfo.dwOemId );
+			ImGui::NewLine();
+			ImGui::Text( "Frametime: %.3f / Framerate: (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate );
+		}
+		if ( ImGui::CollapsingHeader( "About" ) )
+		{
+			ImGui::Text( "DirectX Framework by Kyle Robinson" );
+			ImGui::NewLine();
+			ImGui::Text( "LinkedIn: linkedin.com/in/kylerobinsongames/" );
+			ImGui::Text( "Email: kylerobinson456@outlook.com" );
+			ImGui::Text( "Twitter: @KyleRobinson42" );
+		}
 	}
 	ImGui::End();
 
