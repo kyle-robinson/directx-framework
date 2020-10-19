@@ -23,6 +23,20 @@ bool Application::ProcessMessages() noexcept
 
 void Application::Update()
 {
+    while ( !keyboard.CharBufferIsEmpty() )
+	{
+		unsigned char ch = keyboard.ReadChar();
+	}
+	while ( !keyboard.KeyBufferIsEmpty() )
+	{
+		Keyboard::KeyboardEvent kbe = keyboard.ReadKey();
+		unsigned char keycode = kbe.GetKeyCode();
+	}
+	while ( !mouse.EventBufferIsEmpty() )
+	{
+		Mouse::MouseEvent me = mouse.ReadEvent();
+	}
+    
     static float timer = 0.0f;
 
     if ( gfx.driverType == D3D_DRIVER_TYPE_REFERENCE )
@@ -41,16 +55,16 @@ void Application::Update()
     }
 
     // Setup render state
-    if ( GetAsyncKeyState( VK_SPACE ) )
+    if ( keyboard.KeyIsPressed( VK_SPACE ) )
         gfx.rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    if ( GetAsyncKeyState( VK_LSHIFT ) )
+    if ( keyboard.KeyIsPressed( VK_SHIFT ) )
         gfx.rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
 
     // Animate the cube
     static float multiplier = 1.0f;
-    if ( GetAsyncKeyState( VK_UP ) )
+    if ( keyboard.KeyIsPressed( VK_UP ) )
         multiplier += 0.1f;
-    if ( GetAsyncKeyState( VK_DOWN ) )
+    if ( keyboard.KeyIsPressed( VK_DOWN ) )
         multiplier -= 0.1f;
 
     // cube transformations

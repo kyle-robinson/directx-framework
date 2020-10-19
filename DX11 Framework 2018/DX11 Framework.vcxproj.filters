@@ -33,6 +33,12 @@
     <Filter Include="Resource Files\Cursors">
       <UniqueIdentifier>{e4e9f4f8-2051-4a3d-9911-5fec71e0f763}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Input">
+      <UniqueIdentifier>{43d798bf-baf4-4130-8ea7-a1e40fbc44ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Input">
+      <UniqueIdentifier>{f83b346b-8fa3-43c2-b0b9-b14fbbd792f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -70,6 +76,15 @@
     </ClCompile>
     <ClCompile Include="utility\Matrix.cpp">
       <Filter>Source\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Camera.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="keyboard\Keyboard.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="mouse\Mouse.cpp">
+      <Filter>Source\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +132,15 @@
     </ClInclude>
     <ClInclude Include="utility\Matrix.h">
       <Filter>Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Camera.h">
+      <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="keyboard\Keyboard.h">
+      <Filter>Headers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="mouse\Mouse.h">
+      <Filter>Headers\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
