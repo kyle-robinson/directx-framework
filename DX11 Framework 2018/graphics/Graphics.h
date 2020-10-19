@@ -8,7 +8,7 @@
 #include "VertexBuffer.h"
 #include "ConstantBuffer.h"
 #include "ConstantBufferTypes.h"
-//#pragma comment( lib, "DXGI.lib" )
+#pragma comment( lib, "DXGI.lib" )
 #pragma comment( lib, "d3d11.lib" )
 
 class Graphics
@@ -29,9 +29,9 @@ public:
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesPyramid;
 private:
-	HRESULT InitializeDirectX( HWND hWnd );
-	HRESULT InitializeShaders();
-	HRESULT InitializeScene();
+	bool InitializeDirectX( HWND hWnd );
+	bool InitializeShaders();
+	bool InitializeScene();
 private:
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;

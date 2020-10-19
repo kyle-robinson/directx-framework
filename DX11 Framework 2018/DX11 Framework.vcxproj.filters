@@ -148,6 +148,9 @@
     <ClInclude Include="utility\Timer.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="utility\COMException.h">
+      <Filter>Headers\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\shaders\DX11 Framework.fx">

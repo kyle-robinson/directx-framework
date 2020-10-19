@@ -20,3 +20,9 @@ void ErrorLogger::Log( HRESULT hr, const std::wstring& message ) noexcept
 	std::wstring errorMessage = L"Error: " + message + L"\n" + error.ErrorMessage();
 	MessageBoxW( NULL, errorMessage.c_str(), L"ERROR", MB_ICONERROR );
 }
+
+void ErrorLogger::Log( COMException& exception ) noexcept
+{
+	std::wstring errorMessage = exception.what();
+	MessageBoxW( NULL, errorMessage.c_str(), L"Error: ", MB_ICONERROR );
+}

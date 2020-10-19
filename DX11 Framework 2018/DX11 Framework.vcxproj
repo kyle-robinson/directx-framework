@@ -485,6 +485,7 @@
     <ClInclude Include="keyboard\Keyboard.h" />
     <ClInclude Include="mouse\Mouse.h" />
     <CLInclude Include="resource.h" />
+    <ClInclude Include="utility\COMException.h" />
     <ClInclude Include="utility\ErrorLogger.h" />
     <ClInclude Include="utility\Matrix.h" />
     <ClInclude Include="utility\StringConverter.h" />

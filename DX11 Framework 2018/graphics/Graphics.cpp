@@ -6,13 +6,13 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	this->windowWidth = width;
 	this->windowHeight = height;
 
-	if ( FAILED( InitializeDirectX( hWnd ) ) )
+	if ( !InitializeDirectX( hWnd ) )
 		return false;
 
-	if ( FAILED( InitializeShaders() ) )
+	if ( !InitializeShaders() )
 		return false;
 
-	if ( FAILED( InitializeScene() ) )
+	if ( !InitializeScene() )
 		return false;
 
     for ( int i = 0; i < 3; i++ )
@@ -137,6 +137,7 @@ void Graphics::Update()
 		dwTimeStart = dwTimeCur;
 
 	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
+    gTime = timer;
 
     // cube transformations
     DirectX::XMStoreFloat4x4( &worldMatricesCube[0],
@@ -193,137 +194,122 @@ void Graphics::Update()
     }
 }
 
-HRESULT Graphics::InitializeDirectX( HWND hWnd )
+bool Graphics::InitializeDirectX( HWND hWnd )
 {
-    HRESULT hr = S_OK;
-    UINT createDeviceFlags = 0;
-#ifdef _DEBUG
-    createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
-    D3D_DRIVER_TYPE driverTypes[] =
+    try
     {
-        D3D_DRIVER_TYPE_HARDWARE,
-        D3D_DRIVER_TYPE_WARP,
-        D3D_DRIVER_TYPE_REFERENCE,
-    };
-    UINT numDriverTypes = ARRAYSIZE( driverTypes );
+        UINT createDeviceFlags = 0;
+    #ifdef _DEBUG
+        createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+    #endif
 
-    D3D_FEATURE_LEVEL featureLevels[] =
-    {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
-    };
-	UINT numFeatureLevels = ARRAYSIZE( featureLevels );
+        D3D_DRIVER_TYPE driverTypes[] =
+        {
+            D3D_DRIVER_TYPE_HARDWARE,
+            D3D_DRIVER_TYPE_WARP,
+            D3D_DRIVER_TYPE_REFERENCE,
+        };
+        UINT numDriverTypes = ARRAYSIZE( driverTypes );
 
-    DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
-    sd.BufferCount = 1;
-    sd.BufferDesc.Width = windowWidth;
-    sd.BufferDesc.Height = windowHeight;
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = hWnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
+        D3D_FEATURE_LEVEL featureLevels[] =
+        {
+            D3D_FEATURE_LEVEL_11_0,
+            D3D_FEATURE_LEVEL_10_1,
+            D3D_FEATURE_LEVEL_10_0,
+        };
+	    UINT numFeatureLevels = ARRAYSIZE( featureLevels );
 
-    for ( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
-    {
-        driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain(
-            nullptr,
-            this->driverType,
-            nullptr,
-            createDeviceFlags,
-            featureLevels,
-            numFeatureLevels,
-            D3D11_SDK_VERSION,
-            &sd,
-            this->swapChain.GetAddressOf(),
-            this->device.GetAddressOf(),
-            &this->featureLevel,
-            this->context.GetAddressOf()
-        );
-        if ( SUCCEEDED( hr ) )
-            break;
+        DXGI_SWAP_CHAIN_DESC sd = { 0 };
+        sd.BufferCount = 1;
+        sd.BufferDesc.Width = windowWidth;
+        sd.BufferDesc.Height = windowHeight;
+        sd.BufferDesc.RefreshRate.Numerator = 60;
+        sd.BufferDesc.RefreshRate.Denominator = 1;
+        sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        sd.SampleDesc.Count = 4;
+        sd.SampleDesc.Quality = 0;
+        sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        sd.BufferCount = 1;
+        sd.OutputWindow = hWnd;
+        sd.Windowed = TRUE;
+        sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+        sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+        HRESULT hr;
+        for ( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
+        {
+            driverType = driverTypes[driverTypeIndex];
+            hr = D3D11CreateDeviceAndSwapChain(
+                nullptr,
+                this->driverType,
+                nullptr,
+                createDeviceFlags,
+                featureLevels,
+                numFeatureLevels,
+                D3D11_SDK_VERSION,
+                &sd,
+                this->swapChain.GetAddressOf(),
+                this->device.GetAddressOf(),
+                &this->featureLevel,
+                this->context.GetAddressOf()
+            );
+            if ( SUCCEEDED( hr ) )
+                break;
+        }
+        COM_ERROR_IF_FAILED( hr, "Failed to create Device and Swap Chain!" );
+
+        // create a render target view
+        Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
+        hr = this->swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)pBackBuffer.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Back Buffer!" );
+        hr = device->CreateRenderTargetView( pBackBuffer.Get(), nullptr, this->renderTargetView.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View!" );
+
+        // create depth stencil
+        CD3D11_TEXTURE2D_DESC depthStencilDesc(
+            DXGI_FORMAT_D24_UNORM_S8_UINT,
+            this->windowWidth,
+            this->windowHeight );
+        depthStencilDesc.MipLevels = 1;
+        depthStencilDesc.SampleDesc.Count = 4;
+        depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        hr = this->device->CreateTexture2D( &depthStencilDesc, NULL, this->depthStencilBuffer.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil Buffer!" );
+        hr = this->device->CreateDepthStencilView( this->depthStencilBuffer.Get(), NULL, this->depthStencilView.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil View!" );
+        this->context->OMSetRenderTargets( 1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get() );
+
+        // set depth stencil state
+		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc( CD3D11_DEFAULT{} );
+		depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+		hr = this->device->CreateDepthStencilState( &depthStencilStateDesc, this->depthStencilState.GetAddressOf() );
+		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State!" );
+
+        // setup the viewport
+        CD3D11_VIEWPORT vp( 0.0f, 0.0f,
+            static_cast<FLOAT>( windowWidth ),
+            static_cast<FLOAT>( windowHeight ) );
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        this->context->RSSetViewports( 1, &vp );
+
+        // setup rasterizer state
+        rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
+        rasterizerDesc.MultisampleEnable = TRUE;
+        hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Rasterizer State!" );
     }
-    if ( FAILED( hr ) )
+    catch ( COMException& exception )
     {
-        ErrorLogger::Log( hr, "Failed to create Device and Swap Chain!" );
-        return hr;
-    }
-
-    // create depth stencil
-    D3D11_TEXTURE2D_DESC depthStencilDesc;
-    ZeroMemory( &depthStencilDesc, sizeof( D3D11_TEXTURE2D_DESC ) );
-    depthStencilDesc.Width = this->windowWidth;
-    depthStencilDesc.Height = this->windowHeight;
-    depthStencilDesc.MipLevels = 1;
-    depthStencilDesc.ArraySize = 1;
-    depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-    depthStencilDesc.SampleDesc.Count = 1;
-    depthStencilDesc.SampleDesc.Quality = 0;
-    depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
-    depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    depthStencilDesc.CPUAccessFlags = 0;
-    depthStencilDesc.MiscFlags = 0;
-
-    hr = this->device->CreateTexture2D( &depthStencilDesc, NULL, this->depthStencilBuffer.GetAddressOf() );
-    hr = this->device->CreateDepthStencilView( this->depthStencilBuffer.Get(), NULL, this->depthStencilView.GetAddressOf() );
-    if ( FAILED( hr ) )
-    {
-        ErrorLogger::Log( hr, "Failed to create Depth Stencil View!" );
-        return hr;
-    }
-
-    // Create a render target view
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
-    hr = this->swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)pBackBuffer.GetAddressOf() );
-    if ( FAILED( hr ) )
-    {
-        ErrorLogger::Log( hr, "Failed to " );
-        return hr;
-    }
-
-    hr = device->CreateRenderTargetView( pBackBuffer.Get(), nullptr, this->renderTargetView.GetAddressOf() );
-    if ( FAILED( hr ) )
-    {
-        ErrorLogger::Log( hr, "Failed to create Render Target View!" );
-        return hr;
-    }
-
-    this->context->OMSetRenderTargets( 1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get() );
-
-    // Setup the viewport
-    D3D11_VIEWPORT vp;
-    vp.Width = static_cast<FLOAT>( windowWidth );
-    vp.Height = static_cast<FLOAT>( windowHeight );
-    vp.MinDepth = 0.0f;
-    vp.MaxDepth = 1.0f;
-    vp.TopLeftX = 0;
-    vp.TopLeftY = 0;
-    this->context->RSSetViewports( 1, &vp );
-
-    // setup rasterizer state
-    ZeroMemory( &rasterizerDesc, sizeof( D3D11_RASTERIZER_DESC ) );
-    rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_NONE;
-    hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState.GetAddressOf() );
-    if ( FAILED( hr ) )
-    {
-        ErrorLogger::Log( hr, "Failed to create Rasterizer State!" );
-        return hr;
+        ErrorLogger::Log( exception );
+        return false;
     }
 
-    return S_OK;
+    return true;
 }
 
-HRESULT Graphics::InitializeShaders()
+bool Graphics::InitializeShaders()
 {
 	D3D11_INPUT_ELEMENT_DESC layout[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -332,124 +318,112 @@ HRESULT Graphics::InitializeShaders()
 
 	UINT numElements = ARRAYSIZE( layout );
 
-	if ( FAILED( vertexShader.Initialize( this->device, L"res\\shaders\\DX11 Framework.fx", layout, numElements ) ) )
-		return E_FAIL;
+    try
+    {
+	    HRESULT hr = vertexShader.Initialize( this->device, L"res\\shaders\\DX11 Framework.fx", layout, numElements );
+        COM_ERROR_IF_FAILED( hr, "Failed to initialize Vertex Shader!" );
 
-	if ( FAILED( pixelShader.Initialize( this->device, L"res\\shaders\\DX11 Framework.fx" ) ) )
-		return E_FAIL;
+	    hr = pixelShader.Initialize( this->device, L"res\\shaders\\DX11 Framework.fx" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Pixel Shader!" );
+    }
+    catch ( COMException& exception )
+    {
+        ErrorLogger::Log( exception );
+        return false;
+    }
 	
-	return S_OK;
+	return true;
 }
 
-HRESULT Graphics::InitializeScene()
+bool Graphics::InitializeScene()
 {
-    // cube vertices and indices
-    Vertex_Pos_Col verticesCube[] =
+    try
     {
-        { { -3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
-        { {  3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-        { { -3.0f, -3.0f, -3.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-        { {  3.0f, -3.0f, -3.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-        { { -3.0f,  3.0f,  3.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-        { {  3.0f,  3.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-        { { -3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-        { {  3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }
-    };
-    HRESULT hr = this->vertexBufferCube.Initialize( this->device.Get(), verticesCube, ARRAYSIZE( verticesCube ) );
-	if ( FAILED( hr ) )
-	{
-		ErrorLogger::Log( hr, "Failed to create cube vertex buffer!" );
-		return hr;
-	}
+        // cube vertices and indices
+        Vertex_Pos_Col verticesCube[] =
+        {
+            { { -3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
+            { {  3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
+            { { -3.0f, -3.0f, -3.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
+            { {  3.0f, -3.0f, -3.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+            { { -3.0f,  3.0f,  3.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+            { {  3.0f,  3.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+            { { -3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+            { {  3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }
+        };
+        HRESULT hr = this->vertexBufferCube.Initialize( this->device.Get(), verticesCube, ARRAYSIZE( verticesCube ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
 
-    WORD indicesCube[] =
-    {
-        0, 1, 2,    // side 1
-        2, 1, 3,
-        4, 0, 6,    // side 2
-        6, 0, 2,
-        7, 5, 6,    // side 3
-        6, 5, 4,
-        3, 1, 7,    // side 4
-        7, 1, 5,
-        4, 5, 0,    // side 5
-        0, 5, 1,
-        3, 7, 2,    // side 6
-        2, 7, 6
-    };
-    hr = this->indexBufferCube.Initialize( this->device.Get(), indicesCube, ARRAYSIZE( indicesCube ) );
-	if ( FAILED( hr ) )
-	{
-		ErrorLogger::Log( hr, "Failed to create cube index buffer!" );
-		return hr;
-	}
+        WORD indicesCube[] =
+        {
+            0, 1, 2,    // side 1
+            2, 1, 3,
+            4, 0, 6,    // side 2
+            6, 0, 2,
+            7, 5, 6,    // side 3
+            6, 5, 4,
+            3, 1, 7,    // side 4
+            7, 1, 5,
+            4, 5, 0,    // side 5
+            0, 5, 1,
+            3, 7, 2,    // side 6
+            2, 7, 6
+        };
+        hr = this->indexBufferCube.Initialize( this->device.Get(), indicesCube, ARRAYSIZE( indicesCube ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
-    // pyramid vertices and indices
-    Vertex_Pos_Col verticesPyramid[] =
-    {
-        { { -3.0f, 0.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-        { { 3.0f,  0.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-        { { -3.0f, 0.0f, -3.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-        { { 3.0f,  0.0f, -3.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-        { { 0.0f,  7.0f,  0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
-    };
-    hr = this->vertexBufferPyramid.Initialize( this->device.Get(), verticesPyramid, ARRAYSIZE( verticesPyramid ) );
-	if ( FAILED( hr ) )
-	{
-		ErrorLogger::Log( hr, "Failed to create pyramid vertex buffer!" );
-		return hr;
-	}
+        // pyramid vertices and indices
+        Vertex_Pos_Col verticesPyramid[] =
+        {
+            { { -3.0f, 0.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+            { { 3.0f,  0.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+            { { -3.0f, 0.0f, -3.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+            { { 3.0f,  0.0f, -3.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
+            { { 0.0f,  7.0f,  0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
+        };
+        hr = this->vertexBufferPyramid.Initialize( this->device.Get(), verticesPyramid, ARRAYSIZE( verticesPyramid ) );
+	    COM_ERROR_IF_FAILED( hr, "Failed to create pyramid vertex buffer" );
 
-    WORD indicesPyramid[] =
-    {
-        0, 2, 1,    // base
-        1, 2, 3,
-        0, 1, 4,    // sides
-        1, 3, 4,
-        3, 2, 4,
-        2, 0, 4,
-    };
-    hr = this->indexBufferPyramid.Initialize( this->device.Get(), indicesPyramid, ARRAYSIZE( indicesPyramid ) );
-	if ( FAILED( hr ) )
-	{
-		ErrorLogger::Log( hr, "Failed to create pyramid index buffer!" );
-		return hr;
-	}
+        WORD indicesPyramid[] =
+        {
+            0, 2, 1,    // base
+            1, 2, 3,
+            0, 1, 4,    // sides
+            1, 3, 4,
+            3, 2, 4,
+            2, 0, 4,
+        };
+        hr = this->indexBufferPyramid.Initialize( this->device.Get(), indicesPyramid, ARRAYSIZE( indicesPyramid ) );
+	    COM_ERROR_IF_FAILED( hr, "Failed to create pyramid index buffer!" );
 
-    // quad vertices and indices
-    Vertex_Pos_Col verticesQuad[] =
-    {
-        { { -3.0f,  3.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-        { {  3.0f,  3.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-        { { -3.0f, -3.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-        { {  3.0f, -3.0f, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } }
-    };
-    hr = this->vertexBufferQuad.Initialize( this->device.Get(), verticesQuad, ARRAYSIZE( verticesQuad ) );
-    if ( FAILED( hr ) )
-    {
-        ErrorLogger::Log( hr, "Failed to create quad vertex buffer!" );
-        return hr;
+        // quad vertices and indices
+        Vertex_Pos_Col verticesQuad[] =
+        {
+            { { -3.0f,  3.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+            { {  3.0f,  3.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+            { { -3.0f, -3.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+            { {  3.0f, -3.0f, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } }
+        };
+        hr = this->vertexBufferQuad.Initialize( this->device.Get(), verticesQuad, ARRAYSIZE( verticesQuad ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
+
+        WORD indicesQuad[] =
+        {
+            0, 1, 2,
+            1, 3, 2
+        };
+        hr = this->indexBufferQuad.Initialize( this->device.Get(), indicesQuad, ARRAYSIZE( indicesQuad ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
+
+        // setup constant buffers
+        hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );
+	    COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader' Constant Buffer!" );
     }
-
-    WORD indicesQuad[] =
+    catch ( COMException& exception )
     {
-        0, 1, 2,
-        1, 3, 2
-    };
-    hr = this->indexBufferQuad.Initialize( this->device.Get(), indicesQuad, ARRAYSIZE( indicesQuad ) );
-    if ( FAILED( hr ) )
-    {
-        ErrorLogger::Log( hr, "Failed to create quad index buffer!" );
-        return hr;
+        ErrorLogger::Log( exception );
+        return false;
     }
-
-    // setup constant buffers
-    hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );
-	if ( FAILED( hr ) )
-	{
-		ErrorLogger::Log( hr, "Failed to initialize 'cb_vs_vertexshader' Constant Buffer!" );
-		return hr;
-	}
 
     // initialize camera
     camera.SetPosition( XMFLOAT3( 0.0f, 0.0f, -25.0f ) );
@@ -460,5 +434,5 @@ HRESULT Graphics::InitializeScene()
 		1000.0f
 	);
 
-    return hr;
+    return true;
 }
