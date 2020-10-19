@@ -29,11 +29,19 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         worldMatricesQuad.push_back( worldMatrix );
     }
 
+    ImGui_ImplWin32_Init( hWnd );
+    ImGui_ImplDX11_Init( this->device.Get(), this->context.Get() );
+
 	return true;
 }
 
 void Graphics::BeginFrame( float clearColor[4] )
-{	
+{
+    // manager imgui
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
 	// clear render target
 	this->context->ClearRenderTargetView( this->renderTargetView.Get(), clearColor );
 	this->context->ClearDepthStencilView( this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
@@ -109,7 +117,11 @@ void Graphics::RenderFrame()
 
 void Graphics::EndFrame()
 {
-	// display frame
+	// display imgui
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
+
+    // display frame
 	HRESULT hr = this->swapChain->Present( 1, NULL );
 	if ( FAILED( hr ) )
 	{

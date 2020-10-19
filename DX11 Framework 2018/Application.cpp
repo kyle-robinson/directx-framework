@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "imgui/imgui.h"
 
 bool Application::Initialize(
 	HINSTANCE hInstance,
@@ -99,5 +100,12 @@ void Application::Render()
 
 	this->gfx.BeginFrame( clearColor );
 	this->gfx.RenderFrame();
+
+	if( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+	{
+
+	}
+	ImGui::End();
+
 	this->gfx.EndFrame();
 }

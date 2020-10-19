@@ -5,9 +5,12 @@
 #include "Vertex.h"
 #include "Shaders.h"
 #include "IndexBuffer.h"
+#include "ImGuiManager.h"
 #include "VertexBuffer.h"
 #include "ConstantBuffer.h"
 #include "ConstantBufferTypes.h"
+#include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_dx11.h"
 #pragma comment( lib, "DXGI.lib" )
 #pragma comment( lib, "d3d11.lib" )
 
@@ -24,6 +27,7 @@ public:
 	float gTime, multiplier;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 public:
+	ImGuiManager imgui;
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
