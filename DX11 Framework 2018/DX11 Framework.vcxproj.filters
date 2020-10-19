@@ -89,6 +89,9 @@
     <ClCompile Include="utility\Timer.cpp">
       <Filter>Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\ImGuiManager.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics\ConstantBufferTypes.h">
@@ -150,6 +153,9 @@
     </ClInclude>
     <ClInclude Include="utility\COMException.h">
       <Filter>Headers\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ImGuiManager.h">
+      <Filter>Headers\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
