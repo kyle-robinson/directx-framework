@@ -29,24 +29,6 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         worldMatricesQuad.push_back( worldMatrix );
     }
 
-    // Initialize the view matrix
-	DirectX::XMVECTOR Eye = DirectX::XMVectorSet( 0.0f, 0.0f, -25.0f, 0.0f );
-	DirectX::XMVECTOR At  = DirectX::XMVectorSet( 0.0f, 0.0f,  0.0f,  0.0f );
-	DirectX::XMVECTOR Up  = DirectX::XMVectorSet( 0.0f, 1.0f,  0.0f,  0.0f );
-
-	DirectX::XMStoreFloat4x4( &view, DirectX::XMMatrixLookAtLH( Eye, At, Up ) );
-
-    // Initialize the projection matrix
-	DirectX::XMStoreFloat4x4(
-        &projection,
-        DirectX::XMMatrixPerspectiveFovLH(
-            DirectX::XM_PIDIV2,
-            static_cast<FLOAT>( windowWidth ) / static_cast<FLOAT>( windowHeight ),
-            0.01f,
-            100.0f
-        )
-    );
-
 	return true;
 }
 
@@ -73,10 +55,8 @@ void Graphics::RenderFrame()
     cb_vs_vertexshader.data.gTime = gTime;
 
     // Load matrices
-	DirectX::XMMATRIX viewMatrix = DirectX::XMLoadFloat4x4( &reinterpret_cast<DirectX::XMFLOAT4X4&>( view ) );
-	DirectX::XMMATRIX projectionMatrix = DirectX::XMLoadFloat4x4( &reinterpret_cast<DirectX::XMFLOAT4X4&>( projection ) );
-    cb_vs_vertexshader.data.mView = DirectX::XMMatrixTranspose( viewMatrix );
-    cb_vs_vertexshader.data.mProjection = DirectX::XMMatrixTranspose( projectionMatrix );
+    cb_vs_vertexshader.data.mView = camera.GetViewMatrix();
+    cb_vs_vertexshader.data.mProjection = camera.GetProjectionMatrix();
 
     /*   CUBE OBJECT   */
     // Setup buffers
@@ -86,7 +66,7 @@ void Graphics::RenderFrame()
     for ( int i = 0; i < worldMatricesCube.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
-        cb_vs_vertexshader.data.mWorld = XMMatrixTranspose( worldMatrix );
+        cb_vs_vertexshader.data.mWorld = DirectX::XMMatrixTranspose( worldMatrix );
 
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
@@ -102,7 +82,7 @@ void Graphics::RenderFrame()
     for ( int i = 0; i < worldMatricesPyramid.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesPyramid[i] );
-        cb_vs_vertexshader.data.mWorld = XMMatrixTranspose( worldMatrix );
+        cb_vs_vertexshader.data.mWorld = DirectX::XMMatrixTranspose( worldMatrix );
 
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
@@ -118,7 +98,7 @@ void Graphics::RenderFrame()
     for ( int i = 0; i < worldMatricesQuad.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesQuad[i] );
-        cb_vs_vertexshader.data.mWorld = XMMatrixTranspose( worldMatrix );
+        cb_vs_vertexshader.data.mWorld = DirectX::XMMatrixTranspose( worldMatrix );
 
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
@@ -264,7 +244,7 @@ HRESULT Graphics::InitializeDirectX( HWND hWnd )
     // setup rasterizer state
     ZeroMemory( &rasterizerDesc, sizeof( D3D11_RASTERIZER_DESC ) );
     rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
-    rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
     rasterizerDesc.CullMode = D3D11_CULL_NONE;
     hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState.GetAddressOf() );
     if ( FAILED( hr ) )
@@ -403,6 +383,15 @@ HRESULT Graphics::InitializeScene()
 		ErrorLogger::Log( hr, "Failed to initialize 'cb_vs_vertexshader' Constant Buffer!" );
 		return hr;
 	}
+
+    // initialize camera
+    camera.SetPosition( XMFLOAT3( 0.0f, 0.0f, -25.0f ) );
+	camera.SetProjectionValues(
+		70.0f,
+		static_cast<float>( this->windowWidth ) / static_cast<float>( this->windowHeight ),
+		0.1f,
+		1000.0f
+	);
 
     return hr;
 }

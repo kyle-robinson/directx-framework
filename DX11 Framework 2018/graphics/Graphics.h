@@ -1,13 +1,14 @@
 #include <vector>
 #include <windows.h>
 #include <directxcolors.h>
+#include "Camera.h"
 #include "Vertex.h"
 #include "Shaders.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "ConstantBuffer.h"
 #include "ConstantBufferTypes.h"
-#pragma comment( lib, "DXGI.lib" )
+//#pragma comment( lib, "DXGI.lib" )
 #pragma comment( lib, "d3d11.lib" )
 
 class Graphics
@@ -19,6 +20,7 @@ public:
 	void EndFrame();
 public:
 	float gTime;
+	Camera camera;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
@@ -51,9 +53,8 @@ private:
 	VertexBuffer<Vertex_Pos_Col> vertexBufferQuad;
 	IndexBuffer indexBufferQuad;
 private:
-	DirectX::XMFLOAT4X4 view;
-	DirectX::XMFLOAT4X4 projection;
-private:
 	UINT windowWidth;
 	UINT windowHeight;
+	//DirectX::XMFLOAT4X4 view;
+	//DirectX::XMFLOAT4X4 projection;
 };

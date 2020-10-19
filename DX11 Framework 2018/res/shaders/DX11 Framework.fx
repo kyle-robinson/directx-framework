@@ -32,8 +32,8 @@ VS_OUTPUT VS( float4 Pos : POSITION, float4 Color : COLOR )
     
     VS_OUTPUT output;
     output.Pos = mul( Pos, World );
-    output.Pos = mul( output.Pos, View );
-    output.Pos = mul( output.Pos, Projection );
+    output.Pos = mul( output.Pos, transpose( View ) );
+    output.Pos = mul( output.Pos, transpose( Projection ) );
     output.Color = Color;
     return output;
 }

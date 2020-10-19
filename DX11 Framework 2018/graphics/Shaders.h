@@ -8,7 +8,7 @@
 class Shaders
 {
 protected:
-	HRESULT Shaders::CompileShaderFromFile(
+	HRESULT CompileShaderFromFile(
 		std::wstring szFileName,
 		LPCSTR szEntryPoint,
 		LPCSTR szShaderModel,

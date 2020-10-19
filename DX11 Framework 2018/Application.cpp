@@ -23,20 +23,6 @@ bool Application::ProcessMessages() noexcept
 
 void Application::Update()
 {
-    while ( !keyboard.CharBufferIsEmpty() )
-	{
-		unsigned char ch = keyboard.ReadChar();
-	}
-	while ( !keyboard.KeyBufferIsEmpty() )
-	{
-		Keyboard::KeyboardEvent kbe = keyboard.ReadKey();
-		unsigned char keycode = kbe.GetKeyCode();
-	}
-	while ( !mouse.EventBufferIsEmpty() )
-	{
-		Mouse::MouseEvent me = mouse.ReadEvent();
-	}
-    
     static float timer = 0.0f;
 
     if ( gfx.driverType == D3D_DRIVER_TYPE_REFERENCE )
@@ -54,10 +40,58 @@ void Application::Update()
         timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
     }
 
+    // read input
+    while ( !keyboard.CharBufferIsEmpty() )
+	{
+		unsigned char ch = keyboard.ReadChar();
+	}
+	while ( !keyboard.KeyBufferIsEmpty() )
+	{
+		Keyboard::KeyboardEvent kbe = keyboard.ReadKey();
+		unsigned char keycode = kbe.GetKeyCode();
+	}
+	while ( !mouse.EventBufferIsEmpty() )
+	{
+		Mouse::MouseEvent me = mouse.ReadEvent();
+        if ( mouse.IsRightDown() )
+		{
+			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove )
+			{
+				this->gfx.camera.AdjustRotation(
+					XMFLOAT3(
+						static_cast<float>( me.GetPosY() ) * 0.005f,
+						static_cast<float>( me.GetPosX() ) * 0.005f,
+						0.0f
+					)
+				);
+			}
+		}
+	}
+
+    // camera input
+    const float cameraSpeed = 0.02f;
+	if ( keyboard.KeyIsPressed( 'W' ) )
+		this->gfx.camera.AdjustPosition( this->gfx.camera.GetForwardVector() * cameraSpeed * timer );
+
+	if ( keyboard.KeyIsPressed( 'A' ) )
+		this->gfx.camera.AdjustPosition( this->gfx.camera.GetLeftVector() * cameraSpeed * timer );
+
+	if ( keyboard.KeyIsPressed( 'S' ) )
+		this->gfx.camera.AdjustPosition( this->gfx.camera.GetBackwardVector() * cameraSpeed * timer );
+
+	if ( keyboard.KeyIsPressed( 'D' ) )
+		this->gfx.camera.AdjustPosition( this->gfx.camera.GetRightVector() * cameraSpeed * timer );
+
+	if ( keyboard.KeyIsPressed( VK_SPACE ) )
+		this->gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, cameraSpeed * timer, 0.0f ) );
+
+	if ( keyboard.KeyIsPressed( VK_SHIFT ) )
+		this->gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, -cameraSpeed * timer, 0.0f ) );
+
     // Setup render state
-    if ( keyboard.KeyIsPressed( VK_SPACE ) )
+    if ( keyboard.KeyIsPressed( VK_F1 ) )
         gfx.rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    if ( keyboard.KeyIsPressed( VK_SHIFT ) )
+    if ( keyboard.KeyIsPressed( VK_F2 ) )
         gfx.rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
 
     // Animate the cube
