@@ -126,6 +126,73 @@ void Graphics::EndFrame()
 	}
 }
 
+void Graphics::Update()
+{
+    // setup timer
+	static float timer = 0.0f;
+	static DWORD dwTimeStart = 0;
+	DWORD dwTimeCur = GetTickCount64();
+
+	if ( dwTimeStart == 0 )
+		dwTimeStart = dwTimeCur;
+
+	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
+
+    // cube transformations
+    DirectX::XMStoreFloat4x4( &worldMatricesCube[0],
+        DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
+        DirectX::XMMatrixRotationZ( timer * 0.5f * multiplier )
+    );
+    DirectX::XMStoreFloat4x4( &worldMatricesCube[1],
+        DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
+        DirectX::XMMatrixTranslation( 10.0f, 0.0f, 0.0f ) *
+        DirectX::XMMatrixRotationY( timer * 1.5f * multiplier )
+    );
+    DirectX::XMStoreFloat4x4( &worldMatricesCube[2],
+        DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
+        DirectX::XMMatrixTranslation( 15.0f, 0.0f, 0.0f ) *
+        DirectX::XMMatrixRotationZ( timer * multiplier )
+    );
+
+    // pyramid transformations
+    DirectX::XMStoreFloat4x4( &worldMatricesPyramid[0],
+        DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
+        DirectX::XMMatrixTranslation( 5.0f, 10.0f, 0.0f ) *
+        DirectX::XMMatrixRotationZ( timer * 0.5f * multiplier )
+    );
+    DirectX::XMStoreFloat4x4( &worldMatricesPyramid[1],
+        DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
+        DirectX::XMMatrixTranslation( -10.0f, 0.0f, 0.0f ) *
+        DirectX::XMMatrixRotationY( timer * 1.5f * multiplier )
+    );
+    DirectX::XMStoreFloat4x4( &worldMatricesPyramid[2],
+        DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
+        DirectX::XMMatrixTranslation( -10.0f, 0.0f, 0.0f ) *
+        DirectX::XMMatrixRotationZ( timer * multiplier )
+    );
+
+    // quad transformations
+    int count = 0;
+    static int offset = 6;
+    static int widthLimit = 20;
+    static int heightLimit = 30;
+    for ( int width = 0; width < 20; width++ )
+    {
+        for ( int height = 0; height < 20; height++ )
+        {
+            DirectX::XMStoreFloat4x4( &worldMatricesQuad[count],
+                DirectX::XMMatrixRotationX( 1.5708f ) *
+                DirectX::XMMatrixTranslation(
+                    ( width * offset ) - ( widthLimit + heightLimit ),
+                    -20.0f,
+                    ( height * offset ) - heightLimit
+                )
+            );
+            count++;
+        }
+    }
+}
+
 HRESULT Graphics::InitializeDirectX( HWND hWnd )
 {
     HRESULT hr = S_OK;

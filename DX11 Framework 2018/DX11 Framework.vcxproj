@@ -466,6 +466,7 @@
     <ClCompile Include="utility\ErrorLogger.cpp" />
     <ClCompile Include="utility\Matrix.cpp" />
     <ClCompile Include="utility\StringConverter.cpp" />
+    <ClCompile Include="utility\Timer.cpp" />
     <ClCompile Include="utility\Vector3D.cpp" />
     <ClCompile Include="window\RenderWindow.cpp" />
     <ClCompile Include="window\WindowContainer.cpp" />
@@ -487,6 +488,7 @@
     <ClInclude Include="utility\ErrorLogger.h" />
     <ClInclude Include="utility\Matrix.h" />
     <ClInclude Include="utility\StringConverter.h" />
+    <ClInclude Include="utility\Timer.h" />
     <ClInclude Include="utility\Vector3D.h" />
     <ClInclude Include="window\RenderWindow.h" />
     <ClInclude Include="window\WindowContainer.h" />

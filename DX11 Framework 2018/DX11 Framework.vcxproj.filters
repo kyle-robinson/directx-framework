@@ -86,6 +86,9 @@
     <ClCompile Include="mouse\Mouse.cpp">
       <Filter>Source\Input</Filter>
     </ClCompile>
+    <ClCompile Include="utility\Timer.cpp">
+      <Filter>Source\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics\ConstantBufferTypes.h">
@@ -141,6 +144,9 @@
     </ClInclude>
     <ClInclude Include="mouse\Mouse.h">
       <Filter>Headers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\Timer.h">
+      <Filter>Headers\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

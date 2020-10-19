@@ -18,10 +18,12 @@ public:
 	void BeginFrame( float clearColor[4] );
 	void RenderFrame();
 	void EndFrame();
+	void Update();
 public:
-	float gTime;
 	Camera camera;
+	float gTime, multiplier;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
+public:
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
@@ -55,6 +57,4 @@ private:
 private:
 	UINT windowWidth;
 	UINT windowHeight;
-	//DirectX::XMFLOAT4X4 view;
-	//DirectX::XMFLOAT4X4 projection;
 };
