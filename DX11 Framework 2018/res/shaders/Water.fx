@@ -4,6 +4,9 @@ cbuffer ConstantBuffer : register( b0 )
 	matrix View;
 	matrix Projection;
     float gTime;
+    float waterSpeed;
+    float waterAmount;
+    float waterHeight;
 }
 
 // Vertex Shader
@@ -21,11 +24,8 @@ struct VS_OUTPUT
 
 VS_OUTPUT VS( VS_INPUT input )
 {   
-    //Pos.x = ( Pos.x - 3 ) * ( Pos.x - 3 );
-    //Pos.y = ( Pos.y + 1 ) * ( Pos.y + 1 );
-    input.inPos.z = sin( gTime * 0.8f +
-        ( input.inPos.x * input.inPos.y * 0.1f ) + 0.5 *
-        cos( input.inPos.x * input.inPos.y * 0.1f ) ) * 0.5f;
+    input.inPos.z = sin( gTime * waterSpeed + ( input.inPos.x * input.inPos.y * waterAmount ) *
+                    cos( input.inPos.x * input.inPos.y * waterAmount ) ) * waterHeight;
     
     VS_OUTPUT output;
     output.outPos = mul( float4( input.inPos, 1.0f ), transpose( World ) );

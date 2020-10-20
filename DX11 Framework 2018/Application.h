@@ -17,6 +17,9 @@ public:
 	void Render();
 private:
 	float multiplier = 1.0f;
+	float waterSpeed = 0.8f;
+	float waterAmount = 0.01f;
+	float waterHeight = 0.5f;
 	SYSTEM_INFO siSysInfo;
 	Timer timer;
 };

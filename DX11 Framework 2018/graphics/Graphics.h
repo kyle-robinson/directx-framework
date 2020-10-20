@@ -26,6 +26,7 @@ public:
 public:
 	Camera camera;
 	float gTime, multiplier;
+	float waterSpeed, waterAmount, waterHeight;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 public:
 	ImGuiManager imgui;
@@ -53,9 +54,10 @@ private:
 private:
 	VertexShader vertexShaderPrimitive;
 	PixelShader pixelShaderPrimitive;
+	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
 	VertexShader vertexShaderWater;
 	PixelShader pixelShaderWater;
-	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
+	ConstantBuffer<CB_VS_vertexshader_water> cb_vs_vertexshader_water;
 private:
 	VertexBuffer<Vertex_Pos_Col> vertexBufferCube;
 	IndexBuffer indexBufferCube;

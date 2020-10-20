@@ -62,10 +62,13 @@ void Graphics::BeginFrame( float clearColor[4] )
 void Graphics::RenderFrame()
 {
     cb_vs_vertexshader.data.gTime = gTime;
+    cb_vs_vertexshader_water.data.gTime = gTime;
 
     // Load matrices
     cb_vs_vertexshader.data.mView = camera.GetViewMatrix();
     cb_vs_vertexshader.data.mProjection = camera.GetProjectionMatrix();
+    cb_vs_vertexshader_water.data.mView = camera.GetViewMatrix();
+    cb_vs_vertexshader_water.data.mProjection = camera.GetProjectionMatrix();
 
     /*   CUBE OBJECT   */
     // Setup buffers
@@ -100,22 +103,27 @@ void Graphics::RenderFrame()
     }
 
     /*   QUAD OBJECT   */
-    // Setup buffers
+    // Set shader resources
+    cb_vs_vertexshader_water.data.waterSpeed = waterSpeed;
+    cb_vs_vertexshader_water.data.waterAmount = waterAmount;
+    cb_vs_vertexshader_water.data.waterHeight = waterHeight;
+    // Setup shaders
     this->context->VSSetShader( this->vertexShaderWater.GetShader(), NULL, 0 );
 	this->context->IASetInputLayout( this->vertexShaderWater.GetInputLayout() );
 	this->context->PSSetShader( this->pixelShaderWater.GetShader(), NULL, 0 );
     this->context->PSSetShaderResources( 0, 1, this->waterTexture.GetAddressOf() );
+    // Setup buffers
     offset = 0;
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
     this->context->IASetIndexBuffer( this->indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
     for ( int i = 0; i < worldMatricesQuad.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesQuad[i] );
-        cb_vs_vertexshader.data.mWorld = worldMatrix;
+        cb_vs_vertexshader_water.data.mWorld = worldMatrix;
 
-        if ( !cb_vs_vertexshader.ApplyChanges() )
+        if ( !cb_vs_vertexshader_water.ApplyChanges() )
 		    return;
-        this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
+        this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_water.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferQuad.BufferSize(), 0, 0 );
     }
 }
@@ -454,7 +462,7 @@ bool Graphics::InitializeScene()
         // create textures
         hr = DirectX::CreateWICTextureFromFile(
             this->device.Get(),
-            L"res\\textures\\water.png",
+            L"res\\textures\\lava.png",
             nullptr,
             this->waterTexture.GetAddressOf()
         );
@@ -463,6 +471,8 @@ bool Graphics::InitializeScene()
         // setup constant buffers
         hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );
 	    COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader' Constant Buffer!" );
+        hr = this->cb_vs_vertexshader_water.Initialize( this->device.Get(), this->context.Get() );
+        COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader_water' Constant Buffer!" );
     }
     catch ( COMException& exception )
     {

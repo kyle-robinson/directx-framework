@@ -79,6 +79,9 @@ void Application::Update()
 		this->gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, -cameraSpeed * dt, 0.0f ) );
 
 	gfx.multiplier = multiplier;
+	gfx.waterSpeed = waterSpeed;
+	gfx.waterAmount = waterAmount;
+	gfx.waterHeight = waterHeight;
     gfx.Update();
 }
 
@@ -101,6 +104,12 @@ void Application::Render()
 			ImGui::SameLine();
 			if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
 				gfx.rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+		}
+		if ( ImGui::CollapsingHeader( "Water Parameters" ) )
+		{
+			ImGui::DragFloat( "Speed", &waterSpeed, 0.01f, 0.0f, 1.0f );
+			ImGui::DragFloat( "Amount", &waterAmount, 0.0001f, 0.0f, 0.02f );
+			ImGui::DragFloat( "Height", &waterHeight, 0.01f, 0.0f, 1.0f );
 		}
 		if ( ImGui::CollapsingHeader( "Application Info" ) )
 		{
