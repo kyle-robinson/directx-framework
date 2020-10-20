@@ -11,6 +11,7 @@
 #include "ConstantBufferTypes.h"
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
+#include <dxtk/WICTextureLoader.h>
 #pragma comment( lib, "DXGI.lib" )
 #pragma comment( lib, "d3d11.lib" )
 
@@ -47,16 +48,20 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> waterTexture;
 private:
-	VertexShader vertexShader;
-	PixelShader pixelShader;
+	VertexShader vertexShaderPrimitive;
+	PixelShader pixelShaderPrimitive;
+	VertexShader vertexShaderWater;
+	PixelShader pixelShaderWater;
 	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
 private:
 	VertexBuffer<Vertex_Pos_Col> vertexBufferCube;
 	IndexBuffer indexBufferCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferPyramid;
 	IndexBuffer indexBufferPyramid;
-	VertexBuffer<Vertex_Pos_Col> vertexBufferQuad;
+	VertexBuffer<Vertex_Pos_Tex> vertexBufferQuad;
 	IndexBuffer indexBufferQuad;
 private:
 	UINT windowWidth;

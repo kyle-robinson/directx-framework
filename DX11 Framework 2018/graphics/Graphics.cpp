@@ -53,9 +53,10 @@ void Graphics::BeginFrame( float clearColor[4] )
     this->context->RSSetState( this->rasterizerState.Get() );
 
 	// setup shaders
-	this->context->VSSetShader( this->vertexShader.GetShader(), NULL, 0 );
-	this->context->IASetInputLayout( this->vertexShader.GetInputLayout() );
-	this->context->PSSetShader( this->pixelShader.GetShader(), NULL, 0 );
+	this->context->VSSetShader( this->vertexShaderPrimitive.GetShader(), NULL, 0 );
+	this->context->IASetInputLayout( this->vertexShaderPrimitive.GetInputLayout() );
+	this->context->PSSetShader( this->pixelShaderPrimitive.GetShader(), NULL, 0 );
+    this->context->PSSetSamplers( 0, 1, this->samplerState.GetAddressOf() );
 }
 
 void Graphics::RenderFrame()
@@ -74,7 +75,7 @@ void Graphics::RenderFrame()
     for ( int i = 0; i < worldMatricesCube.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
-        cb_vs_vertexshader.data.mWorld = DirectX::XMMatrixTranspose( worldMatrix );
+        cb_vs_vertexshader.data.mWorld = worldMatrix;
 
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
@@ -90,7 +91,7 @@ void Graphics::RenderFrame()
     for ( int i = 0; i < worldMatricesPyramid.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesPyramid[i] );
-        cb_vs_vertexshader.data.mWorld = DirectX::XMMatrixTranspose( worldMatrix );
+        cb_vs_vertexshader.data.mWorld = worldMatrix;
 
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
@@ -100,13 +101,17 @@ void Graphics::RenderFrame()
 
     /*   QUAD OBJECT   */
     // Setup buffers
+    this->context->VSSetShader( this->vertexShaderWater.GetShader(), NULL, 0 );
+	this->context->IASetInputLayout( this->vertexShaderWater.GetInputLayout() );
+	this->context->PSSetShader( this->pixelShaderWater.GetShader(), NULL, 0 );
+    this->context->PSSetShaderResources( 0, 1, this->waterTexture.GetAddressOf() );
     offset = 0;
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
     this->context->IASetIndexBuffer( this->indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
     for ( int i = 0; i < worldMatricesQuad.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesQuad[i] );
-        cb_vs_vertexshader.data.mWorld = DirectX::XMMatrixTranspose( worldMatrix );
+        cb_vs_vertexshader.data.mWorld = worldMatrix;
 
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
@@ -311,6 +316,16 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         rasterizerDesc.MultisampleEnable = TRUE;
         hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Rasterizer State!" );
+
+        // create sampler state
+		CD3D11_SAMPLER_DESC samplerDesc( CD3D11_DEFAULT{} );
+		samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
+		hr = this->device->CreateSamplerState( &samplerDesc, this->samplerState.GetAddressOf() );
+		COM_ERROR_IF_FAILED( hr, "Failed to create Sampler State!" );
     }
     catch ( COMException& exception )
     {
@@ -323,20 +338,29 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 
 bool Graphics::InitializeShaders()
 {
-	D3D11_INPUT_ELEMENT_DESC layout[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
-
-	UINT numElements = ARRAYSIZE( layout );
-
     try
     {
-	    HRESULT hr = vertexShader.Initialize( this->device, L"res\\shaders\\DX11 Framework.fx", layout, numElements );
-        COM_ERROR_IF_FAILED( hr, "Failed to initialize Vertex Shader!" );
+        /*   PRIMITIVE SHADERS   */
+	    D3D11_INPUT_ELEMENT_DESC layoutPrimitive[] = {
+		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	    };
+	    UINT numElements = ARRAYSIZE( layoutPrimitive );
+	    HRESULT hr = vertexShaderPrimitive.Initialize( this->device, L"res\\shaders\\Primitive.fx", layoutPrimitive, numElements );
+        COM_ERROR_IF_FAILED( hr, "Failed to create primitive Vertex Shader!" );
+	    hr = pixelShaderPrimitive.Initialize( this->device, L"res\\shaders\\Primitive.fx" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create primitive Pixel Shader!" );
 
-	    hr = pixelShader.Initialize( this->device, L"res\\shaders\\DX11 Framework.fx" );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Pixel Shader!" );
+        /*   WATER SHADERS   */
+        D3D11_INPUT_ELEMENT_DESC layoutWater[] = {
+		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	    };
+	    numElements = ARRAYSIZE( layoutWater );
+	    hr = vertexShaderWater.Initialize( this->device, L"res\\shaders\\Water.fx", layoutWater, numElements );
+        COM_ERROR_IF_FAILED( hr, "Failed to create water Vertex Shader!" );
+	    hr = pixelShaderWater.Initialize( this->device, L"res\\shaders\\Water.fx" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create water Pixel Shader!" );
     }
     catch ( COMException& exception )
     {
@@ -409,23 +433,32 @@ bool Graphics::InitializeScene()
 	    COM_ERROR_IF_FAILED( hr, "Failed to create pyramid index buffer!" );
 
         // quad vertices and indices
-        Vertex_Pos_Col verticesQuad[] =
+        Vertex_Pos_Tex verticesQuad[] =
         {
-            { { -3.0f,  3.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-            { {  3.0f,  3.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-            { { -3.0f, -3.0f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-            { {  3.0f, -3.0f, 0.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } }
+            { { -3.0f,  3.0f, 0.0f }, { 0.0f, 0.0f } },
+            { {  3.0f,  3.0f, 0.0f }, { 1.0f, 0.0f } },
+            { {  3.0f, -3.0f, 0.0f }, { 1.0f, 1.0f } },
+            { { -3.0f, -3.0f, 0.0f }, { 0.0f, 1.0f } }
         };
         hr = this->vertexBufferQuad.Initialize( this->device.Get(), verticesQuad, ARRAYSIZE( verticesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
 
         WORD indicesQuad[] =
         {
-            0, 1, 2,
-            1, 3, 2
+            0, 1, 3,
+            1, 2, 3
         };
         hr = this->indexBufferQuad.Initialize( this->device.Get(), indicesQuad, ARRAYSIZE( indicesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
+
+        // create textures
+        hr = DirectX::CreateWICTextureFromFile(
+            this->device.Get(),
+            L"res\\textures\\water.png",
+            nullptr,
+            this->waterTexture.GetAddressOf()
+        );
+        COM_ERROR_IF_FAILED( hr, "Failed to create WIC texture from file!" );
 
         // setup constant buffers
         hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );
