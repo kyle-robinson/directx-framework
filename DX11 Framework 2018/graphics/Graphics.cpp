@@ -80,8 +80,7 @@ void Graphics::RenderFrame()
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
         cb_vs_vertexshader.data.mWorld = worldMatrix;
-        if ( !cb_vs_vertexshader.ApplyChanges() )
-		    return;
+        if ( !cb_vs_vertexshader.ApplyChanges() ) return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferCube.BufferSize(), 0, 0 );
     }
@@ -95,8 +94,7 @@ void Graphics::RenderFrame()
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesPyramid[i] );
         cb_vs_vertexshader.data.mWorld = worldMatrix;
-        if ( !cb_vs_vertexshader.ApplyChanges() )
-		    return;
+        if ( !cb_vs_vertexshader.ApplyChanges() ) return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferPyramid.BufferSize(), 0, 0 );
     }
@@ -111,9 +109,10 @@ void Graphics::RenderFrame()
     cb_vs_vertexshader_normal.data.mWorld = matrixLightCube;
     cb_vs_vertexshader_normal.data.mView = camera.GetViewMatrix();
     cb_vs_vertexshader_normal.data.mProjection = camera.GetProjectionMatrix();
-    if ( !cb_vs_vertexshader_normal.ApplyChanges() )
-		return;
+    if ( !cb_vs_vertexshader_normal.ApplyChanges() ) return;
+    if ( !cb_ps_pixelshader_normal.ApplyChanges() ) return;
     this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_normal.GetAddressOf() );
+    this->context->PSSetConstantBuffers( 1, 1, this->cb_ps_pixelshader_normal.GetAddressOf() );
     this->context->Draw( this->vertexBufferLightCube.BufferSize(), 0 );
 
     /*   QUAD OBJECT   */
@@ -134,8 +133,7 @@ void Graphics::RenderFrame()
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesQuad[i] );
         cb_vs_vertexshader_water.data.mWorld = worldMatrix;
-        if ( !cb_vs_vertexshader_water.ApplyChanges() )
-		    return;
+        if ( !cb_vs_vertexshader_water.ApplyChanges() ) return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_water.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferQuad.BufferSize(), 0, 0 );
     }
@@ -548,6 +546,8 @@ bool Graphics::InitializeScene()
         COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader_water' Constant Buffer!" );
         hr = this->cb_vs_vertexshader_normal.Initialize( this->device.Get(), this->context.Get() );
         COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader_normal' Constant Buffer!" );
+        hr = this->cb_ps_pixelshader_normal.Initialize( this->device.Get(), this->context.Get() );
+        COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader_normal' Constant Buffer!" );
     }
     catch ( COMException& exception )
     {

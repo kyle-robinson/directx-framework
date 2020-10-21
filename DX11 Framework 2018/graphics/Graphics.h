@@ -62,6 +62,7 @@ private:
 	VertexShader vertexShaderNormal;
 	PixelShader pixelShaderNormal;
 	ConstantBuffer<CB_VS_vertexshader_normal> cb_vs_vertexshader_normal;
+	ConstantBuffer<CB_PS_pixelshader_normal> cb_ps_pixelshader_normal;
 private:
 	VertexBuffer<Vertex_Pos_Nrm> vertexBufferLightCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferCube;
