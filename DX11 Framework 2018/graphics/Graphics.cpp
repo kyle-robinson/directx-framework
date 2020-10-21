@@ -109,6 +109,7 @@ void Graphics::RenderFrame()
     cb_vs_vertexshader_normal.data.mWorld = matrixLightCube;
     cb_vs_vertexshader_normal.data.mView = camera.GetViewMatrix();
     cb_vs_vertexshader_normal.data.mProjection = camera.GetProjectionMatrix();
+    cb_ps_pixelshader_normal.data.eyePos = camera.GetPositionFloat3();
     if ( !cb_vs_vertexshader_normal.ApplyChanges() ) return;
     if ( !cb_ps_pixelshader_normal.ApplyChanges() ) return;
     this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_normal.GetAddressOf() );

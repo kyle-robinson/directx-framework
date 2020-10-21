@@ -36,7 +36,10 @@ cbuffer ConstantBufferPixel : register( b1 )
     float4 ambientLight;
     float4 diffuseMaterial;
     float4 diffuseLight;
+    float4 specularLight;
+    float specularPower;
     float3 lightDirection;
+    float3 eyePos;
 }
 
 struct PS_INPUT
@@ -54,8 +57,14 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     float3 diffuseAmount = max( dot( lightDirection, input.inNrm ), 0.0f );
     float3 diffuse = diffuseAmount * ( diffuseMaterial * diffuseLight ).rgb;
     
+    // specular lighting
+    float3 toEye = normalize( eyePos - input.inPos.xyz );
+    float3 reflection = reflect( -lightDirection, input.inNrm );
+    float specularAmount = pow( max( dot( reflection, toEye ), 0.0f ), specularPower );
+    float3 specular = specularAmount * ( diffuseMaterial * specularLight );
+    
     float4 result;
-    result.rgb = ambient + diffuse;
+    result.rgb = ambient + diffuse + specular;
     result.a = diffuseMaterial.a;
     
     return result;
