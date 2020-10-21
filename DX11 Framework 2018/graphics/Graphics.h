@@ -31,6 +31,7 @@ public:
 public:
 	ImGuiManager imgui;
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
+	DirectX::XMFLOAT4X4 worldMatrixLightCube;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesPyramid;
@@ -58,7 +59,11 @@ private:
 	VertexShader vertexShaderWater;
 	PixelShader pixelShaderWater;
 	ConstantBuffer<CB_VS_vertexshader_water> cb_vs_vertexshader_water;
+	VertexShader vertexShaderNormal;
+	PixelShader pixelShaderNormal;
+	ConstantBuffer<CB_VS_vertexshader_normal> cb_vs_vertexshader_normal;
 private:
+	VertexBuffer<Vertex_Pos_Nrm> vertexBufferLightCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferCube;
 	IndexBuffer indexBufferCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferPyramid;

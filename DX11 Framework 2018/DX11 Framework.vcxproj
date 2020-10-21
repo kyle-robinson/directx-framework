@@ -509,6 +509,7 @@
     <Image Include="directx.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="res\shaders\Normal.fx" />
     <FxCompile Include="res\shaders\Primitive.fx" />
     <FxCompile Include="res\shaders\Water.fx" />
   </ItemGroup>

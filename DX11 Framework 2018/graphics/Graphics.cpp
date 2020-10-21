@@ -22,12 +22,13 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         worldMatricesCube.push_back( worldMatrix );
         worldMatricesPyramid.push_back( worldMatrix );
     }
-    for ( int i = 0; i < 1000; i++ )
+    for ( int i = 0; i < 400; i++ )
     {
         DirectX::XMFLOAT4X4 worldMatrix;
         DirectX::XMStoreFloat4x4( &worldMatrix, DirectX::XMMatrixIdentity() );
         worldMatricesQuad.push_back( worldMatrix );
     }
+    DirectX::XMStoreFloat4x4( &worldMatrixLightCube, DirectX::XMMatrixIdentity() );
 
     ImGui_ImplWin32_Init( hWnd );
     ImGui_ImplDX11_Init( this->device.Get(), this->context.Get() );
@@ -79,7 +80,6 @@ void Graphics::RenderFrame()
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
         cb_vs_vertexshader.data.mWorld = worldMatrix;
-
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
@@ -95,12 +95,26 @@ void Graphics::RenderFrame()
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesPyramid[i] );
         cb_vs_vertexshader.data.mWorld = worldMatrix;
-
         if ( !cb_vs_vertexshader.ApplyChanges() )
 		    return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferPyramid.BufferSize(), 0, 0 );
     }
+
+    /*   LIGHT CUBE OBJECT   */
+    this->context->VSSetShader( this->vertexShaderNormal.GetShader(), NULL, 0 );
+	this->context->IASetInputLayout( this->vertexShaderNormal.GetInputLayout() );
+	this->context->PSSetShader( this->pixelShaderNormal.GetShader(), NULL, 0 );
+    offset = 0;
+    this->context->IASetVertexBuffers( 0, 1, this->vertexBufferLightCube.GetAddressOf(), vertexBufferLightCube.StridePtr(), &offset );
+    DirectX::XMMATRIX matrixLightCube = DirectX::XMLoadFloat4x4( &worldMatrixLightCube );
+    cb_vs_vertexshader_normal.data.mWorld = matrixLightCube;
+    cb_vs_vertexshader_normal.data.mView = camera.GetViewMatrix();
+    cb_vs_vertexshader_normal.data.mProjection = camera.GetProjectionMatrix();
+    if ( !cb_vs_vertexshader_normal.ApplyChanges() )
+		return;
+    this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_normal.GetAddressOf() );
+    this->context->Draw( this->vertexBufferLightCube.BufferSize(), 0 );
 
     /*   QUAD OBJECT   */
     // Set shader resources
@@ -120,7 +134,6 @@ void Graphics::RenderFrame()
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesQuad[i] );
         cb_vs_vertexshader_water.data.mWorld = worldMatrix;
-
         if ( !cb_vs_vertexshader_water.ApplyChanges() )
 		    return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_water.GetAddressOf() );
@@ -167,7 +180,8 @@ void Graphics::Update()
     // cube transformations
     DirectX::XMStoreFloat4x4( &worldMatricesCube[0],
         DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
-        DirectX::XMMatrixRotationZ( timer * 0.5f * multiplier )
+        DirectX::XMMatrixRotationZ( timer * 0.5f * multiplier ) *
+        DirectX::XMMatrixTranslation( 0.0f, 0.0f, 30.0f )
     );
     DirectX::XMStoreFloat4x4( &worldMatricesCube[1],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
@@ -194,6 +208,11 @@ void Graphics::Update()
     DirectX::XMStoreFloat4x4( &worldMatricesPyramid[2],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
         DirectX::XMMatrixTranslation( -10.0f, 0.0f, 0.0f ) *
+        DirectX::XMMatrixRotationZ( timer * multiplier )
+    );
+
+    DirectX::XMStoreFloat4x4( &worldMatrixLightCube,
+        DirectX::XMMatrixRotationY( timer * multiplier ) *
         DirectX::XMMatrixRotationZ( timer * multiplier )
     );
 
@@ -349,6 +368,7 @@ bool Graphics::InitializeShaders()
     try
     {
         /*   PRIMITIVE SHADERS   */
+        // color shader
 	    D3D11_INPUT_ELEMENT_DESC layoutPrimitive[] = {
 		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
@@ -358,6 +378,17 @@ bool Graphics::InitializeShaders()
         COM_ERROR_IF_FAILED( hr, "Failed to create primitive Vertex Shader!" );
 	    hr = pixelShaderPrimitive.Initialize( this->device, L"res\\shaders\\Primitive.fx" );
         COM_ERROR_IF_FAILED( hr, "Failed to create primitive Pixel Shader!" );
+
+        // normal shader
+        D3D11_INPUT_ELEMENT_DESC layoutNormals[] = {
+		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		    { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	    };
+	    numElements = ARRAYSIZE( layoutNormals );
+	    hr = vertexShaderNormal.Initialize( this->device, L"res\\shaders\\Normal.fx", layoutNormals, numElements );
+        COM_ERROR_IF_FAILED( hr, "Failed to create normal Vertex Shader!" );
+	    hr = pixelShaderNormal.Initialize( this->device, L"res\\shaders\\Normal.fx" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create normal Pixel Shader!" );
 
         /*   WATER SHADERS   */
         D3D11_INPUT_ELEMENT_DESC layoutWater[] = {
@@ -383,6 +414,48 @@ bool Graphics::InitializeScene()
 {
     try
     {
+        Vertex_Pos_Nrm verticesLightCube[] =
+        {
+            { { -1.0,  1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
+            { {  1.0,  1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
+            { { -1.0, -1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
+            { { -1.0, -1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
+            { {  1.0,  1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
+            { {  1.0, -1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
+            { {  1.0,  1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
+            { {  1.0,  1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
+            { {  1.0, -1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
+            { {  1.0, -1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
+            { {  1.0,  1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
+            { {  1.0, -1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
+            { {  1.0,  1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
+            { { -1.0,  1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
+            { {  1.0, -1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
+            { {  1.0, -1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
+            { { -1.0,  1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
+            { { -1.0, -1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
+            { { -1.0,  1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
+            { { -1.0,  1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
+            { { -1.0, -1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
+            { { -1.0, -1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
+            { { -1.0,  1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
+            { { -1.0, -1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
+            { { -1.0,  1.0,  1.0 }, { 0.0,  1.0,  0.0 } },
+            { {  1.0,  1.0,  1.0 }, { 0.0,  1.0,  0.0 } },
+            { { -1.0,  1.0, -1.0 }, { 0.0,  1.0,  0.0 } },
+            { { -1.0,  1.0, -1.0 }, { 0.0,  1.0,  0.0 } },
+            { {  1.0,  1.0,  1.0 }, { 0.0,  1.0,  0.0 } },
+            { {  1.0,  1.0, -1.0 }, { 0.0,  1.0,  0.0 } },
+            { { -1.0, -1.0, -1.0 }, { 0.0, -1.0,  0.0 } },
+            { {  1.0, -1.0, -1.0 }, { 0.0, -1.0,  0.0 } },
+            { { -1.0, -1.0,  1.0 }, { 0.0, -1.0,  0.0 } },
+            { { -1.0, -1.0,  1.0 }, { 0.0, -1.0,  0.0 } },
+            { {  1.0, -1.0, -1.0 }, { 0.0, -1.0,  0.0 } },
+            { {  1.0, -1.0,  1.0 }, { 0.0, -1.0,  0.0 } }
+        };
+        HRESULT hr = this->vertexBufferLightCube.Initialize( this->device.Get(), verticesLightCube, ARRAYSIZE( verticesLightCube ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create light cube vertex buffer!" );
+        
         // cube vertices and indices
         Vertex_Pos_Col verticesCube[] =
         {
@@ -395,7 +468,7 @@ bool Graphics::InitializeScene()
             { { -3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
             { {  3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }
         };
-        HRESULT hr = this->vertexBufferCube.Initialize( this->device.Get(), verticesCube, ARRAYSIZE( verticesCube ) );
+        hr = this->vertexBufferCube.Initialize( this->device.Get(), verticesCube, ARRAYSIZE( verticesCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
 
         WORD indicesCube[] =
@@ -462,7 +535,7 @@ bool Graphics::InitializeScene()
         // create textures
         hr = DirectX::CreateWICTextureFromFile(
             this->device.Get(),
-            L"res\\textures\\lava.png",
+            L"res\\textures\\water.png",
             nullptr,
             this->waterTexture.GetAddressOf()
         );
@@ -473,6 +546,8 @@ bool Graphics::InitializeScene()
 	    COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader' Constant Buffer!" );
         hr = this->cb_vs_vertexshader_water.Initialize( this->device.Get(), this->context.Get() );
         COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader_water' Constant Buffer!" );
+        hr = this->cb_vs_vertexshader_normal.Initialize( this->device.Get(), this->context.Get() );
+        COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader_normal' Constant Buffer!" );
     }
     catch ( COMException& exception )
     {
