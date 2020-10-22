@@ -25,8 +25,7 @@ VS_OUTPUT VS( VS_INPUT input )
     output.outPos = mul( output.outPos, transpose( View ) );
     output.outPos = mul( output.outPos, transpose( Projection ) );
     // convert normals from local to world space
-    output.outNrm = mul( float4( input.inNrm, 0.0f ), transpose( World ) ).xyz;
-    output.outNrm = output.outNrm;
+    output.outNrm = mul( float4( normalize( input.inNrm ), 0.0f ), transpose( World ) ).xyz;
     return output;
 }
 
