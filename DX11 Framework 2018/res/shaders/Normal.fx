@@ -25,7 +25,7 @@ VS_OUTPUT VS( VS_INPUT input )
     output.outPos = mul( output.outPos, transpose( View ) );
     output.outPos = mul( output.outPos, transpose( Projection ) );
     // convert normals from local to world space
-    output.outNrm = mul( float4( normalize( input.inNrm ), 0.0f ), transpose( World ) ).xyz;
+    output.outNrm = mul( float4( input.inNrm, 0.0f ), transpose( World ) ).xyz;
     return output;
 }
 
@@ -36,8 +36,8 @@ cbuffer ConstantBufferPixel : register( b1 )
     float4 diffuseMaterial;
     float4 diffuseLight;
     float4 specularLight;
-    float specularPower;
     float3 lightDirection;
+    float specularPower;
     float3 eyePos;
 }
 
@@ -49,6 +49,8 @@ struct PS_INPUT
 
 float4 PS( PS_INPUT input ) : SV_TARGET
 {   
+    input.inNrm = normalize( input.inNrm );
+    
     // ambient lighting
     float3 ambient = diffuseMaterial * ambientLight;
     
@@ -60,7 +62,7 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     float3 toEye = normalize( eyePos - input.inPos.xyz );
     float3 reflection = reflect( -lightDirection, input.inNrm );
     float specularAmount = pow( max( dot( reflection, toEye ), 0.0f ), specularPower );
-    float3 specular = specularAmount * ( diffuseMaterial * specularLight );
+    float3 specular = specularAmount * ( diffuseMaterial * specularLight ).rgb;
     
     float4 result;
     result.rgb = ambient + diffuse + specular;
