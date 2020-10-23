@@ -1,4 +1,7 @@
 #pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
+
 #include <DirectXMath.h>
 using namespace DirectX;
 
@@ -46,3 +49,5 @@ private:
 	XMVECTOR vec_right;
 	XMVECTOR vec_backward;
 };
+
+#endif

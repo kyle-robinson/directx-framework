@@ -1,4 +1,7 @@
 #pragma once
+#ifndef INDEXBUFFER_H
+#define INDEXBUFFER_H
+
 #include <memory>
 #include <d3d11.h>
 #include <wrl/client.h>
@@ -46,3 +49,5 @@ public:
 		return hr;
 	}
 };
+
+#endif

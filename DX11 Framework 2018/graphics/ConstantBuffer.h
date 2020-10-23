@@ -1,4 +1,7 @@
 #pragma once
+#ifndef CONSTANTBUFFER_H
+#define CONSTANTBUFFER_H
+
 #include <d3d11.h>
 #include <wrl/client.h>
 #include "ConstantBufferTypes.h"
@@ -56,3 +59,5 @@ public:
 		return true;
 	}
 };
+
+#endif

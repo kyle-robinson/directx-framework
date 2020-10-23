@@ -1,4 +1,7 @@
 #pragma once
+#ifndef RENDERWINDOW_H
+#define RENDERWINDOW_H
+
 #include "../utility/ErrorLogger.h"
 #include "../resource.h"
 
@@ -30,3 +33,5 @@ private:
 	std::wstring windowClass_Wide = L"";
 	int width, height;
 };
+
+#endif

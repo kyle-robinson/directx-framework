@@ -1,6 +1,3 @@
-#ifndef __MATRIX_CPP
-#define __MATIRX_CPP
-
 #include "Matrix.h"
 
 // parameter constructor
@@ -254,5 +251,3 @@ unsigned int Matrix<T>::GetCols() const
 {
 	return this->cols;
 }
-
-#endif

@@ -1,4 +1,7 @@
 #pragma once
+#ifndef VERTEX_H
+#define VERTEX_H
+
 #include <DirectXMath.h>
 
 struct Vertex_Pos_Col
@@ -18,3 +21,5 @@ struct Vertex_Pos_Nrm
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT3 normal;
 };
+
+#endif

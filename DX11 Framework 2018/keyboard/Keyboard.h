@@ -1,4 +1,7 @@
 #pragma once
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
+
 #include <queue>
 
 class Keyboard
@@ -46,3 +49,5 @@ private:
 	std::queue<KeyboardEvent> keyBuffer;
 	std::queue<unsigned char> charBuffer;
 };
+
+#endif

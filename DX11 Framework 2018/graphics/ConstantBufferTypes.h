@@ -1,4 +1,7 @@
 #pragma once
+#ifndef CONSTANTBUFFERTYPES_H
+#define CONSTANTBUFFERTYPES_H
+
 #include <DirectXMath.h>
 
 struct CB_VS_vertexshader
@@ -42,3 +45,5 @@ struct CB_PS_pixelshader_normal
 	DirectX::XMFLOAT3 lightDirection = { 0.25f, 0.5f, -1.0f };
 	DirectX::XMFLOAT3 eyePos;
 };
+
+#endif

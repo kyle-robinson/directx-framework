@@ -1,7 +1,7 @@
-#ifndef __MATRIX_H
-#define __MATRIX_H
+#pragma once
+#ifndef MATRIX_H
+#define MATRIX_H
 
-//#pragma once
 #include <vector>
 
 template<typename T>

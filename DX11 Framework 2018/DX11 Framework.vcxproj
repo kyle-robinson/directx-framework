@@ -204,7 +204,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions> /FORCE %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -460,10 +460,8 @@
     <ClCompile Include="keyboard\Keyboard.cpp" />
     <ClCompile Include="mouse\Mouse.cpp" />
     <ClCompile Include="utility\ErrorLogger.cpp" />
-    <ClCompile Include="utility\Matrix.cpp" />
     <ClCompile Include="utility\StringConverter.cpp" />
     <ClCompile Include="utility\Timer.cpp" />
-    <ClCompile Include="utility\Vector3D.cpp" />
     <ClCompile Include="window\RenderWindow.cpp" />
     <ClCompile Include="window\WindowContainer.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -484,6 +482,8 @@
     <ClInclude Include="graphics\Graphics.h" />
     <ClInclude Include="graphics\ImGuiManager.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />
+    <ClInclude Include="graphics\ObjectIndices.h" />
+    <ClInclude Include="graphics\ObjectVertices.h" />
     <ClInclude Include="graphics\Shaders.h" />
     <ClInclude Include="graphics\Vertex.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />
@@ -492,10 +492,8 @@
     <CLInclude Include="resource.h" />
     <ClInclude Include="utility\COMException.h" />
     <ClInclude Include="utility\ErrorLogger.h" />
-    <ClInclude Include="utility\Matrix.h" />
     <ClInclude Include="utility\StringConverter.h" />
     <ClInclude Include="utility\Timer.h" />
-    <ClInclude Include="utility\Vector3D.h" />
     <ClInclude Include="window\RenderWindow.h" />
     <ClInclude Include="window\WindowContainer.h" />
     <ResourceCompile Include="DX11 Framework.rc" />

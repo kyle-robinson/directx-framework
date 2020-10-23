@@ -42,6 +42,9 @@
     <Filter Include="Resource Files\ImGui">
       <UniqueIdentifier>{e81e3e0a-96ae-4892-ad4e-d7133f641b0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Graphics\Objects">
+      <UniqueIdentifier>{64c7e55d-7242-4739-95dd-0f381cfaa2a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -73,12 +76,6 @@
     </ClCompile>
     <ClCompile Include="graphics\IndexBuffer.cpp">
       <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="utility\Vector3D.cpp">
-      <Filter>Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="utility\Matrix.cpp">
-      <Filter>Source\Utility</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Camera.cpp">
       <Filter>Source\Graphics</Filter>
@@ -151,12 +148,6 @@
     <ClInclude Include="graphics\ConstantBuffer.h">
       <Filter>Headers\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="utility\Vector3D.h">
-      <Filter>Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="utility\Matrix.h">
-      <Filter>Headers\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\Camera.h">
       <Filter>Headers\Graphics</Filter>
     </ClInclude>
@@ -198,6 +189,12 @@
     </ClInclude>
     <ClInclude Include="..\External\imgui\imstb_truetype.h">
       <Filter>Resource Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ObjectVertices.h">
+      <Filter>Headers\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ObjectIndices.h">
+      <Filter>Headers\Graphics\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

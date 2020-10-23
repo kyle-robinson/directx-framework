@@ -1,4 +1,7 @@
 #pragma once
+#ifndef VECTOR3D_H
+#define VECTOR3D_H
+
 #include <Windows.h>
 
 class Vector3D
@@ -33,3 +36,5 @@ public:
 	float ShowZ() const noexcept;
 	void Display() noexcept;
 };
+
+#endif

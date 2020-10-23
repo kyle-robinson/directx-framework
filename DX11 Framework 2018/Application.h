@@ -1,4 +1,7 @@
 #pragma once
+#ifndef APPLICATION_H
+#define APPLICATION_H
+
 #include "window/WindowContainer.h"
 #include "utility/Timer.h"
 
@@ -24,3 +27,4 @@ private:
 	Timer timer;
 };
 
+#endif

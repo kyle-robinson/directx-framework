@@ -1,12 +1,15 @@
+#pragma once
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
+
 #include <vector>
-#include <windows.h>
-#include <directxcolors.h>
 #include "Camera.h"
-#include "Vertex.h"
 #include "Shaders.h"
 #include "IndexBuffer.h"
 #include "ImGuiManager.h"
 #include "VertexBuffer.h"
+#include "ObjectIndices.h"
+#include "ObjectVertices.h"
 #include "ConstantBuffer.h"
 #include "ConstantBufferTypes.h"
 #include "imgui/imgui_impl_win32.h"
@@ -75,3 +78,5 @@ private:
 	UINT windowWidth;
 	UINT windowHeight;
 };
+
+#endif

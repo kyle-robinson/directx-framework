@@ -413,122 +413,25 @@ bool Graphics::InitializeScene()
 {
     try
     {
-        Vertex_Pos_Nrm verticesLightCube[] =
-        {
-            { { -1.0,  1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
-            { {  1.0,  1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
-            { { -1.0, -1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
-            { { -1.0, -1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
-            { {  1.0,  1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
-            { {  1.0, -1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
-            { {  1.0,  1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
-            { {  1.0,  1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
-            { {  1.0, -1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
-            { {  1.0, -1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
-            { {  1.0,  1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
-            { {  1.0, -1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
-            { {  1.0,  1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
-            { { -1.0,  1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
-            { {  1.0, -1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
-            { {  1.0, -1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
-            { { -1.0,  1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
-            { { -1.0, -1.0,  1.0 }, { 0.0,  0.0,  1.0 } },
-            { { -1.0,  1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
-            { { -1.0,  1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
-            { { -1.0, -1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
-            { { -1.0, -1.0,  1.0 }, { 1.0,  0.0,  0.0 } },
-            { { -1.0,  1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
-            { { -1.0, -1.0, -1.0 }, { 1.0,  0.0,  0.0 } },
-            { { -1.0,  1.0,  1.0 }, { 0.0,  1.0,  0.0 } },
-            { {  1.0,  1.0,  1.0 }, { 0.0,  1.0,  0.0 } },
-            { { -1.0,  1.0, -1.0 }, { 0.0,  1.0,  0.0 } },
-            { { -1.0,  1.0, -1.0 }, { 0.0,  1.0,  0.0 } },
-            { {  1.0,  1.0,  1.0 }, { 0.0,  1.0,  0.0 } },
-            { {  1.0,  1.0, -1.0 }, { 0.0,  1.0,  0.0 } },
-            { { -1.0, -1.0, -1.0 }, { 0.0, -1.0,  0.0 } },
-            { {  1.0, -1.0, -1.0 }, { 0.0, -1.0,  0.0 } },
-            { { -1.0, -1.0,  1.0 }, { 0.0, -1.0,  0.0 } },
-            { { -1.0, -1.0,  1.0 }, { 0.0, -1.0,  0.0 } },
-            { {  1.0, -1.0, -1.0 }, { 0.0, -1.0,  0.0 } },
-            { {  1.0, -1.0,  1.0 }, { 0.0, -1.0,  0.0 } }
-        };
-        HRESULT hr = this->vertexBufferLightCube.Initialize( this->device.Get(), verticesLightCube, ARRAYSIZE( verticesLightCube ) );
+        HRESULT hr = this->vertexBufferLightCube.Initialize( this->device.Get(), VTX::verticesLightCube, ARRAYSIZE( VTX::verticesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create light cube vertex buffer!" );
         
         // cube vertices and indices
-        Vertex_Pos_Col verticesCube[] =
-        {
-            { { -3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
-            { {  3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-            { { -3.0f, -3.0f, -3.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-            { {  3.0f, -3.0f, -3.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-            { { -3.0f,  3.0f,  3.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-            { {  3.0f,  3.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-            { { -3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-            { {  3.0f, -3.0f,  3.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }
-        };
-        hr = this->vertexBufferCube.Initialize( this->device.Get(), verticesCube, ARRAYSIZE( verticesCube ) );
+        hr = this->vertexBufferCube.Initialize( this->device.Get(), VTX::verticesCube, ARRAYSIZE( VTX::verticesCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
-
-        WORD indicesCube[] =
-        {
-            0, 1, 2,    // side 1
-            2, 1, 3,
-            4, 0, 6,    // side 2
-            6, 0, 2,
-            7, 5, 6,    // side 3
-            6, 5, 4,
-            3, 1, 7,    // side 4
-            7, 1, 5,
-            4, 5, 0,    // side 5
-            0, 5, 1,
-            3, 7, 2,    // side 6
-            2, 7, 6
-        };
-        hr = this->indexBufferCube.Initialize( this->device.Get(), indicesCube, ARRAYSIZE( indicesCube ) );
+        hr = this->indexBufferCube.Initialize( this->device.Get(), IDX::indicesCube, ARRAYSIZE( IDX::indicesCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
         // pyramid vertices and indices
-        Vertex_Pos_Col verticesPyramid[] =
-        {
-            { { -3.0f, 0.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-            { { 3.0f,  0.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-            { { -3.0f, 0.0f, -3.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-            { { 3.0f,  0.0f, -3.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-            { { 0.0f,  7.0f,  0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }
-        };
-        hr = this->vertexBufferPyramid.Initialize( this->device.Get(), verticesPyramid, ARRAYSIZE( verticesPyramid ) );
+        hr = this->vertexBufferPyramid.Initialize( this->device.Get(), VTX::verticesPyramid, ARRAYSIZE( VTX::verticesPyramid ) );
 	    COM_ERROR_IF_FAILED( hr, "Failed to create pyramid vertex buffer" );
-
-        WORD indicesPyramid[] =
-        {
-            0, 2, 1,    // base
-            1, 2, 3,
-            0, 1, 4,    // sides
-            1, 3, 4,
-            3, 2, 4,
-            2, 0, 4,
-        };
-        hr = this->indexBufferPyramid.Initialize( this->device.Get(), indicesPyramid, ARRAYSIZE( indicesPyramid ) );
+        hr = this->indexBufferPyramid.Initialize( this->device.Get(), IDX::indicesPyramid, ARRAYSIZE( IDX::indicesPyramid ) );
 	    COM_ERROR_IF_FAILED( hr, "Failed to create pyramid index buffer!" );
 
         // quad vertices and indices
-        Vertex_Pos_Tex verticesQuad[] =
-        {
-            { { -3.0f,  3.0f, 0.0f }, { 0.0f, 0.0f } },
-            { {  3.0f,  3.0f, 0.0f }, { 1.0f, 0.0f } },
-            { {  3.0f, -3.0f, 0.0f }, { 1.0f, 1.0f } },
-            { { -3.0f, -3.0f, 0.0f }, { 0.0f, 1.0f } }
-        };
-        hr = this->vertexBufferQuad.Initialize( this->device.Get(), verticesQuad, ARRAYSIZE( verticesQuad ) );
+        hr = this->vertexBufferQuad.Initialize( this->device.Get(), VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
-
-        WORD indicesQuad[] =
-        {
-            0, 1, 3,
-            1, 2, 3
-        };
-        hr = this->indexBufferQuad.Initialize( this->device.Get(), indicesQuad, ARRAYSIZE( indicesQuad ) );
+        hr = this->indexBufferQuad.Initialize( this->device.Get(), IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
 
         // create textures

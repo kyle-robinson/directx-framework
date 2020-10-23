@@ -1,3 +1,7 @@
+#pragma once
+#ifndef WINDOWCONTAINER_H
+#define WINDOWCONTAINER_H
+
 #include "RenderWindow.h"
 #include "../graphics/Graphics.h"
 #include "../keyboard/Keyboard.h"
@@ -14,3 +18,5 @@ protected:
 	Graphics gfx;
 	Mouse mouse;
 };
+
+#endif

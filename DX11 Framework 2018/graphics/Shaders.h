@@ -1,8 +1,11 @@
 #pragma once
-#include "../utility/ErrorLogger.h"
+#ifndef SHADERS_H
+#define SHADERS_H
+
 #include <d3d11.h>
 #include <wrl/client.h>
 #include <d3dcompiler.h>
+#include "../utility/ErrorLogger.h"
 #pragma comment( lib, "D3DCompiler.lib" )
 
 class Shaders
@@ -43,3 +46,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> shader;
 	Microsoft::WRL::ComPtr<ID3D10Blob> shaderBuffer;
 };
+
+#endif

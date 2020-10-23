@@ -1,4 +1,7 @@
 #pragma once
+#ifndef TIMER_H
+#define TIMER_H
+
 #include <chrono>
 
 class Timer
@@ -19,3 +22,5 @@ private:
 	std::chrono::time_point<std::chrono::system_clock> stop;
 #endif
 };
+
+#endif

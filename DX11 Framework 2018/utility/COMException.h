@@ -1,4 +1,7 @@
 #pragma once
+#ifndef COMEXCEPTION_H
+#define COMEXCEPTION_H
+
 #include <comdef.h>
 #include "StringConverter.h"
 
@@ -28,3 +31,5 @@ public:
 private:
 	std::wstring whatMsg;
 };
+
+#endif

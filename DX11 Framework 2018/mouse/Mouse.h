@@ -1,4 +1,7 @@
 #pragma once
+#ifndef MOUSE_H
+#define MOUSE_H
+
 #include <queue>
 
 struct MousePoint
@@ -67,3 +70,5 @@ private:
 	bool isMiddleDown = false;
 	int x = 0, y = 0;
 };
+
+#endif
