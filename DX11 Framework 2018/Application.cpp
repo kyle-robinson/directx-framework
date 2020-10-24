@@ -8,8 +8,8 @@ bool Application::Initialize(
 	int width,
 	int height )
 {
-    timer.Start();
-	GetSystemInfo( &siSysInfo );
+	this->timer.Start();
+	GetSystemInfo( &this->siSysInfo );
 
 	if ( !this->renderWindow.Initialize( this, hInstance, windowTitle, windowClass, width, height ) )
 		return false;
@@ -27,8 +27,8 @@ bool Application::ProcessMessages() noexcept
 
 void Application::Update()
 {
-    float dt = timer.GetMiliSecondsElapsed();
-    timer.Restart();
+    float dt = this->timer.GetMiliSecondsElapsed();
+	this->timer.Restart();
 
     // read input
     while ( !keyboard.CharBufferIsEmpty() )
@@ -96,9 +96,17 @@ void Application::Update()
 	gfx.cb_vs_vertexshader_normal.data.mProjection = gfx.camera.GetProjectionMatrix();
 
 	// variables
-	gfx.cb_vs_vertexshader_water.data.waterSpeed = waterSpeed;
-	gfx.cb_vs_vertexshader_water.data.waterAmount = waterAmount;
-	gfx.cb_vs_vertexshader_water.data.waterHeight = waterHeight;
+	gfx.cb_vs_vertexshader_water.data.waterSpeed = this->waterSpeed;
+	gfx.cb_vs_vertexshader_water.data.waterAmount = this->waterAmount;
+	gfx.cb_vs_vertexshader_water.data.waterHeight = this->waterHeight;
+
+	// lighting
+	gfx.cb_ps_pixelshader_normal.data.ambientLight = this->ambientLight;
+	gfx.cb_ps_pixelshader_normal.data.diffuseLight = this->diffuseLight;
+	gfx.cb_ps_pixelshader_normal.data.specularLight = this->specularLight;
+	gfx.cb_ps_pixelshader_normal.data.diffuseMaterial = this->diffuseMaterial;
+	gfx.cb_ps_pixelshader_normal.data.lightDirection = this->lightDirection;
+	gfx.cb_ps_pixelshader_normal.data.specularPower = this->specularPower;
 	gfx.cb_ps_pixelshader_normal.data.eyePos = gfx.camera.GetPositionFloat3();
 
     gfx.Update();
@@ -126,15 +134,24 @@ void Application::Render()
 		}
 		if ( ImGui::CollapsingHeader( "Water Parameters" ) )
 		{
-			ImGui::DragFloat( "Speed", &waterSpeed, 0.01f, 0.0f, 1.0f );
-			ImGui::DragFloat( "Amount", &waterAmount, 0.0001f, 0.0f, 0.02f );
-			ImGui::DragFloat( "Height", &waterHeight, 0.01f, 0.0f, 1.0f );
+			ImGui::DragFloat( "Speed", &this->waterSpeed, 0.01f, 0.0f, 1.0f );
+			ImGui::DragFloat( "Amount", &this->waterAmount, 0.0001f, 0.0f, 0.02f );
+			ImGui::DragFloat( "Height", &this->waterHeight, 0.01f, 0.0f, 1.0f );
+		}
+		if ( ImGui::CollapsingHeader( "Lighting Parameters" ) )
+		{
+			ImGui::ColorEdit4( "Ambient", &this->ambientLight.x );
+			ImGui::ColorEdit4( "Diffuse", &this->diffuseLight.x );
+			ImGui::ColorEdit4( "Specular", &this->specularLight.x );
+			ImGui::ColorEdit4( "Material", &this->diffuseMaterial.x );
+			ImGui::SliderFloat3( "Light Direction", &this->lightDirection.x, -1.0f, 1.0f );
+			ImGui::SliderFloat( "Specular Power", &this->specularPower, 0.0f, 20.0f );
 		}
 		if ( ImGui::CollapsingHeader( "Application Info" ) )
 		{
-			ImGui::Text( "Processor Type: %u", siSysInfo.dwProcessorType );
-			ImGui::Text( "Processor Count: %u", siSysInfo.dwNumberOfProcessors );
-			ImGui::Text( "OEM ID: %u", siSysInfo.dwOemId );
+			ImGui::Text( "Processor Type: %u", this->siSysInfo.dwProcessorType );
+			ImGui::Text( "Processor Count: %u", this->siSysInfo.dwNumberOfProcessors );
+			ImGui::Text( "OEM ID: %u", this->siSysInfo.dwOemId );
 			ImGui::NewLine();
 			ImGui::Text( "Frametime: %.3f / Framerate: (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate );
 		}

@@ -37,12 +37,12 @@ struct CB_PS_pixelshader
 
 struct CB_PS_pixelshader_normal
 {
-	DirectX::XMFLOAT4 ambientLight = { 0.2f, 0.2f, 0.2f, 1.0f };
-	DirectX::XMFLOAT4 diffuseMaterial = { 0.8f, 0.5f, 0.5f, 1.0f };
-	DirectX::XMFLOAT4 diffuseLight = { 1.0f, 1.0f, 1.0f, 1.0f };
-	DirectX::XMFLOAT4 specularLight = { 0.5f, 0.5f, 0.5f, 1.0f };
-	DirectX::XMFLOAT3 lightDirection = { 0.0f, 0.0f, -1.0f };
-	float specularPower = 10.0f;
+	DirectX::XMFLOAT4 ambientLight;
+	DirectX::XMFLOAT4 diffuseMaterial;
+	DirectX::XMFLOAT4 diffuseLight;
+	DirectX::XMFLOAT4 specularLight;
+	DirectX::XMFLOAT3 lightDirection;
+	float specularPower;
 	DirectX::XMFLOAT3 eyePos;
 };
 
