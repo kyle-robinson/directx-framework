@@ -122,12 +122,12 @@ MousePoint Mouse::GetPos() const noexcept
 	return { this->x, this->y };
 }
 
-bool Mouse::EventBufferIsEmpty()
+bool Mouse::EventBufferIsEmpty() const noexcept
 {
 	return eventBuffer.empty();
 }
 
-Mouse::MouseEvent Mouse::ReadEvent()
+Mouse::MouseEvent Mouse::ReadEvent() noexcept
 {
 	if ( this->eventBuffer.empty() )
 	{

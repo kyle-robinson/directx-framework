@@ -39,17 +39,17 @@ bool Keyboard::KeyIsPressed( const unsigned char keycode )
 	return this->keyStates[keycode];
 }
 
-bool Keyboard::KeyBufferIsEmpty()
+bool Keyboard::KeyBufferIsEmpty() const noexcept
 {
 	return this->keyBuffer.empty();
 }
 
-bool Keyboard::CharBufferIsEmpty()
+bool Keyboard::CharBufferIsEmpty() const noexcept
 {
 	return this->charBuffer.empty();
 }
 
-Keyboard::KeyboardEvent Keyboard::ReadKey()
+Keyboard::KeyboardEvent Keyboard::ReadKey() noexcept
 {
 	if ( this->keyBuffer.empty() )
 	{
@@ -63,7 +63,7 @@ Keyboard::KeyboardEvent Keyboard::ReadKey()
 	}
 }
 
-unsigned char Keyboard::ReadChar()
+unsigned char Keyboard::ReadChar() noexcept
 {
 	if ( this->charBuffer.empty() )
 	{
@@ -77,49 +77,49 @@ unsigned char Keyboard::ReadChar()
 	}
 }
 
-void Keyboard::OnKeyPressed( const unsigned char key )
+void Keyboard::OnKeyPressed( const unsigned char key ) noexcept
 {
 	this->keyStates[key] = true;
 	this->keyBuffer.push( KeyboardEvent( KeyboardEvent::EventType::Press, key ) );
 }
 
-void Keyboard::OnKeyReleased( const unsigned char key )
+void Keyboard::OnKeyReleased( const unsigned char key ) noexcept
 {
 	this->keyStates[key] = false;
 	this->keyBuffer.push( KeyboardEvent( KeyboardEvent::EventType::Release, key ) );
 }
 
-void Keyboard::OnChar( const unsigned char key )
+void Keyboard::OnChar( const unsigned char key ) noexcept
 {
 	this->charBuffer.push( key );
 }
 
-void Keyboard::EnableAutoRepeatKeys()
+void Keyboard::EnableAutoRepeatKeys() noexcept
 {
 	this->autoRepeatKeys = true;
 }
 
-void Keyboard::DisableAutoRepeatKeys()
+void Keyboard::DisableAutoRepeatKeys() noexcept
 {
 	this->autoRepeatKeys = false;
 }
 
-void Keyboard::EnableAutoRepeatChars()
+void Keyboard::EnableAutoRepeatChars() noexcept
 {
 	this->autoRepeatChars = true;
 }
 
-void Keyboard::DisableAutoRepeatChars()
+void Keyboard::DisableAutoRepeatChars() noexcept
 {
 	this->autoRepeatChars = false;
 }
 
-bool Keyboard::IsKeysAutoRepeat()
+bool Keyboard::IsKeysAutoRepeat() const noexcept
 {
 	return this->autoRepeatKeys;
 }
 
-bool Keyboard::IsCharsAutoRepeat()
+bool Keyboard::IsCharsAutoRepeat() const noexcept
 {
 	return this->autoRepeatChars;
 }

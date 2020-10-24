@@ -52,17 +52,15 @@ public:
 	void OnWheelDown( int x, int y ) noexcept;
 	void OnMouseMove( int x, int y ) noexcept;
 	void OnMouseMoveRaw( int x, int y ) noexcept;
-
+public:
 	bool IsLeftDown() const noexcept;
 	bool IsRightDown() const noexcept;
 	bool IsMiddleDown() const noexcept;
-
 	int GetPosX() const noexcept;
 	int GetPosY() const noexcept;
 	MousePoint GetPos() const noexcept;
-
-	bool EventBufferIsEmpty();
-	MouseEvent ReadEvent();
+	bool EventBufferIsEmpty() const noexcept;
+	MouseEvent ReadEvent() noexcept;
 private:
 	std::queue<MouseEvent> eventBuffer;
 	bool isLeftDown = false;
