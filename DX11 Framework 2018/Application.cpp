@@ -78,10 +78,29 @@ void Application::Update()
 	if ( keyboard.KeyIsPressed( VK_SHIFT ) )
 		this->gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, -cameraSpeed * dt, 0.0f ) );
 
-	gfx.multiplier = multiplier;
-	gfx.waterSpeed = waterSpeed;
-	gfx.waterAmount = waterAmount;
-	gfx.waterHeight = waterHeight;
+	// constant buffer
+	// timers
+	static DWORD dwTimeStart = 0;
+	DWORD dwTimeCur = GetTickCount64();
+	if ( dwTimeStart == 0 ) dwTimeStart = dwTimeCur;
+	gfx.gTime = ( dwTimeCur - dwTimeStart ) / 1000.0f;
+	gfx.cb_vs_vertexshader.data.gTime = gfx.gTime;
+	gfx.cb_vs_vertexshader_water.data.gTime = gfx.gTime;
+
+	// matrices
+	gfx.cb_vs_vertexshader.data.mView = gfx.camera.GetViewMatrix();
+	gfx.cb_vs_vertexshader_water.data.mView = gfx.camera.GetViewMatrix();
+	gfx.cb_vs_vertexshader_normal.data.mView = gfx.camera.GetViewMatrix();
+	gfx.cb_vs_vertexshader.data.mProjection = gfx.camera.GetProjectionMatrix();
+	gfx.cb_vs_vertexshader_water.data.mProjection = gfx.camera.GetProjectionMatrix();
+	gfx.cb_vs_vertexshader_normal.data.mProjection = gfx.camera.GetProjectionMatrix();
+
+	// variables
+	gfx.cb_vs_vertexshader_water.data.waterSpeed = waterSpeed;
+	gfx.cb_vs_vertexshader_water.data.waterAmount = waterAmount;
+	gfx.cb_vs_vertexshader_water.data.waterHeight = waterHeight;
+	gfx.cb_ps_pixelshader_normal.data.eyePos = gfx.camera.GetPositionFloat3();
+
     gfx.Update();
 }
 
@@ -97,7 +116,7 @@ void Application::Render()
 		if ( ImGui::CollapsingHeader( "Scene Parameters" ) )
 		{
 			ImGui::ColorEdit3( "Clear Colour", clearColor );
-			ImGui::DragFloat( "Rotation Multiplier", &multiplier, 0.01f, -1.0f, 1.0f );
+			ImGui::DragFloat( "Rotation Multiplier", &gfx.multiplier, 0.01f, -1.0f, 1.0f );
 			static int fillGroup = 0;
 			if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
 				gfx.rasterizerDesc.FillMode = D3D11_FILL_SOLID;

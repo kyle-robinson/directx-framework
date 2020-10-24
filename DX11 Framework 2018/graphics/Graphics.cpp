@@ -62,15 +62,6 @@ void Graphics::BeginFrame( float clearColor[4] )
 
 void Graphics::RenderFrame()
 {
-    cb_vs_vertexshader.data.gTime = gTime;
-    cb_vs_vertexshader_water.data.gTime = gTime;
-
-    // Load matrices
-    cb_vs_vertexshader.data.mView = camera.GetViewMatrix();
-    cb_vs_vertexshader.data.mProjection = camera.GetProjectionMatrix();
-    cb_vs_vertexshader_water.data.mView = camera.GetViewMatrix();
-    cb_vs_vertexshader_water.data.mProjection = camera.GetProjectionMatrix();
-
     /*   CUBE OBJECT   */
     // Setup buffers
     UINT offset = 0;
@@ -107,9 +98,6 @@ void Graphics::RenderFrame()
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferLightCube.GetAddressOf(), vertexBufferLightCube.StridePtr(), &offset );
     DirectX::XMMATRIX matrixLightCube = DirectX::XMLoadFloat4x4( &worldMatrixLightCube );
     cb_vs_vertexshader_normal.data.mWorld = matrixLightCube;
-    cb_vs_vertexshader_normal.data.mView = camera.GetViewMatrix();
-    cb_vs_vertexshader_normal.data.mProjection = camera.GetProjectionMatrix();
-    cb_ps_pixelshader_normal.data.eyePos = camera.GetPositionFloat3();
     if ( !cb_vs_vertexshader_normal.ApplyChanges() ) return;
     if ( !cb_ps_pixelshader_normal.ApplyChanges() ) return;
     this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_normal.GetAddressOf() );
@@ -117,10 +105,6 @@ void Graphics::RenderFrame()
     this->context->Draw( this->vertexBufferLightCube.BufferSize(), 0 );
 
     /*   QUAD OBJECT   */
-    // Set shader resources
-    cb_vs_vertexshader_water.data.waterSpeed = waterSpeed;
-    cb_vs_vertexshader_water.data.waterAmount = waterAmount;
-    cb_vs_vertexshader_water.data.waterHeight = waterHeight;
     // Setup shaders
     this->context->VSSetShader( this->vertexShaderWater.GetShader(), NULL, 0 );
 	this->context->IASetInputLayout( this->vertexShaderWater.GetInputLayout() );
@@ -165,54 +149,43 @@ void Graphics::EndFrame()
 
 void Graphics::Update()
 {
-    // setup timer
-	static float timer = 0.0f;
-	static DWORD dwTimeStart = 0;
-	DWORD dwTimeCur = GetTickCount64();
-
-	if ( dwTimeStart == 0 )
-		dwTimeStart = dwTimeCur;
-
-	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
-    gTime = timer;
-
     // cube transformations
     DirectX::XMStoreFloat4x4( &worldMatricesCube[0],
         DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
-        DirectX::XMMatrixRotationZ( timer * 0.5f * multiplier ) *
+        DirectX::XMMatrixRotationZ( gTime * 0.5f * multiplier ) *
         DirectX::XMMatrixTranslation( 0.0f, 0.0f, 30.0f )
     );
     DirectX::XMStoreFloat4x4( &worldMatricesCube[1],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
         DirectX::XMMatrixTranslation( 10.0f, 0.0f, 0.0f ) *
-        DirectX::XMMatrixRotationY( timer * 1.5f * multiplier )
+        DirectX::XMMatrixRotationY( gTime * 1.5f * multiplier )
     );
     DirectX::XMStoreFloat4x4( &worldMatricesCube[2],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
         DirectX::XMMatrixTranslation( 15.0f, 0.0f, 0.0f ) *
-        DirectX::XMMatrixRotationZ( timer * multiplier )
+        DirectX::XMMatrixRotationZ( gTime * multiplier )
     );
 
     // pyramid transformations
     DirectX::XMStoreFloat4x4( &worldMatricesPyramid[0],
         DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
         DirectX::XMMatrixTranslation( 5.0f, 10.0f, 0.0f ) *
-        DirectX::XMMatrixRotationZ( timer * 0.5f * multiplier )
+        DirectX::XMMatrixRotationZ( gTime * 0.5f * multiplier )
     );
     DirectX::XMStoreFloat4x4( &worldMatricesPyramid[1],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
         DirectX::XMMatrixTranslation( -10.0f, 0.0f, 0.0f ) *
-        DirectX::XMMatrixRotationY( timer * 1.5f * multiplier )
+        DirectX::XMMatrixRotationY( gTime * 1.5f * multiplier )
     );
     DirectX::XMStoreFloat4x4( &worldMatricesPyramid[2],
         DirectX::XMMatrixScaling( 0.5f, 0.5f, 0.5f ) *
         DirectX::XMMatrixTranslation( -10.0f, 0.0f, 0.0f ) *
-        DirectX::XMMatrixRotationZ( timer * multiplier )
+        DirectX::XMMatrixRotationZ( gTime * multiplier )
     );
 
     DirectX::XMStoreFloat4x4( &worldMatrixLightCube,
-        DirectX::XMMatrixRotationY( timer * multiplier ) *
-        DirectX::XMMatrixRotationZ( timer * multiplier )
+        DirectX::XMMatrixRotationY( gTime * multiplier ) *
+        DirectX::XMMatrixRotationZ( gTime * multiplier )
     );
 
     // quad transformations

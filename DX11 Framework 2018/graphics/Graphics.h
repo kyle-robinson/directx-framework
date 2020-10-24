@@ -28,9 +28,13 @@ public:
 	void Update();
 public:
 	Camera camera;
-	float gTime, multiplier;
-	float waterSpeed, waterAmount, waterHeight;
+	float gTime, multiplier = 1.0f;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
+public:
+	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
+	ConstantBuffer<CB_VS_vertexshader_water> cb_vs_vertexshader_water;
+	ConstantBuffer<CB_VS_vertexshader_normal> cb_vs_vertexshader_normal;
+	ConstantBuffer<CB_PS_pixelshader_normal> cb_ps_pixelshader_normal;
 public:
 	ImGuiManager imgui;
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
@@ -58,14 +62,10 @@ private:
 private:
 	VertexShader vertexShaderPrimitive;
 	PixelShader pixelShaderPrimitive;
-	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
 	VertexShader vertexShaderWater;
 	PixelShader pixelShaderWater;
-	ConstantBuffer<CB_VS_vertexshader_water> cb_vs_vertexshader_water;
 	VertexShader vertexShaderNormal;
 	PixelShader pixelShaderNormal;
-	ConstantBuffer<CB_VS_vertexshader_normal> cb_vs_vertexshader_normal;
-	ConstantBuffer<CB_PS_pixelshader_normal> cb_ps_pixelshader_normal;
 private:
 	VertexBuffer<Vertex_Pos_Nrm> vertexBufferLightCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferCube;
