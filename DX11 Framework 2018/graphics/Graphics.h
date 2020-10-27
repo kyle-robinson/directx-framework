@@ -2,21 +2,14 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <vector>
+#include "Light.h"
 #include "Camera.h"
 #include "Shaders.h"
-#include "IndexBuffer.h"
 #include "ImGuiManager.h"
-#include "VertexBuffer.h"
-#include "ObjectIndices.h"
-#include "ObjectVertices.h"
-#include "ConstantBuffer.h"
-#include "ConstantBufferTypes.h"
+#include "RenderableGameObject.h"
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
 #include <dxtk/WICTextureLoader.h>
-#pragma comment( lib, "DXGI.lib" )
-#pragma comment( lib, "d3d11.lib" )
 
 class Graphics
 {
@@ -27,21 +20,22 @@ public:
 	void EndFrame();
 	void Update();
 public:
+	Light light;
 	Camera camera;
+	RenderableGameObject gameObject;
 	float gTime, multiplier = 1.0f;
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 public:
-	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
-	ConstantBuffer<CB_VS_vertexshader_water> cb_vs_vertexshader_water;
-	ConstantBuffer<CB_VS_vertexshader_normal> cb_vs_vertexshader_normal;
-	ConstantBuffer<CB_PS_pixelshader_normal> cb_ps_pixelshader_normal;
+	//ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
+	//ConstantBuffer<CB_VS_vertexshader_water> cb_vs_vertexshader_water;
+	//ConstantBuffer<CB_VS_vertexshader_normal> cb_vs_vertexshader_normal;
+	//ConstantBuffer<CB_PS_pixelshader_normal> cb_ps_pixelshader_normal;
 public:
-	ImGuiManager imgui;
 	D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
-	DirectX::XMFLOAT4X4 worldMatrixLightCube;
-	std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
-	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
-	std::vector<DirectX::XMFLOAT4X4> worldMatricesPyramid;
+	//DirectX::XMFLOAT4X4 worldMatrixLightCube;
+	//std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
+	//std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
+	//std::vector<DirectX::XMFLOAT4X4> worldMatricesPyramid;
 private:
 	bool InitializeDirectX( HWND hWnd );
 	bool InitializeShaders();
@@ -60,23 +54,30 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> waterTexture;
 private:
-	VertexShader vertexShaderPrimitive;
+	VertexShader vertexShader;
+	VertexShader vertexShader_noLight;
+	PixelShader pixelShader;
+	PixelShader pixelShader_noLight;
+	ConstantBuffer<CB_VS_vertexShader> cb_vs_vertexshader;
+	ConstantBuffer<CB_PS_light> cb_ps_light;
+	/*VertexShader vertexShaderPrimitive;
 	PixelShader pixelShaderPrimitive;
 	VertexShader vertexShaderWater;
 	PixelShader pixelShaderWater;
 	VertexShader vertexShaderNormal;
-	PixelShader pixelShaderNormal;
+	PixelShader pixelShaderNormal;*/
 private:
-	VertexBuffer<Vertex_Pos_Nrm> vertexBufferLightCube;
+	/*VertexBuffer<Vertex_Pos_Nrm> vertexBufferLightCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferCube;
-	IndexBuffer indexBufferCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferPyramid;
-	IndexBuffer indexBufferPyramid;
 	VertexBuffer<Vertex_Pos_Tex> vertexBufferQuad;
-	IndexBuffer indexBufferQuad;
+	IndexBuffer indexBufferCube;
+	IndexBuffer indexBufferPyramid;
+	IndexBuffer indexBufferQuad;*/
 private:
 	UINT windowWidth;
 	UINT windowHeight;
+	ImGuiManager imgui;
 };
 
 #endif

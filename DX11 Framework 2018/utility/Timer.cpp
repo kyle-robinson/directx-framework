@@ -6,7 +6,7 @@ Timer::Timer()
 	stop = std::chrono::high_resolution_clock::now();
 }
 
-double Timer::GetMiliSecondsElapsed()
+double Timer::GetMilliSecondsElapsed()
 {
 	if ( isRunning )
 	{

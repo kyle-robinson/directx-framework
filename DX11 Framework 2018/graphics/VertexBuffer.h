@@ -1,22 +1,31 @@
 #pragma once
-#ifndef VERTEXBUFFER_H
-#define VERTEXBUFFER_H
-
-#include <memory>
 #include <d3d11.h>
 #include <wrl/client.h>
+#include <memory>
 
 template<class T>
 class VertexBuffer
 {
 private:
-	VertexBuffer( const VertexBuffer<T>& rhs );
-private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-	std::unique_ptr<UINT> stride;
-	UINT bufferSize = 0;
+	UINT stride = sizeof( T );
+	UINT vertexCount = 0;
 public:
 	VertexBuffer() {}
+	VertexBuffer( const VertexBuffer<T>& rhs )
+	{
+		this->buffer = rhs.buffer;
+		this->stride = rhs.stride;
+		this->vertexCount = rhs.vertexCount;
+	}
+	VertexBuffer<T>& operator=( const VertexBuffer<T>& rhs )
+	{
+		this->buffer = rhs.buffer;
+		this->stride = rhs.stride;
+		this->vertexCount = rhs.vertexCount;
+		return *this;
+	}
+public:
 	ID3D11Buffer* Get() const noexcept
 	{
 		return buffer.Get();
@@ -25,31 +34,29 @@ public:
 	{
 		return buffer.GetAddressOf();
 	}
-	UINT BufferSize() const noexcept
+	UINT VertexCount() const noexcept
 	{
-		return this->bufferSize;
+		return this->vertexCount;
 	}
 	const UINT Stride() const noexcept
 	{
-		return *this->stride.get();
+		return this->stride;
 	}
 	const UINT* StridePtr() const noexcept
 	{
-		return this->stride.get();
+		return &this->stride;
 	}
-	HRESULT Initialize( ID3D11Device* device, T* data, UINT numVertices )
+	HRESULT Initialize( ID3D11Device* device, T* data, UINT vertexCount )
 	{
 		if ( buffer.Get() != nullptr )
 			buffer.Reset();
 
-		this->bufferSize = numVertices;
-		if ( stride.get() == nullptr )
-			this->stride = std::make_unique<UINT>( sizeof( T ) );
+		this->vertexCount = vertexCount;
 
 		D3D11_BUFFER_DESC vertexBufferDesc;
 		ZeroMemory( &vertexBufferDesc, sizeof( D3D11_BUFFER_DESC ) );
 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		vertexBufferDesc.ByteWidth = sizeof( T ) * numVertices;
+		vertexBufferDesc.ByteWidth = this->stride * vertexCount;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = 0;
 		vertexBufferDesc.MiscFlags = 0;
@@ -62,5 +69,3 @@ public:
 		return hr;
 	}
 };
-
-#endif

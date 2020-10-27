@@ -45,6 +45,21 @@
     <Filter Include="Headers\Graphics\Objects">
       <UniqueIdentifier>{64c7e55d-7242-4739-95dd-0f381cfaa2a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Graphics\Model">
+      <UniqueIdentifier>{d9d32f9d-ef70-48ec-b548-747aed1ad95d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\Bindables">
+      <UniqueIdentifier>{5e1b0e88-2e46-4bb6-9f5d-673d3b458c37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Objects">
+      <UniqueIdentifier>{3afe182d-483a-491f-b6eb-2924b35c7394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Model">
+      <UniqueIdentifier>{2623e95e-02d1-444c-94e2-eb58a63d891b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Bindables">
+      <UniqueIdentifier>{2ff92b7f-abc5-42b2-99d5-df163146dbe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -68,18 +83,6 @@
     <ClCompile Include="window\RenderWindow.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\VertexBuffer.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\Shaders.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\IndexBuffer.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\Camera.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="keyboard\Keyboard.cpp">
       <Filter>Source\Input</Filter>
     </ClCompile>
@@ -88,9 +91,6 @@
     </ClCompile>
     <ClCompile Include="utility\Timer.cpp">
       <Filter>Source\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\ImGuiManager.cpp">
-      <Filter>Source\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\imgui.cpp">
       <Filter>Resource Files\ImGui</Filter>
@@ -107,14 +107,44 @@
     <ClCompile Include="..\External\imgui\imgui_widgets.cpp">
       <Filter>Resource Files\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\Camera.cpp">
+      <Filter>Source\Graphics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Light.cpp">
+      <Filter>Source\Graphics\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\GameObject.cpp">
+      <Filter>Source\Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Mesh.cpp">
+      <Filter>Source\Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Model.cpp">
+      <Filter>Source\Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\RenderableGameObject.cpp">
+      <Filter>Source\Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\VertexBuffer.cpp">
+      <Filter>Source\Graphics\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Texture.cpp">
+      <Filter>Source\Graphics\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Shaders.cpp">
+      <Filter>Source\Graphics\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\IndexBuffer.cpp">
+      <Filter>Source\Graphics\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\ImGuiManager.cpp">
+      <Filter>Source\Graphics\Bindables</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Colour.cpp">
+      <Filter>Source\Graphics\Bindables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graphics\ConstantBufferTypes.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Vertex.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -136,21 +166,6 @@
     <ClInclude Include="window\WindowContainer.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\VertexBuffer.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Shaders.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\IndexBuffer.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\ConstantBuffer.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Camera.h">
-      <Filter>Headers\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="keyboard\Keyboard.h">
       <Filter>Headers\Input</Filter>
     </ClInclude>
@@ -162,9 +177,6 @@
     </ClInclude>
     <ClInclude Include="utility\COMException.h">
       <Filter>Headers\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\ImGuiManager.h">
-      <Filter>Headers\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\External\imgui\imconfig.h">
       <Filter>Resource Files\ImGui</Filter>
@@ -196,6 +208,51 @@
     <ClInclude Include="graphics\ObjectIndices.h">
       <Filter>Headers\Graphics\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\Light.h">
+      <Filter>Headers\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Camera.h">
+      <Filter>Headers\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Model.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Mesh.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\RenderableGameObject.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GameObject.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\VertexBuffer.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Shaders.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\IndexBuffer.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ImGuiManager.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ConstantBufferTypes.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ConstantBuffer.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Colour.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Texture.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Vertex.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11 Framework.rc">
@@ -226,6 +283,12 @@
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="res\shaders\Normal.fx">
+      <Filter>Resource Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="res\shaders\Model.fx">
+      <Filter>Resource Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="res\shaders\Model_NoLight.fx">
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

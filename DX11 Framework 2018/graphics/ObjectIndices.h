@@ -2,7 +2,7 @@
 #ifndef OBJECTINDICES_H
 #define OBJECTINDICES_H
 
-#include <Windows.h>
+typedef unsigned short WORD;
 
 namespace IDX
 {
@@ -41,4 +41,5 @@ namespace IDX
         1, 2, 3
     };
 }
+
 #endif

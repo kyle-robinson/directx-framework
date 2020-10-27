@@ -15,7 +15,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	if ( !InitializeScene() )
 		return false;
 
-    for ( int i = 0; i < 3; i++ )
+    /*for ( int i = 0; i < 3; i++ )
     {
         DirectX::XMFLOAT4X4 worldMatrix;
         DirectX::XMStoreFloat4x4( &worldMatrix, DirectX::XMMatrixIdentity() );
@@ -28,7 +28,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         DirectX::XMStoreFloat4x4( &worldMatrix, DirectX::XMMatrixIdentity() );
         worldMatricesQuad.push_back( worldMatrix );
     }
-    DirectX::XMStoreFloat4x4( &worldMatrixLightCube, DirectX::XMMatrixIdentity() );
+    DirectX::XMStoreFloat4x4( &worldMatrixLightCube, DirectX::XMMatrixIdentity() );*/
 
     ImGui_ImplWin32_Init( hWnd );
     ImGui_ImplDX11_Init( this->device.Get(), this->context.Get() );
@@ -43,6 +43,19 @@ void Graphics::BeginFrame( float clearColor[4] )
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    // set constant buffers
+    this->cb_ps_light.data.dynamicLightColor = light.lightColor;
+	this->cb_ps_light.data.dynamicLightStrength = light.lightStrength;
+	this->cb_ps_light.data.specularLightColor = light.specularColor;
+	this->cb_ps_light.data.specularLightIntensity = light.specularIntensity;
+	this->cb_ps_light.data.specularLightPower = light.specularPower;
+	this->cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
+	this->cb_ps_light.data.lightConstant = light.constant;
+	this->cb_ps_light.data.lightLinear = light.linear;
+	this->cb_ps_light.data.lightQuadratic = light.quadratic;
+	this->cb_ps_light.ApplyChanges();
+	this->context->PSSetConstantBuffers( 1, 1, this->cb_ps_light.GetAddressOf() );
+
 	// clear render target
 	this->context->ClearRenderTargetView( this->renderTargetView.Get(), clearColor );
 	this->context->ClearDepthStencilView( this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
@@ -54,17 +67,24 @@ void Graphics::BeginFrame( float clearColor[4] )
     this->context->RSSetState( this->rasterizerState.Get() );
 
 	// setup shaders
-	this->context->VSSetShader( this->vertexShaderPrimitive.GetShader(), NULL, 0 );
-	this->context->IASetInputLayout( this->vertexShaderPrimitive.GetInputLayout() );
-	this->context->PSSetShader( this->pixelShaderPrimitive.GetShader(), NULL, 0 );
+	this->context->VSSetShader( this->vertexShader.GetShader(), NULL, 0 );
+	this->context->IASetInputLayout( this->vertexShader.GetInputLayout() );
     this->context->PSSetSamplers( 0, 1, this->samplerState.GetAddressOf() );
+	this->context->PSSetShader( this->pixelShader.GetShader(), NULL, 0 );
 }
 
 void Graphics::RenderFrame()
 {
+    this->gameObject.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
+
+    //this->context->VSSetShader( this->vertexShader_noLight.GetShader(), NULL, 0 );
+    //this->context->IASetInputLayout( this->vertexShader_noLight.GetInputLayout() );
+	this->context->PSSetShader( this->pixelShader_noLight.GetShader(), NULL, 0 );
+	this->light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
+    
     /*   CUBE OBJECT   */
     // Setup buffers
-    UINT offset = 0;
+    /*UINT offset = 0;
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
     this->context->IASetIndexBuffer( this->indexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0 );
     for ( int i = 0; i < worldMatricesCube.size(); i++ )
@@ -74,11 +94,11 @@ void Graphics::RenderFrame()
         if ( !cb_vs_vertexshader.ApplyChanges() ) return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferCube.BufferSize(), 0, 0 );
-    }
+    }*/
 
     /*   PYRAMID OBJECT   */
     // Setup buffers
-    offset = 0;
+    /*offset = 0;
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferPyramid.GetAddressOf(), vertexBufferPyramid.StridePtr(), &offset );
     this->context->IASetIndexBuffer( this->indexBufferPyramid.Get(), DXGI_FORMAT_R16_UINT, 0 );
     for ( int i = 0; i < worldMatricesPyramid.size(); i++ )
@@ -88,10 +108,10 @@ void Graphics::RenderFrame()
         if ( !cb_vs_vertexshader.ApplyChanges() ) return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferPyramid.BufferSize(), 0, 0 );
-    }
+    }*/
 
     /*   LIGHT CUBE OBJECT   */
-    this->context->VSSetShader( this->vertexShaderNormal.GetShader(), NULL, 0 );
+    /*this->context->VSSetShader( this->vertexShaderNormal.GetShader(), NULL, 0 );
 	this->context->IASetInputLayout( this->vertexShaderNormal.GetInputLayout() );
 	this->context->PSSetShader( this->pixelShaderNormal.GetShader(), NULL, 0 );
     offset = 0;
@@ -102,11 +122,11 @@ void Graphics::RenderFrame()
     if ( !cb_ps_pixelshader_normal.ApplyChanges() ) return;
     this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_normal.GetAddressOf() );
     this->context->PSSetConstantBuffers( 1, 1, this->cb_ps_pixelshader_normal.GetAddressOf() );
-    this->context->Draw( this->vertexBufferLightCube.BufferSize(), 0 );
+    this->context->Draw( this->vertexBufferLightCube.BufferSize(), 0 );*/
 
     /*   QUAD OBJECT   */
     // Setup shaders
-    this->context->VSSetShader( this->vertexShaderWater.GetShader(), NULL, 0 );
+    /*this->context->VSSetShader( this->vertexShaderWater.GetShader(), NULL, 0 );
 	this->context->IASetInputLayout( this->vertexShaderWater.GetInputLayout() );
 	this->context->PSSetShader( this->pixelShaderWater.GetShader(), NULL, 0 );
     this->context->PSSetShaderResources( 0, 1, this->waterTexture.GetAddressOf() );
@@ -121,12 +141,39 @@ void Graphics::RenderFrame()
         if ( !cb_vs_vertexshader_water.ApplyChanges() ) return;
         this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader_water.GetAddressOf() );
         this->context->DrawIndexed( this->indexBufferQuad.BufferSize(), 0, 0 );
-    }
+    }*/
 }
 
 void Graphics::EndFrame()
 {
 	// display imgui
+    if ( ImGui::Begin( "Light Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+	{
+		if ( ImGui::TreeNode( "Ambient Components" ) )
+		{
+			ImGui::ColorEdit3( "Ambient", &this->cb_ps_light.data.ambientLightColor.x );
+			ImGui::SliderFloat( "Intensity", &this->cb_ps_light.data.ambientLightStrength, 0.0f, 1.0f );
+		ImGui::TreePop(); }
+		if ( ImGui::TreeNode( "Diffuse Components" ) )
+		{
+			ImGui::ColorEdit3( "Diffuse", &light.lightColor.x );
+			ImGui::SliderFloat( "Intensity", &light.lightStrength, 0.0f, 1.0f );
+		ImGui::TreePop(); }
+		if ( ImGui::TreeNode( "Specular Components" ) )
+		{
+			ImGui::ColorEdit3( "Specular", &light.specularColor.x );
+			ImGui::SliderFloat( "Intensity", &light.specularIntensity, 0.0f, 10.0f );
+			ImGui::SliderFloat( "Glossiness", &light.specularPower, 0.0f, 10.0f );
+		ImGui::TreePop(); }
+		if ( ImGui::TreeNode( "Attenuation" ) )
+		{
+			ImGui::SliderFloat( "Constant", &light.constant, 0.05f, 10.0f, "%.2f", 4 );
+			ImGui::SliderFloat( "Linear", &light.linear, 0.0001f, 4.0f, "%.4f", 8 );
+			ImGui::SliderFloat( "Quadratic", &light.quadratic, 0.0000001f, 1.0f, "%.7f", 10 );
+		ImGui::TreePop(); }
+	}
+	ImGui::End();
+
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 
@@ -150,7 +197,7 @@ void Graphics::EndFrame()
 void Graphics::Update()
 {
     // cube transformations
-    DirectX::XMStoreFloat4x4( &worldMatricesCube[0],
+    /*DirectX::XMStoreFloat4x4( &worldMatricesCube[0],
         DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
         DirectX::XMMatrixRotationZ( gTime * 0.5f * multiplier ) *
         DirectX::XMMatrixTranslation( 0.0f, 0.0f, 30.0f )
@@ -207,7 +254,7 @@ void Graphics::Update()
             );
             count++;
         }
-    }
+    }*/
 }
 
 bool Graphics::InitializeDirectX( HWND hWnd )
@@ -339,9 +386,23 @@ bool Graphics::InitializeShaders()
 {
     try
     {
+        /*   MODELS   */
+        D3D11_INPUT_ELEMENT_DESC layout[] = {
+		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		    { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	    };
+	    UINT numElements = ARRAYSIZE( layout );
+	    HRESULT hr = vertexShader.Initialize( this->device, L"res\\shaders\\Model.fx", layout, numElements );
+		COM_ERROR_IF_FAILED( hr, "Failed to create vertex shader!" );
+	    hr = pixelShader.Initialize( this->device, L"res\\shaders\\Model.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create pixel shader!" );
+	    hr = pixelShader_noLight.Initialize( this->device, L"res\\shaders\\Model_NoLight.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
+
         /*   PRIMITIVE SHADERS   */
         // color shader
-	    D3D11_INPUT_ELEMENT_DESC layoutPrimitive[] = {
+	    /*D3D11_INPUT_ELEMENT_DESC layoutPrimitive[] = {
 		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	    };
@@ -349,10 +410,10 @@ bool Graphics::InitializeShaders()
 	    HRESULT hr = vertexShaderPrimitive.Initialize( this->device, L"res\\shaders\\Primitive.fx", layoutPrimitive, numElements );
         COM_ERROR_IF_FAILED( hr, "Failed to create primitive Vertex Shader!" );
 	    hr = pixelShaderPrimitive.Initialize( this->device, L"res\\shaders\\Primitive.fx" );
-        COM_ERROR_IF_FAILED( hr, "Failed to create primitive Pixel Shader!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create primitive Pixel Shader!" );*/
 
         // normal shader
-        D3D11_INPUT_ELEMENT_DESC layoutNormals[] = {
+        /*D3D11_INPUT_ELEMENT_DESC layoutNormals[] = {
 		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		    { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	    };
@@ -360,10 +421,10 @@ bool Graphics::InitializeShaders()
 	    hr = vertexShaderNormal.Initialize( this->device, L"res\\shaders\\Normal.fx", layoutNormals, numElements );
         COM_ERROR_IF_FAILED( hr, "Failed to create normal Vertex Shader!" );
 	    hr = pixelShaderNormal.Initialize( this->device, L"res\\shaders\\Normal.fx" );
-        COM_ERROR_IF_FAILED( hr, "Failed to create normal Pixel Shader!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create normal Pixel Shader!" );*/
 
         /*   WATER SHADERS   */
-        D3D11_INPUT_ELEMENT_DESC layoutWater[] = {
+        /*D3D11_INPUT_ELEMENT_DESC layoutWater[] = {
 		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	    };
@@ -371,7 +432,7 @@ bool Graphics::InitializeShaders()
 	    hr = vertexShaderWater.Initialize( this->device, L"res\\shaders\\Water.fx", layoutWater, numElements );
         COM_ERROR_IF_FAILED( hr, "Failed to create water Vertex Shader!" );
 	    hr = pixelShaderWater.Initialize( this->device, L"res\\shaders\\Water.fx" );
-        COM_ERROR_IF_FAILED( hr, "Failed to create water Pixel Shader!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create water Pixel Shader!" );*/
     }
     catch ( COMException& exception )
     {
@@ -386,7 +447,24 @@ bool Graphics::InitializeScene()
 {
     try
     {
-        HRESULT hr = this->vertexBufferLightCube.Initialize( this->device.Get(), VTX::verticesLightCube, ARRAYSIZE( VTX::verticesLightCube ) );
+        HRESULT hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader' Constant Buffer!" );
+
+		hr = this->cb_ps_light.Initialize( this->device.Get(), this->context.Get() );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader' Constant Buffer!" );
+
+		this->cb_ps_light.data.ambientLightColor = XMFLOAT3( 1.0f, 1.0f, 1.0f );
+		this->cb_ps_light.data.ambientLightStrength = 1.0f;
+
+		// initialize objects
+		if ( !gameObject.Initialize( "res\\models\\nanosuit\\nanosuit.obj",
+			this->device.Get(), this->context.Get(), this->cb_vs_vertexshader ) )
+			return false;
+
+		if ( !light.Initialize( this->device.Get(), this->context.Get(), this->cb_vs_vertexshader ) )
+			return false;
+
+        /*HRESULT hr = this->vertexBufferLightCube.Initialize( this->device.Get(), VTX::verticesLightCube, ARRAYSIZE( VTX::verticesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create light cube vertex buffer!" );
         
         // cube vertices and indices
@@ -405,41 +483,40 @@ bool Graphics::InitializeScene()
         hr = this->vertexBufferQuad.Initialize( this->device.Get(), VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
         hr = this->indexBufferQuad.Initialize( this->device.Get(), IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );*/
 
         // create textures
-        hr = DirectX::CreateWICTextureFromFile(
+        /*HRESULT hr = DirectX::CreateWICTextureFromFile(
             this->device.Get(),
             L"res\\textures\\water.png",
             nullptr,
             this->waterTexture.GetAddressOf()
         );
-        COM_ERROR_IF_FAILED( hr, "Failed to create WIC texture from file!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create WIC texture from file!" );*/
 
         // setup constant buffers
-        hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );
+        /*hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );
 	    COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader' Constant Buffer!" );
         hr = this->cb_vs_vertexshader_water.Initialize( this->device.Get(), this->context.Get() );
         COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader_water' Constant Buffer!" );
         hr = this->cb_vs_vertexshader_normal.Initialize( this->device.Get(), this->context.Get() );
         COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader_normal' Constant Buffer!" );
         hr = this->cb_ps_pixelshader_normal.Initialize( this->device.Get(), this->context.Get() );
-        COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader_normal' Constant Buffer!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader_normal' Constant Buffer!" );*/
+        
+        // initialize camera
+        camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -10.0f ) );
+	    camera.SetProjectionValues(
+		    70.0f,
+		    static_cast<float>( this->windowWidth ) / static_cast<float>( this->windowHeight ),
+		    0.1f,
+		    1000.0f
+	    );
     }
     catch ( COMException& exception )
     {
         ErrorLogger::Log( exception );
         return false;
     }
-
-    // initialize camera
-    camera.SetPosition( XMFLOAT3( 0.0f, 0.0f, -25.0f ) );
-	camera.SetProjectionValues(
-		70.0f,
-		static_cast<float>( this->windowWidth ) / static_cast<float>( this->windowHeight ),
-		0.1f,
-		1000.0f
-	);
-
     return true;
 }

@@ -6,7 +6,6 @@
 #include <wrl/client.h>
 #include <d3dcompiler.h>
 #include "../utility/ErrorLogger.h"
-#pragma comment( lib, "D3DCompiler.lib" )
 
 class Shaders
 {
