@@ -10,9 +10,8 @@ class ImGuiManager
 public:
 	ImGuiManager();
 	~ImGuiManager();
-	void RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture,
-		ID3D11RasterizerState* rasterizerState_Solid,
-		ID3D11RasterizerState* rasterizerState_Wireframe );
+	void RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
+		ID3D11RasterizerState* rasterizerState_Solid, ID3D11RasterizerState* rasterizerState_Wireframe );
 	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light );
 private:
 	SYSTEM_INFO siSysInfo;

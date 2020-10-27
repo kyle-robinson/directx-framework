@@ -14,7 +14,7 @@ ImGuiManager::~ImGuiManager()
 	ImGui::DestroyContext();
 }
 
-void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture,
+void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
     ID3D11RasterizerState* rasterizerState_Solid, ID3D11RasterizerState* rasterizerState_Wireframe )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
@@ -26,6 +26,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
                 ImGui::ColorEdit3( "Clear Color", clearColor );
+                ImGui::SliderFloat( "Blend Factor", &alphaFactor, 0.0f, 1.0f );
 			    
                 static int fillGroup = 0;
 			    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )

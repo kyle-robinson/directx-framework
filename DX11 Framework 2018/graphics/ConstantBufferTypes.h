@@ -41,6 +41,7 @@ struct CB_PS_light
 	float lightLinear;
 	float lightQuadratic;
 	bool useTexture;
+	float alphaFactor;
 };
 
 #endif

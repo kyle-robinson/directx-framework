@@ -38,6 +38,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
 protected:
@@ -56,6 +57,7 @@ private:
 	ImGuiManager imgui;
 	float clearColor[4];
 	bool useTexture = true;
+	float alphaFactor = 1.0f;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
 };
 

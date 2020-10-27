@@ -52,6 +52,7 @@ cbuffer LightBuffer : register(b1)
     float lightLinear;
     float lightQuadratic;
     bool useTexture;
+    float alphaFactor;
 };
 
 struct PS_INPUT
@@ -85,5 +86,5 @@ float4 PS( PS_INPUT input ) : SV_TARGET
         pow( max( 0.0f, dot( normalize( -reflection ), normalize( input.inViewPos ) ) ), specularLightPower );
     
     float3 finalColor = saturate( ambient + diffuse + specular ) * ( sampleColor = ( useTexture == true ) ? sampleColor : 1 );
-    return float4( finalColor, 1.0f );
+    return float4( finalColor, alphaFactor );
 }

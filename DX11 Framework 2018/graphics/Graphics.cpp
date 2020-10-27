@@ -37,6 +37,7 @@ void Graphics::BeginFrame()
 	// set render state
 	this->context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	this->context->OMSetDepthStencilState( this->depthStencilState.Get(), 0 );
+    this->context->OMSetBlendState( this->blendState.Get(), NULL, 0xFFFFFFFF);
 
 	// setup shaders
 	this->context->VSSetShader( this->vertexShader.GetShader(), NULL, 0 );
@@ -55,6 +56,7 @@ void Graphics::BeginFrame()
 	this->cb_ps_light.data.lightLinear = light.linear;
 	this->cb_ps_light.data.lightQuadratic = light.quadratic;
 	this->cb_ps_light.data.useTexture = useTexture;
+	this->cb_ps_light.data.alphaFactor = alphaFactor;
 	this->cb_ps_light.ApplyChanges();
 	this->context->PSSetConstantBuffers( 1, 1, this->cb_ps_light.GetAddressOf() );
 }
@@ -92,7 +94,7 @@ void Graphics::EndFrame()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    imgui.RenderMainWindow( this->context.Get(), this->clearColor, this->useTexture,
+    imgui.RenderMainWindow( this->context.Get(), this->clearColor, this->useTexture, this->alphaFactor,
         this->rasterizerState_Solid.Get(), this->rasterizerState_Wireframe.Get() );
     imgui.RenderLightWindow( this->light, this->cb_ps_light );
 
@@ -251,6 +253,22 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         COM_ERROR_IF_FAILED( hr, "Failed to create wireframe Rasterizer State!" );
         
         this->context->RSSetState( this->rasterizerState_Solid.Get() );
+
+        // set blend state
+		D3D11_RENDER_TARGET_BLEND_DESC renderTargetBlendDesc = { 0 };
+		renderTargetBlendDesc.BlendEnable = TRUE;
+		renderTargetBlendDesc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		renderTargetBlendDesc.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		renderTargetBlendDesc.BlendOp = D3D11_BLEND_OP_ADD;
+		renderTargetBlendDesc.SrcBlendAlpha = D3D11_BLEND_ONE;
+		renderTargetBlendDesc.DestBlendAlpha = D3D11_BLEND_ZERO;
+		renderTargetBlendDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		renderTargetBlendDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+		D3D11_BLEND_DESC blendDesc = { 0 };
+		blendDesc.RenderTarget[0] = renderTargetBlendDesc;
+		hr = this->device->CreateBlendState( &blendDesc, this->blendState.GetAddressOf() );
+		COM_ERROR_IF_FAILED( hr, "Failed to create Blend State!" );
 
         // create sampler state
 		CD3D11_SAMPLER_DESC samplerDesc( CD3D11_DEFAULT{} );
