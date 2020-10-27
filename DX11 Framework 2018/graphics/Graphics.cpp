@@ -36,13 +36,8 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	return true;
 }
 
-void Graphics::BeginFrame( float clearColor[4] )
+void Graphics::BeginFrame()
 {
-    // manager imgui
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
     // set constant buffers
     this->cb_ps_light.data.dynamicLightColor = light.lightColor;
 	this->cb_ps_light.data.dynamicLightStrength = light.lightStrength;
@@ -57,14 +52,12 @@ void Graphics::BeginFrame( float clearColor[4] )
 	this->context->PSSetConstantBuffers( 1, 1, this->cb_ps_light.GetAddressOf() );
 
 	// clear render target
-	this->context->ClearRenderTargetView( this->renderTargetView.Get(), clearColor );
+	this->context->ClearRenderTargetView( this->renderTargetView.Get(), this->clearColor );
 	this->context->ClearDepthStencilView( this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
 
 	// set render state
 	this->context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	this->context->OMSetDepthStencilState( this->depthStencilState.Get(), 0 );
-    this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState.GetAddressOf() );
-    this->context->RSSetState( this->rasterizerState.Get() );
 
 	// setup shaders
 	this->context->VSSetShader( this->vertexShader.GetShader(), NULL, 0 );
@@ -75,7 +68,7 @@ void Graphics::BeginFrame( float clearColor[4] )
 
 void Graphics::RenderFrame()
 {
-    this->gameObject.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
+    this->nanosuit.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
 
     //this->context->VSSetShader( this->vertexShader_noLight.GetShader(), NULL, 0 );
     //this->context->IASetInputLayout( this->vertexShader_noLight.GetInputLayout() );
@@ -146,33 +139,14 @@ void Graphics::RenderFrame()
 
 void Graphics::EndFrame()
 {
-	// display imgui
-    if ( ImGui::Begin( "Light Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
-	{
-		if ( ImGui::TreeNode( "Ambient Components" ) )
-		{
-			ImGui::ColorEdit3( "Ambient", &this->cb_ps_light.data.ambientLightColor.x );
-			ImGui::SliderFloat( "Intensity", &this->cb_ps_light.data.ambientLightStrength, 0.0f, 1.0f );
-		ImGui::TreePop(); }
-		if ( ImGui::TreeNode( "Diffuse Components" ) )
-		{
-			ImGui::ColorEdit3( "Diffuse", &light.lightColor.x );
-			ImGui::SliderFloat( "Intensity", &light.lightStrength, 0.0f, 1.0f );
-		ImGui::TreePop(); }
-		if ( ImGui::TreeNode( "Specular Components" ) )
-		{
-			ImGui::ColorEdit3( "Specular", &light.specularColor.x );
-			ImGui::SliderFloat( "Intensity", &light.specularIntensity, 0.0f, 10.0f );
-			ImGui::SliderFloat( "Glossiness", &light.specularPower, 0.0f, 10.0f );
-		ImGui::TreePop(); }
-		if ( ImGui::TreeNode( "Attenuation" ) )
-		{
-			ImGui::SliderFloat( "Constant", &light.constant, 0.05f, 10.0f, "%.2f", 4 );
-			ImGui::SliderFloat( "Linear", &light.linear, 0.0001f, 4.0f, "%.4f", 8 );
-			ImGui::SliderFloat( "Quadratic", &light.quadratic, 0.0000001f, 1.0f, "%.7f", 10 );
-		ImGui::TreePop(); }
-	}
-	ImGui::End();
+    // display imgui
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+
+    imgui.RenderMainWindow( this->context.Get(), this->clearColor,
+        this->rasterizerState_Solid.Get(), this->rasterizerState_Wireframe.Get() );
+    imgui.RenderLightWindow( this->light, this->cb_ps_light );
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
@@ -181,21 +155,18 @@ void Graphics::EndFrame()
 	HRESULT hr = this->swapChain->Present( 1, NULL );
 	if ( FAILED( hr ) )
 	{
-		if ( hr == DXGI_ERROR_DEVICE_REMOVED )
-		{
-			ErrorLogger::Log( this->device->GetDeviceRemovedReason(), "Swap Chain. Graphics device removed!" );
-			exit( -1 );
-		}
-		else
-		{
-			ErrorLogger::Log( hr, "Swap Chain failed to render frame!" );
-			exit( -1 );
-		}
+		hr == DXGI_ERROR_DEVICE_REMOVED ?
+            ErrorLogger::Log( this->device->GetDeviceRemovedReason(), "Swap Chain. Graphics device removed!" ) :
+            ErrorLogger::Log( hr, "Swap Chain failed to render frame!" );
+		exit( -1 );
 	}
 }
 
-void Graphics::Update()
+void Graphics::Update( float dt )
 {
+    // model transformations
+    this->nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
+
     // cube transformations
     /*DirectX::XMStoreFloat4x4( &worldMatricesCube[0],
         DirectX::XMMatrixScaling( 1.5f, 1.5f, 1.5f ) *
@@ -357,11 +328,18 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         vp.MaxDepth = 1.0f;
         this->context->RSSetViewports( 1, &vp );
 
-        // setup rasterizer state
-        rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
+        // setup rasterizer states
+        CD3D11_RASTERIZER_DESC rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
         rasterizerDesc.MultisampleEnable = TRUE;
-        hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Rasterizer State!" );
+        hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState_Solid.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create solid Rasterizer State!" );
+
+        rasterizerDesc.MultisampleEnable = TRUE;
+        rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+        hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState_Wireframe.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create wireframe Rasterizer State!" );
+        
+        this->context->RSSetState( this->rasterizerState_Solid.Get() );
 
         // create sampler state
 		CD3D11_SAMPLER_DESC samplerDesc( CD3D11_DEFAULT{} );
@@ -447,6 +425,16 @@ bool Graphics::InitializeScene()
 {
     try
     {
+        // initialize camera
+        camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -10.0f ) );
+	    camera.SetProjectionValues(
+		    70.0f,
+		    static_cast<float>( this->windowWidth ) / static_cast<float>( this->windowHeight ),
+		    0.1f,
+		    1000.0f
+	    );
+        
+        // initialize constant buffers
         HRESULT hr = this->cb_vs_vertexshader.Initialize( this->device.Get(), this->context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader' Constant Buffer!" );
 
@@ -454,16 +442,22 @@ bool Graphics::InitializeScene()
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader' Constant Buffer!" );
 
 		this->cb_ps_light.data.ambientLightColor = XMFLOAT3( 1.0f, 1.0f, 1.0f );
-		this->cb_ps_light.data.ambientLightStrength = 1.0f;
+		this->cb_ps_light.data.ambientLightStrength = 0.1f;
 
 		// initialize objects
-		if ( !gameObject.Initialize( "res\\models\\nanosuit\\nanosuit.obj",
+		if ( !nanosuit.Initialize( "res\\models\\nanosuit\\nanosuit.obj",
 			this->device.Get(), this->context.Get(), this->cb_vs_vertexshader ) )
 			return false;
 
 		if ( !light.Initialize( this->device.Get(), this->context.Get(), this->cb_vs_vertexshader ) )
 			return false;
 
+        XMVECTOR lightPosition = this->camera.GetPositionVector();
+		lightPosition += this->camera.GetForwardVector() + this->camera.GetRightVector();
+		this->light.SetPosition( lightPosition );
+		this->light.SetRotation( this->camera.GetRotationFloat3() );
+
+        // initialize vertices & indices
         /*HRESULT hr = this->vertexBufferLightCube.Initialize( this->device.Get(), VTX::verticesLightCube, ARRAYSIZE( VTX::verticesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create light cube vertex buffer!" );
         
@@ -503,15 +497,6 @@ bool Graphics::InitializeScene()
         COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_vertexshader_normal' Constant Buffer!" );
         hr = this->cb_ps_pixelshader_normal.Initialize( this->device.Get(), this->context.Get() );
         COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader_normal' Constant Buffer!" );*/
-        
-        // initialize camera
-        camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -10.0f ) );
-	    camera.SetProjectionValues(
-		    70.0f,
-		    static_cast<float>( this->windowWidth ) / static_cast<float>( this->windowHeight ),
-		    0.1f,
-		    1000.0f
-	    );
     }
     catch ( COMException& exception )
     {

@@ -2,7 +2,6 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "Light.h"
 #include "Camera.h"
 #include "Shaders.h"
 #include "ImGuiManager.h"
@@ -15,16 +14,16 @@ class Graphics
 {
 public:
 	bool Initialize( HWND hWnd, int width, int height );
-	void BeginFrame( float clearColor[4] );
+	void BeginFrame();
 	void RenderFrame();
 	void EndFrame();
-	void Update();
+	void Update( float dt );
 public:
 	Light light;
 	Camera camera;
-	RenderableGameObject gameObject;
-	float gTime, multiplier = 1.0f;
-	D3D11_RASTERIZER_DESC rasterizerDesc;
+	RenderableGameObject nanosuit;
+	float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	//D3D11_RASTERIZER_DESC rasterizerDesc;
 public:
 	//ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
 	//ConstantBuffer<CB_VS_vertexshader_water> cb_vs_vertexshader_water;
@@ -42,30 +41,32 @@ private:
 	bool InitializeScene();
 private:
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
-	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
-private:
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> waterTexture;
-private:
+protected:
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_Solid;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_Wireframe;
+protected:
 	VertexShader vertexShader;
 	VertexShader vertexShader_noLight;
 	PixelShader pixelShader;
 	PixelShader pixelShader_noLight;
-	ConstantBuffer<CB_VS_vertexShader> cb_vs_vertexshader;
-	ConstantBuffer<CB_PS_light> cb_ps_light;
 	/*VertexShader vertexShaderPrimitive;
 	PixelShader pixelShaderPrimitive;
 	VertexShader vertexShaderWater;
 	PixelShader pixelShaderWater;
 	VertexShader vertexShaderNormal;
 	PixelShader pixelShaderNormal;*/
+public:
+	ConstantBuffer<CB_VS_vertexShader> cb_vs_vertexshader;
+	ConstantBuffer<CB_PS_light> cb_ps_light;
 private:
 	/*VertexBuffer<Vertex_Pos_Nrm> vertexBufferLightCube;
 	VertexBuffer<Vertex_Pos_Col> vertexBufferCube;

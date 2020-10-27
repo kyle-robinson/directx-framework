@@ -9,7 +9,6 @@ bool Application::Initialize(
 	int height )
 {
 	this->timer.Start();
-	GetSystemInfo( &this->siSysInfo );
 
 	if ( !this->renderWindow.Initialize( this, hInstance, windowTitle, windowClass, width, height ) )
 		return false;
@@ -57,8 +56,6 @@ void Application::Update()
 			}
 		}
 	}
-
-    gfx.gameObject.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
 
 	float cameraSpeed = 0.002f;
 
@@ -122,18 +119,18 @@ void Application::Update()
 	gfx.cb_ps_pixelshader_normal.data.specularPower = this->specularPower;
 	gfx.cb_ps_pixelshader_normal.data.eyePos = gfx.camera.GetPositionFloat3();*/
 
-    gfx.Update();
+    gfx.Update( dt );
 }
 
 void Application::Render()
 {
-	static float clearColor[] = { 0.0f, 0.5f, 0.5f, 1.0f };
+	//static float clearColor[] = { 0.0f, 0.5f, 0.5f, 1.0f };
 
-	this->gfx.BeginFrame( clearColor );
+	this->gfx.BeginFrame();
 	this->gfx.RenderFrame();
 
 	// render imgui windows
-	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+	/*if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
 	{
 		if ( ImGui::CollapsingHeader( "Float Sliders" ) )
 		{
@@ -162,7 +159,7 @@ void Application::Render()
 			ImGui::Text( "Twitter: @KyleRobinson42" );
 		}
 	}
-	ImGui::End();
+	ImGui::End();*/
 
 	/*if( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
 	{

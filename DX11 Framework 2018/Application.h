@@ -24,7 +24,6 @@ private:
 	float waterAmount = 0.01f;
 	float waterHeight = 0.5f;
 private:
-	SYSTEM_INFO siSysInfo;
 	Timer timer;
 };
 
