@@ -134,7 +134,7 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
                 ImGui::ColorEdit3( "Diffuse", &light.lightColor.x );
-			    ImGui::SliderFloat( "Intensity", &light.lightStrength, 0.0f, 1.0f );
+			    ImGui::SliderFloat( "Intensity", &light.lightStrength, 0.0f, 10.0f );
             }
             ImGui::PopStyleColor();
 		    ImGui::TreePop();

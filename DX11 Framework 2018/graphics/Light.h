@@ -1,4 +1,7 @@
 #pragma once
+#ifndef LIGHT_H
+#define LIGHT_H
+
 #include "RenderableGameObject.h"
 
 class Light : public RenderableGameObject
@@ -15,3 +18,5 @@ public:
 	float linear = 0.045f;
 	float quadratic = 0.0075f;
 };
+
+#endif

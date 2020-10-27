@@ -1,4 +1,7 @@
 #pragma once
+#ifndef MESH_H
+#define MESH_H
+
 #include "Vertex.h"
 #include "Texture.h"
 #include "VertexBuffer.h"
@@ -28,3 +31,5 @@ private:
 	std::vector<Texture> textures;
 	DirectX::XMMATRIX transformMatrix;
 };
+
+#endif

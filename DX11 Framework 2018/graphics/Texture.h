@@ -1,4 +1,7 @@
 #pragma once
+#ifndef TEXTURE_H
+#define TEXTURE_H
+
 #include "Colour.h"
 #include <d3d11.h>
 #include <wrl/client.h>
@@ -33,3 +36,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureView = nullptr;
 	aiTextureType type = aiTextureType_UNKNOWN;
 };
+
+#endif

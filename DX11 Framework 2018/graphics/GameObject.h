@@ -1,4 +1,7 @@
 #pragma once
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
+
 #include "Model.h"
 
 class GameObject
@@ -44,3 +47,5 @@ protected:
 	XMVECTOR vec_right_noY;
 	XMVECTOR vec_backward_noY;
 };
+
+#endif

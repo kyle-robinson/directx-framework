@@ -1,4 +1,7 @@
 #pragma once
+#ifndef RENDERABLEGAMEOBJECT_H
+#define RENDERABLEGAMEOBJECT_H
+
 #include "GameObject.h"
 
 class RenderableGameObject : public GameObject
@@ -15,3 +18,5 @@ protected:
 	void UpdateMatrix() override;
 	XMMATRIX worldMatrix = XMMatrixIdentity();
 };
+
+#endif

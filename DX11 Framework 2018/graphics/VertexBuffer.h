@@ -1,4 +1,7 @@
 #pragma once
+#ifndef VERTEXBUFFER_H
+#define VERTEXBUFFER_H
+
 #include <d3d11.h>
 #include <wrl/client.h>
 #include <memory>
@@ -69,3 +72,5 @@ public:
 		return hr;
 	}
 };
+
+#endif

@@ -1,4 +1,7 @@
 #pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
+
 #include "GameObject.h"
 using namespace DirectX;
 
@@ -14,3 +17,5 @@ private:
 	void UpdateMatrix() override;
 	XMMATRIX view, projection;
 };
+
+#endif

@@ -1,6 +1,8 @@
 #pragma once
-#include "Mesh.h"
+#ifndef MODEL_H
+#define MODEL_H
 
+#include "Mesh.h"
 using namespace DirectX;
 
 class Model
@@ -26,3 +28,5 @@ private:
 	ID3D11DeviceContext* context = nullptr;
 	ConstantBuffer<CB_VS_matrix>* cb_vs_vertexshader = nullptr;
 };
+
+#endif

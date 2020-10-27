@@ -1,4 +1,7 @@
 #pragma once
+#ifndef COLOUR_H
+#define COLOUR_H
+
 typedef unsigned char BYTE;
 
 class Colour
@@ -35,3 +38,5 @@ namespace Colours
 	const Colour UnloadedTextureColour( 100, 100, 100 );
 	const Colour UnhandledTextureColour( 250, 0, 0 );
 }
+
+#endif
