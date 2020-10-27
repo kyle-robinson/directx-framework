@@ -37,7 +37,7 @@ void Graphics::BeginFrame()
 	// set render state
 	this->context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	this->context->OMSetDepthStencilState( this->depthStencilState.Get(), 0 );
-    this->context->OMSetBlendState( this->blendState.Get(), NULL, 0xFFFFFFFF);
+    this->context->OMSetBlendState( this->blendState.Get(), NULL, 0xFFFFFFFF );
 
 	// setup shaders
 	this->context->VSSetShader( this->vertexShader.GetShader(), NULL, 0 );
@@ -136,8 +136,9 @@ void Graphics::Update( float dt )
     );
     DirectX::XMStoreFloat4x4( &worldMatricesCube[2],
         DirectX::XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
-        DirectX::XMMatrixTranslation( 15.0f, 10.0f, 0.0f ) *
-        DirectX::XMMatrixRotationZ( timer * 1.5f )
+        DirectX::XMMatrixTranslation( 1.0f, 10.0f, 0.0f ) *
+        DirectX::XMMatrixRotationZ( timer * 1.5f ) *
+        DirectX::XMMatrixTranslation( 0.0f, 7.5f, 0.0f )
     );
 }
 
@@ -321,7 +322,7 @@ bool Graphics::InitializeScene()
     try
     {
         // initialize camera
-        camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -10.0f ) );
+        camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
 	    camera.SetProjectionValues(
 		    70.0f,
 		    static_cast<float>( this->windowWidth ) / static_cast<float>( this->windowHeight ),
@@ -338,7 +339,7 @@ bool Graphics::InitializeScene()
 			return false;
 
         XMVECTOR lightPosition = this->camera.GetPositionVector();
-		lightPosition += this->camera.GetForwardVector() + this->camera.GetRightVector();
+		lightPosition += this->camera.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 		this->light.SetPosition( lightPosition );
 		this->light.SetRotation( this->camera.GetRotationFloat3() );
         
