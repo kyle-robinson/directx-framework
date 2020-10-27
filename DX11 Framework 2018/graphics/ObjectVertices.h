@@ -6,8 +6,36 @@
 
 namespace VTX
 {
+    // textured light cube
+    Vertex verticesCube_PosTexNrm[] = {
+        { { -0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f }, { 0.0f,  1.0f,  0.0f } }, // +Y (top face)
+        { {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f }, { 0.0f,  1.0f,  0.0f } },
+        { {  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }, { 0.0f,  1.0f,  0.0f } },
+        { { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }, { 0.0f,  1.0f,  0.0f } },
+        { { -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }, { 0.0f, -1.0f,  0.0f } }, // -Y (bottom face)
+        { {  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }, { 0.0f, -1.0f,  0.0f } },
+        { {  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f }, { 0.0f, -1.0f,  0.0f } },
+        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f }, { 0.0f, -1.0f,  0.0f } },
+        { {  0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }, { 1.0f,  0.0f,  0.0f } }, // +X (right face)
+        { {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f }, { 1.0f,  0.0f,  0.0f } },
+        { {  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f }, { 1.0f,  0.0f,  0.0f } },
+        { {  0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f }, { 1.0f,  0.0f,  0.0f } },
+        { { -0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f }, { 1.0f,  0.0f,  0.0f } }, // -X (left face)
+        { { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f }, { 1.0f,  0.0f,  0.0f } },
+        { { -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f }, { 1.0f,  0.0f,  0.0f } },
+        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f }, { 1.0f,  0.0f,  0.0f } },
+        { { -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }, { 0.0f,  0.0f,  1.0f } }, // +Z (front face)
+        { {  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f }, { 0.0f,  0.0f,  1.0f } },
+        { {  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f }, { 0.0f,  0.0f,  1.0f } },
+        { { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f }, { 0.0f,  0.0f,  1.0f } },
+        { {  0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f }, { 0.0f,  0.0f, -1.0f } }, // -Z (back face)
+        { { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f }, { 0.0f,  0.0f, -1.0f } },
+        { { -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f }, { 0.0f,  0.0f, -1.0f } },
+        { {  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f }, { 0.0f,  0.0f, -1.0f } }
+    };
+
     // light cube
-    Vertex_Pos_Nrm verticesLightCube[] =
+    Vertex_Pos_Nrm verticesCube_PosNrm[] =
     {
         { { -1.0,  1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
         { {  1.0,  1.0, -1.0 }, { 0.0,  0.0, -1.0 } },
@@ -47,8 +75,8 @@ namespace VTX
         { {  1.0, -1.0,  1.0 }, { 0.0, -1.0,  0.0 } }
     };
 
-    // cube
-    Vertex_Pos_Col verticesCube[] =
+    // coloured cube
+    Vertex_Pos_Col verticesCube_PosCol[] =
     {
         { { -3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
         { {  3.0f,  3.0f, -3.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
@@ -61,7 +89,7 @@ namespace VTX
     };
 
     // pyramid
-    Vertex_Pos_Col verticesPyramid[] =
+    Vertex_Pos_Col verticesPyramid_PosCol[] =
     {
         { { -3.0f, 0.0f,  3.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
         { { 3.0f,  0.0f,  3.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
@@ -71,7 +99,7 @@ namespace VTX
     };
 
     // quad
-    Vertex_Pos_Tex verticesQuad[] =
+    Vertex_Pos_Tex verticesQuad_PosTex[] =
     {
         { { -3.0f,  3.0f, 0.0f }, { 0.0f, 0.0f } },
         { {  3.0f,  3.0f, 0.0f }, { 1.0f, 0.0f } },

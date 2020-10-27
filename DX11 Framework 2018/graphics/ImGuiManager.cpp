@@ -14,7 +14,7 @@ ImGuiManager::~ImGuiManager()
 	ImGui::DestroyContext();
 }
 
-void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4],
+void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture,
     ID3D11RasterizerState* rasterizerState_Solid, ID3D11RasterizerState* rasterizerState_Wireframe )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
@@ -26,12 +26,20 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
                 ImGui::ColorEdit3( "Clear Color", clearColor );
-			    static int fillGroup = 0;
+			    
+                static int fillGroup = 0;
 			    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
 				    context->RSSetState( rasterizerState_Solid );
 			    ImGui::SameLine();
 			    if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
                     context->RSSetState( rasterizerState_Wireframe );
+
+                static int textureGroup = 0;
+                if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
+                    useTexture = true;
+                ImGui::SameLine();
+                if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
+                    useTexture = false;
             }
             ImGui::PopStyleColor();
             ImGui::TreePop();

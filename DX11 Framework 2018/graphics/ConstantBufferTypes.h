@@ -4,14 +4,14 @@
 
 #include <DirectXMath.h>
 
-struct CB_VS_vertexShader
+struct CB_VS_matrix
 {
 	DirectX::XMMATRIX worldMatrix;
 	DirectX::XMMATRIX viewMatrix;
 	DirectX::XMMATRIX projectionMatrix;
 };
 
-struct CB_VS_vertexshader_water
+struct CB_VS_water
 {
 	DirectX::XMMATRIX mWorld;
 	DirectX::XMMATRIX mView;
@@ -22,27 +22,9 @@ struct CB_VS_vertexshader_water
 	float waterHeight;
 };
 
-struct CB_VS_vertexshader_normal
-{
-	DirectX::XMMATRIX mWorld;
-	DirectX::XMMATRIX mView;
-	DirectX::XMMATRIX mProjection;
-};
-
-struct CB_PS_pixelshader
+struct CB_PS_alpha
 {
 	float alpha = 1.0f;
-};
-
-struct CB_PS_pixelshader_normal
-{
-	DirectX::XMFLOAT4 ambientLight;
-	DirectX::XMFLOAT4 diffuseMaterial;
-	DirectX::XMFLOAT4 diffuseLight;
-	DirectX::XMFLOAT4 specularLight;
-	DirectX::XMFLOAT3 lightDirection;
-	float specularPower;
-	DirectX::XMFLOAT3 eyePos;
 };
 
 struct CB_PS_light
@@ -58,6 +40,7 @@ struct CB_PS_light
 	float lightConstant;
 	float lightLinear;
 	float lightQuadratic;
+	bool useTexture;
 };
 
 #endif
