@@ -39,11 +39,12 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
 protected:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_Solid;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_Wireframe;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Anisotropic;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Point;
 private:
 	VertexShader vertexShader;
 	VertexShader vertexShader_noLight;

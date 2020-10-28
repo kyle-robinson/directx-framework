@@ -15,7 +15,8 @@ ImGuiManager::~ImGuiManager()
 }
 
 void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
-    ID3D11RasterizerState* rasterizerState_Solid, ID3D11RasterizerState* rasterizerState_Wireframe )
+    ID3D11RasterizerState* rasterizerState_Solid, ID3D11RasterizerState* rasterizerState_Wireframe,
+    ID3D11SamplerState* samplerState_Anisotropic, ID3D11SamplerState* samplerState_Point )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {
@@ -41,6 +42,13 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
                     useTexture = false;
+
+                static int filterGroup = 0;
+                if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
+                    context->PSSetSamplers( 0, 1, &samplerState_Anisotropic );
+                ImGui::SameLine();
+                if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
+                    context->PSSetSamplers( 0, 1, &samplerState_Point );
             }
             ImGui::PopStyleColor();
             ImGui::TreePop();

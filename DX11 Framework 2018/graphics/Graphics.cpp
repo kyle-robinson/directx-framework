@@ -42,7 +42,6 @@ void Graphics::BeginFrame()
 	// setup shaders
 	this->context->VSSetShader( this->vertexShader.GetShader(), NULL, 0 );
 	this->context->IASetInputLayout( this->vertexShader.GetInputLayout() );
-    this->context->PSSetSamplers( 0, 1, this->samplerState.GetAddressOf() );
 	this->context->PSSetShader( this->pixelShader.GetShader(), NULL, 0 );
     
     // set constant buffers
@@ -95,7 +94,8 @@ void Graphics::EndFrame()
     ImGui::NewFrame();
 
     imgui.RenderMainWindow( this->context.Get(), this->clearColor, this->useTexture, this->alphaFactor,
-        this->rasterizerState_Solid.Get(), this->rasterizerState_Wireframe.Get() );
+        this->rasterizerState_Solid.Get(), this->rasterizerState_Wireframe.Get(),
+        this->samplerState_Anisotropic.Get(), this->samplerState_Point.Get() );
     imgui.RenderLightWindow( this->light, this->cb_ps_light );
 
     ImGui::Render();
@@ -115,7 +115,7 @@ void Graphics::EndFrame()
 void Graphics::Update( float dt )
 {
     // model transformations
-    this->nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
+    //this->nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
 
     static float timer = 0.0f;
     static DWORD dwTimeStart = 0;
@@ -271,15 +271,22 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		hr = this->device->CreateBlendState( &blendDesc, this->blendState.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create Blend State!" );
 
-        // create sampler state
+        // create sampler states
 		CD3D11_SAMPLER_DESC samplerDesc( CD3D11_DEFAULT{} );
 		samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
-		hr = this->device->CreateSamplerState( &samplerDesc, this->samplerState.GetAddressOf() );
-		COM_ERROR_IF_FAILED( hr, "Failed to create Sampler State!" );
+		hr = this->device->CreateSamplerState( &samplerDesc, this->samplerState_Anisotropic.GetAddressOf() );
+		COM_ERROR_IF_FAILED( hr, "Failed to create anisotropic Sampler State!" );
+
+		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+		samplerDesc.MaxAnisotropy = 1;
+		hr = this->device->CreateSamplerState( &samplerDesc, this->samplerState_Point.GetAddressOf() );
+		COM_ERROR_IF_FAILED( hr, "Failed to create point Sampler State!" );
+        
+        this->context->PSSetSamplers( 0, 1, this->samplerState_Anisotropic.GetAddressOf() );
     }
     catch ( COMException& exception )
     {
