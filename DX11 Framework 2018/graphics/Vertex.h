@@ -29,4 +29,9 @@ struct Vertex_Pos_Nrm
 	DirectX::XMFLOAT3 normal;
 };
 
+struct Vertex_Pos
+{
+	DirectX::XMFLOAT2 position;
+};
+
 #endif

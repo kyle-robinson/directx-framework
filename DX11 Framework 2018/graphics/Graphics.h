@@ -34,10 +34,14 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
+
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
+
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
+
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
 protected:
@@ -46,12 +50,16 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Anisotropic;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Point;
 private:
-	VertexShader vertexShader;
+	VertexShader vertexShader_full;
+	VertexShader vertexShader_light;
 	VertexShader vertexShader_noLight;
-	PixelShader pixelShader;
+	PixelShader pixelShader_full;
+	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;
 	VertexBuffer<Vertex> vertexBufferCube;
 	IndexBuffer indexBufferCube;
+	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
+	IndexBuffer indexBufferFullscreen;
 private:
 	UINT windowWidth;
 	UINT windowHeight;

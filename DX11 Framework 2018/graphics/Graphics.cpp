@@ -31,6 +31,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 void Graphics::BeginFrame()
 {
 	// clear render target
+    this->context->OMSetRenderTargets( 1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get() );
 	this->context->ClearRenderTargetView( this->renderTargetView.Get(), this->clearColor );
 	this->context->ClearDepthStencilView( this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
 
@@ -40,9 +41,9 @@ void Graphics::BeginFrame()
     this->context->OMSetBlendState( this->blendState.Get(), NULL, 0xFFFFFFFF );
 
 	// setup shaders
-	this->context->VSSetShader( this->vertexShader.GetShader(), NULL, 0 );
-	this->context->IASetInputLayout( this->vertexShader.GetInputLayout() );
-	this->context->PSSetShader( this->pixelShader.GetShader(), NULL, 0 );
+	this->context->VSSetShader( this->vertexShader_light.GetShader(), NULL, 0 );
+	this->context->IASetInputLayout( this->vertexShader_light.GetInputLayout() );
+	this->context->PSSetShader( this->pixelShader_light.GetShader(), NULL, 0 );
     
     // set constant buffers
     this->cb_ps_light.data.dynamicLightColor = light.lightColor;
@@ -101,6 +102,17 @@ void Graphics::EndFrame()
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 
+    // render to texture
+    UINT offset = 0;
+    this->context->PSSetShaderResources( 0, 1, this->shaderResourceView.GetAddressOf() );
+    this->context->IASetVertexBuffers( 0, 1, this->vertexBufferFullscreen.GetAddressOf(), this->vertexBufferFullscreen.StridePtr(), &offset );
+    this->context->IASetIndexBuffer( this->indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    this->context->VSSetShader( this->vertexShader_full.GetShader(), NULL, 0 );
+    this->context->IASetInputLayout( this->vertexShader_full.GetInputLayout() );
+    this->context->PSSetShader( this->pixelShader_full.GetShader(), NULL, 0 );
+    this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
+    this->context->OMSetRenderTargets( 1, this->renderTargetView.GetAddressOf(), nullptr );
+    
     // display frame
 	HRESULT hr = this->swapChain->Present( 1, NULL );
 	if ( FAILED( hr ) )
@@ -115,7 +127,7 @@ void Graphics::EndFrame()
 void Graphics::Update( float dt )
 {
     // model transformations
-    //this->nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
+    this->nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
 
     static float timer = 0.0f;
     static DWORD dwTimeStart = 0;
@@ -207,12 +219,46 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         }
         COM_ERROR_IF_FAILED( hr, "Failed to create Device and Swap Chain!" );
 
-        // create a render target view
+        // create texture resource
+        D3D11_TEXTURE2D_DESC textureDesc = { 0 };
+        textureDesc.Width = this->windowWidth;
+        textureDesc.Height = this->windowHeight;
+        textureDesc.MipLevels = 1;
+        textureDesc.ArraySize = 1;
+        textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        textureDesc.SampleDesc.Count = 1;
+        textureDesc.SampleDesc.Quality = 0;
+        textureDesc.Usage = D3D11_USAGE_DEFAULT;
+        textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+        textureDesc.CPUAccessFlags = 0;
+        textureDesc.MiscFlags = 0;
+        Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
+        hr = this->device->CreateTexture2D( &textureDesc, nullptr, pTexture.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Texture for Render Target!" );
+
+        // create resource view on texture
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+        srvDesc.Format = textureDesc.Format;
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+        srvDesc.Texture2D.MipLevels = 1;
+        hr = this->device->CreateShaderResourceView( pTexture.Get(), &srvDesc, this->shaderResourceView.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Shader Resource View!" );
+
+        // create the target view on the texture
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+        rtvDesc.Format = textureDesc.Format;
+        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
+        hr = this->device->CreateRenderTargetView( pTexture.Get(), &rtvDesc, this->renderTargetView.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Texture!" );
+
+        // create a render target view with back buffer
         Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
         hr = this->swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)pBackBuffer.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Back Buffer!" );
         hr = device->CreateRenderTargetView( pBackBuffer.Get(), nullptr, this->renderTargetView.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Back Buffer!" );
 
         // create depth stencil
         CD3D11_TEXTURE2D_DESC depthStencilDesc(
@@ -226,7 +272,6 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil Buffer!" );
         hr = this->device->CreateDepthStencilView( this->depthStencilBuffer.Get(), NULL, this->depthStencilView.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil View!" );
-        this->context->OMSetRenderTargets( 1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get() );
 
         // set depth stencil state
 		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc( CD3D11_DEFAULT{} );
@@ -308,12 +353,22 @@ bool Graphics::InitializeShaders()
 		    { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	    };
 	    UINT numElements = ARRAYSIZE( layoutModel );
-	    HRESULT hr = vertexShader.Initialize( this->device, L"res\\shaders\\Model.fx", layoutModel, numElements );
-		COM_ERROR_IF_FAILED( hr, "Failed to create vertex shader!" );
-	    hr = pixelShader.Initialize( this->device, L"res\\shaders\\Model.fx" );
-		COM_ERROR_IF_FAILED( hr, "Failed to create pixel shader!" );
+	    HRESULT hr = vertexShader_light.Initialize( this->device, L"res\\shaders\\Model.fx", layoutModel, numElements );
+		COM_ERROR_IF_FAILED( hr, "Failed to create light vertex shader!" );
+	    hr = pixelShader_light.Initialize( this->device, L"res\\shaders\\Model.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create light pixel shader!" );
 	    hr = pixelShader_noLight.Initialize( this->device, L"res\\shaders\\Model_NoLight.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
+
+        /*   POST-PROCESSING   */
+        D3D11_INPUT_ELEMENT_DESC layoutFull[] = {
+		    { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	    };
+        numElements = ARRAYSIZE( layoutFull );
+	    hr = vertexShader_full.Initialize( this->device, L"res\\shaders\\Fullscreen.fx", layoutFull, numElements );
+		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen vertex shader!" );
+	    hr = pixelShader_full.Initialize( this->device, L"res\\shaders\\Fullscreen.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen pixel shader!" );
     }
     catch ( COMException& exception )
     {
@@ -356,6 +411,13 @@ bool Graphics::InitializeScene()
         COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
         hr = this->indexBufferCube.Initialize( this->device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
+
+        // fullscreen texture
+        hr = this->vertexBufferFullscreen.Initialize( this->device.Get(),
+            VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
+        hr = this->indexBufferFullscreen.Initialize( this->device.Get(), IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );
 
         // create textures
         hr = DirectX::CreateWICTextureFromFile(

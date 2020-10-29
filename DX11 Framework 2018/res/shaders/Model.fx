@@ -1,7 +1,7 @@
 #pragma pack_matrix( row_major )
 
 // vertex shader
-cbuffer ObjectBuffer : register(b0)
+cbuffer ObjectBuffer : register( b0 )
 {
     float4x4 worldMatrix;
     float4x4 viewMatrix;
@@ -10,7 +10,7 @@ cbuffer ObjectBuffer : register(b0)
 
 struct VS_INPUT
 {
-    float3 inPos : POSITION;
+    float3 inPosition : POSITION;
     float2 inTexCoord : TEXCOORD;
     float3 inNormal : NORMAL;
 };
@@ -27,13 +27,13 @@ struct VS_OUTPUT
 VS_OUTPUT VS( VS_INPUT input )
 {
     VS_OUTPUT output;
-    output.outPosition = mul( float4( input.inPos, 1.0f ), worldMatrix );
+    output.outPosition = mul( float4( input.inPosition, 1.0f ), worldMatrix );
     output.outPosition = mul( output.outPosition, viewMatrix );
-    output.outViewPos = output.outPosition;
     output.outPosition = mul( output.outPosition, projectionMatrix );
     output.outTexCoord = input.inTexCoord;
     output.outNormal = normalize( mul( float4( input.inNormal, 0.0f ), worldMatrix ) );
-    output.outWorldPos = mul( float4( input.inPos, 1.0f ), worldMatrix );
+    output.outWorldPos = mul( float4( input.inPosition, 1.0f ), worldMatrix );
+    output.outViewPos = mul( float4( input.inPosition, 1.0f ), viewMatrix );
     return output;
 }
 
@@ -64,8 +64,8 @@ struct PS_INPUT
     float3 inViewPos : VIEW_POSITION;
 };
 
-Texture2D objTexture : TEXTURE : register(t0);
-SamplerState samplerState : SAMPLER : register(s0);
+Texture2D objTexture : TEXTURE : register( t0 );
+SamplerState samplerState : SAMPLER : register( s0 );
 
 float4 PS( PS_INPUT input ) : SV_TARGET
 {

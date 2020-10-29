@@ -101,6 +101,14 @@ namespace VTX
         { {  3.0f, -3.0f, 0.0f }, { 1.0f, 1.0f } },
         { { -3.0f, -3.0f, 0.0f }, { 0.0f, 1.0f } }
     };
+
+    Vertex_Pos verticesFullscreen[] =
+    {
+        { { -1.0f,  1.0f } },
+        { {  1.0f,  1.0f } },
+        { { -1.0f, -1.0f } },
+        { {  1.0f, -1.0f } },
+    };
 }
 
 #endif
