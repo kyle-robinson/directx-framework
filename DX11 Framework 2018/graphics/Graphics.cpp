@@ -85,11 +85,26 @@ void Graphics::RenderFrame()
 
     /*   LIGHT   */
 	this->context->PSSetShader( this->pixelShader_noLight.GetShader(), NULL, 0 );
-	this->light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
+	this->light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );   
 }
 
 void Graphics::EndFrame()
 {
+    // render to texture
+    this->context->OMSetRenderTargets( 1, this->backBuffer.GetAddressOf(), nullptr );
+    this->context->ClearRenderTargetView( this->backBuffer.Get(), this->clearColor );
+
+    this->context->RSGetState( this->rasterizerState_Wireframe.GetAddressOf() );
+
+    UINT offset = 0;
+    this->context->PSSetShaderResources( 0, 1, this->shaderResourceView.GetAddressOf() );
+    this->context->IASetVertexBuffers( 0, 1, this->vertexBufferFullscreen.GetAddressOf(), this->vertexBufferFullscreen.StridePtr(), &offset );
+    this->context->IASetInputLayout( this->vertexShader_full.GetInputLayout() );
+    this->context->IASetIndexBuffer( this->indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    this->context->VSSetShader( this->vertexShader_full.GetShader(), NULL, 0 );
+    this->context->PSSetShader( this->pixelShader_full.GetShader(), NULL, 0 );
+    this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
+
     // display imgui
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -102,21 +117,7 @@ void Graphics::EndFrame()
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
-
-    // render to texture
-    this->context->OMSetRenderTargets( 1, this->backBuffer.GetAddressOf(), this->depthStencilView.Get() );
-    this->context->ClearRenderTargetView( this->backBuffer.Get(), this->clearColor );
-    this->context->ClearDepthStencilView( this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
-
-    UINT offset = 0;
-    this->context->PSSetShaderResources( 0, 1, this->shaderResourceView.GetAddressOf() );
-    this->context->IASetVertexBuffers( 0, 1, this->vertexBufferFullscreen.GetAddressOf(), this->vertexBufferFullscreen.StridePtr(), &offset );
-    this->context->IASetInputLayout( this->vertexShader_full.GetInputLayout() );
-    this->context->IASetIndexBuffer( this->indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    this->context->VSSetShader( this->vertexShader_full.GetShader(), NULL, 0 );
-    this->context->PSSetShader( this->pixelShader_full.GetShader(), NULL, 0 );
-    this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
-
+    
     this->context->OMSetRenderTargets( 1, this->nullRenderTarget.GetAddressOf(), nullptr );
     this->context->PSSetShaderResources( 0, 1, this->nullShaderResourceView.GetAddressOf() );
     
@@ -239,7 +240,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         textureDesc.Height = this->windowHeight;
         textureDesc.MipLevels = 1;
         textureDesc.ArraySize = 1;
-        textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+        textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         textureDesc.SampleDesc.Count = 1;
         textureDesc.SampleDesc.Quality = 0;
         textureDesc.Usage = D3D11_USAGE_DEFAULT;

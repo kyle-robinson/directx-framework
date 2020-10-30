@@ -11,10 +11,12 @@ struct VS_OUTPUT
 };
 
 VS_OUTPUT VS( VS_INPUT input )
-{
+{   
     VS_OUTPUT output;
     output.outPos = float4( input.inPos, 0.0f, 1.0f );
-    output.outTex = float2( ( input.inPos.x + 1 ) / 2.0f, -( input.inPos.y - 1 ) / 2.0f );
+    input.inPos = float2( ( input.inPos.x + 1 ) / 2.0f, -( input.inPos.y - 1 ) / 2.0f );
+    //input.inPos.x = ( input.inPos.x + 1 );
+    //input.inPos.y = -( input.inPos.y - 1 );
     output.outTex = input.inPos;
     return output;
 }
@@ -31,5 +33,5 @@ SamplerState samplerState : SAMPLER : register( s0 );
 
 float4 PS( PS_INPUT input ) : SV_TARGET
 {
-    return 1.0f - quadTexture.Sample( samplerState, input.inTex ).rgba;
+    return quadTexture.Sample( samplerState, input.inTex ).rgba;
 }
