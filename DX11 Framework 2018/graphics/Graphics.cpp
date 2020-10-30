@@ -102,6 +102,23 @@ void Graphics::EndFrame()
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
+
+    // render to texture
+    this->context->OMSetRenderTargets( 1, this->backBuffer.GetAddressOf(), this->depthStencilView.Get() );
+    this->context->ClearRenderTargetView( this->backBuffer.Get(), this->clearColor );
+    this->context->ClearDepthStencilView( this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
+
+    UINT offset = 0;
+    this->context->PSSetShaderResources( 0, 1, this->shaderResourceView.GetAddressOf() );
+    this->context->IASetVertexBuffers( 0, 1, this->vertexBufferFullscreen.GetAddressOf(), this->vertexBufferFullscreen.StridePtr(), &offset );
+    this->context->IASetInputLayout( this->vertexShader_full.GetInputLayout() );
+    this->context->IASetIndexBuffer( this->indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    this->context->VSSetShader( this->vertexShader_full.GetShader(), NULL, 0 );
+    this->context->PSSetShader( this->pixelShader_full.GetShader(), NULL, 0 );
+    this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
+
+    this->context->OMSetRenderTargets( 1, this->nullRenderTarget.GetAddressOf(), nullptr );
+    this->context->PSSetShaderResources( 0, 1, this->nullShaderResourceView.GetAddressOf() );
     
     // display frame
 	HRESULT hr = this->swapChain->Present( 1, NULL );
@@ -177,7 +194,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         sd.BufferDesc.RefreshRate.Denominator = 1;
         sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.SampleDesc.Count = 4;
+        sd.SampleDesc.Count = 1;
         sd.SampleDesc.Quality = 0;
         sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         sd.BufferCount = 1;
@@ -213,8 +230,42 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
         hr = this->swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)pBackBuffer.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Back Buffer!" );
-        hr = device->CreateRenderTargetView( pBackBuffer.Get(), nullptr, this->renderTargetView.GetAddressOf() );
+        hr = device->CreateRenderTargetView( pBackBuffer.Get(), nullptr, this->backBuffer.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Back Buffer!" );
+
+        // create texture resource
+        D3D11_TEXTURE2D_DESC textureDesc = { 0 };
+        textureDesc.Width = this->windowWidth;
+        textureDesc.Height = this->windowHeight;
+        textureDesc.MipLevels = 1;
+        textureDesc.ArraySize = 1;
+        textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+        textureDesc.SampleDesc.Count = 1;
+        textureDesc.SampleDesc.Quality = 0;
+        textureDesc.Usage = D3D11_USAGE_DEFAULT;
+        textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+        textureDesc.CPUAccessFlags = 0;
+        textureDesc.MiscFlags = 0;
+        Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
+        hr = this->device->CreateTexture2D( &textureDesc, nullptr, pTexture.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Texture for Render Target!" );
+
+        // create resource view on texture
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+        srvDesc.Format = textureDesc.Format;
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+        srvDesc.Texture2D.MipLevels = 1;
+        hr = this->device->CreateShaderResourceView( pTexture.Get(), &srvDesc, this->shaderResourceView.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Shader Resource View!" );
+
+        // create the target view on the texture
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+        rtvDesc.Format = textureDesc.Format;
+        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
+        hr = this->device->CreateRenderTargetView( pTexture.Get(), &rtvDesc, this->renderTargetView.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Texture!" );
 
         // create depth stencil
         CD3D11_TEXTURE2D_DESC depthStencilDesc(
@@ -222,7 +273,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
             this->windowWidth,
             this->windowHeight );
         depthStencilDesc.MipLevels = 1;
-        depthStencilDesc.SampleDesc.Count = 4;
+        depthStencilDesc.SampleDesc.Count = 1;
         depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
         hr = this->device->CreateTexture2D( &depthStencilDesc, NULL, this->depthStencilBuffer.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil Buffer!" );
