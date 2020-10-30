@@ -1,4 +1,9 @@
 // Vertex Shader
+cbuffer ViewBuffer : register( b0 )
+{
+    bool multiView;
+};
+
 struct VS_INPUT
 {
     float2 inPos : POSITION;
@@ -14,10 +19,22 @@ VS_OUTPUT VS( VS_INPUT input )
 {   
     VS_OUTPUT output;
     output.outPos = float4( input.inPos, 0.0f, 1.0f );
-    input.inPos = float2( ( input.inPos.x + 1 ) / 2.0f, -( input.inPos.y - 1 ) / 2.0f );
-    //input.inPos.x = ( input.inPos.x + 1 );
-    //input.inPos.y = -( input.inPos.y - 1 );
-    output.outTex = input.inPos;
+    
+    float2 multiTex;
+    multiTex.x = ( input.inPos.x + 1 );
+    multiTex.y = -( input.inPos.y - 1 );
+    
+    float2 normalTex;
+    normalTex = float2( ( input.inPos.x + 1 ) / 2.0f, -( input.inPos.y - 1 ) / 2.0f );
+    
+    if ( multiView )
+    {
+        output.outTex = multiTex;
+    }
+    else
+    {
+        output.outTex = normalTex;
+    }
     return output;
 }
 

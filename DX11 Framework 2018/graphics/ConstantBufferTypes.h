@@ -11,6 +11,11 @@ struct CB_VS_matrix
 	DirectX::XMMATRIX projectionMatrix;
 };
 
+struct CB_VS_fullscreen
+{
+	bool multiView;
+};
+
 struct CB_VS_water
 {
 	DirectX::XMMATRIX mWorld;

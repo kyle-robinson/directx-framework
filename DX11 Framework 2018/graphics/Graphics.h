@@ -29,7 +29,9 @@ public:
 	Camera camera;
 	RenderableGameObject nanosuit;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
+private:
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
+	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;
 private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
@@ -68,6 +70,7 @@ private:
 	UINT windowHeight;
 	ImGuiManager imgui;
 	float clearColor[4];
+	bool multiView = false;
 	bool useTexture = true;
 	float alphaFactor = 1.0f;
 	bool rasterizerSolid = true;

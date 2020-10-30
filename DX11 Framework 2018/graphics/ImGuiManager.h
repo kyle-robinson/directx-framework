@@ -11,7 +11,7 @@ public:
 	ImGuiManager();
 	~ImGuiManager();
 	void RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
-		bool& rasterizerSolid, bool& samplerAnisotropic );
+		bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView );
 	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light );
 private:
 	SYSTEM_INFO siSysInfo;

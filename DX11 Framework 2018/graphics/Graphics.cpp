@@ -6,7 +6,6 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	windowWidth = width;
 	windowHeight = height;
 
-
 	if ( !InitializeDirectX( hWnd ) )
 		return false;
 
@@ -68,10 +67,9 @@ void Graphics::RenderFrame()
 	cb_ps_light.ApplyChanges();
 	context->PSSetConstantBuffers( 1, 1, cb_ps_light.GetAddressOf() );
 
-    /*   MODELS   */
+    // render models
     nanosuit.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
-    
-    /*   CUBE   */
+
     UINT offset = 0;
     context->IASetVertexBuffers( 0, 1, vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
     context->IASetIndexBuffer( indexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0 );
@@ -87,7 +85,6 @@ void Graphics::RenderFrame()
         context->DrawIndexed( indexBufferCube.IndexCount(), 0, 0 );
     }
 
-    /*   LIGHT   */
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
 	light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );   
 }
@@ -105,6 +102,11 @@ void Graphics::EndFrame()
     context->IASetIndexBuffer( indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->VSSetShader( vertexShader_full.GetShader(), NULL, 0 );
     context->PSSetShader( pixelShader_full.GetShader(), NULL, 0 );
+    
+    cb_vs_fullscreen.data.multiView = multiView;
+    if ( !cb_vs_fullscreen.ApplyChanges() ) return;
+    context->VSSetConstantBuffers( 0, 1, cb_vs_fullscreen.GetAddressOf() );
+
     if ( rasterizerSolid )
     {
         context->DrawIndexed( indexBufferFullscreen.IndexCount(), 0, 0 );
@@ -122,7 +124,7 @@ void Graphics::EndFrame()
     ImGui::NewFrame();
 
     imgui.RenderMainWindow( context.Get(), clearColor, useTexture, alphaFactor,
-        rasterizerSolid, samplerAnisotropic );
+        rasterizerSolid, samplerAnisotropic, multiView );
     imgui.RenderLightWindow( light, cb_ps_light );
 
     ImGui::Render();
@@ -399,16 +401,7 @@ bool Graphics::InitializeScene()
 {
     try
     {
-        // initialize camera
-        camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
-	    camera.SetProjectionValues(
-		    70.0f,
-		    static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ),
-		    0.1f,
-		    1000.0f
-	    );
-
-		// initialize objects
+        /*   MODELS   */
 		if ( !nanosuit.Initialize( "res\\models\\nanosuit\\nanosuit.obj",
 			device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
@@ -416,26 +409,31 @@ bool Graphics::InitializeScene()
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
 
+        /*   OBJECTS   */
+        camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
+	    camera.SetProjectionValues( 70.0f,
+		    static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ),
+		    0.1f, 1000.0f );
+
         XMVECTOR lightPosition = camera.GetPositionVector();
 		lightPosition += camera.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 		light.SetPosition( lightPosition );
-		light.SetRotation( camera.GetRotationFloat3() );
-        
-        // cube vertices and indices
+		light.SetRotation( camera.GetRotationFloat3() );    
+
+        /*   VERTEX/INDEX   */
         HRESULT hr = vertexBufferCube.Initialize( device.Get(),
             VTX::verticesCube_PosTexNrm, ARRAYSIZE( VTX::verticesCube_PosTexNrm ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
         hr = indexBufferCube.Initialize( device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
-        // fullscreen texture
+        /*   TEXTURES   */
         hr = vertexBufferFullscreen.Initialize( device.Get(),
             VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
         hr = indexBufferFullscreen.Initialize( device.Get(), IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );
 
-        // create textures
         hr = DirectX::CreateWICTextureFromFile(
             device.Get(),
             L"res\\textures\\CrashBox.png",
@@ -444,9 +442,12 @@ bool Graphics::InitializeScene()
         );
         COM_ERROR_IF_FAILED( hr, "Failed to create WIC texture from file!" );
 
-        // initialize constant buffers
+        /*   CONSTANT BUFFERS   */
         hr = cb_vs_matrix.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_matrix' Constant Buffer!" );
+
+        hr = cb_vs_fullscreen.Initialize( device.Get(), context.Get() );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_fullscreen' Constant Buffer!" );
 
 		hr = cb_ps_light.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader' Constant Buffer!" );

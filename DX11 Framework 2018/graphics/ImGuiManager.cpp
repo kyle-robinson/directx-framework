@@ -15,7 +15,7 @@ ImGuiManager::~ImGuiManager()
 }
 
 void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
-    bool& rasterizerSolid, bool& samplerAnisotropic )
+    bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {
@@ -48,6 +48,13 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
                     samplerAnisotropic = false;
+
+                static int viewGroup = 0;
+                if ( ImGui::RadioButton( "Normal", &viewGroup, 0 ) )
+                    multiView = false;
+                ImGui::SameLine();
+                if ( ImGui::RadioButton( "Multi-View", &viewGroup, 1 ) )
+                    multiView = true;
             }
             ImGui::PopStyleColor();
             ImGui::TreePop();
