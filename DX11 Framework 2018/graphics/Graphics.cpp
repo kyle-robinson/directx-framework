@@ -40,6 +40,10 @@ void Graphics::BeginFrame()
 	this->context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	this->context->OMSetDepthStencilState( this->depthStencilState.Get(), 0 );
     this->context->OMSetBlendState( this->blendState.Get(), NULL, 0xFFFFFFFF );
+    rasterizerSolid == true ? this->context->RSSetState( this->rasterizerState_Solid.Get() ) :
+        this->context->RSSetState( this->rasterizerState_Wireframe.Get() );
+    samplerAnisotropic == true ? this->context->PSSetSamplers( 0, 1, this->samplerState_Anisotropic.GetAddressOf() ) :
+        this->context->PSSetSamplers( 0, 1, this->samplerState_Point.GetAddressOf() );
 }
 
 void Graphics::RenderFrame()
@@ -94,8 +98,6 @@ void Graphics::EndFrame()
     this->context->OMSetRenderTargets( 1, this->backBuffer.GetAddressOf(), nullptr );
     this->context->ClearRenderTargetView( this->backBuffer.Get(), this->clearColor );
 
-    this->context->RSGetState( this->rasterizerState_Wireframe.GetAddressOf() );
-
     UINT offset = 0;
     this->context->PSSetShaderResources( 0, 1, this->shaderResourceView.GetAddressOf() );
     this->context->IASetVertexBuffers( 0, 1, this->vertexBufferFullscreen.GetAddressOf(), this->vertexBufferFullscreen.StridePtr(), &offset );
@@ -103,7 +105,16 @@ void Graphics::EndFrame()
     this->context->IASetIndexBuffer( this->indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
     this->context->VSSetShader( this->vertexShader_full.GetShader(), NULL, 0 );
     this->context->PSSetShader( this->pixelShader_full.GetShader(), NULL, 0 );
-    this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
+    if ( rasterizerSolid )
+    {
+        this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
+    }
+    else
+    {
+        this->context->RSSetState( this->rasterizerState_Solid.Get() );
+        this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
+        this->context->RSSetState( this->rasterizerState_Wireframe.Get() );
+    }
 
     // display imgui
     ImGui_ImplDX11_NewFrame();
@@ -111,8 +122,7 @@ void Graphics::EndFrame()
     ImGui::NewFrame();
 
     imgui.RenderMainWindow( this->context.Get(), this->clearColor, this->useTexture, this->alphaFactor,
-        this->rasterizerState_Solid.Get(), this->rasterizerState_Wireframe.Get(),
-        this->samplerState_Anisotropic.Get(), this->samplerState_Point.Get() );
+        this->rasterizerSolid, this->samplerAnisotropic );
     imgui.RenderLightWindow( this->light, this->cb_ps_light );
 
     ImGui::Render();
@@ -306,7 +316,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState_Wireframe.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create wireframe Rasterizer State!" );
         
-        this->context->RSSetState( this->rasterizerState_Solid.Get() );
+        //this->context->RSSetState( this->rasterizerState_Solid.Get() );
 
         // set blend state
 		D3D11_RENDER_TARGET_BLEND_DESC renderTargetBlendDesc = { 0 };
@@ -338,8 +348,6 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		samplerDesc.MaxAnisotropy = 1;
 		hr = this->device->CreateSamplerState( &samplerDesc, this->samplerState_Point.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create point Sampler State!" );
-        
-        this->context->PSSetSamplers( 0, 1, this->samplerState_Anisotropic.GetAddressOf() );
     }
     catch ( COMException& exception )
     {

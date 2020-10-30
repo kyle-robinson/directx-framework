@@ -70,6 +70,8 @@ private:
 	float clearColor[4];
 	bool useTexture = true;
 	float alphaFactor = 1.0f;
+	bool rasterizerSolid = true;
+	bool samplerAnisotropic = true;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
 };
 

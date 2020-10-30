@@ -15,8 +15,7 @@ ImGuiManager::~ImGuiManager()
 }
 
 void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
-    ID3D11RasterizerState* rasterizerState_Solid, ID3D11RasterizerState* rasterizerState_Wireframe,
-    ID3D11SamplerState* samplerState_Anisotropic, ID3D11SamplerState* samplerState_Point )
+    bool& rasterizerSolid, bool& samplerAnisotropic )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {
@@ -31,10 +30,10 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
 			    
                 static int fillGroup = 0;
 			    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
-				    context->RSSetState( rasterizerState_Solid );
+				    rasterizerSolid = true;
 			    ImGui::SameLine();
 			    if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
-                    context->RSSetState( rasterizerState_Wireframe );
+                    rasterizerSolid = false;
 
                 static int textureGroup = 0;
                 if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
@@ -45,10 +44,10 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
 
                 static int filterGroup = 0;
                 if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
-                    context->PSSetSamplers( 0, 1, &samplerState_Anisotropic );
+                    samplerAnisotropic = true;
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
-                    context->PSSetSamplers( 0, 1, &samplerState_Point );
+                    samplerAnisotropic = false;
             }
             ImGui::PopStyleColor();
             ImGui::TreePop();
