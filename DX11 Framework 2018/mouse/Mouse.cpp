@@ -9,117 +9,117 @@ Mouse::MouseEvent::MouseEvent( const EventType type, const int x, const int y ) 
 
 bool Mouse::MouseEvent::IsValid() const noexcept
 {
-	return this->type != EventType::Invalid;
+	return type != EventType::Invalid;
 }
 
 Mouse::MouseEvent::EventType Mouse::MouseEvent::GetType() const noexcept
 {
-	return this->type;
+	return type;
 }
 
 MousePoint Mouse::MouseEvent::GetPos() const noexcept
 {
-	return { this->x, this->y };
+	return { x, y };
 }
 
 int Mouse::MouseEvent::GetPosX() const noexcept
 {
-	return this->x;
+	return x;
 }
 
 int Mouse::MouseEvent::GetPosY() const noexcept
 {
-	return this->y;
+	return y;
 }
 
 /*   MOUSE CLASS   */
 void Mouse::OnLeftPressed( int x, int y ) noexcept
 {
-	this->isLeftDown = true;
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::LPress, x, y ) );
+	isLeftDown = true;
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::LPress, x, y ) );
 }
 
 void Mouse::OnLeftReleased( int x, int y ) noexcept
 {
-	this->isLeftDown = false;
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::LRelease, x, y ) );
+	isLeftDown = false;
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::LRelease, x, y ) );
 }
 
 void Mouse::OnRightPressed( int x, int y ) noexcept
 {
-	this->isRightDown = true;
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::RPress, x, y ) );
+	isRightDown = true;
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::RPress, x, y ) );
 }
 
 void Mouse::OnRightReleased( int x, int y ) noexcept
 {
-	this->isRightDown = false;
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::RRelease, x, y ) );
+	isRightDown = false;
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::RRelease, x, y ) );
 }
 
 void Mouse::OnMiddlePressed( int x, int y ) noexcept
 {
-	this->isMiddleDown = true;
-	this->eventBuffer.push( MouseEvent( Mouse::MouseEvent::EventType::MPress, x, y ) );
+	isMiddleDown = true;
+	eventBuffer.push( MouseEvent( Mouse::MouseEvent::EventType::MPress, x, y ) );
 }
 
 void Mouse::OnMiddleReleased( int x, int y ) noexcept
 {
-	this->isMiddleDown = false;
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::MRelease, x, y ) );
+	isMiddleDown = false;
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::MRelease, x, y ) );
 }
 
 void Mouse::OnWheelUp( int x, int y ) noexcept
 {
 	MouseEvent mouseEvent( MouseEvent::WheelUp, x, y );
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::WheelUp, x, y ) );
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::WheelUp, x, y ) );
 }
 
 void Mouse::OnWheelDown( int x, int y ) noexcept
 {
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::WheelDown, x, y ) );
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::WheelDown, x, y ) );
 }
 
 void Mouse::OnMouseMove( int x, int y ) noexcept
 {
-	this->x = x;
-	this->y = y;
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::Move, x, y ) );
+	x = x;
+	y = y;
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::Move, x, y ) );
 }
 
 void Mouse::OnMouseMoveRaw( int x, int y ) noexcept
 {
-	this->eventBuffer.push( MouseEvent( MouseEvent::EventType::RawMove, x, y ) );
+	eventBuffer.push( MouseEvent( MouseEvent::EventType::RawMove, x, y ) );
 }
 
 bool Mouse::IsLeftDown() const noexcept
 {
-	return this->isLeftDown;
+	return isLeftDown;
 }
 
 bool Mouse::IsRightDown() const noexcept
 {
-	return this->isRightDown;
+	return isRightDown;
 }
 
 bool Mouse::IsMiddleDown() const noexcept
 {
-	return this->isMiddleDown;
+	return isMiddleDown;
 }
 
 int Mouse::GetPosX() const noexcept
 {
-	return this->x;
+	return x;
 }
 
 int Mouse::GetPosY() const noexcept
 {
-	return this->y;
+	return y;
 }
 
 MousePoint Mouse::GetPos() const noexcept
 {
-	return { this->x, this->y };
+	return { x, y };
 }
 
 bool Mouse::EventBufferIsEmpty() const noexcept
@@ -129,14 +129,14 @@ bool Mouse::EventBufferIsEmpty() const noexcept
 
 Mouse::MouseEvent Mouse::ReadEvent() noexcept
 {
-	if ( this->eventBuffer.empty() )
+	if ( eventBuffer.empty() )
 	{
 		return MouseEvent();
 	}
 	else
 	{
-		MouseEvent e = this->eventBuffer.front();
-		this->eventBuffer.pop();
+		MouseEvent e = eventBuffer.front();
+		eventBuffer.pop();
 		return e;
 	}
 }

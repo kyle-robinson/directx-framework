@@ -20,11 +20,11 @@ public:
 	T data;
 	ID3D11Buffer* Get() const noexcept
 	{
-		return this->buffer.Get();
+		return buffer.Get();
 	}
 	ID3D11Buffer* const* GetAddressOf() const noexcept
 	{
-		return this->buffer.GetAddressOf();
+		return buffer.GetAddressOf();
 	}
 	HRESULT Initialize( ID3D11Device* device, ID3D11DeviceContext* context )
 	{
@@ -42,20 +42,20 @@ public:
 		constantBufferDesc.MiscFlags = 0;
 		constantBufferDesc.StructureByteStride = 0;
 
-		HRESULT hr = device->CreateBuffer( &constantBufferDesc, NULL, this->buffer.GetAddressOf() );
+		HRESULT hr = device->CreateBuffer( &constantBufferDesc, NULL, buffer.GetAddressOf() );
 		return hr;
 	}
 	bool ApplyChanges()
 	{
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		HRESULT hr = this->context->Map( this->buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+		HRESULT hr = context->Map( buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
 		if ( FAILED( hr ) )
 		{
 			ErrorLogger::Log( hr, "Failed to map constant buffer!" );
 			return false;
 		}
-		CopyMemory( mappedResource.pData, &this->data, sizeof( T ) );
-		this->context->Unmap( this->buffer.Get(), 0 );
+		CopyMemory( mappedResource.pData, &data, sizeof( T ) );
+		context->Unmap( buffer.Get(), 0 );
 		return true;
 	}
 };

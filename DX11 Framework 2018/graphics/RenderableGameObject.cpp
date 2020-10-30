@@ -9,20 +9,20 @@ bool RenderableGameObject::Initialize(
 	if ( !model.Initialize( filePath, device, context, cb_vs_vertexshader ) )
 		return false;
 
-	this->SetPosition( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
-	this->SetRotation( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
-	this->UpdateMatrix();
+	SetPosition( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
+	SetRotation( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
+	UpdateMatrix();
 	return true;
 }
 
 void RenderableGameObject::Draw( const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix )
 {
-	model.Draw( this->worldMatrix, viewMatrix, projectionMatrix );
+	model.Draw( worldMatrix, viewMatrix, projectionMatrix );
 }
 
 void RenderableGameObject::UpdateMatrix()
 {
-	this->worldMatrix = XMMatrixRotationRollPitchYaw( this->rotation.x, this->rotation.y, this->rotation.z ) *
-		XMMatrixTranslation( this->position.x, this->position.y, this->position.z );
-	this->UpdateDirectionVectors();
+	worldMatrix = XMMatrixRotationRollPitchYaw( rotation.x, rotation.y, rotation.z ) *
+		XMMatrixTranslation( position.x, position.y, position.z );
+	UpdateDirectionVectors();
 }

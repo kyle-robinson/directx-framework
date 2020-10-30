@@ -5,12 +5,12 @@
 
 Texture::Texture( ID3D11Device* device, const Colour& color, aiTextureType type )
 {
-	this->Initialize1x1ColourTexture( device, color, type );
+	Initialize1x1ColourTexture( device, color, type );
 }
 
 Texture::Texture( ID3D11Device* device, const Colour* colorData, UINT width, UINT height, aiTextureType type )
 {
-	this->InitializeColourTexture( device, colorData, width, height, type );
+	InitializeColourTexture( device, colorData, width, height, type );
 }
 
 Texture::Texture( ID3D11Device* device, const std::string& filePath, aiTextureType type )
@@ -20,20 +20,20 @@ Texture::Texture( ID3D11Device* device, const std::string& filePath, aiTextureTy
 	{
 		HRESULT hr = DirectX::CreateDDSTextureFromFile( device,
 			StringConverter::StringToWide( filePath ).c_str(),
-			this->texture.GetAddressOf(),
-			this->textureView.GetAddressOf() );
+			texture.GetAddressOf(),
+			textureView.GetAddressOf() );
 		if ( FAILED( hr ) )
-			this->Initialize1x1ColourTexture( device, Colours::UnloadedTextureColour, type );
+			Initialize1x1ColourTexture( device, Colours::UnloadedTextureColour, type );
 		return;
 	}
 	else
 	{
 		HRESULT hr = DirectX::CreateWICTextureFromFile( device,
 			StringConverter::StringToWide( filePath ).c_str(),
-			this->texture.GetAddressOf(),
-			this->textureView.GetAddressOf() );
+			texture.GetAddressOf(),
+			textureView.GetAddressOf() );
 		if ( FAILED( hr ) )
-			this->Initialize1x1ColourTexture( device, Colours::UnloadedTextureColour, type );
+			Initialize1x1ColourTexture( device, Colours::UnloadedTextureColour, type );
 		return;
 	}
 }
@@ -42,28 +42,28 @@ Texture::Texture( ID3D11Device* device, const uint8_t* pData, size_t size, aiTex
 {
 	this->type = type;
 	HRESULT hr = DirectX::CreateWICTextureFromMemory( device, pData, size,
-		this->texture.GetAddressOf(), this->textureView.GetAddressOf() );
+		texture.GetAddressOf(), textureView.GetAddressOf() );
 	COM_ERROR_IF_FAILED( hr, "Failed to create texture from memory!" );
 }
 
 aiTextureType Texture::GetType()
 {
-	return this->type;
+	return type;
 }
 
 ID3D11ShaderResourceView* Texture::GetTextureResourceView()
 {
-	return this->textureView.Get();
+	return textureView.Get();
 }
 
 ID3D11ShaderResourceView** Texture::GetTextureResourceViewAddress()
 {
-	return this->textureView.GetAddressOf();
+	return textureView.GetAddressOf();
 }
 
 void Texture::Initialize1x1ColourTexture( ID3D11Device* device, const Colour& color, aiTextureType type )
 {
-	this->InitializeColourTexture( device, &color, 1, 1, type );
+	InitializeColourTexture( device, &color, 1, 1, type );
 }
 
 void Texture::InitializeColourTexture(  ID3D11Device* device, const Colour* colorData, UINT width, UINT height, aiTextureType type )

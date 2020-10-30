@@ -125,9 +125,6 @@
     <ClCompile Include="graphics\RenderableGameObject.cpp">
       <Filter>Source\Graphics\Model</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\VertexBuffer.cpp">
-      <Filter>Source\Graphics\Bindables</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\Texture.cpp">
       <Filter>Source\Graphics\Bindables</Filter>
     </ClCompile>

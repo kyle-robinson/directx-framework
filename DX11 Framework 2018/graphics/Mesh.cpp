@@ -13,10 +13,10 @@ Mesh::Mesh( ID3D11Device* device,
 		this->textures = textures;
 		this->transformMatrix = transformMatrix;
 
-		HRESULT hr = this->vertexBuffer.Initialize( device, vertices.data(), vertices.size() );
+		HRESULT hr = vertexBuffer.Initialize( device, vertices.data(), vertices.size() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize vertex buffer for mesh!" );
 
-		hr = this->indexBuffer.Initialize( device, indices.data(), indices.size() );
+		hr = indexBuffer.Initialize( device, indices.data(), indices.size() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize index buffer for mesh!" );
 	}
 	catch ( COMException& exception )
@@ -28,16 +28,16 @@ Mesh::Mesh( ID3D11Device* device,
 
 const DirectX::XMMATRIX& Mesh::GetTransformMatrix()
 {
-	return this->transformMatrix;
+	return transformMatrix;
 }
 
 Mesh::Mesh( const Mesh& mesh )
 {
-	this->context = mesh.context;
-	this->vertexBuffer = mesh.vertexBuffer;
-	this->indexBuffer = mesh.indexBuffer;
-	this->textures = mesh.textures;
-	this->transformMatrix = mesh.transformMatrix;
+	context = mesh.context;
+	vertexBuffer = mesh.vertexBuffer;
+	indexBuffer = mesh.indexBuffer;
+	textures = mesh.textures;
+	transformMatrix = mesh.transformMatrix;
 }
 
 void Mesh::Draw()
@@ -46,13 +46,13 @@ void Mesh::Draw()
 	{
 		if ( textures[i].GetType() == aiTextureType_DIFFUSE )
 		{
-			this->context->PSSetShaderResources( 0, 1, textures[i].GetTextureResourceViewAddress() );
+			context->PSSetShaderResources( 0, 1, textures[i].GetTextureResourceViewAddress() );
 			break;
 		}
 	}
 
 	UINT offset = 0;
-	this->context->IASetVertexBuffers( 0, 1, this->vertexBuffer.GetAddressOf(), this->vertexBuffer.StridePtr(), &offset );
-	this->context->IASetIndexBuffer( this->indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0 );
-	this->context->DrawIndexed( this->indexBuffer.IndexCount(), 0, 0 );
+	context->IASetVertexBuffers( 0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset );
+	context->IASetIndexBuffer( indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0 );
+	context->DrawIndexed( indexBuffer.IndexCount(), 0, 0 );
 }

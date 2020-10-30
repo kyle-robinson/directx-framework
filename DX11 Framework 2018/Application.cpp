@@ -8,12 +8,12 @@ bool Application::Initialize(
 	int width,
 	int height )
 {
-	this->timer.Start();
+	timer.Start();
 
-	if ( !this->renderWindow.Initialize( this, hInstance, windowTitle, windowClass, width, height ) )
+	if ( !renderWindow.Initialize( this, hInstance, windowTitle, windowClass, width, height ) )
 		return false;
 
-	if ( !gfx.Initialize( this->renderWindow.GetHWND(), width, height ) )
+	if ( !gfx.Initialize( renderWindow.GetHWND(), width, height ) )
 		return false;
 
 	return true;
@@ -21,13 +21,13 @@ bool Application::Initialize(
 
 bool Application::ProcessMessages() noexcept
 {
-	return this->renderWindow.ProcessMessages();
+	return renderWindow.ProcessMessages();
 }
 
 void Application::Update()
 {
-    float dt = this->timer.GetMilliSecondsElapsed();
-	this->timer.Restart();
+    float dt = timer.GetMilliSecondsElapsed();
+	timer.Restart();
 
     // read input
     while ( !keyboard.CharBufferIsEmpty() )
@@ -46,7 +46,7 @@ void Application::Update()
 		{
 			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove )
 			{
-				this->gfx.camera.AdjustRotation(
+				gfx.camera.AdjustRotation(
 					XMFLOAT3(
 						static_cast<float>( me.GetPosY() ) * 0.005f,
 						static_cast<float>( me.GetPosX() ) * 0.005f,
@@ -63,29 +63,29 @@ void Application::Update()
 		cameraSpeed = 0.01f;
 
 	if ( keyboard.KeyIsPressed( 'W' ) )
-		this->gfx.camera.AdjustPosition( this->gfx.camera.GetForwardVector() * cameraSpeed * dt );
+		gfx.camera.AdjustPosition( gfx.camera.GetForwardVector() * cameraSpeed * dt );
 
 	if ( keyboard.KeyIsPressed( 'A' ) )
-		this->gfx.camera.AdjustPosition( this->gfx.camera.GetLeftVector() * cameraSpeed * dt );
+		gfx.camera.AdjustPosition( gfx.camera.GetLeftVector() * cameraSpeed * dt );
 
 	if ( keyboard.KeyIsPressed( 'S' ) )
-		this->gfx.camera.AdjustPosition( this->gfx.camera.GetBackwardVector() * cameraSpeed * dt );
+		gfx.camera.AdjustPosition( gfx.camera.GetBackwardVector() * cameraSpeed * dt );
 
 	if ( keyboard.KeyIsPressed( 'D' ) )
-		this->gfx.camera.AdjustPosition( this->gfx.camera.GetRightVector() * cameraSpeed * dt );
+		gfx.camera.AdjustPosition( gfx.camera.GetRightVector() * cameraSpeed * dt );
 
 	if ( keyboard.KeyIsPressed( VK_SPACE ) )
-		this->gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, cameraSpeed * dt, 0.0f ) );
+		gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, cameraSpeed * dt, 0.0f ) );
 
 	if ( keyboard.KeyIsPressed( 'E' ) )
-		this->gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, -cameraSpeed * dt, 0.0f ) );
+		gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, -cameraSpeed * dt, 0.0f ) );
 
 	if ( keyboard.KeyIsPressed( 'C' ) )
 	{
 		XMVECTOR lightPosition = gfx.camera.GetPositionVector();
-		lightPosition += this->gfx.camera.GetForwardVector();
-		this->gfx.light.SetPosition( lightPosition );
-		this->gfx.light.SetRotation( this->gfx.camera.GetRotationFloat3() );
+		lightPosition += gfx.camera.GetForwardVector();
+		gfx.light.SetPosition( lightPosition );
+		gfx.light.SetRotation( gfx.camera.GetRotationFloat3() );
 	}
 
     gfx.Update( dt );
@@ -93,7 +93,7 @@ void Application::Update()
 
 void Application::Render()
 {
-	this->gfx.BeginFrame();
-	this->gfx.RenderFrame();
-	this->gfx.EndFrame();
+	gfx.BeginFrame();
+	gfx.RenderFrame();
+	gfx.EndFrame();
 }

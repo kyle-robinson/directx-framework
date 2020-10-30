@@ -17,15 +17,15 @@ public:
 	VertexBuffer() {}
 	VertexBuffer( const VertexBuffer<T>& rhs )
 	{
-		this->buffer = rhs.buffer;
-		this->stride = rhs.stride;
-		this->vertexCount = rhs.vertexCount;
+		buffer = rhs.buffer;
+		stride = rhs.stride;
+		vertexCount = rhs.vertexCount;
 	}
 	VertexBuffer<T>& operator=( const VertexBuffer<T>& rhs )
 	{
-		this->buffer = rhs.buffer;
-		this->stride = rhs.stride;
-		this->vertexCount = rhs.vertexCount;
+		buffer = rhs.buffer;
+		stride = rhs.stride;
+		vertexCount = rhs.vertexCount;
 		return *this;
 	}
 public:
@@ -39,15 +39,15 @@ public:
 	}
 	UINT VertexCount() const noexcept
 	{
-		return this->vertexCount;
+		return vertexCount;
 	}
 	const UINT Stride() const noexcept
 	{
-		return this->stride;
+		return stride;
 	}
 	const UINT* StridePtr() const noexcept
 	{
-		return &this->stride;
+		return &stride;
 	}
 	HRESULT Initialize( ID3D11Device* device, T* data, UINT vertexCount )
 	{
@@ -59,7 +59,7 @@ public:
 		D3D11_BUFFER_DESC vertexBufferDesc;
 		ZeroMemory( &vertexBufferDesc, sizeof( D3D11_BUFFER_DESC ) );
 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		vertexBufferDesc.ByteWidth = this->stride * vertexCount;
+		vertexBufferDesc.ByteWidth = stride * vertexCount;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = 0;
 		vertexBufferDesc.MiscFlags = 0;
@@ -68,7 +68,7 @@ public:
 		ZeroMemory( &vertexBufferData, sizeof( D3D11_SUBRESOURCE_DATA ) );
 		vertexBufferData.pSysMem = data;
 
-		HRESULT hr = device->CreateBuffer( &vertexBufferDesc, &vertexBufferData, this->buffer.GetAddressOf() );
+		HRESULT hr = device->CreateBuffer( &vertexBufferDesc, &vertexBufferData, buffer.GetAddressOf() );
 		return hr;
 	}
 };

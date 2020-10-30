@@ -3,33 +3,33 @@
 bool RenderWindow::Initialize( WindowContainer* pWindowContainer, HINSTANCE hInstance, const std::string& windowName, const std::string& windowClass, int width, int height )
 {
 	// register window class
-	this->hInstance = hInstance;
-	this->width = width;
-	this->height = height;
-	this->windowTitle = windowName;
-	this->windowTitle_Wide = StringConverter::StringToWide( windowName );
+	hInstance = hInstance;
+	width = width;
+	height = height;
+	windowTitle = windowName;
+	windowTitle_Wide = StringConverter::StringToWide( windowName );
 	this->windowClass = windowClass;
-	this->windowClass_Wide = StringConverter::StringToWide( windowClass );
+	windowClass_Wide = StringConverter::StringToWide( windowClass );
 
-	hHandNormal = LoadCursor( this->hInstance, (LPCWSTR)IDR_ANICURSOR1 );
-	hHandSelect = LoadCursor( this->hInstance, (LPCWSTR)IDR_ANICURSOR2 );
+	hHandNormal = LoadCursor( hInstance, (LPCWSTR)IDR_ANICURSOR1 );
+	hHandSelect = LoadCursor( hInstance, (LPCWSTR)IDR_ANICURSOR2 );
 
-	this->RegisterWindowClass();
+	RegisterWindowClass();
 
-	int centerScreenX = GetSystemMetrics( SM_CXSCREEN ) / 2 - this->width / 2;
-	int centerScreenY = GetSystemMetrics( SM_CYSCREEN ) / 2 - this->height / 2;
+	int centerScreenX = GetSystemMetrics( SM_CXSCREEN ) / 2 - width / 2;
+	int centerScreenY = GetSystemMetrics( SM_CYSCREEN ) / 2 - height / 2;
 
 	RECT windowRect;
 	windowRect.left = centerScreenX;
 	windowRect.top = centerScreenY;
-	windowRect.right = windowRect.left + this->width;
-	windowRect.bottom = windowRect.top + this->height;
+	windowRect.right = windowRect.left + width;
+	windowRect.bottom = windowRect.top + height;
 	AdjustWindowRect( &windowRect, WS_OVERLAPPEDWINDOW, FALSE );
 
 	// create window
-	this->hWnd = CreateWindow(
-		this->windowClass_Wide.c_str(),
-		this->windowTitle_Wide.c_str(),
+	hWnd = CreateWindow(
+		windowClass_Wide.c_str(),
+		windowTitle_Wide.c_str(),
 		WS_OVERLAPPEDWINDOW,
 		windowRect.left,
 		windowRect.top,
@@ -37,20 +37,20 @@ bool RenderWindow::Initialize( WindowContainer* pWindowContainer, HINSTANCE hIns
 		windowRect.bottom - windowRect.top,
 		NULL,
 		NULL,
-		this->hInstance,
+		hInstance,
 		pWindowContainer
 	);
 
-	if ( this->hWnd == NULL )
+	if ( hWnd == NULL )
 	{
-		ErrorLogger::Log( GetLastError(), "ERROR::CreateWindow Failed for window: " + this->windowTitle );
+		ErrorLogger::Log( GetLastError(), "ERROR::CreateWindow Failed for window: " + windowTitle );
 		return false;
 	}
 
 	// show window
-	ShowWindow( this->hWnd, SW_SHOW );
-	SetForegroundWindow( this->hWnd );
-	SetFocus( this->hWnd );
+	ShowWindow( hWnd, SW_SHOW );
+	SetForegroundWindow( hWnd );
+	SetFocus( hWnd );
 
 	return true;
 }
@@ -101,7 +101,7 @@ bool RenderWindow::ProcessMessages() noexcept
 {
 	MSG msg;
 	ZeroMemory( &msg, sizeof( MSG ) );
-	while ( PeekMessage( &msg, this->hWnd, 0u, 0u, PM_REMOVE ) )
+	while ( PeekMessage( &msg, hWnd, 0u, 0u, PM_REMOVE ) )
 	{
 		TranslateMessage( &msg );
 		DispatchMessage( &msg );
@@ -110,10 +110,10 @@ bool RenderWindow::ProcessMessages() noexcept
 	// check if the window was closed
 	if ( msg.message == WM_NULL )
 	{
-		if ( !IsWindow( this->hWnd ) )
+		if ( !IsWindow( hWnd ) )
 		{
-			this->hWnd = NULL;
-			UnregisterClass( this->windowClass_Wide.c_str(), this->hInstance );
+			hWnd = NULL;
+			UnregisterClass( windowClass_Wide.c_str(), hInstance );
 			return false;
 		}
 	}
@@ -123,7 +123,7 @@ bool RenderWindow::ProcessMessages() noexcept
 
 HWND RenderWindow::GetHWND() const noexcept
 {
-	return this->hWnd;
+	return hWnd;
 }
 
 void RenderWindow::RegisterWindowClass() noexcept
@@ -146,9 +146,9 @@ void RenderWindow::RegisterWindowClass() noexcept
 
 RenderWindow::~RenderWindow() noexcept
 {
-	if ( this->hWnd != NULL )
+	if ( hWnd != NULL )
 	{
-		UnregisterClass( this->windowClass_Wide.c_str(), this->hInstance );
-		DestroyWindow( this->hWnd );
+		UnregisterClass( windowClass_Wide.c_str(), hInstance );
+		DestroyWindow( hWnd );
 	}
 }

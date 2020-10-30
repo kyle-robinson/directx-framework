@@ -12,7 +12,7 @@ bool Model::Initialize(
 
 	try
 	{
-		if ( !this->LoadModel( filePath ) )
+		if ( !LoadModel( filePath ) )
 			return false;
 	}
 	catch ( COMException& exception )
@@ -26,27 +26,27 @@ bool Model::Initialize(
 
 void Model::Draw( const XMMATRIX& worldMatrix, const XMMATRIX& viewMatrix, const XMMATRIX& projectionMatrix )
 {
-	this->cb_vs_vertexshader->data.viewMatrix = viewMatrix;
-	this->cb_vs_vertexshader->data.projectionMatrix = projectionMatrix;
-	this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_vertexshader->GetAddressOf() );
+	cb_vs_vertexshader->data.viewMatrix = viewMatrix;
+	cb_vs_vertexshader->data.projectionMatrix = projectionMatrix;
+	context->VSSetConstantBuffers( 0, 1, cb_vs_vertexshader->GetAddressOf() );
 	
 	for ( int i = 0; i < meshes.size(); i++ )
 	{
-		this->cb_vs_vertexshader->data.worldMatrix = meshes[i].GetTransformMatrix() * worldMatrix;
-		this->cb_vs_vertexshader->ApplyChanges();
+		cb_vs_vertexshader->data.worldMatrix = meshes[i].GetTransformMatrix() * worldMatrix;
+		cb_vs_vertexshader->ApplyChanges();
 		meshes[i].Draw();
 	}
 }
 
 bool Model::LoadModel( const std::string& filePath )
 {
-	this->directory = StringConverter::GetDirectoryFromPath( filePath );
+	directory = StringConverter::GetDirectoryFromPath( filePath );
 	Assimp::Importer importer;
 	const aiScene* pScene = importer.ReadFile( filePath,
 		aiProcess_Triangulate | aiProcess_ConvertToLeftHanded );
 	if ( pScene == nullptr )
 		return false;
-	this->ProcessNode( pScene->mRootNode, pScene, XMMatrixIdentity() );
+	ProcessNode( pScene->mRootNode, pScene, XMMatrixIdentity() );
 	return true;
 }
 
@@ -57,11 +57,11 @@ void Model::ProcessNode( aiNode* node, const aiScene* scene, const XMMATRIX& par
 	for ( UINT i = 0; i < node->mNumMeshes; i++ )
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back( this->ProcessMesh( mesh, scene, nodeTransformMatrix ) );
+		meshes.push_back( ProcessMesh( mesh, scene, nodeTransformMatrix ) );
 	}
 
 	for ( UINT i = 0; i < node->mNumChildren; i++ )
-		this->ProcessNode( node->mChildren[i], scene, nodeTransformMatrix );
+		ProcessNode( node->mChildren[i], scene, nodeTransformMatrix );
 }
 
 Mesh Model::ProcessMesh( aiMesh* mesh, const aiScene* scene, const XMMATRIX& transformMatrix )
@@ -103,7 +103,7 @@ Mesh Model::ProcessMesh( aiMesh* mesh, const aiScene* scene, const XMMATRIX& tra
 	std::vector<Texture> diffuseTextures = LoadMaterialTextures( material, aiTextureType_DIFFUSE, scene );
 	textures.insert( textures.end(), diffuseTextures.begin(), diffuseTextures.end() );
 
-	return Mesh( this->device, this->context, vertices, indices, textures, transformMatrix );
+	return Mesh( device, context, vertices, indices, textures, transformMatrix );
 }
 
 TextureStorageType Model::GetTextureStorageType( const aiScene* pScene, aiMaterial* pMaterial, unsigned int index, aiTextureType textureType )
@@ -161,10 +161,10 @@ std::vector<Texture> Model::LoadMaterialTextures( aiMaterial* pMaterial, aiTextu
 			pMaterial->Get( AI_MATKEY_COLOR_DIFFUSE, aiColor );
 			if ( aiColor.IsBlack() )
 			{
-				materialTextures.push_back( Texture( this->device, Colours::UnloadedTextureColour, textureType ) );
+				materialTextures.push_back( Texture( device, Colours::UnloadedTextureColour, textureType ) );
 				return materialTextures;
 			}
-			materialTextures.push_back( Texture( this->device, Colour( aiColor.r * 255, aiColor.g * 255, aiColor.b * 255 ), textureType ) );
+			materialTextures.push_back( Texture( device, Colour( aiColor.r * 255, aiColor.g * 255, aiColor.b * 255 ), textureType ) );
 			return materialTextures;
 		}
 	}
@@ -179,15 +179,15 @@ std::vector<Texture> Model::LoadMaterialTextures( aiMaterial* pMaterial, aiTextu
 			{
 				case TextureStorageType::Disk:
 				{
-					std::string fileName = this->directory + '\\' + path.C_Str();
-					Texture diskTexture( this->device, fileName, textureType );
+					std::string fileName = directory + '\\' + path.C_Str();
+					Texture diskTexture( device, fileName, textureType );
 					materialTextures.push_back( diskTexture );
 					break;
 				}
 				case TextureStorageType::EmbeddedCompressed:
 				{
 					const aiTexture* pTexture = pScene->GetEmbeddedTexture( path.C_Str() );
-					Texture embeddedTexture( this->device, reinterpret_cast<uint8_t*>( pTexture->pcData ),
+					Texture embeddedTexture( device, reinterpret_cast<uint8_t*>( pTexture->pcData ),
 						pTexture->mWidth, textureType );
 					materialTextures.push_back( embeddedTexture );
 					break;
@@ -195,7 +195,7 @@ std::vector<Texture> Model::LoadMaterialTextures( aiMaterial* pMaterial, aiTextu
 				case TextureStorageType::EmbeddedIndexCompressed:
 				{
 					int index = GetTextureIndex( &path );
-					Texture embeddedTextureIndexed( this->device, reinterpret_cast<uint8_t*>( pScene->mTextures[index]->pcData ),
+					Texture embeddedTextureIndexed( device, reinterpret_cast<uint8_t*>( pScene->mTextures[index]->pcData ),
 						pScene->mTextures[index]->mWidth, textureType );
 					materialTextures.push_back( embeddedTextureIndexed );
 					break;
@@ -205,7 +205,7 @@ std::vector<Texture> Model::LoadMaterialTextures( aiMaterial* pMaterial, aiTextu
 	}
 
 	if ( materialTextures.size() == 0 )
-		materialTextures.push_back( Texture( this->device, Colours::UnhandledTextureColour, aiTextureType_DIFFUSE ) );
+		materialTextures.push_back( Texture( device, Colours::UnhandledTextureColour, aiTextureType_DIFFUSE ) );
 
 	return materialTextures;
 }

@@ -5,8 +5,8 @@ bool Light::Initialize( ID3D11Device* device, ID3D11DeviceContext* context,
 {
 	if ( !model.Initialize( "res\\models\\light.fbx", device, context, cb_vs_vertexshader ) )
 		return false;
-	this->SetPosition( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
-	this->SetRotation( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
-	this->UpdateMatrix();
+	SetPosition( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
+	SetRotation( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
+	UpdateMatrix();
 	return true;
 }

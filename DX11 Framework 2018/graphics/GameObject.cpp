@@ -7,108 +7,108 @@ void GameObject::UpdateMatrix()
 
 const XMVECTOR& GameObject::GetPositionVector() const noexcept
 {
-	return this->posVector;
+	return posVector;
 }
 
 const XMFLOAT3& GameObject::GetPositionFloat3() const noexcept
 {
-	return this->position;
+	return position;
 }
 
 const XMVECTOR& GameObject::GetRotationVector() const noexcept
 {
-	return this->rotVector;
+	return rotVector;
 }
 
 const XMFLOAT3& GameObject::GetRotationFloat3() const noexcept
 {
-	return this->rotation;
+	return rotation;
 }
 
 void GameObject::SetPosition( const XMVECTOR& pos ) noexcept
 {
-	XMStoreFloat3( &this->position, pos );
-	this->posVector = pos;
-	this->UpdateMatrix();
+	XMStoreFloat3( &position, pos );
+	posVector = pos;
+	UpdateMatrix();
 }
 
 void GameObject::UpdateDirectionVectors()
 {
-	XMMATRIX vecRotationMatrix = XMMatrixRotationRollPitchYaw( this->rotation.x, this->rotation.y, 0.0f );
-	this->vec_forward = XMVector3TransformCoord( this->DEFAULT_FORWARD_VECTOR, vecRotationMatrix );
-	this->vec_backward = XMVector3TransformCoord( this->DEFAULT_BACKWARD_VECTOR, vecRotationMatrix );
-	this->vec_left = XMVector3TransformCoord( this->DEFAULT_LEFT_VECTOR, vecRotationMatrix );
-	this->vec_right = XMVector3TransformCoord( this->DEFAULT_RIGHT_VECTOR, vecRotationMatrix );
+	XMMATRIX vecRotationMatrix = XMMatrixRotationRollPitchYaw( rotation.x, rotation.y, 0.0f );
+	vec_forward = XMVector3TransformCoord( DEFAULT_FORWARD_VECTOR, vecRotationMatrix );
+	vec_backward = XMVector3TransformCoord( DEFAULT_BACKWARD_VECTOR, vecRotationMatrix );
+	vec_left = XMVector3TransformCoord( DEFAULT_LEFT_VECTOR, vecRotationMatrix );
+	vec_right = XMVector3TransformCoord( DEFAULT_RIGHT_VECTOR, vecRotationMatrix );
 
-	XMMATRIX vecRotationMatrix_noY = XMMatrixRotationRollPitchYaw( 0.0f, this->rotation.y, 0.0f );
-	this->vec_forward_noY = XMVector3TransformCoord( this->DEFAULT_FORWARD_VECTOR, vecRotationMatrix_noY );
-	this->vec_backward_noY = XMVector3TransformCoord( this->DEFAULT_BACKWARD_VECTOR, vecRotationMatrix_noY );
-	this->vec_left_noY = XMVector3TransformCoord( this->DEFAULT_LEFT_VECTOR, vecRotationMatrix_noY );
-	this->vec_right_noY = XMVector3TransformCoord( this->DEFAULT_RIGHT_VECTOR, vecRotationMatrix_noY );
+	XMMATRIX vecRotationMatrix_noY = XMMatrixRotationRollPitchYaw( 0.0f, rotation.y, 0.0f );
+	vec_forward_noY = XMVector3TransformCoord( DEFAULT_FORWARD_VECTOR, vecRotationMatrix_noY );
+	vec_backward_noY = XMVector3TransformCoord( DEFAULT_BACKWARD_VECTOR, vecRotationMatrix_noY );
+	vec_left_noY = XMVector3TransformCoord( DEFAULT_LEFT_VECTOR, vecRotationMatrix_noY );
+	vec_right_noY = XMVector3TransformCoord( DEFAULT_RIGHT_VECTOR, vecRotationMatrix_noY );
 }
 
 void GameObject::SetPosition( const XMFLOAT3& pos ) noexcept
 {
-	this->position = pos;
-	this->posVector = XMLoadFloat3( &this->position );
-	this->UpdateMatrix();
+	position = pos;
+	posVector = XMLoadFloat3( &position );
+	UpdateMatrix();
 }
 
 void GameObject::AdjustPosition( const XMVECTOR& pos ) noexcept
 {
-	this->posVector += pos;
-	XMStoreFloat3( &this->position, this->posVector );
-	this->UpdateMatrix();
+	posVector += pos;
+	XMStoreFloat3( &position, posVector );
+	UpdateMatrix();
 }
 
 void GameObject::AdjustPosition( const XMFLOAT3& pos ) noexcept
 {
-	this->position.x += pos.x;
-	this->position.y += pos.y;
-	this->position.z += pos.z;
-	this->posVector = XMLoadFloat3( &this->position );
-	this->UpdateMatrix();
+	position.x += pos.x;
+	position.y += pos.y;
+	position.z += pos.z;
+	posVector = XMLoadFloat3( &position );
+	UpdateMatrix();
 }
 
 void GameObject::SetRotation( const XMVECTOR& rot ) noexcept
 {
-	this->rotVector = rot;
-	XMStoreFloat3( &this->rotation, rot );
-	this->UpdateMatrix();
+	rotVector = rot;
+	XMStoreFloat3( &rotation, rot );
+	UpdateMatrix();
 }
 
 void GameObject::SetRotation( const XMFLOAT3& rot ) noexcept
 {
-	this->rotation = rot;
-	this->rotVector = XMLoadFloat3( &this->rotation );
-	this->UpdateMatrix();
+	rotation = rot;
+	rotVector = XMLoadFloat3( &rotation );
+	UpdateMatrix();
 }
 
 void GameObject::AdjustRotation( const XMVECTOR& rot ) noexcept
 {
-	this->rotVector += rot;
-	XMStoreFloat3( &this->rotation, this->rotVector );
-	this->UpdateMatrix();
+	rotVector += rot;
+	XMStoreFloat3( &rotation, rotVector );
+	UpdateMatrix();
 }
 
 void GameObject::AdjustRotation( const XMFLOAT3& rot ) noexcept
 {
-	this->rotation.x += rot.x;
-	this->rotation.y += rot.y;
-	this->rotation.z += rot.z;
-	this->rotVector = XMLoadFloat3( &this->rotation );
-	this->UpdateMatrix();
+	rotation.x += rot.x;
+	rotation.y += rot.y;
+	rotation.z += rot.z;
+	rotVector = XMLoadFloat3( &rotation );
+	UpdateMatrix();
 }
 
 void GameObject::SetLookAtPos( XMFLOAT3 lookAtPos ) noexcept
 {
-	if ( lookAtPos.x == this->position.x &&
-		 lookAtPos.y == this->position.y &&
-		 lookAtPos.z == this->position.z ) return;
+	if ( lookAtPos.x == position.x &&
+		 lookAtPos.y == position.y &&
+		 lookAtPos.z == position.z ) return;
 
-	lookAtPos.x = this->position.x - lookAtPos.x;
-	lookAtPos.y = this->position.y - lookAtPos.y;
-	lookAtPos.z = this->position.z - lookAtPos.z;
+	lookAtPos.x = position.x - lookAtPos.x;
+	lookAtPos.y = position.y - lookAtPos.y;
+	lookAtPos.z = position.z - lookAtPos.z;
 
 	float pitch = 0.0f;
 	if ( lookAtPos.y != 0.0f )
@@ -123,25 +123,25 @@ void GameObject::SetLookAtPos( XMFLOAT3 lookAtPos ) noexcept
 	if ( lookAtPos.z > 0.0f )
 		yaw += XM_PI;
 
-	this->SetRotation( XMFLOAT3( pitch, yaw, 0.0f ) );
+	SetRotation( XMFLOAT3( pitch, yaw, 0.0f ) );
 }
 
 const XMVECTOR& GameObject::GetForwardVector( bool omitY ) noexcept
 {
-	return omitY ? this->vec_forward_noY : this->vec_forward;
+	return omitY ? vec_forward_noY : vec_forward;
 }
 
 const XMVECTOR& GameObject::GetBackwardVector( bool omitY ) noexcept
 {
-	return omitY ? this->vec_backward_noY : this->vec_backward;
+	return omitY ? vec_backward_noY : vec_backward;
 }
 
 const XMVECTOR& GameObject::GetLeftVector( bool omitY ) noexcept
 {
-	return omitY ? this->vec_left_noY : this->vec_left;
+	return omitY ? vec_left_noY : vec_left;
 }
 
 const XMVECTOR& GameObject::GetRightVector( bool omitY ) noexcept
 {
-	return omitY ? this->vec_right_noY : this->vec_right;
+	return omitY ? vec_right_noY : vec_right;
 }

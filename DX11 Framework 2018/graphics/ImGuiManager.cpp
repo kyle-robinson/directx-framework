@@ -6,7 +6,7 @@ ImGuiManager::ImGuiManager()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
-    GetSystemInfo( &this->siSysInfo );
+    GetSystemInfo( &siSysInfo );
 }
 
 ImGuiManager::~ImGuiManager()

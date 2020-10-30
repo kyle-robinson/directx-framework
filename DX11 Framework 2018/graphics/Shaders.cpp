@@ -3,7 +3,7 @@
 HRESULT VertexShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, std::wstring shaderPath, D3D11_INPUT_ELEMENT_DESC* layoutDesc, UINT numElements )
 {
     // Compile the vertex shader
-    HRESULT hr = CompileShaderFromFile( shaderPath.c_str(), "VS", "vs_5_0", this->shaderBuffer.GetAddressOf()  );
+    HRESULT hr = CompileShaderFromFile( shaderPath.c_str(), "VS", "vs_5_0", shaderBuffer.GetAddressOf()  );
     if ( FAILED( hr ) )
     {
         ErrorLogger::Log(
@@ -16,15 +16,15 @@ HRESULT VertexShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, 
 
 	// Create the vertex shader
 	hr = device->CreateVertexShader(
-        this->shaderBuffer->GetBufferPointer(),
-        this->shaderBuffer->GetBufferSize(),
+        shaderBuffer->GetBufferPointer(),
+        shaderBuffer->GetBufferSize(),
         nullptr,
-        this->shader.GetAddressOf()
+        shader.GetAddressOf()
     );
 	if ( FAILED( hr ) )
 	{
         ErrorLogger::Log( hr, "Failed to create Vertex Shader!" );
-		this->shaderBuffer->Release();
+		shaderBuffer->Release();
         return hr;
 	}
 
@@ -32,11 +32,11 @@ HRESULT VertexShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, 
 	hr = device->CreateInputLayout(
         layoutDesc,
         numElements,
-        this->shaderBuffer->GetBufferPointer(),
-        this->shaderBuffer->GetBufferSize(),
-        this->inputLayout.GetAddressOf()
+        shaderBuffer->GetBufferPointer(),
+        shaderBuffer->GetBufferSize(),
+        inputLayout.GetAddressOf()
     );
-	this->shaderBuffer->Release();
+	shaderBuffer->Release();
 	if ( FAILED( hr ) )
     {
         ErrorLogger::Log( hr, "Failed to create Input Layout." );
@@ -48,23 +48,23 @@ HRESULT VertexShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, 
 
 ID3D11VertexShader* VertexShader::GetShader() const noexcept
 {
-    return this->shader.Get();
+    return shader.Get();
 }
 
 ID3D10Blob* VertexShader::GetBuffer() const noexcept
 {
-    return this->shaderBuffer.Get();
+    return shaderBuffer.Get();
 }
 
 ID3D11InputLayout* VertexShader::GetInputLayout() const noexcept
 {
-    return this->inputLayout.Get();
+    return inputLayout.Get();
 }
 
 HRESULT PixelShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device> &device, std::wstring shaderPath )
 {
     // Compile the pixel shader
-    HRESULT hr = CompileShaderFromFile( shaderPath.c_str(), "PS", "ps_5_0", this->shaderBuffer.GetAddressOf() );
+    HRESULT hr = CompileShaderFromFile( shaderPath.c_str(), "PS", "ps_5_0", shaderBuffer.GetAddressOf() );
     if ( FAILED( hr ) )
     {
         ErrorLogger::Log(
@@ -77,12 +77,12 @@ HRESULT PixelShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device> &device, s
 
 	// Create the pixel shader
 	hr = device->CreatePixelShader(
-        this->shaderBuffer->GetBufferPointer(),
-        this->shaderBuffer->GetBufferSize(),
+        shaderBuffer->GetBufferPointer(),
+        shaderBuffer->GetBufferSize(),
         nullptr,
-        this->shader.GetAddressOf()
+        shader.GetAddressOf()
     );
-	this->shaderBuffer->Release();
+	shaderBuffer->Release();
     if ( FAILED( hr ) )
     {
         ErrorLogger::Log( hr, "Failed to create Pixel Shader!" );
@@ -92,12 +92,12 @@ HRESULT PixelShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device> &device, s
 
 ID3D11PixelShader* PixelShader::GetShader() const noexcept
 {
-    return this->shader.Get();
+    return shader.Get();
 }
 
 ID3D10Blob* PixelShader::GetBuffer() const noexcept
 {
-    return this->shaderBuffer.Get();
+    return shaderBuffer.Get();
 }
 
 HRESULT Shaders::CompileShaderFromFile( std::wstring szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut )

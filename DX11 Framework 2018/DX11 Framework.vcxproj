@@ -463,7 +463,6 @@
     <ClCompile Include="graphics\RenderableGameObject.cpp" />
     <ClCompile Include="graphics\Shaders.cpp" />
     <ClCompile Include="graphics\Texture.cpp" />
-    <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="keyboard\Keyboard.cpp" />
     <ClCompile Include="mouse\Mouse.cpp" />
     <ClCompile Include="utility\ErrorLogger.cpp" />

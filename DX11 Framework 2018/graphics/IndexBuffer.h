@@ -25,7 +25,7 @@ public:
 	}
 	UINT IndexCount() const noexcept
 	{
-		return this->indexCount;
+		return indexCount;
 	}
 	HRESULT Initialize( ID3D11Device* device, WORD* data, UINT indexCount )
 	{
@@ -45,7 +45,7 @@ public:
 		D3D11_SUBRESOURCE_DATA indexBufferData;
 		indexBufferData.pSysMem = data;
 
-		HRESULT hr = device->CreateBuffer( &indexBufferDesc, &indexBufferData, this->buffer.GetAddressOf() );
+		HRESULT hr = device->CreateBuffer( &indexBufferDesc, &indexBufferData, buffer.GetAddressOf() );
 		return hr;
 	}
 };

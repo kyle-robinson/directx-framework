@@ -3,8 +3,8 @@
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
-	this->windowWidth = width;
-	this->windowHeight = height;
+	windowWidth = width;
+	windowHeight = height;
 
 
 	if ( !InitializeDirectX( hWnd ) )
@@ -24,7 +24,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
     }
 
     ImGui_ImplWin32_Init( hWnd );
-    ImGui_ImplDX11_Init( this->device.Get(), this->context.Get() );
+    ImGui_ImplDX11_Init( device.Get(), context.Get() );
 
 	return true;
 }
@@ -32,88 +32,88 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 void Graphics::BeginFrame()
 {
 	// clear render target
-    this->context->OMSetRenderTargets( 1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get() );
-	this->context->ClearRenderTargetView( this->renderTargetView.Get(), this->clearColor );
-	this->context->ClearDepthStencilView( this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
+    context->OMSetRenderTargets( 1, renderTargetView.GetAddressOf(), depthStencilView.Get() );
+	context->ClearRenderTargetView( renderTargetView.Get(), clearColor );
+	context->ClearDepthStencilView( depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
 
 	// set render state
-	this->context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	this->context->OMSetDepthStencilState( this->depthStencilState.Get(), 0 );
-    this->context->OMSetBlendState( this->blendState.Get(), NULL, 0xFFFFFFFF );
-    rasterizerSolid == true ? this->context->RSSetState( this->rasterizerState_Solid.Get() ) :
-        this->context->RSSetState( this->rasterizerState_Wireframe.Get() );
-    samplerAnisotropic == true ? this->context->PSSetSamplers( 0, 1, this->samplerState_Anisotropic.GetAddressOf() ) :
-        this->context->PSSetSamplers( 0, 1, this->samplerState_Point.GetAddressOf() );
+	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	context->OMSetDepthStencilState( depthStencilState.Get(), 0 );
+    context->OMSetBlendState( blendState.Get(), NULL, 0xFFFFFFFF );
+    rasterizerSolid == true ? context->RSSetState( rasterizerState_Solid.Get() ) :
+        context->RSSetState( rasterizerState_Wireframe.Get() );
+    samplerAnisotropic == true ? context->PSSetSamplers( 0, 1, samplerState_Anisotropic.GetAddressOf() ) :
+        context->PSSetSamplers( 0, 1, samplerState_Point.GetAddressOf() );
 }
 
 void Graphics::RenderFrame()
 {
 	// setup shaders
-	this->context->VSSetShader( this->vertexShader_light.GetShader(), NULL, 0 );
-	this->context->IASetInputLayout( this->vertexShader_light.GetInputLayout() );
-	this->context->PSSetShader( this->pixelShader_light.GetShader(), NULL, 0 );
+	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
+	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
+	context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
     
     // set constant buffers
-    this->cb_ps_light.data.dynamicLightColor = light.lightColor;
-	this->cb_ps_light.data.dynamicLightStrength = light.lightStrength;
-	this->cb_ps_light.data.specularLightColor = light.specularColor;
-	this->cb_ps_light.data.specularLightIntensity = light.specularIntensity;
-	this->cb_ps_light.data.specularLightPower = light.specularPower;
-	this->cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
-	this->cb_ps_light.data.lightConstant = light.constant;
-	this->cb_ps_light.data.lightLinear = light.linear;
-	this->cb_ps_light.data.lightQuadratic = light.quadratic;
-	this->cb_ps_light.data.useTexture = useTexture;
-	this->cb_ps_light.data.alphaFactor = alphaFactor;
-	this->cb_ps_light.ApplyChanges();
-	this->context->PSSetConstantBuffers( 1, 1, this->cb_ps_light.GetAddressOf() );
+    cb_ps_light.data.dynamicLightColor = light.lightColor;
+	cb_ps_light.data.dynamicLightStrength = light.lightStrength;
+	cb_ps_light.data.specularLightColor = light.specularColor;
+	cb_ps_light.data.specularLightIntensity = light.specularIntensity;
+	cb_ps_light.data.specularLightPower = light.specularPower;
+	cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
+	cb_ps_light.data.lightConstant = light.constant;
+	cb_ps_light.data.lightLinear = light.linear;
+	cb_ps_light.data.lightQuadratic = light.quadratic;
+	cb_ps_light.data.useTexture = useTexture;
+	cb_ps_light.data.alphaFactor = alphaFactor;
+	cb_ps_light.ApplyChanges();
+	context->PSSetConstantBuffers( 1, 1, cb_ps_light.GetAddressOf() );
 
     /*   MODELS   */
-    this->nanosuit.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
+    nanosuit.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
     
     /*   CUBE   */
     UINT offset = 0;
-    this->context->IASetVertexBuffers( 0, 1, this->vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
-    this->context->IASetIndexBuffer( this->indexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    this->context->PSSetShaderResources( 0, 1, this->boxTexture.GetAddressOf() );
+    context->IASetVertexBuffers( 0, 1, vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
+    context->IASetIndexBuffer( indexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    context->PSSetShaderResources( 0, 1, boxTexture.GetAddressOf() );
     for ( int i = 0; i < worldMatricesCube.size(); i++ )
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
-        this->cb_vs_matrix.data.worldMatrix = worldMatrix;
-        this->cb_ps_light.data.useTexture = useTexture;
+        cb_vs_matrix.data.worldMatrix = worldMatrix;
+        cb_ps_light.data.useTexture = useTexture;
         if ( !cb_vs_matrix.ApplyChanges() ) return;
         if ( !cb_ps_light.ApplyChanges() ) return;
-        this->context->VSSetConstantBuffers( 0, 1, this->cb_vs_matrix.GetAddressOf() );
-        this->context->DrawIndexed( this->indexBufferCube.IndexCount(), 0, 0 );
+        context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+        context->DrawIndexed( indexBufferCube.IndexCount(), 0, 0 );
     }
 
     /*   LIGHT   */
-	this->context->PSSetShader( this->pixelShader_noLight.GetShader(), NULL, 0 );
-	this->light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );   
+	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
+	light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );   
 }
 
 void Graphics::EndFrame()
 {
     // render to texture
-    this->context->OMSetRenderTargets( 1, this->backBuffer.GetAddressOf(), nullptr );
-    this->context->ClearRenderTargetView( this->backBuffer.Get(), this->clearColor );
+    context->OMSetRenderTargets( 1, backBuffer.GetAddressOf(), nullptr );
+    context->ClearRenderTargetView( backBuffer.Get(), clearColor );
 
     UINT offset = 0;
-    this->context->PSSetShaderResources( 0, 1, this->shaderResourceView.GetAddressOf() );
-    this->context->IASetVertexBuffers( 0, 1, this->vertexBufferFullscreen.GetAddressOf(), this->vertexBufferFullscreen.StridePtr(), &offset );
-    this->context->IASetInputLayout( this->vertexShader_full.GetInputLayout() );
-    this->context->IASetIndexBuffer( this->indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    this->context->VSSetShader( this->vertexShader_full.GetShader(), NULL, 0 );
-    this->context->PSSetShader( this->pixelShader_full.GetShader(), NULL, 0 );
+    context->PSSetShaderResources( 0, 1, shaderResourceView.GetAddressOf() );
+    context->IASetVertexBuffers( 0, 1, vertexBufferFullscreen.GetAddressOf(), vertexBufferFullscreen.StridePtr(), &offset );
+    context->IASetInputLayout( vertexShader_full.GetInputLayout() );
+    context->IASetIndexBuffer( indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    context->VSSetShader( vertexShader_full.GetShader(), NULL, 0 );
+    context->PSSetShader( pixelShader_full.GetShader(), NULL, 0 );
     if ( rasterizerSolid )
     {
-        this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
+        context->DrawIndexed( indexBufferFullscreen.IndexCount(), 0, 0 );
     }
     else
     {
-        this->context->RSSetState( this->rasterizerState_Solid.Get() );
-        this->context->DrawIndexed( this->indexBufferFullscreen.IndexCount(), 0, 0 );
-        this->context->RSSetState( this->rasterizerState_Wireframe.Get() );
+        context->RSSetState( rasterizerState_Solid.Get() );
+        context->DrawIndexed( indexBufferFullscreen.IndexCount(), 0, 0 );
+        context->RSSetState( rasterizerState_Wireframe.Get() );
     }
 
     // display imgui
@@ -121,22 +121,22 @@ void Graphics::EndFrame()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    imgui.RenderMainWindow( this->context.Get(), this->clearColor, this->useTexture, this->alphaFactor,
-        this->rasterizerSolid, this->samplerAnisotropic );
-    imgui.RenderLightWindow( this->light, this->cb_ps_light );
+    imgui.RenderMainWindow( context.Get(), clearColor, useTexture, alphaFactor,
+        rasterizerSolid, samplerAnisotropic );
+    imgui.RenderLightWindow( light, cb_ps_light );
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
     
-    this->context->OMSetRenderTargets( 1, this->nullRenderTarget.GetAddressOf(), nullptr );
-    this->context->PSSetShaderResources( 0, 1, this->nullShaderResourceView.GetAddressOf() );
+    context->OMSetRenderTargets( 1, nullRenderTarget.GetAddressOf(), nullptr );
+    context->PSSetShaderResources( 0, 1, nullShaderResourceView.GetAddressOf() );
     
     // display frame
-	HRESULT hr = this->swapChain->Present( 1, NULL );
+	HRESULT hr = swapChain->Present( 1, NULL );
 	if ( FAILED( hr ) )
 	{
 		hr == DXGI_ERROR_DEVICE_REMOVED ?
-            ErrorLogger::Log( this->device->GetDeviceRemovedReason(), "Swap Chain. Graphics device removed!" ) :
+            ErrorLogger::Log( device->GetDeviceRemovedReason(), "Swap Chain. Graphics device removed!" ) :
             ErrorLogger::Log( hr, "Swap Chain failed to render frame!" );
 		exit( -1 );
 	}
@@ -145,7 +145,7 @@ void Graphics::EndFrame()
 void Graphics::Update( float dt )
 {
     // model transformations
-    this->nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
+    nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
 
     static float timer = 0.0f;
     static DWORD dwTimeStart = 0;
@@ -227,10 +227,10 @@ bool Graphics::InitializeDirectX( HWND hWnd )
                 numFeatureLevels,               // No. of Feature Levels
                 D3D11_SDK_VERSION,              // SDK Version
                 &sd,                            // Swap Chain Description
-                this->swapChain.GetAddressOf(), // Swap Chain Address
-                this->device.GetAddressOf(),    // Device Address
+                swapChain.GetAddressOf(), // Swap Chain Address
+                device.GetAddressOf(),    // Device Address
                 nullptr,                        // Ptr to Feature Level
-                this->context.GetAddressOf()    // Context Address
+                context.GetAddressOf()    // Context Address
             );
             if ( SUCCEEDED( hr ) )
                 break;
@@ -239,15 +239,15 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 
         // create a render target view with back buffer
         Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
-        hr = this->swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)pBackBuffer.GetAddressOf() );
+        hr = swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)pBackBuffer.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Back Buffer!" );
-        hr = device->CreateRenderTargetView( pBackBuffer.Get(), nullptr, this->backBuffer.GetAddressOf() );
+        hr = device->CreateRenderTargetView( pBackBuffer.Get(), nullptr, backBuffer.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Back Buffer!" );
 
         // create texture resource
         D3D11_TEXTURE2D_DESC textureDesc = { 0 };
-        textureDesc.Width = this->windowWidth;
-        textureDesc.Height = this->windowHeight;
+        textureDesc.Width = windowWidth;
+        textureDesc.Height = windowHeight;
         textureDesc.MipLevels = 1;
         textureDesc.ArraySize = 1;
         textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -258,7 +258,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         textureDesc.CPUAccessFlags = 0;
         textureDesc.MiscFlags = 0;
         Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
-        hr = this->device->CreateTexture2D( &textureDesc, nullptr, pTexture.GetAddressOf() );
+        hr = device->CreateTexture2D( &textureDesc, nullptr, pTexture.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Texture for Render Target!" );
 
         // create resource view on texture
@@ -267,7 +267,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
         srvDesc.Texture2D.MostDetailedMip = 0;
         srvDesc.Texture2D.MipLevels = 1;
-        hr = this->device->CreateShaderResourceView( pTexture.Get(), &srvDesc, this->shaderResourceView.GetAddressOf() );
+        hr = device->CreateShaderResourceView( pTexture.Get(), &srvDesc, shaderResourceView.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Shader Resource View!" );
 
         // create the target view on the texture
@@ -275,26 +275,26 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         rtvDesc.Format = textureDesc.Format;
         rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
         rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
-        hr = this->device->CreateRenderTargetView( pTexture.Get(), &rtvDesc, this->renderTargetView.GetAddressOf() );
+        hr = device->CreateRenderTargetView( pTexture.Get(), &rtvDesc, renderTargetView.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Texture!" );
 
         // create depth stencil
         CD3D11_TEXTURE2D_DESC depthStencilDesc(
             DXGI_FORMAT_D24_UNORM_S8_UINT,
-            this->windowWidth,
-            this->windowHeight );
+            windowWidth,
+            windowHeight );
         depthStencilDesc.MipLevels = 1;
         depthStencilDesc.SampleDesc.Count = 1;
         depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-        hr = this->device->CreateTexture2D( &depthStencilDesc, NULL, this->depthStencilBuffer.GetAddressOf() );
+        hr = device->CreateTexture2D( &depthStencilDesc, NULL, depthStencilBuffer.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil Buffer!" );
-        hr = this->device->CreateDepthStencilView( this->depthStencilBuffer.Get(), NULL, this->depthStencilView.GetAddressOf() );
+        hr = device->CreateDepthStencilView( depthStencilBuffer.Get(), NULL, depthStencilView.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil View!" );
 
         // set depth stencil state
 		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc( CD3D11_DEFAULT{} );
 		depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-		hr = this->device->CreateDepthStencilState( &depthStencilStateDesc, this->depthStencilState.GetAddressOf() );
+		hr = device->CreateDepthStencilState( &depthStencilStateDesc, depthStencilState.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State!" );
 
         // setup the viewport
@@ -303,20 +303,20 @@ bool Graphics::InitializeDirectX( HWND hWnd )
             static_cast<FLOAT>( windowHeight ) );
         vp.MinDepth = 0.0f;
         vp.MaxDepth = 1.0f;
-        this->context->RSSetViewports( 1, &vp );
+        context->RSSetViewports( 1, &vp );
 
         // setup rasterizer states
         CD3D11_RASTERIZER_DESC rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
         rasterizerDesc.MultisampleEnable = TRUE;
-        hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState_Solid.GetAddressOf() );
+        hr = device->CreateRasterizerState( &rasterizerDesc, rasterizerState_Solid.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create solid Rasterizer State!" );
 
         rasterizerDesc.MultisampleEnable = TRUE;
         rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
-        hr = this->device->CreateRasterizerState( &rasterizerDesc, this->rasterizerState_Wireframe.GetAddressOf() );
+        hr = device->CreateRasterizerState( &rasterizerDesc, rasterizerState_Wireframe.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create wireframe Rasterizer State!" );
         
-        //this->context->RSSetState( this->rasterizerState_Solid.Get() );
+        //context->RSSetState( rasterizerState_Solid.Get() );
 
         // set blend state
 		D3D11_RENDER_TARGET_BLEND_DESC renderTargetBlendDesc = { 0 };
@@ -331,7 +331,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 
 		D3D11_BLEND_DESC blendDesc = { 0 };
 		blendDesc.RenderTarget[0] = renderTargetBlendDesc;
-		hr = this->device->CreateBlendState( &blendDesc, this->blendState.GetAddressOf() );
+		hr = device->CreateBlendState( &blendDesc, blendState.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create Blend State!" );
 
         // create sampler states
@@ -341,12 +341,12 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
-		hr = this->device->CreateSamplerState( &samplerDesc, this->samplerState_Anisotropic.GetAddressOf() );
+		hr = device->CreateSamplerState( &samplerDesc, samplerState_Anisotropic.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create anisotropic Sampler State!" );
 
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
 		samplerDesc.MaxAnisotropy = 1;
-		hr = this->device->CreateSamplerState( &samplerDesc, this->samplerState_Point.GetAddressOf() );
+		hr = device->CreateSamplerState( &samplerDesc, samplerState_Point.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create point Sampler State!" );
     }
     catch ( COMException& exception )
@@ -369,11 +369,11 @@ bool Graphics::InitializeShaders()
 		    { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	    };
 	    UINT numElements = ARRAYSIZE( layoutModel );
-	    HRESULT hr = vertexShader_light.Initialize( this->device, L"res\\shaders\\Model.fx", layoutModel, numElements );
+	    HRESULT hr = vertexShader_light.Initialize( device, L"res\\shaders\\Model.fx", layoutModel, numElements );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light vertex shader!" );
-	    hr = pixelShader_light.Initialize( this->device, L"res\\shaders\\Model.fx" );
+	    hr = pixelShader_light.Initialize( device, L"res\\shaders\\Model.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light pixel shader!" );
-	    hr = pixelShader_noLight.Initialize( this->device, L"res\\shaders\\Model_NoLight.fx" );
+	    hr = pixelShader_noLight.Initialize( device, L"res\\shaders\\Model_NoLight.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
 
         /*   POST-PROCESSING   */
@@ -381,9 +381,9 @@ bool Graphics::InitializeShaders()
 		    { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	    };
         numElements = ARRAYSIZE( layoutFull );
-	    hr = vertexShader_full.Initialize( this->device, L"res\\shaders\\Fullscreen.fx", layoutFull, numElements );
+	    hr = vertexShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx", layoutFull, numElements );
 		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen vertex shader!" );
-	    hr = pixelShader_full.Initialize( this->device, L"res\\shaders\\Fullscreen.fx" );
+	    hr = pixelShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen pixel shader!" );
     }
     catch ( COMException& exception )
@@ -403,55 +403,55 @@ bool Graphics::InitializeScene()
         camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
 	    camera.SetProjectionValues(
 		    70.0f,
-		    static_cast<float>( this->windowWidth ) / static_cast<float>( this->windowHeight ),
+		    static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ),
 		    0.1f,
 		    1000.0f
 	    );
 
 		// initialize objects
 		if ( !nanosuit.Initialize( "res\\models\\nanosuit\\nanosuit.obj",
-			this->device.Get(), this->context.Get(), this->cb_vs_matrix ) )
+			device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
 
-		if ( !light.Initialize( this->device.Get(), this->context.Get(), this->cb_vs_matrix ) )
+		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
 
-        XMVECTOR lightPosition = this->camera.GetPositionVector();
-		lightPosition += this->camera.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-		this->light.SetPosition( lightPosition );
-		this->light.SetRotation( this->camera.GetRotationFloat3() );
+        XMVECTOR lightPosition = camera.GetPositionVector();
+		lightPosition += camera.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+		light.SetPosition( lightPosition );
+		light.SetRotation( camera.GetRotationFloat3() );
         
         // cube vertices and indices
-        HRESULT hr = this->vertexBufferCube.Initialize( this->device.Get(),
+        HRESULT hr = vertexBufferCube.Initialize( device.Get(),
             VTX::verticesCube_PosTexNrm, ARRAYSIZE( VTX::verticesCube_PosTexNrm ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
-        hr = this->indexBufferCube.Initialize( this->device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
+        hr = indexBufferCube.Initialize( device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
         // fullscreen texture
-        hr = this->vertexBufferFullscreen.Initialize( this->device.Get(),
+        hr = vertexBufferFullscreen.Initialize( device.Get(),
             VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
-        hr = this->indexBufferFullscreen.Initialize( this->device.Get(), IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
+        hr = indexBufferFullscreen.Initialize( device.Get(), IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );
 
         // create textures
         hr = DirectX::CreateWICTextureFromFile(
-            this->device.Get(),
+            device.Get(),
             L"res\\textures\\CrashBox.png",
             nullptr,
-            this->boxTexture.GetAddressOf()
+            boxTexture.GetAddressOf()
         );
         COM_ERROR_IF_FAILED( hr, "Failed to create WIC texture from file!" );
 
         // initialize constant buffers
-        hr = this->cb_vs_matrix.Initialize( this->device.Get(), this->context.Get() );
+        hr = cb_vs_matrix.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_matrix' Constant Buffer!" );
 
-		hr = this->cb_ps_light.Initialize( this->device.Get(), this->context.Get() );
+		hr = cb_ps_light.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader' Constant Buffer!" );
-		this->cb_ps_light.data.ambientLightColor = XMFLOAT3( 1.0f, 1.0f, 1.0f );
-		this->cb_ps_light.data.ambientLightStrength = 0.1f;
+		cb_ps_light.data.ambientLightColor = XMFLOAT3( 1.0f, 1.0f, 1.0f );
+		cb_ps_light.data.ambientLightStrength = 0.1f;
     }
     catch ( COMException& exception )
     {
