@@ -465,6 +465,7 @@
     <ClCompile Include="graphics\Model.cpp" />
     <ClCompile Include="graphics\RenderableGameObject.cpp" />
     <ClCompile Include="graphics\Shaders.cpp" />
+    <ClCompile Include="graphics\Sprite.cpp" />
     <ClCompile Include="graphics\Texture.cpp" />
     <ClCompile Include="keyboard\Keyboard.cpp" />
     <ClCompile Include="mouse\Mouse.cpp" />
@@ -503,6 +504,7 @@
     <ClInclude Include="graphics\ObjectVertices.h" />
     <ClInclude Include="graphics\RenderableGameObject.h" />
     <ClInclude Include="graphics\Shaders.h" />
+    <ClInclude Include="graphics\Sprite.h" />
     <ClInclude Include="graphics\Texture.h" />
     <ClInclude Include="graphics\Vertex.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />
@@ -531,6 +533,7 @@
     <FxCompile Include="res\shaders\Model_NoLight.fx" />
     <FxCompile Include="res\shaders\Normal.fx" />
     <FxCompile Include="res\shaders\Primitive.fx" />
+    <FxCompile Include="res\shaders\Sprite.fx" />
     <FxCompile Include="res\shaders\Water.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

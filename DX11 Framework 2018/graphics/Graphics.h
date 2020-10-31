@@ -2,14 +2,16 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "Camera3D.h"
+#include "Sprite.h"
 #include "Shaders.h"
+#include "Camera2D.h"
+#include "Camera3D.h"
 #include "ImGuiManager.h"
 #include "ObjectIndices.h"
 #include "ObjectVertices.h"
 #include "RenderableGameObject.h"
-#include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
 #include <dxtk/WICTextureLoader.h>
 
 class Graphics
@@ -26,11 +28,14 @@ private:
 	bool InitializeScene();
 public:
 	Light light;
-	Camera3D camera;
+	Sprite sprite;
+	Camera2D camera2D;
+	Camera3D camera3D;
 	RenderableGameObject nanosuit;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
 private:
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
+	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
 	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;
 private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
@@ -55,13 +60,15 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Anisotropic;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Point;
 private:
+	VertexShader vertexShader_2D;
 	VertexShader vertexShader_full;
 	VertexShader vertexShader_light;
 	VertexShader vertexShader_noLight;
+	PixelShader pixelShader_2D;
 	PixelShader pixelShader_full;
 	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;
-	VertexBuffer<Vertex> vertexBufferCube;
+	VertexBuffer<Vertex3D> vertexBufferCube;
 	IndexBuffer indexBufferCube;
 	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
 	IndexBuffer indexBufferFullscreen;

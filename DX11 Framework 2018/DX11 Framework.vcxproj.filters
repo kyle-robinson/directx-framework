@@ -149,6 +149,9 @@
     <ClCompile Include="graphics\Camera2D.cpp">
       <Filter>Source\Graphics\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\Sprite.cpp">
+      <Filter>Source\Graphics\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -268,6 +271,9 @@
     <ClInclude Include="graphics\Camera2D.h">
       <Filter>Headers\Graphics\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\Sprite.h">
+      <Filter>Headers\Graphics\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11 Framework.rc">
@@ -307,6 +313,9 @@
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="res\shaders\Fullscreen.fx">
+      <Filter>Resource Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="res\shaders\Sprite.fx">
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -20,10 +20,12 @@ public:
 	void SetRotation( const XMFLOAT3& rot ) noexcept;
 	void AdjustRotation( const XMVECTOR& rot ) noexcept;
 	void AdjustRotation( const XMFLOAT3& rot ) noexcept;
+	void SetScale( float xScale, float yScale, float zScale = 1.0f );
 protected:
 	virtual void UpdateMatrix();
 	XMVECTOR posVector, rotVector;
 	XMFLOAT3 position, rotation;
+	XMFLOAT3 scale;
 };
 
 #endif

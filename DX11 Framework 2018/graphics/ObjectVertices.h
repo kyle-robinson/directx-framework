@@ -6,7 +6,7 @@
 
 namespace VTX
 {
-    Vertex verticesCube_PosTexNrm[] = {
+    Vertex3D verticesCube_PosTexNrm[] = {
         { { -0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f }, { 0.0f,  1.0f,  0.0f } }, // +Y (top face)
         { {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f }, { 0.0f,  1.0f,  0.0f } },
         { {  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }, { 0.0f,  1.0f,  0.0f } },

@@ -4,11 +4,17 @@
 
 #include <DirectXMath.h>
 
-struct Vertex
+struct Vertex3D
 {
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT2 texCoord;
 	DirectX::XMFLOAT3 normals;
+};
+
+struct Vertex2D
+{
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT2 texCoord;
 };
 
 struct Vertex_Pos_Col

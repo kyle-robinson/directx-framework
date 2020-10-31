@@ -68,7 +68,7 @@ void Graphics::RenderFrame()
 	context->PSSetConstantBuffers( 1, 1, cb_ps_light.GetAddressOf() );
 
     // render models
-    nanosuit.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
+    nanosuit.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
 
     UINT offset = 0;
     context->IASetVertexBuffers( 0, 1, vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
@@ -86,7 +86,13 @@ void Graphics::RenderFrame()
     }
 
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
-	light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );   
+	light.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
+
+    // render sprites
+    context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
+    context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
+    context->PSSetShader( pixelShader_2D.GetShader(), NULL, 0 );
+    sprite.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() );
 }
 
 void Graphics::EndFrame()
@@ -387,6 +393,17 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen vertex shader!" );
 	    hr = pixelShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen pixel shader!" );
+
+        /*   SPRITES   */
+        D3D11_INPUT_ELEMENT_DESC layoutSprite[] = {
+		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	    };
+	    numElements = ARRAYSIZE( layoutSprite );
+	    hr = vertexShader_2D.Initialize( device, L"res\\shaders\\Sprite.fx", layoutSprite, numElements );
+		COM_ERROR_IF_FAILED( hr, "Failed to create 2D vertex shader!" );
+	    hr = pixelShader_2D.Initialize( device, L"res\\shaders\\Sprite.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create 2D pixel shader!" );
     }
     catch ( COMException& exception )
     {
@@ -409,16 +426,21 @@ bool Graphics::InitializeScene()
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
 
+        if ( !sprite.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\purpleheart.png", cb_vs_matrix_2d ) )
+            return false;
+
         /*   OBJECTS   */
-        camera.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
-	    camera.SetProjectionValues( 70.0f,
+        camera2D.SetProjectionValues( static_cast<float>( windowWidth ), static_cast<float>( windowHeight ), 0.0f, 1.0f );
+
+        camera3D.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
+	    camera3D.SetProjectionValues( 70.0f,
 		    static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ),
 		    0.1f, 1000.0f );
 
-        XMVECTOR lightPosition = camera.GetPositionVector();
-		lightPosition += camera.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+        XMVECTOR lightPosition = camera3D.GetPositionVector();
+		lightPosition += camera3D.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 		light.SetPosition( lightPosition );
-		light.SetRotation( camera.GetRotationFloat3() );    
+		light.SetRotation( camera3D.GetRotationFloat3() );    
 
         /*   VERTEX/INDEX   */
         HRESULT hr = vertexBufferCube.Initialize( device.Get(),
@@ -445,6 +467,9 @@ bool Graphics::InitializeScene()
         /*   CONSTANT BUFFERS   */
         hr = cb_vs_matrix.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_matrix' Constant Buffer!" );
+
+        hr = cb_vs_matrix_2d.Initialize( device.Get(), context.Get() );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_matrix_2d' Constant Buffer!" );
 
         hr = cb_vs_fullscreen.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_fullscreen' Constant Buffer!" );

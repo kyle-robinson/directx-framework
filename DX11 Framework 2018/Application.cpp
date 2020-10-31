@@ -46,7 +46,7 @@ void Application::Update()
 		{
 			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove )
 			{
-				gfx.camera.AdjustRotation(
+				gfx.camera3D.AdjustRotation(
 					XMFLOAT3(
 						static_cast<float>( me.GetPosY() ) * 0.005f,
 						static_cast<float>( me.GetPosX() ) * 0.005f,
@@ -57,35 +57,35 @@ void Application::Update()
 		}
 	}
 
-	float cameraSpeed = 0.002f;
+	float camera3DSpeed = 0.002f;
 
 	if ( keyboard.KeyIsPressed( VK_SHIFT ) )
-		cameraSpeed = 0.01f;
+		camera3DSpeed = 0.01f;
 
 	if ( keyboard.KeyIsPressed( 'W' ) )
-		gfx.camera.AdjustPosition( gfx.camera.GetForwardVector() * cameraSpeed * dt );
+		gfx.camera3D.AdjustPosition( gfx.camera3D.GetForwardVector() * camera3DSpeed * dt );
 
 	if ( keyboard.KeyIsPressed( 'A' ) )
-		gfx.camera.AdjustPosition( gfx.camera.GetLeftVector() * cameraSpeed * dt );
+		gfx.camera3D.AdjustPosition( gfx.camera3D.GetLeftVector() * camera3DSpeed * dt );
 
 	if ( keyboard.KeyIsPressed( 'S' ) )
-		gfx.camera.AdjustPosition( gfx.camera.GetBackwardVector() * cameraSpeed * dt );
+		gfx.camera3D.AdjustPosition( gfx.camera3D.GetBackwardVector() * camera3DSpeed * dt );
 
 	if ( keyboard.KeyIsPressed( 'D' ) )
-		gfx.camera.AdjustPosition( gfx.camera.GetRightVector() * cameraSpeed * dt );
+		gfx.camera3D.AdjustPosition( gfx.camera3D.GetRightVector() * camera3DSpeed * dt );
 
 	if ( keyboard.KeyIsPressed( VK_SPACE ) )
-		gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, cameraSpeed * dt, 0.0f ) );
+		gfx.camera3D.AdjustPosition( XMFLOAT3( 0.0f, camera3DSpeed * dt, 0.0f ) );
 
 	if ( keyboard.KeyIsPressed( 'E' ) )
-		gfx.camera.AdjustPosition( XMFLOAT3( 0.0f, -cameraSpeed * dt, 0.0f ) );
+		gfx.camera3D.AdjustPosition( XMFLOAT3( 0.0f, -camera3DSpeed * dt, 0.0f ) );
 
 	if ( keyboard.KeyIsPressed( 'C' ) )
 	{
-		XMVECTOR lightPosition = gfx.camera.GetPositionVector();
-		lightPosition += gfx.camera.GetForwardVector();
+		XMVECTOR lightPosition = gfx.camera3D.GetPositionVector();
+		lightPosition += gfx.camera3D.GetForwardVector();
 		gfx.light.SetPosition( lightPosition );
-		gfx.light.SetRotation( gfx.camera.GetRotationFloat3() );
+		gfx.light.SetRotation( gfx.camera3D.GetRotationFloat3() );
 	}
 
     gfx.Update( dt );
