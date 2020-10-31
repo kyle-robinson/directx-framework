@@ -2,9 +2,9 @@
 #ifndef RENDERABLEGAMEOBJECT_H
 #define RENDERABLEGAMEOBJECT_H
 
-#include "GameObject.h"
+#include "GameObject3D.h"
 
-class RenderableGameObject : public GameObject
+class RenderableGameObject : public GameObject3D
 {
 public:
 	bool Initialize(

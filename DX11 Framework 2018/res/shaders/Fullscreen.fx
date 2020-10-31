@@ -28,13 +28,10 @@ VS_OUTPUT VS( VS_INPUT input )
     normalTex = float2( ( input.inPos.x + 1 ) / 2.0f, -( input.inPos.y - 1 ) / 2.0f );
     
     if ( multiView )
-    {
         output.outTex = multiTex;
-    }
     else
-    {
         output.outTex = normalTex;
-    }
+    
     return output;
 }
 

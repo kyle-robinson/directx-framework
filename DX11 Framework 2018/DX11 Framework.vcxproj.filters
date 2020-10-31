@@ -140,6 +140,12 @@
     <ClCompile Include="graphics\Colour.cpp">
       <Filter>Source\Graphics\Bindables</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\GameObject2D.cpp">
+      <Filter>Source\Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\GameObject3D.cpp">
+      <Filter>Source\Graphics\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -249,6 +255,12 @@
     </ClInclude>
     <ClInclude Include="graphics\Vertex.h">
       <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GameObject2D.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GameObject3D.h">
+      <Filter>Headers\Graphics\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

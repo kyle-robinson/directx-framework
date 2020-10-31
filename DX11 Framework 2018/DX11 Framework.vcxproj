@@ -454,6 +454,8 @@
     <ClCompile Include="graphics\Camera.cpp" />
     <ClCompile Include="graphics\Colour.cpp" />
     <ClCompile Include="graphics\GameObject.cpp" />
+    <ClCompile Include="graphics\GameObject2D.cpp" />
+    <ClCompile Include="graphics\GameObject3D.cpp" />
     <ClCompile Include="graphics\Graphics.cpp" />
     <ClCompile Include="graphics\ImGuiManager.cpp" />
     <ClCompile Include="graphics\IndexBuffer.cpp" />
@@ -487,6 +489,8 @@
     <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\ConstantBufferTypes.h" />
     <ClInclude Include="graphics\GameObject.h" />
+    <ClInclude Include="graphics\GameObject2D.h" />
+    <ClInclude Include="graphics\GameObject3D.h" />
     <ClInclude Include="graphics\Graphics.h" />
     <ClInclude Include="graphics\ImGuiManager.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />

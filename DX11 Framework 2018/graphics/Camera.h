@@ -2,10 +2,10 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "GameObject.h"
+#include "GameObject3D.h"
 using namespace DirectX;
 
-class Camera : public GameObject
+class Camera : public GameObject3D
 {
 public:
 	Camera();
