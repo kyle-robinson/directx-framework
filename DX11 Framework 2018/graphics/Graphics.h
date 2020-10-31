@@ -48,9 +48,11 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> nullShaderResourceView = nullptr;
 
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState_drawMask;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState_writeMask;
 
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;

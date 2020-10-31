@@ -47,7 +47,15 @@ void Graphics::BeginFrame()
 
 void Graphics::RenderFrame()
 {
-	// setup shaders
+    // render sprites
+    context->OMSetDepthStencilState( depthStencilState_drawMask.Get(), 0 );
+    context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
+    context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
+    context->PSSetShader( nullptr, NULL, 0 );
+    sprite.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() );
+	
+    // setup shaders
+    context->OMSetDepthStencilState( depthStencilState_writeMask.Get(), 0 );
 	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
 	context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
@@ -87,12 +95,6 @@ void Graphics::RenderFrame()
 
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
 	light.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-
-    // render sprites
-    context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
-    context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
-    context->PSSetShader( pixelShader_2D.GetShader(), NULL, 0 );
-    sprite.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() );
 }
 
 void Graphics::EndFrame()
@@ -299,11 +301,45 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         hr = device->CreateDepthStencilView( depthStencilBuffer.Get(), NULL, depthStencilView.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil View!" );
 
-        // set depth stencil state
+        // set depth stencil states
 		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc( CD3D11_DEFAULT{} );
 		depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-		hr = device->CreateDepthStencilState( &depthStencilStateDesc, depthStencilState.GetAddressOf() );
+		hr = this->device->CreateDepthStencilState( &depthStencilStateDesc, this->depthStencilState.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State!" );
+
+		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc_drawMask( CD3D11_DEFAULT{} );
+		depthStencilStateDesc_drawMask.DepthEnable = FALSE;
+		depthStencilStateDesc_drawMask.StencilEnable = TRUE;
+		
+		depthStencilStateDesc_drawMask.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
+		depthStencilStateDesc_drawMask.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		depthStencilStateDesc_drawMask.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthStencilStateDesc_drawMask.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+
+		depthStencilStateDesc_drawMask.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		depthStencilStateDesc_drawMask.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		depthStencilStateDesc_drawMask.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthStencilStateDesc_drawMask.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR_SAT;
+
+		hr = this->device->CreateDepthStencilState( &depthStencilStateDesc_drawMask, this->depthStencilState_drawMask.GetAddressOf() );
+		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State for drawing mask!" );
+
+		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc_writeMask( CD3D11_DEFAULT{} );
+		depthStencilStateDesc_writeMask.StencilEnable = TRUE;
+		depthStencilStateDesc_writeMask.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+		
+		depthStencilStateDesc_writeMask.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
+		depthStencilStateDesc_writeMask.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		depthStencilStateDesc_writeMask.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthStencilStateDesc_writeMask.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+
+		depthStencilStateDesc_writeMask.FrontFace.StencilFunc = D3D11_COMPARISON_LESS;
+		depthStencilStateDesc_writeMask.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		depthStencilStateDesc_writeMask.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		depthStencilStateDesc_writeMask.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+
+		hr = this->device->CreateDepthStencilState( &depthStencilStateDesc_writeMask, this->depthStencilState_writeMask.GetAddressOf() );
+		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State for writing mask!" );
 
         // setup the viewport
         CD3D11_VIEWPORT vp( 0.0f, 0.0f,
@@ -426,8 +462,10 @@ bool Graphics::InitializeScene()
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
 
+        /*   SPRITES   */
         if ( !sprite.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\purpleheart.png", cb_vs_matrix_2d ) )
             return false;
+        sprite.SetPosition( XMFLOAT3( windowWidth / 2 - sprite.GetWidth() / 2, windowHeight / 2 - sprite.GetHeight() / 2, 0 ) );
 
         /*   OBJECTS   */
         camera2D.SetProjectionValues( static_cast<float>( windowWidth ), static_cast<float>( windowHeight ), 0.0f, 1.0f );
