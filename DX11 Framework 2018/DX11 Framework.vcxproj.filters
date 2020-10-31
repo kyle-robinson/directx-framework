@@ -318,5 +318,8 @@
     <FxCompile Include="res\shaders\Sprite.fx">
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="res\shaders\Sprite_Discard.fx">
+      <Filter>Resource Files\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

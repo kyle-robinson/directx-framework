@@ -67,6 +67,7 @@ private:
 	VertexShader vertexShader_light;
 	VertexShader vertexShader_noLight;
 	PixelShader pixelShader_2D;
+	PixelShader pixelShader_2D_discard;
 	PixelShader pixelShader_full;
 	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;

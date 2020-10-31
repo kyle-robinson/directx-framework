@@ -534,6 +534,7 @@
     <FxCompile Include="res\shaders\Normal.fx" />
     <FxCompile Include="res\shaders\Primitive.fx" />
     <FxCompile Include="res\shaders\Sprite.fx" />
+    <FxCompile Include="res\shaders\Sprite_Discard.fx" />
     <FxCompile Include="res\shaders\Water.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

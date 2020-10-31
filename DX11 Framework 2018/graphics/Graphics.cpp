@@ -47,11 +47,11 @@ void Graphics::BeginFrame()
 
 void Graphics::RenderFrame()
 {
-    // render sprites
+    // setup sprite masking
     context->OMSetDepthStencilState( depthStencilState_drawMask.Get(), 0 );
     context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
     context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
-    context->PSSetShader( nullptr, NULL, 0 );
+    context->PSSetShader( pixelShader_2D_discard.GetShader(), NULL, 0 );
     sprite.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() );
 	
     // setup shaders
@@ -440,6 +440,8 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D vertex shader!" );
 	    hr = pixelShader_2D.Initialize( device, L"res\\shaders\\Sprite.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D pixel shader!" );
+        hr = pixelShader_2D_discard.Initialize( device, L"res\\shaders\\Sprite_Discard.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create 2D discard pixel shader!" );
     }
     catch ( COMException& exception )
     {
@@ -463,7 +465,7 @@ bool Graphics::InitializeScene()
 			return false;
 
         /*   SPRITES   */
-        if ( !sprite.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\purpleheart.png", cb_vs_matrix_2d ) )
+        if ( !sprite.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\circle.png", cb_vs_matrix_2d ) )
             return false;
         sprite.SetPosition( XMFLOAT3( windowWidth / 2 - sprite.GetWidth() / 2, windowHeight / 2 - sprite.GetHeight() / 2, 0 ) );
 
