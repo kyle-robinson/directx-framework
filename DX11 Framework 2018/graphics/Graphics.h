@@ -26,17 +26,6 @@ private:
 	bool InitializeDirectX( HWND hWnd );
 	bool InitializeShaders();
 	bool InitializeScene();
-public:
-	Light light;
-	Sprite sprite;
-	Camera2D camera2D;
-	Camera3D camera3D;
-	RenderableGameObject nanosuit;
-	ConstantBuffer<CB_PS_light> cb_ps_light;
-private:
-	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
-	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
-	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;
 private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
@@ -61,25 +50,42 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_Wireframe;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Anisotropic;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Point;
+public:
+	Light light;
+	Sprite circle;
+	Sprite square;
+	Camera2D camera2D;
+	Camera3D camera3D;
+	RenderableGameObject nanosuit;
+	ConstantBuffer<CB_PS_light> cb_ps_light;
 private:
 	VertexShader vertexShader_2D;
 	VertexShader vertexShader_full;
 	VertexShader vertexShader_light;
 	VertexShader vertexShader_noLight;
+
 	PixelShader pixelShader_2D;
 	PixelShader pixelShader_2D_discard;
 	PixelShader pixelShader_full;
 	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;
+
 	VertexBuffer<Vertex3D> vertexBufferCube;
-	IndexBuffer indexBufferCube;
 	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
+
+	IndexBuffer indexBufferCube;
 	IndexBuffer indexBufferFullscreen;
+
+	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
+	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
+	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;
 private:
 	UINT windowWidth;
 	UINT windowHeight;
 	ImGuiManager imgui;
 	float clearColor[4];
+	bool useMask = false;
+	bool circleMask = true;
 	bool multiView = false;
 	bool useTexture = true;
 	float alphaFactor = 1.0f;

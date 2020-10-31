@@ -48,14 +48,18 @@ void Graphics::BeginFrame()
 void Graphics::RenderFrame()
 {
     // setup sprite masking
-    context->OMSetDepthStencilState( depthStencilState_drawMask.Get(), 0 );
-    context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
-    context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
-    context->PSSetShader( pixelShader_2D_discard.GetShader(), NULL, 0 );
-    sprite.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() );
+    if ( useMask ) 
+    {
+        context->OMSetDepthStencilState( depthStencilState_drawMask.Get(), 0 );
+        context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
+        context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
+        context->PSSetShader( pixelShader_2D_discard.GetShader(), NULL, 0 );
+        circleMask == true ? circle.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() ) :
+            square.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() );
+        context->OMSetDepthStencilState( depthStencilState_writeMask.Get(), 0 );
+    }
 	
     // setup shaders
-    context->OMSetDepthStencilState( depthStencilState_writeMask.Get(), 0 );
 	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
 	context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
@@ -132,7 +136,7 @@ void Graphics::EndFrame()
     ImGui::NewFrame();
 
     imgui.RenderMainWindow( context.Get(), clearColor, useTexture, alphaFactor,
-        rasterizerSolid, samplerAnisotropic, multiView );
+        rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
     imgui.RenderLightWindow( light, cb_ps_light );
 
     ImGui::Render();
@@ -465,9 +469,13 @@ bool Graphics::InitializeScene()
 			return false;
 
         /*   SPRITES   */
-        if ( !sprite.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\circle.png", cb_vs_matrix_2d ) )
+        if ( !circle.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\circle.png", cb_vs_matrix_2d ) )
             return false;
-        sprite.SetPosition( XMFLOAT3( windowWidth / 2 - sprite.GetWidth() / 2, windowHeight / 2 - sprite.GetHeight() / 2, 0 ) );
+        circle.SetPosition( XMFLOAT3( windowWidth / 2 - circle.GetWidth() / 2, windowHeight / 2 - circle.GetHeight() / 2, 0 ) );
+
+        if ( !square.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\purpleheart.png", cb_vs_matrix_2d ) )
+            return false;
+        square.SetPosition( XMFLOAT3( windowWidth / 2 - square.GetWidth() / 2, windowHeight / 2 - square.GetHeight() / 2, 0 ) );
 
         /*   OBJECTS   */
         camera2D.SetProjectionValues( static_cast<float>( windowWidth ), static_cast<float>( windowHeight ), 0.0f, 1.0f );

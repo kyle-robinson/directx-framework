@@ -15,7 +15,7 @@ ImGuiManager::~ImGuiManager()
 }
 
 void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
-    bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView )
+    bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView, bool& useMask, bool& circleMask )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {
@@ -55,6 +55,23 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Multi-View", &viewGroup, 1 ) )
                     multiView = true;
+
+                static int maskGroup = 0;
+                if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
+                    useMask = false;
+                ImGui::SameLine();
+                if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
+                    useMask = true;
+
+                if ( useMask )
+                {
+                    static int maskTypeGroup = 0;
+                    if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
+                        circleMask = true;
+                    ImGui::SameLine();
+                    if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
+                        circleMask = false;
+                }
             }
             ImGui::PopStyleColor();
             ImGui::TreePop();
