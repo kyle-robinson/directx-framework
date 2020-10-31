@@ -8,6 +8,13 @@ cbuffer ObjectBuffer : register( b0 )
     float4x4 projectionMatrix;
 };
 
+cbuffer FogBuffer : register( b1 )
+{
+    float3 fogColor;
+    float fogStart;
+    float fogEnd;
+}
+
 struct VS_INPUT
 {
     float3 inPosition : POSITION;
@@ -22,6 +29,7 @@ struct VS_OUTPUT
     float3 outNormal : NORMAL;
     float3 outWorldPos : WORLD_POSITION;
     float3 outViewPos : VIEW_POSITION;
+    float  outFog : FOG;
 };
 
 VS_OUTPUT VS( VS_INPUT input )
@@ -29,6 +37,7 @@ VS_OUTPUT VS( VS_INPUT input )
     VS_OUTPUT output;
     output.outPosition = mul( float4( input.inPosition, 1.0f ), worldMatrix );
     output.outPosition = mul( output.outPosition, viewMatrix );
+    output.outFog = saturate( ( fogEnd - output.outPosition.z ) / ( fogEnd - fogStart ) ); // linear fog
     output.outPosition = mul( output.outPosition, projectionMatrix );
     output.outTexCoord = input.inTexCoord;
     output.outNormal = normalize( mul( float4( input.inNormal, 0.0f ), worldMatrix ) );
@@ -38,7 +47,7 @@ VS_OUTPUT VS( VS_INPUT input )
 }
 
 // pixel shader
-cbuffer LightBuffer : register(b1)
+cbuffer LightBuffer : register( b2 )
 {
     float3 ambientLightColor;
     float ambientLightStrength;
@@ -62,13 +71,14 @@ struct PS_INPUT
     float3 inNormal : NORMAL;
     float3 inWorldPos : WORLD_POSITION;
     float3 inViewPos : VIEW_POSITION;
+    float  inFog : FOG;
 };
 
 Texture2D objTexture : TEXTURE : register( t0 );
 SamplerState samplerState : SAMPLER : register( s0 );
 
 float4 PS( PS_INPUT input ) : SV_TARGET
-{
+{   
     float3 ambient = ambientLightColor * ambientLightStrength;
     float3 sampleColor = objTexture.Sample( samplerState, input.inTexCoord );
     
@@ -86,5 +96,6 @@ float4 PS( PS_INPUT input ) : SV_TARGET
         pow( max( 0.0f, dot( normalize( -reflection ), normalize( input.inViewPos ) ) ), specularLightPower );
     
     float3 finalColor = saturate( ambient + diffuse + specular ) * ( sampleColor = ( useTexture == true ) ? sampleColor : 1 );
+    finalColor +=  input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;
     return float4( finalColor, alphaFactor );
 }

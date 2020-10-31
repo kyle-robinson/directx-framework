@@ -42,6 +42,28 @@ void Graphics::BeginFrame()
         context->RSSetState( rasterizerState_Wireframe.Get() );
     samplerAnisotropic == true ? context->PSSetSamplers( 0, 1, samplerState_Anisotropic.GetAddressOf() ) :
         context->PSSetSamplers( 0, 1, samplerState_Point.GetAddressOf() );
+
+    // setup constant buffers
+    cb_vs_fog.data.fogColor = fogColor;
+    cb_vs_fog.data.fogStart = fogStart;
+    cb_vs_fog.data.fogEnd = fogEnd;
+    if ( !cb_vs_fog.ApplyChanges() ) return;
+	context->VSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
+	context->PSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
+    
+    cb_ps_light.data.dynamicLightColor = light.lightColor;
+	cb_ps_light.data.dynamicLightStrength = light.lightStrength;
+	cb_ps_light.data.specularLightColor = light.specularColor;
+	cb_ps_light.data.specularLightIntensity = light.specularIntensity;
+	cb_ps_light.data.specularLightPower = light.specularPower;
+	cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
+	cb_ps_light.data.lightConstant = light.constant;
+	cb_ps_light.data.lightLinear = light.linear;
+	cb_ps_light.data.lightQuadratic = light.quadratic;
+	cb_ps_light.data.useTexture = useTexture;
+	cb_ps_light.data.alphaFactor = alphaFactor;
+	if ( !cb_ps_light.ApplyChanges() ) return;
+	context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
 }
 
 void Graphics::RenderFrame()
@@ -62,21 +84,6 @@ void Graphics::RenderFrame()
 	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
 	context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
-    
-    // set constant buffers
-    cb_ps_light.data.dynamicLightColor = light.lightColor;
-	cb_ps_light.data.dynamicLightStrength = light.lightStrength;
-	cb_ps_light.data.specularLightColor = light.specularColor;
-	cb_ps_light.data.specularLightIntensity = light.specularIntensity;
-	cb_ps_light.data.specularLightPower = light.specularPower;
-	cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
-	cb_ps_light.data.lightConstant = light.constant;
-	cb_ps_light.data.lightLinear = light.linear;
-	cb_ps_light.data.lightQuadratic = light.quadratic;
-	cb_ps_light.data.useTexture = useTexture;
-	cb_ps_light.data.alphaFactor = alphaFactor;
-	cb_ps_light.ApplyChanges();
-	context->PSSetConstantBuffers( 1, 1, cb_ps_light.GetAddressOf() );
 
     // render models
     nanosuit.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
@@ -304,7 +311,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         // set depth stencil states
 		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc( CD3D11_DEFAULT{} );
 		depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-		hr = this->device->CreateDepthStencilState( &depthStencilStateDesc, this->depthStencilState.GetAddressOf() );
+		hr = device->CreateDepthStencilState( &depthStencilStateDesc, depthStencilState.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State!" );
 
 		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc_drawMask( CD3D11_DEFAULT{} );
@@ -321,7 +328,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		depthStencilStateDesc_drawMask.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
 		depthStencilStateDesc_drawMask.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR_SAT;
 
-		hr = this->device->CreateDepthStencilState( &depthStencilStateDesc_drawMask, this->depthStencilState_drawMask.GetAddressOf() );
+		hr = device->CreateDepthStencilState( &depthStencilStateDesc_drawMask, depthStencilState_drawMask.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State for drawing mask!" );
 
 		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc_writeMask( CD3D11_DEFAULT{} );
@@ -338,7 +345,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		depthStencilStateDesc_writeMask.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
 		depthStencilStateDesc_writeMask.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 
-		hr = this->device->CreateDepthStencilState( &depthStencilStateDesc_writeMask, this->depthStencilState_writeMask.GetAddressOf() );
+		hr = device->CreateDepthStencilState( &depthStencilStateDesc_writeMask, depthStencilState_writeMask.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State for writing mask!" );
 
         // setup the viewport
@@ -387,7 +394,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		COM_ERROR_IF_FAILED( hr, "Failed to create anisotropic Sampler State!" );
 
 		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-		samplerDesc.MaxAnisotropy = 1;
+		samplerDesc.MaxAnisotropy = 0;
 		hr = device->CreateSamplerState( &samplerDesc, samplerState_Point.GetAddressOf() );
 		COM_ERROR_IF_FAILED( hr, "Failed to create point Sampler State!" );
     }
@@ -507,6 +514,12 @@ bool Graphics::InitializeScene()
         COM_ERROR_IF_FAILED( hr, "Failed to create WIC texture from file!" );
 
         /*   CONSTANT BUFFERS   */
+        hr = cb_vs_fog.Initialize( device.Get(), context.Get() );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_fog' Constant Buffer!" );
+        fogColor = cb_vs_fog.data.fogColor = XMFLOAT3( 0.2f, 0.2f, 0.2f );
+        fogStart = cb_vs_fog.data.fogStart = 10.0f;
+        fogEnd = cb_vs_fog.data.fogEnd = 50.0f;
+
         hr = cb_vs_matrix.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_matrix' Constant Buffer!" );
 

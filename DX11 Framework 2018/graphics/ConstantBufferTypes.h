@@ -21,6 +21,13 @@ struct CB_VS_fullscreen
 	bool multiView;
 };
 
+struct CB_VS_fog
+{
+	DirectX::XMFLOAT3 fogColor;
+	float fogStart;
+	float fogEnd;
+};
+
 struct CB_VS_water
 {
 	DirectX::XMMATRIX mWorld;

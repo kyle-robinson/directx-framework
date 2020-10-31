@@ -74,6 +74,7 @@ private:
 	IndexBuffer indexBufferCube;
 	IndexBuffer indexBufferFullscreen;
 
+	ConstantBuffer<CB_VS_fog> cb_vs_fog;
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
 	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
 	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;
@@ -90,6 +91,10 @@ private:
 	bool rasterizerSolid = true;
 	bool samplerAnisotropic = true;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
+	
+	float fogEnd;
+	float fogStart;
+	DirectX::XMFLOAT3 fogColor;
 };
 
 #endif
