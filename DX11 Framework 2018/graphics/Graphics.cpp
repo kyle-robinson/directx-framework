@@ -219,7 +219,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         sd.BufferDesc.RefreshRate.Denominator = 1;
         sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.SampleDesc.Count = 1;
+        sd.SampleDesc.Count = 4;
         sd.SampleDesc.Quality = 0;
         sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         sd.BufferCount = 1;
@@ -265,8 +265,8 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         textureDesc.MipLevels = 1;
         textureDesc.ArraySize = 1;
         textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        textureDesc.SampleDesc.Count = 1;
-        textureDesc.SampleDesc.Quality = 0;
+        textureDesc.SampleDesc.Count = sd.SampleDesc.Count;
+        textureDesc.SampleDesc.Quality = sd.SampleDesc.Quality;
         textureDesc.Usage = D3D11_USAGE_DEFAULT;
         textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
         textureDesc.CPUAccessFlags = 0;
@@ -278,7 +278,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         // create resource view on texture
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
         srvDesc.Format = textureDesc.Format;
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
         srvDesc.Texture2D.MostDetailedMip = 0;
         srvDesc.Texture2D.MipLevels = 1;
         hr = device->CreateShaderResourceView( pTexture.Get(), &srvDesc, shaderResourceView.GetAddressOf() );
@@ -287,7 +287,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         // create the target view on the texture
         D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
         rtvDesc.Format = textureDesc.Format;
-        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
         rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
         hr = device->CreateRenderTargetView( pTexture.Get(), &rtvDesc, renderTargetView.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Texture!" );
@@ -298,7 +298,8 @@ bool Graphics::InitializeDirectX( HWND hWnd )
             windowWidth,
             windowHeight );
         depthStencilDesc.MipLevels = 1;
-        depthStencilDesc.SampleDesc.Count = 1;
+        depthStencilDesc.SampleDesc.Count = sd.SampleDesc.Count;
+        depthStencilDesc.SampleDesc.Quality = sd.SampleDesc.Quality;
         depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
         hr = device->CreateTexture2D( &depthStencilDesc, NULL, depthStencilBuffer.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil Buffer!" );
