@@ -64,7 +64,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 0.8f, 0.5f, 1.0f } );
 
-            if ( ImGui::TreeNode( "Camera Controls" ) )
+            if ( ImGui::TreeNode( "Camera3D Controls" ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
                 {
@@ -75,7 +75,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
                     ImGui::Text( "E\t\t->\tDownward" );
                     ImGui::Text( "SPACE\t->\tUpward" );
                     ImGui::Text( "SHIFT\t->\tMove Faster" );
-                    ImGui::Text( "RMB  \t->\tRotate Camera" );
+                    ImGui::Text( "RMB  \t->\tRotate Camera3D" );
                 }
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
@@ -85,7 +85,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
                 {
-                    ImGui::Text( "C\t\t->\tMove Light to Camera" );
+                    ImGui::Text( "C\t\t->\tMove Light to Camera3D" );
                 }
                 ImGui::PopStyleColor();
                 ImGui::TreePop();

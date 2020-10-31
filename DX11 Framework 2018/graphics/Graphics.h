@@ -2,7 +2,7 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "Camera.h"
+#include "Camera3D.h"
 #include "Shaders.h"
 #include "ImGuiManager.h"
 #include "ObjectIndices.h"
@@ -26,7 +26,7 @@ private:
 	bool InitializeScene();
 public:
 	Light light;
-	Camera camera;
+	Camera3D camera;
 	RenderableGameObject nanosuit;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
 private:

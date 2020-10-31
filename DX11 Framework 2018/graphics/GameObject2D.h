@@ -6,10 +6,8 @@
 
 class GameObject2D : public GameObject
 {
-public:
-
-private:
-
+protected:
+	virtual void UpdateMatrix();
 };
 
 #endif
