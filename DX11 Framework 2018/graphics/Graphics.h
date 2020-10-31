@@ -10,8 +10,6 @@
 #include "ObjectIndices.h"
 #include "ObjectVertices.h"
 #include "RenderableGameObject.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
 #include <dxtk/WICTextureLoader.h>
 
 class Graphics

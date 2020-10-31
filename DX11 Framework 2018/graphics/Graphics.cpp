@@ -22,8 +22,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         worldMatricesCube.push_back( worldMatrix );
     }
 
-    ImGui_ImplWin32_Init( hWnd );
-    ImGui_ImplDX11_Init( device.Get(), context.Get() );
+    imgui.Initialize( hWnd, device.Get(), context.Get() );
 
 	return true;
 }
@@ -131,17 +130,13 @@ void Graphics::EndFrame()
     }
 
     // display imgui
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
+    imgui.BeginRender();
     imgui.RenderMainWindow( context.Get(), clearColor, useTexture, alphaFactor,
         rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
     imgui.RenderLightWindow( light, cb_ps_light );
-
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
+    imgui.EndRender();
     
+    // unbind rtv and srv
     context->OMSetRenderTargets( 1, nullRenderTarget.GetAddressOf(), nullptr );
     context->PSSetShaderResources( 0, 1, nullShaderResourceView.GetAddressOf() );
     
@@ -233,18 +228,18 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         {
             D3D_DRIVER_TYPE driverType = driverTypes[driverTypeIndex];
             hr = D3D11CreateDeviceAndSwapChain(
-                nullptr,                        // IDXGI Adapter
-                driverType,                     // Driver Type
-                nullptr,                        // Software Module
-                createDeviceFlags,              // Flags for Runtime Layers
-                featureLevels,                  // Feature Levels Array
-                numFeatureLevels,               // No. of Feature Levels
-                D3D11_SDK_VERSION,              // SDK Version
-                &sd,                            // Swap Chain Description
-                swapChain.GetAddressOf(), // Swap Chain Address
-                device.GetAddressOf(),    // Device Address
-                nullptr,                        // Ptr to Feature Level
-                context.GetAddressOf()    // Context Address
+                nullptr,                    // IDXGI Adapter
+                driverType,                 // Driver Type
+                nullptr,                    // Software Module
+                createDeviceFlags,          // Flags for Runtime Layers
+                featureLevels,              // Feature Levels Array
+                numFeatureLevels,           // No. of Feature Levels
+                D3D11_SDK_VERSION,          // SDK Version
+                &sd,                        // Swap Chain Description
+                swapChain.GetAddressOf(),   // Swap Chain Address
+                device.GetAddressOf(),      // Device Address
+                nullptr,                    // Ptr to Feature Level
+                context.GetAddressOf()      // Context Address
             );
             if ( SUCCEEDED( hr ) )
                 break;
@@ -364,8 +359,6 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
         hr = device->CreateRasterizerState( &rasterizerDesc, rasterizerState_Wireframe.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create wireframe Rasterizer State!" );
-        
-        //context->RSSetState( rasterizerState_Solid.Get() );
 
         // set blend state
 		D3D11_RENDER_TARGET_BLEND_DESC renderTargetBlendDesc = { 0 };
