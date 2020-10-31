@@ -214,7 +214,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         sd.BufferDesc.RefreshRate.Denominator = 1;
         sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.SampleDesc.Count = 4;
+        sd.SampleDesc.Count = 1;
         sd.SampleDesc.Quality = 0;
         sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         sd.BufferCount = 1;
@@ -273,7 +273,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         // create resource view on texture
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
         srvDesc.Format = textureDesc.Format;
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
         srvDesc.Texture2D.MostDetailedMip = 0;
         srvDesc.Texture2D.MipLevels = 1;
         hr = device->CreateShaderResourceView( pTexture.Get(), &srvDesc, shaderResourceView.GetAddressOf() );
@@ -282,7 +282,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         // create the target view on the texture
         D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
         rtvDesc.Format = textureDesc.Format;
-        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
         rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
         hr = device->CreateRenderTargetView( pTexture.Get(), &rtvDesc, renderTargetView.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Texture!" );
