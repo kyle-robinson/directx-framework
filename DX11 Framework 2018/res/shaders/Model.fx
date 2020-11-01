@@ -13,6 +13,7 @@ cbuffer FogBuffer : register( b1 )
     float3 fogColor;
     float fogStart;
     float fogEnd;
+    bool fogEnable;
 }
 
 struct VS_INPUT
@@ -96,6 +97,7 @@ float4 PS( PS_INPUT input ) : SV_TARGET
         pow( max( 0.0f, dot( normalize( -reflection ), normalize( input.inViewPos ) ) ), specularLightPower );
     
     float3 finalColor = saturate( ambient + diffuse + specular ) * ( sampleColor = ( useTexture == true ) ? sampleColor : 1 );
-    finalColor +=  input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;
+    float3 finalColor_fog = input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;
+    finalColor += ( fogEnable == true ) ? finalColor_fog : 0;
     return float4( finalColor, alphaFactor );
 }

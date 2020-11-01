@@ -44,9 +44,6 @@ void Graphics::BeginFrame()
         context->PSSetSamplers( 0, 1, samplerState_Point.GetAddressOf() );
 
     // setup constant buffers
-    cb_vs_fog.data.fogColor = fogColor;
-    cb_vs_fog.data.fogStart = fogStart;
-    cb_vs_fog.data.fogEnd = fogEnd;
     if ( !cb_vs_fog.ApplyChanges() ) return;
 	context->VSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 	context->PSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
@@ -141,6 +138,7 @@ void Graphics::EndFrame()
     imgui.RenderMainWindow( context.Get(), clearColor, useTexture, alphaFactor,
         rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
     imgui.RenderLightWindow( light, cb_ps_light );
+    imgui.RenderFogWindow( cb_vs_fog );
     imgui.EndRender();
     
     // unbind rtv and srv
@@ -516,9 +514,10 @@ bool Graphics::InitializeScene()
         /*   CONSTANT BUFFERS   */
         hr = cb_vs_fog.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_fog' Constant Buffer!" );
-        fogColor = cb_vs_fog.data.fogColor = XMFLOAT3( 0.2f, 0.2f, 0.2f );
-        fogStart = cb_vs_fog.data.fogStart = 10.0f;
-        fogEnd = cb_vs_fog.data.fogEnd = 50.0f;
+        cb_vs_fog.data.fogColor = XMFLOAT3( 0.2f, 0.2f, 0.2f );
+        cb_vs_fog.data.fogStart = 10.0f;
+        cb_vs_fog.data.fogEnd = 50.0f;
+        cb_vs_fog.data.fogEnable = true;
 
         hr = cb_vs_matrix.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_matrix' Constant Buffer!" );

@@ -26,6 +26,7 @@ struct CB_VS_fog
 	DirectX::XMFLOAT3 fogColor;
 	float fogStart;
 	float fogEnd;
+	bool fogEnable;
 };
 
 struct CB_VS_water

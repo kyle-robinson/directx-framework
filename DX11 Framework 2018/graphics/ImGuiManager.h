@@ -16,6 +16,7 @@ public:
 	void RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
 		bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView, bool& useMask, bool& circleMask );
 	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light );
+	void RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog );
 private:
 	SYSTEM_INFO siSysInfo;
 };

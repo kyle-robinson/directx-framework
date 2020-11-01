@@ -91,10 +91,6 @@ private:
 	bool rasterizerSolid = true;
 	bool samplerAnisotropic = true;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
-	
-	float fogEnd;
-	float fogStart;
-	DirectX::XMFLOAT3 fogColor;
 };
 
 #endif

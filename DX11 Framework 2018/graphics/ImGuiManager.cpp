@@ -220,3 +220,23 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         ImGui::PopStyleColor();
 	} ImGui::End();
 }
+
+void ImGuiManager::RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog )
+{
+    if ( ImGui::Begin( "Fog Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    {
+        static int fogGroup = 0;
+        if ( ImGui::RadioButton( "Enable Fog", &fogGroup, 0 ) )
+            cb_vs_fog.data.fogEnable = true;
+        ImGui::SameLine();
+        if ( ImGui::RadioButton( "Disable Fog", &fogGroup, 1 ) )
+            cb_vs_fog.data.fogEnable = false;
+
+        if ( cb_vs_fog.data.fogEnable )
+        {
+            ImGui::ColorEdit3( "Fog Colour", &cb_vs_fog.data.fogColor.x );
+            ImGui::SliderFloat( "Start Distance", &cb_vs_fog.data.fogStart, 1.0f, 10.0f );
+            ImGui::SliderFloat( "End Distance", &cb_vs_fog.data.fogEnd, 10.0f, 100.0f  );
+        }
+    } ImGui::End();
+}
