@@ -517,7 +517,7 @@ bool Graphics::InitializeScene()
         cb_vs_fog.data.fogColor = XMFLOAT3( 0.2f, 0.2f, 0.2f );
         cb_vs_fog.data.fogStart = 10.0f;
         cb_vs_fog.data.fogEnd = 50.0f;
-        cb_vs_fog.data.fogEnable = true;
+        cb_vs_fog.data.fogEnable = false;
 
         hr = cb_vs_matrix.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_matrix' Constant Buffer!" );

@@ -226,11 +226,11 @@ void ImGuiManager::RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog )
     if ( ImGui::Begin( "Fog Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {
         static int fogGroup = 0;
-        if ( ImGui::RadioButton( "Enable Fog", &fogGroup, 0 ) )
-            cb_vs_fog.data.fogEnable = true;
-        ImGui::SameLine();
-        if ( ImGui::RadioButton( "Disable Fog", &fogGroup, 1 ) )
+        if ( ImGui::RadioButton( "Disable Fog", &fogGroup, 0 ) )
             cb_vs_fog.data.fogEnable = false;
+        ImGui::SameLine();
+        if ( ImGui::RadioButton( "Enable Fog", &fogGroup, 1 ) )
+            cb_vs_fog.data.fogEnable = true;
 
         if ( cb_vs_fog.data.fogEnable )
         {
