@@ -3,9 +3,9 @@
 bool RenderWindow::Initialize( WindowContainer* pWindowContainer, HINSTANCE hInstance, const std::string& windowName, const std::string& windowClass, int width, int height )
 {
 	// register window class
-	hInstance = hInstance;
-	width = width;
-	height = height;
+	this->hInstance = hInstance;
+	this->width = width;
+	this->height = height;
 	windowTitle = windowName;
 	windowTitle_Wide = StringConverter::StringToWide( windowName );
 	this->windowClass = windowClass;

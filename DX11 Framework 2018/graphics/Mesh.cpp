@@ -49,6 +49,11 @@ void Mesh::Draw()
 			context->PSSetShaderResources( 0, 1, textures[i].GetTextureResourceViewAddress() );
 			break;
 		}
+		if ( textures[i].GetType() == aiTextureType_SPECULAR )
+		{
+			context->PSSetShaderResources( 1, 1, textures[i].GetTextureResourceViewAddress() );
+			break;
+		}
 	}
 
 	UINT offset = 0;

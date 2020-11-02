@@ -102,6 +102,8 @@ Mesh Model::ProcessMesh( aiMesh* mesh, const aiScene* scene, const XMMATRIX& tra
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	std::vector<Texture> diffuseTextures = LoadMaterialTextures( material, aiTextureType_DIFFUSE, scene );
 	textures.insert( textures.end(), diffuseTextures.begin(), diffuseTextures.end() );
+	std::vector<Texture> specularTextures = LoadMaterialTextures( material, aiTextureType_SPECULAR, scene );
+	textures.insert( textures.end(), specularTextures.begin(), specularTextures.end() );
 
 	return Mesh( device, context, vertices, indices, textures, transformMatrix );
 }
@@ -159,6 +161,15 @@ std::vector<Texture> Model::LoadMaterialTextures( aiMaterial* pMaterial, aiTextu
 		{
 		case aiTextureType_DIFFUSE:
 			pMaterial->Get( AI_MATKEY_COLOR_DIFFUSE, aiColor );
+			if ( aiColor.IsBlack() )
+			{
+				materialTextures.push_back( Texture( device, Colours::UnloadedTextureColour, textureType ) );
+				return materialTextures;
+			}
+			materialTextures.push_back( Texture( device, Colour( aiColor.r * 255, aiColor.g * 255, aiColor.b * 255 ), textureType ) );
+			return materialTextures;
+		case aiTextureType_SPECULAR:
+			pMaterial->Get( AI_MATKEY_COLOR_SPECULAR, aiColor );
 			if ( aiColor.IsBlack() )
 			{
 				materialTextures.push_back( Texture( device, Colours::UnloadedTextureColour, textureType ) );

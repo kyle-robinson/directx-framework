@@ -11,8 +11,6 @@
 #define IDI_TUTORIAL1                   107
 #define IDI_SMALL                       108
 #define IDC_TUTORIAL1                   109
-//#define IDI_ANICURSOR1                  112
-//#define IDI_ANICURSOR2                  113
 #define IDR_MAINFRAME                   128
 #define IDC_CURSOR1                     129
 #define IDR_ANICURSOR1                  130

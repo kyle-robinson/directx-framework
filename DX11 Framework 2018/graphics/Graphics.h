@@ -14,6 +14,7 @@
 
 class Graphics
 {
+	friend class GraphicsResource;
 public:
 	bool Initialize( HWND hWnd, int width, int height );
 	void BeginFrame();

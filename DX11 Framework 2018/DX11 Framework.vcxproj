@@ -458,6 +458,7 @@
     <ClCompile Include="graphics\GameObject2D.cpp" />
     <ClCompile Include="graphics\GameObject3D.cpp" />
     <ClCompile Include="graphics\Graphics.cpp" />
+    <ClCompile Include="graphics\GraphicsResource.cpp" />
     <ClCompile Include="graphics\ImGuiManager.cpp" />
     <ClCompile Include="graphics\IndexBuffer.cpp" />
     <ClCompile Include="graphics\Light.cpp" />
@@ -495,6 +496,7 @@
     <ClInclude Include="graphics\GameObject2D.h" />
     <ClInclude Include="graphics\GameObject3D.h" />
     <ClInclude Include="graphics\Graphics.h" />
+    <ClInclude Include="graphics\GraphicsResource.h" />
     <ClInclude Include="graphics\ImGuiManager.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />
     <ClInclude Include="graphics\Light.h" />

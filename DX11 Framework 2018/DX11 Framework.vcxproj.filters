@@ -152,6 +152,9 @@
     <ClCompile Include="graphics\Sprite.cpp">
       <Filter>Source\Graphics\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\GraphicsResource.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -273,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="graphics\Sprite.h">
       <Filter>Headers\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GraphicsResource.h">
+      <Filter>Headers\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

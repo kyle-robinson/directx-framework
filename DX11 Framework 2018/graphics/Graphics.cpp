@@ -507,8 +507,7 @@ bool Graphics::InitializeScene()
             device.Get(),
             L"res\\textures\\CrashBox.png",
             nullptr,
-            boxTexture.GetAddressOf()
-        );
+            boxTexture.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create WIC texture from file!" );
 
         /*   CONSTANT BUFFERS   */

@@ -75,28 +75,32 @@ struct PS_INPUT
     float  inFog : FOG;
 };
 
-Texture2D objTexture : TEXTURE : register( t0 );
+Texture2D albedoTexture : DIFFUSE_TEXTURE : register( t0 );
 SamplerState samplerState : SAMPLER : register( s0 );
 
 float4 PS( PS_INPUT input ) : SV_TARGET
 {   
     float3 ambient = ambientLightColor * ambientLightStrength;
-    float3 sampleColor = objTexture.Sample( samplerState, input.inTexCoord );
+    float3 albedoSample = albedoTexture.Sample( samplerState, input.inTexCoord );
     
-    float distToL = distance( dynamicLightPosition, input.inWorldPos );
+    // attenuation
+    float3 vToL = normalize( dynamicLightPosition - input.inWorldPos );
+    float distToL = length( vToL );
     float attenuation = 1 / ( lightConstant + lightLinear * distToL + lightQuadratic * pow( distToL, 2 ) );
     
-    float3 vToL = normalize( dynamicLightPosition - input.inWorldPos );
+    // diffuse lighting
     float3 diffuseIntensity = max( dot( vToL, input.inNormal ), 0 );
     diffuseIntensity *= attenuation;
     float3 diffuse = diffuseIntensity * dynamicLightStrength * dynamicLightColor;
     
+    // specular lighting
     float3 incidence = input.inNormal * dot( vToL, input.inNormal );
     float3 reflection = incidence * 2.0f - vToL;
     float3 specular = specularLightColor * specularLightIntensity * attenuation *
         pow( max( 0.0f, dot( normalize( -reflection ), normalize( input.inViewPos ) ) ), specularLightPower );
     
-    float3 finalColor = saturate( ambient + diffuse + specular ) * ( sampleColor = ( useTexture == true ) ? sampleColor : 1 );
+    // output colour
+    float3 finalColor = saturate( ambient + diffuse + specular ) * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
     float3 finalColor_fog = input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;
     finalColor += ( fogEnable == true ) ? finalColor_fog : 0;
     return float4( finalColor, alphaFactor );
