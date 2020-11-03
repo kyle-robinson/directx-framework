@@ -17,6 +17,7 @@ namespace Bind
 {
 	class Sampler;
 	class Stencil;
+	class Blender;
 	class Rasterizer;
 	class DepthStencil;
 }
@@ -48,9 +49,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> nullShaderResourceView = nullptr;
 
-	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
+	//Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
 	
+	std::shared_ptr<Bind::Blender> blendState;
 	std::shared_ptr<Bind::DepthStencil> depthStencil;
 	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
 	std::map<std::string, std::shared_ptr<Bind::Stencil>> stencilStates;

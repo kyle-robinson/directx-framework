@@ -487,6 +487,7 @@
     <ClInclude Include="..\External\imgui\imstb_textedit.h" />
     <ClInclude Include="..\External\imgui\imstb_truetype.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="graphics\Blender.h" />
     <ClInclude Include="graphics\Camera2D.h" />
     <ClInclude Include="graphics\Camera3D.h" />
     <ClInclude Include="graphics\Colour.h" />

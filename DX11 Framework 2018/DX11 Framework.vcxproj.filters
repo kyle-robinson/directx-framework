@@ -304,6 +304,9 @@
     <ClInclude Include="graphics\DepthStencil.h">
       <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\Blender.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11 Framework.rc">

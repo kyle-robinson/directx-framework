@@ -1,6 +1,7 @@
 #include "Graphics.h"
-#include "Stencil.h"
+#include "Blender.h"
 #include "Sampler.h"
+#include "Stencil.h"
 #include "Viewport.h"
 #include "Rasterizer.h"
 #include "DepthStencil.h"
@@ -43,7 +44,7 @@ void Graphics::BeginFrame()
 	// set render state
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     stencilStates["Off"]->Bind( *this );
-    context->OMSetBlendState( blendState.Get(), NULL, 0xFFFFFFFF );
+    blendState->Bind( *this );
     rasterizerSolid == true ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
     samplerAnisotropic == true ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );
 
@@ -280,20 +281,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         rasterizerStates.emplace( "Wireframe", std::make_shared<Bind::Rasterizer>( *this, false, true ) );
 
         // set blend state
-		D3D11_RENDER_TARGET_BLEND_DESC renderTargetBlendDesc = { 0 };
-		renderTargetBlendDesc.BlendEnable = TRUE;
-		renderTargetBlendDesc.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-		renderTargetBlendDesc.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-		renderTargetBlendDesc.BlendOp = D3D11_BLEND_OP_ADD;
-		renderTargetBlendDesc.SrcBlendAlpha = D3D11_BLEND_ONE;
-		renderTargetBlendDesc.DestBlendAlpha = D3D11_BLEND_ZERO;
-		renderTargetBlendDesc.BlendOpAlpha = D3D11_BLEND_OP_ADD;
-		renderTargetBlendDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-		D3D11_BLEND_DESC blendDesc = { 0 };
-		blendDesc.RenderTarget[0] = renderTargetBlendDesc;
-		hr = device->CreateBlendState( &blendDesc, blendState.GetAddressOf() );
-		COM_ERROR_IF_FAILED( hr, "Failed to create Blend State!" );
+        blendState = std::make_shared<Bind::Blender>( *this );
 
         // create sampler states
         samplerStates.emplace( "Anisotropic", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
