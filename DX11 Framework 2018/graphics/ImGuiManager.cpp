@@ -186,8 +186,8 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 		{
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
-                ImGui::ColorEdit3( "Diffuse", &light.lightColor.x );
-			    ImGui::SliderFloat( "Intensity", &light.lightStrength, 0.0f, 10.0f );
+                ImGui::ColorEdit3( "Diffuse", &cb_ps_light.data.dynamicLightColor.x );
+			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.dynamicLightStrength, 0.0f, 10.0f );
             }
             ImGui::PopStyleColor();
 		    ImGui::TreePop();
@@ -197,9 +197,9 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 		{
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
-			    ImGui::ColorEdit3( "Specular", &light.specularColor.x );
-			    ImGui::SliderFloat( "Intensity", &light.specularIntensity, 0.0f, 10.0f );
-			    ImGui::SliderFloat( "Glossiness", &light.specularPower, 0.0f, 10.0f );
+			    ImGui::ColorEdit3( "Specular", &cb_ps_light.data.specularLightColor.x );
+			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.specularLightIntensity, 0.0f, 10.0f );
+			    ImGui::SliderFloat( "Glossiness", &cb_ps_light.data.specularLightPower, 0.0f, 10.0f );
             }
             ImGui::PopStyleColor();
 		    ImGui::TreePop();
@@ -209,13 +209,15 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 		{
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
-			    ImGui::SliderFloat( "Constant", &light.constant, 0.05f, 10.0f, "%.2f", 4 );
-			    ImGui::SliderFloat( "Linear", &light.linear, 0.0001f, 4.0f, "%.4f", 8 );
-			    ImGui::SliderFloat( "Quadratic", &light.quadratic, 0.0000001f, 1.0f, "%.7f", 10 );
+			    ImGui::SliderFloat( "Constant", &cb_ps_light.data.lightConstant, 0.05f, 10.0f, "%.2f", 4 );
+			    ImGui::SliderFloat( "Linear", &cb_ps_light.data.lightLinear, 0.0001f, 4.0f, "%.4f", 8 );
+			    ImGui::SliderFloat( "Quadratic", &cb_ps_light.data.lightQuadratic, 0.0000001f, 1.0f, "%.7f", 10 );
             }
             ImGui::PopStyleColor();
 		    ImGui::TreePop();
         }
+
+        light.SetConstantBuffer( cb_ps_light );
 
         ImGui::PopStyleColor();
 	} ImGui::End();

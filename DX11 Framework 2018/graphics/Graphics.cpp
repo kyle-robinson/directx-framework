@@ -2,6 +2,7 @@
 #include "Sampler.h"
 #include "Viewport.h"
 #include "../resource.h"
+#include <map>
 
 std::map<std::string, std::unique_ptr<Bind::Sampler>> samplerStates;
 
@@ -50,18 +51,8 @@ void Graphics::BeginFrame()
     if ( !cb_vs_fog.ApplyChanges() ) return;
 	context->VSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 	context->PSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
-    
-    cb_ps_light.data.dynamicLightColor = light.lightColor;
-	cb_ps_light.data.dynamicLightStrength = light.lightStrength;
-	cb_ps_light.data.specularLightColor = light.specularColor;
-	cb_ps_light.data.specularLightIntensity = light.specularIntensity;
-	cb_ps_light.data.specularLightPower = light.specularPower;
-	cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
-	cb_ps_light.data.lightConstant = light.constant;
-	cb_ps_light.data.lightLinear = light.linear;
-	cb_ps_light.data.lightQuadratic = light.quadratic;
-	cb_ps_light.data.useTexture = useTexture;
-	cb_ps_light.data.alphaFactor = alphaFactor;
+
+    light.UpdateConstantBuffer( cb_ps_light );
 	if ( !cb_ps_light.ApplyChanges() ) return;
 	context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
 }
@@ -96,7 +87,7 @@ void Graphics::RenderFrame()
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
         cb_vs_matrix.data.worldMatrix = worldMatrix;
-        cb_ps_light.data.useTexture = useTexture;
+        cb_ps_light.data.useTexture = light.useTexture;
         if ( !cb_vs_matrix.ApplyChanges() ) return;
         if ( !cb_ps_light.ApplyChanges() ) return;
         context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
@@ -138,7 +129,7 @@ void Graphics::EndFrame()
 
     // display imgui
     imgui.BeginRender();
-    imgui.RenderMainWindow( context.Get(), clearColor, useTexture, alphaFactor,
+    imgui.RenderMainWindow( context.Get(), clearColor, light.useTexture, light.alphaFactor,
         rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
     imgui.RenderLightWindow( light, cb_ps_light );
     imgui.RenderFogWindow( cb_vs_fog );
@@ -528,8 +519,6 @@ bool Graphics::InitializeScene()
 
 		hr = cb_ps_light.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader' Constant Buffer!" );
-		cb_ps_light.data.ambientLightColor = XMFLOAT3( 1.0f, 1.0f, 1.0f );
-		cb_ps_light.data.ambientLightStrength = 0.1f;
     }
     catch ( COMException& exception )
     {

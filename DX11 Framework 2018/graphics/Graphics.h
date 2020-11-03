@@ -2,7 +2,6 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <map>
 #include "Sprite.h"
 #include "Shaders.h"
 #include "Camera2D.h"
@@ -88,8 +87,6 @@ private:
 	bool useMask = false;
 	bool circleMask = true;
 	bool multiView = false;
-	bool useTexture = true;
-	float alphaFactor = 1.0f;
 	bool rasterizerSolid = true;
 	bool samplerAnisotropic = true;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
