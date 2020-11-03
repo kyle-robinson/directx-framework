@@ -1,10 +1,12 @@
 #include "Graphics.h"
 #include "Sampler.h"
 #include "Viewport.h"
+#include "Rasterizer.h"
 #include "../resource.h"
 #include <map>
 
 std::map<std::string, std::unique_ptr<Bind::Sampler>> samplerStates;
+std::map<std::string, std::unique_ptr<Bind::Rasterizer>> rasterizerStates;
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -43,9 +45,8 @@ void Graphics::BeginFrame()
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 	context->OMSetDepthStencilState( depthStencilState.Get(), 0 );
     context->OMSetBlendState( blendState.Get(), NULL, 0xFFFFFFFF );
-    rasterizerSolid == true ? context->RSSetState( rasterizerState_Solid.Get() ) :
-        context->RSSetState( rasterizerState_Wireframe.Get() );
-    samplerAnisotropic == true ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"].get()->Bind( *this );
+    rasterizerSolid == true ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
+    samplerAnisotropic == true ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );
 
     // setup constant buffers
     if ( !cb_vs_fog.ApplyChanges() ) return;
@@ -100,10 +101,11 @@ void Graphics::RenderFrame()
 
 void Graphics::EndFrame()
 {
-    // render to texture
+    // set and clear back buffer
     context->OMSetRenderTargets( 1, backBuffer.GetAddressOf(), nullptr );
     context->ClearRenderTargetView( backBuffer.Get(), clearColor );
 
+    // render to fullscreen texture
     UINT offset = 0;
     context->PSSetShaderResources( 0, 1, shaderResourceView.GetAddressOf() );
     context->IASetVertexBuffers( 0, 1, vertexBufferFullscreen.GetAddressOf(), vertexBufferFullscreen.StridePtr(), &offset );
@@ -111,21 +113,10 @@ void Graphics::EndFrame()
     context->IASetIndexBuffer( indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->VSSetShader( vertexShader_full.GetShader(), NULL, 0 );
     context->PSSetShader( pixelShader_full.GetShader(), NULL, 0 );
-    
     cb_vs_fullscreen.data.multiView = multiView;
     if ( !cb_vs_fullscreen.ApplyChanges() ) return;
     context->VSSetConstantBuffers( 0, 1, cb_vs_fullscreen.GetAddressOf() );
-
-    if ( rasterizerSolid )
-    {
-        context->DrawIndexed( indexBufferFullscreen.IndexCount(), 0, 0 );
-    }
-    else
-    {
-        context->RSSetState( rasterizerState_Solid.Get() );
-        context->DrawIndexed( indexBufferFullscreen.IndexCount(), 0, 0 );
-        context->RSSetState( rasterizerState_Wireframe.Get() );
-    }
+    Bind::Rasterizer::DrawSolid( *this, indexBufferFullscreen.IndexCount() ); // always draw as solid
 
     // display imgui
     imgui.BeginRender();
@@ -297,10 +288,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Texture!" );
 
         // create depth stencil
-        CD3D11_TEXTURE2D_DESC depthStencilDesc(
-            DXGI_FORMAT_D24_UNORM_S8_UINT,
-            windowWidth,
-            windowHeight );
+        CD3D11_TEXTURE2D_DESC depthStencilDesc( DXGI_FORMAT_D24_UNORM_S8_UINT, windowWidth, windowHeight );
         depthStencilDesc.MipLevels = 1;
         depthStencilDesc.SampleDesc.Count = sd.SampleDesc.Count;
         depthStencilDesc.SampleDesc.Quality = sd.SampleDesc.Quality;
@@ -355,15 +343,8 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         viewport.get()->Bind( *this );
 
         // setup rasterizer states
-        CD3D11_RASTERIZER_DESC rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
-        rasterizerDesc.MultisampleEnable = TRUE;
-        hr = device->CreateRasterizerState( &rasterizerDesc, rasterizerState_Solid.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create solid Rasterizer State!" );
-
-        rasterizerDesc.MultisampleEnable = TRUE;
-        rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
-        hr = device->CreateRasterizerState( &rasterizerDesc, rasterizerState_Wireframe.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create wireframe Rasterizer State!" );
+        rasterizerStates.emplace( "Solid", std::make_unique<Bind::Rasterizer>( *this, true, false ) );
+        rasterizerStates.emplace( "Wireframe", std::make_unique<Bind::Rasterizer>( *this, false, true ) );
 
         // set blend state
 		D3D11_RENDER_TARGET_BLEND_DESC renderTargetBlendDesc = { 0 };
@@ -450,8 +431,7 @@ bool Graphics::InitializeScene()
     try
     {
         /*   MODELS   */
-		if ( !nanosuit.Initialize( "res\\models\\nanosuit\\nanosuit.obj",
-			device.Get(), context.Get(), cb_vs_matrix ) )
+		if ( !nanosuit.Initialize( "res\\models\\nanosuit\\nanosuit.obj", device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
 
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )
@@ -470,8 +450,7 @@ bool Graphics::InitializeScene()
         camera2D.SetProjectionValues( static_cast<float>( windowWidth ), static_cast<float>( windowHeight ), 0.0f, 1.0f );
 
         camera3D.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
-	    camera3D.SetProjectionValues( 70.0f,
-		    static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ),
+	    camera3D.SetProjectionValues( 70.0f, static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ),
 		    0.1f, 1000.0f );
 
         XMVECTOR lightPosition = camera3D.GetPositionVector();
@@ -486,18 +465,13 @@ bool Graphics::InitializeScene()
         hr = indexBufferCube.Initialize( device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
-        /*   TEXTURES   */
-        hr = vertexBufferFullscreen.Initialize( device.Get(),
-            VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
+        hr = vertexBufferFullscreen.Initialize( device.Get(), VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
         hr = indexBufferFullscreen.Initialize( device.Get(), IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );
 
-        hr = DirectX::CreateWICTextureFromFile(
-            device.Get(),
-            L"res\\textures\\CrashBox.png",
-            nullptr,
-            boxTexture.GetAddressOf() );
+        /*   TEXTURES   */
+        hr = DirectX::CreateWICTextureFromFile( device.Get(), L"res\\textures\\CrashBox.png", nullptr, boxTexture.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create WIC texture from file!" );
 
         /*   CONSTANT BUFFERS   */

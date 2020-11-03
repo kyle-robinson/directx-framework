@@ -48,6 +48,7 @@ namespace Bind
 			catch ( COMException& exception )
 			{
 				ErrorLogger::Log( exception );
+				return;
 			}
 		}
 		void Bind( Graphics& gfx ) noexcept override
