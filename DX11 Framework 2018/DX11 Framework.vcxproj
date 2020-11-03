@@ -510,6 +510,7 @@
     <ClInclude Include="graphics\Texture.h" />
     <ClInclude Include="graphics\Vertex.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />
+    <ClInclude Include="graphics\Viewport.h" />
     <ClInclude Include="keyboard\Keyboard.h" />
     <ClInclude Include="mouse\Mouse.h" />
     <CLInclude Include="resource.h" />

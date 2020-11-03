@@ -42,23 +42,32 @@
     <Filter Include="Resource Files\ImGui">
       <UniqueIdentifier>{e81e3e0a-96ae-4892-ad4e-d7133f641b0e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers\Graphics\Objects">
-      <UniqueIdentifier>{64c7e55d-7242-4739-95dd-0f381cfaa2a2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headers\Graphics\Model">
       <UniqueIdentifier>{d9d32f9d-ef70-48ec-b548-747aed1ad95d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headers\Graphics\Bindables">
       <UniqueIdentifier>{5e1b0e88-2e46-4bb6-9f5d-673d3b458c37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Graphics\Objects">
-      <UniqueIdentifier>{3afe182d-483a-491f-b6eb-2924b35c7394}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Graphics\Model">
       <UniqueIdentifier>{2623e95e-02d1-444c-94e2-eb58a63d891b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Graphics\Bindables">
       <UniqueIdentifier>{2ff92b7f-abc5-42b2-99d5-df163146dbe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\GameObjects">
+      <UniqueIdentifier>{f4046498-2dba-49e5-94f6-77bebbb4bfb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\Drawables">
+      <UniqueIdentifier>{2cc253a4-a834-42d0-a95d-e8d82a17a9ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Graphics\ObjectData">
+      <UniqueIdentifier>{256dbec4-63f1-420c-b2ee-aec243065115}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\GameObjects">
+      <UniqueIdentifier>{da7141cd-9ce7-4e4f-af43-66dc13e4ea2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Drawables">
+      <UniqueIdentifier>{3afe182d-483a-491f-b6eb-2924b35c7394}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -108,22 +117,13 @@
       <Filter>Resource Files\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Light.cpp">
-      <Filter>Source\Graphics\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\GameObject.cpp">
-      <Filter>Source\Graphics\Model</Filter>
+      <Filter>Source\Graphics\Drawables</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Mesh.cpp">
       <Filter>Source\Graphics\Model</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Model.cpp">
       <Filter>Source\Graphics\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\RenderableGameObject.cpp">
-      <Filter>Source\Graphics\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\Texture.cpp">
-      <Filter>Source\Graphics\Bindables</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Shaders.cpp">
       <Filter>Source\Graphics\Bindables</Filter>
@@ -134,26 +134,35 @@
     <ClCompile Include="graphics\ImGuiManager.cpp">
       <Filter>Source\Graphics\Bindables</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\Colour.cpp">
-      <Filter>Source\Graphics\Bindables</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\GameObject2D.cpp">
-      <Filter>Source\Graphics\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\GameObject3D.cpp">
-      <Filter>Source\Graphics\Model</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\Camera3D.cpp">
-      <Filter>Source\Graphics\Objects</Filter>
+      <Filter>Source\Graphics\Drawables</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Camera2D.cpp">
-      <Filter>Source\Graphics\Objects</Filter>
+      <Filter>Source\Graphics\Drawables</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Sprite.cpp">
-      <Filter>Source\Graphics\Objects</Filter>
+      <Filter>Source\Graphics\Drawables</Filter>
     </ClCompile>
     <ClCompile Include="graphics\GraphicsResource.cpp">
       <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\RenderableGameObject.cpp">
+      <Filter>Source\Graphics\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\GameObject3D.cpp">
+      <Filter>Source\Graphics\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\GameObject2D.cpp">
+      <Filter>Source\Graphics\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\GameObject.cpp">
+      <Filter>Source\Graphics\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Colour.cpp">
+      <Filter>Source\Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Texture.cpp">
+      <Filter>Source\Graphics\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,25 +223,10 @@
     <ClInclude Include="..\External\imgui\imstb_truetype.h">
       <Filter>Resource Files\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\ObjectVertices.h">
-      <Filter>Headers\Graphics\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\ObjectIndices.h">
-      <Filter>Headers\Graphics\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Light.h">
-      <Filter>Headers\Graphics\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\Model.h">
       <Filter>Headers\Graphics\Model</Filter>
     </ClInclude>
     <ClInclude Include="graphics\Mesh.h">
-      <Filter>Headers\Graphics\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\RenderableGameObject.h">
-      <Filter>Headers\Graphics\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\GameObject.h">
       <Filter>Headers\Graphics\Model</Filter>
     </ClInclude>
     <ClInclude Include="graphics\VertexBuffer.h">
@@ -247,38 +241,56 @@
     <ClInclude Include="graphics\ImGuiManager.h">
       <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\ConstantBufferTypes.h">
-      <Filter>Headers\Graphics\Bindables</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\ConstantBuffer.h">
       <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\Colour.h">
-      <Filter>Headers\Graphics\Bindables</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Texture.h">
-      <Filter>Headers\Graphics\Bindables</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Vertex.h">
-      <Filter>Headers\Graphics\Bindables</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\GameObject2D.h">
-      <Filter>Headers\Graphics\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\GameObject3D.h">
-      <Filter>Headers\Graphics\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Camera3D.h">
-      <Filter>Headers\Graphics\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Camera2D.h">
-      <Filter>Headers\Graphics\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Sprite.h">
-      <Filter>Headers\Graphics\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\GraphicsResource.h">
       <Filter>Headers\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\RenderableGameObject.h">
+      <Filter>Headers\Graphics\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GameObject3D.h">
+      <Filter>Headers\Graphics\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GameObject2D.h">
+      <Filter>Headers\Graphics\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GameObject.h">
+      <Filter>Headers\Graphics\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Sprite.h">
+      <Filter>Headers\Graphics\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Camera2D.h">
+      <Filter>Headers\Graphics\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Camera3D.h">
+      <Filter>Headers\Graphics\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Light.h">
+      <Filter>Headers\Graphics\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Texture.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Colour.h">
+      <Filter>Headers\Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Vertex.h">
+      <Filter>Headers\Graphics\ObjectData</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ConstantBufferTypes.h">
+      <Filter>Headers\Graphics\ObjectData</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ObjectVertices.h">
+      <Filter>Headers\Graphics\ObjectData</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ObjectIndices.h">
+      <Filter>Headers\Graphics\ObjectData</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Viewport.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,8 @@ public:
 	void RenderFrame();
 	void EndFrame();
 	void Update( float dt );
+	UINT GetWidth() const noexcept;
+	UINT GetHeight() const noexcept;
 private:
 	bool InitializeDirectX( HWND hWnd );
 	bool InitializeShaders();

@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "Viewport.h"
 #include "../resource.h"
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
@@ -186,6 +187,16 @@ void Graphics::Update( float dt )
     );
 }
 
+UINT Graphics::GetWidth() const noexcept
+{
+    return windowWidth;
+}
+
+UINT Graphics::GetHeight() const noexcept
+{
+    return windowHeight;
+}
+
 bool Graphics::InitializeDirectX( HWND hWnd )
 {
     try
@@ -347,12 +358,8 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State for writing mask!" );
 
         // setup the viewport
-        CD3D11_VIEWPORT vp( 0.0f, 0.0f,
-            static_cast<FLOAT>( windowWidth ),
-            static_cast<FLOAT>( windowHeight ) );
-        vp.MinDepth = 0.0f;
-        vp.MaxDepth = 1.0f;
-        context->RSSetViewports( 1, &vp );
+        std::unique_ptr<Bind::Viewport> viewport = std::make_unique<Bind::Viewport>( *this );
+        viewport.get()->Bind( *this );
 
         // setup rasterizer states
         CD3D11_RASTERIZER_DESC rasterizerDesc = CD3D11_RASTERIZER_DESC( CD3D11_DEFAULT{} );
