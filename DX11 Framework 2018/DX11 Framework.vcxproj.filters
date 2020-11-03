@@ -292,6 +292,9 @@
     <ClInclude Include="graphics\Viewport.h">
       <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\Sampler.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11 Framework.rc">

@@ -2,6 +2,7 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include <map>
 #include "Sprite.h"
 #include "Shaders.h"
 #include "Camera2D.h"
@@ -49,8 +50,6 @@ private:
 protected:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_Solid;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_Wireframe;
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Anisotropic;
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState_Point;
 public:
 	Light light;
 	Sprite circle;

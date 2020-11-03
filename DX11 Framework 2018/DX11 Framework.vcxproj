@@ -505,6 +505,7 @@
     <ClInclude Include="graphics\ObjectIndices.h" />
     <ClInclude Include="graphics\ObjectVertices.h" />
     <ClInclude Include="graphics\RenderableGameObject.h" />
+    <ClInclude Include="graphics\Sampler.h" />
     <ClInclude Include="graphics\Shaders.h" />
     <ClInclude Include="graphics\Sprite.h" />
     <ClInclude Include="graphics\Texture.h" />

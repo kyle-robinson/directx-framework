@@ -1,6 +1,9 @@
 #include "Graphics.h"
+#include "Sampler.h"
 #include "Viewport.h"
 #include "../resource.h"
+
+std::map<std::string, std::unique_ptr<Bind::Sampler>> samplerStates;
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -41,8 +44,7 @@ void Graphics::BeginFrame()
     context->OMSetBlendState( blendState.Get(), NULL, 0xFFFFFFFF );
     rasterizerSolid == true ? context->RSSetState( rasterizerState_Solid.Get() ) :
         context->RSSetState( rasterizerState_Wireframe.Get() );
-    samplerAnisotropic == true ? context->PSSetSamplers( 0, 1, samplerState_Anisotropic.GetAddressOf() ) :
-        context->PSSetSamplers( 0, 1, samplerState_Point.GetAddressOf() );
+    samplerAnisotropic == true ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"].get()->Bind( *this );
 
     // setup constant buffers
     if ( !cb_vs_fog.ApplyChanges() ) return;
@@ -160,7 +162,7 @@ void Graphics::EndFrame()
 void Graphics::Update( float dt )
 {
     // model transformations
-    nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
+    //nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
 
     static float timer = 0.0f;
     static DWORD dwTimeStart = 0;
@@ -389,19 +391,9 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		COM_ERROR_IF_FAILED( hr, "Failed to create Blend State!" );
 
         // create sampler states
-		CD3D11_SAMPLER_DESC samplerDesc( CD3D11_DEFAULT{} );
-		samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
-		hr = device->CreateSamplerState( &samplerDesc, samplerState_Anisotropic.GetAddressOf() );
-		COM_ERROR_IF_FAILED( hr, "Failed to create anisotropic Sampler State!" );
-
-		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-		samplerDesc.MaxAnisotropy = 0;
-		hr = device->CreateSamplerState( &samplerDesc, samplerState_Point.GetAddressOf() );
-		COM_ERROR_IF_FAILED( hr, "Failed to create point Sampler State!" );
+        samplerStates.emplace( "Anisotropic", std::make_unique<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
+        samplerStates.emplace( "Bilinear", std::make_unique<Bind::Sampler>( *this, Bind::Sampler::Type::Bilinear ) );
+        samplerStates.emplace( "Point", std::make_unique<Bind::Sampler>( *this, Bind::Sampler::Type::Point ) );
     }
     catch ( COMException& exception )
     {
