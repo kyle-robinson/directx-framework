@@ -55,6 +55,7 @@ namespace Bind
 		{
 			GetContext( gfx )->PSSetSamplers( slot, 1u, pSampler.GetAddressOf() );
 		}
+		virtual ~Sampler( void ) = default;
 	private:
 		Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
 		Type type;

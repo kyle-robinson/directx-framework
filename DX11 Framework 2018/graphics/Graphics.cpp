@@ -5,9 +5,6 @@
 #include "../resource.h"
 #include <map>
 
-std::map<std::string, std::unique_ptr<Bind::Sampler>> samplerStates;
-std::map<std::string, std::unique_ptr<Bind::Rasterizer>> rasterizerStates;
-
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
 	windowWidth = width;
@@ -343,8 +340,8 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         viewport.get()->Bind( *this );
 
         // setup rasterizer states
-        rasterizerStates.emplace( "Solid", std::make_unique<Bind::Rasterizer>( *this, true, false ) );
-        rasterizerStates.emplace( "Wireframe", std::make_unique<Bind::Rasterizer>( *this, false, true ) );
+        rasterizerStates.emplace( "Solid", std::make_shared<Bind::Rasterizer>( *this, true, false ) );
+        rasterizerStates.emplace( "Wireframe", std::make_shared<Bind::Rasterizer>( *this, false, true ) );
 
         // set blend state
 		D3D11_RENDER_TARGET_BLEND_DESC renderTargetBlendDesc = { 0 };
@@ -363,9 +360,9 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 		COM_ERROR_IF_FAILED( hr, "Failed to create Blend State!" );
 
         // create sampler states
-        samplerStates.emplace( "Anisotropic", std::make_unique<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
-        samplerStates.emplace( "Bilinear", std::make_unique<Bind::Sampler>( *this, Bind::Sampler::Type::Bilinear ) );
-        samplerStates.emplace( "Point", std::make_unique<Bind::Sampler>( *this, Bind::Sampler::Type::Point ) );
+        samplerStates.emplace( "Anisotropic", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
+        samplerStates.emplace( "Bilinear", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Bilinear ) );
+        samplerStates.emplace( "Point", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Point ) );
     }
     catch ( COMException& exception )
     {

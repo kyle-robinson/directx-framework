@@ -2,6 +2,7 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include <map>
 #include "Sprite.h"
 #include "Shaders.h"
 #include "Camera2D.h"
@@ -12,10 +13,17 @@
 #include "RenderableGameObject.h"
 #include <dxtk/WICTextureLoader.h>
 
+namespace Bind
+{
+	class Sampler;
+	class Rasterizer;
+}
+
 class Graphics
 {
 	friend class GraphicsResource;
 public:
+	virtual ~Graphics( void ) = default;
 	bool Initialize( HWND hWnd, int width, int height );
 	void BeginFrame();
 	void RenderFrame();
@@ -46,6 +54,9 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
+	
+	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
+	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
 public:
 	Light light;
 	Sprite circle;
