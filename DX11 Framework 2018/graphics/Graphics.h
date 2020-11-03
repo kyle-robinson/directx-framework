@@ -18,6 +18,7 @@ namespace Bind
 	class Sampler;
 	class Stencil;
 	class Rasterizer;
+	class DepthStencil;
 }
 
 class Graphics
@@ -37,9 +38,9 @@ private:
 	bool InitializeShaders();
 	bool InitializeScene();
 private:
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> backBuffer;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
@@ -47,12 +48,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> nullShaderResourceView = nullptr;
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
-
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
 	
+	std::shared_ptr<Bind::DepthStencil> depthStencil;
 	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
 	std::map<std::string, std::shared_ptr<Bind::Stencil>> stencilStates;
 	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;

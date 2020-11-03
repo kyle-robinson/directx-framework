@@ -3,6 +3,7 @@
 #include "Sampler.h"
 #include "Viewport.h"
 #include "Rasterizer.h"
+#include "DepthStencil.h"
 #include "../resource.h"
 #include <map>
 
@@ -35,9 +36,9 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 void Graphics::BeginFrame()
 {
 	// clear render target
-    context->OMSetRenderTargets( 1, renderTargetView.GetAddressOf(), depthStencilView.Get() );
+    context->OMSetRenderTargets( 1, renderTargetView.GetAddressOf(), depthStencil->GetDepthStencilView() );
 	context->ClearRenderTargetView( renderTargetView.Get(), clearColor );
-	context->ClearDepthStencilView( depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0 );
+    depthStencil->ClearDepthStencil( *this );
 
 	// set render state
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
@@ -263,15 +264,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Texture!" );
 
         // create depth stencil
-        CD3D11_TEXTURE2D_DESC depthStencilDesc( DXGI_FORMAT_D24_UNORM_S8_UINT, windowWidth, windowHeight );
-        depthStencilDesc.MipLevels = 1;
-        depthStencilDesc.SampleDesc.Count = sd.SampleDesc.Count;
-        depthStencilDesc.SampleDesc.Quality = sd.SampleDesc.Quality;
-        depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-        hr = device->CreateTexture2D( &depthStencilDesc, NULL, depthStencilBuffer.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil Buffer!" );
-        hr = device->CreateDepthStencilView( depthStencilBuffer.Get(), NULL, depthStencilView.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil View!" );
+        depthStencil = std::make_shared<Bind::DepthStencil>( *this );
 
         // set depth stencil states
         stencilStates.emplace( "Off", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Off ) );

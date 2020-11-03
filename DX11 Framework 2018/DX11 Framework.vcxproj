@@ -492,6 +492,7 @@
     <ClInclude Include="graphics\Colour.h" />
     <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\ConstantBufferTypes.h" />
+    <ClInclude Include="graphics\DepthStencil.h" />
     <ClInclude Include="graphics\Stencil.h" />
     <ClInclude Include="graphics\GameObject.h" />
     <ClInclude Include="graphics\GameObject2D.h" />
