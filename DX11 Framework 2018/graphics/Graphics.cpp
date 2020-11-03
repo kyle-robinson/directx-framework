@@ -187,22 +187,6 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
     #endif
 
-        D3D_DRIVER_TYPE driverTypes[] =
-        {
-            D3D_DRIVER_TYPE_HARDWARE,
-            D3D_DRIVER_TYPE_WARP,
-            D3D_DRIVER_TYPE_REFERENCE,
-        };
-        UINT numDriverTypes = ARRAYSIZE( driverTypes );
-
-        D3D_FEATURE_LEVEL featureLevels[] =
-        {
-            D3D_FEATURE_LEVEL_11_0,
-            D3D_FEATURE_LEVEL_10_1,
-            D3D_FEATURE_LEVEL_10_0,
-        };
-	    UINT numFeatureLevels = ARRAYSIZE( featureLevels );
-
         DXGI_SWAP_CHAIN_DESC sd = { 0 };
         sd.BufferCount = 1;
         sd.BufferDesc.Width = windowWidth;
@@ -220,27 +204,20 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
         sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-        HRESULT hr;
-        for ( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
-        {
-            D3D_DRIVER_TYPE driverType = driverTypes[driverTypeIndex];
-            hr = D3D11CreateDeviceAndSwapChain(
-                nullptr,                    // IDXGI Adapter
-                driverType,                 // Driver Type
-                nullptr,                    // Software Module
-                createDeviceFlags,          // Flags for Runtime Layers
-                featureLevels,              // Feature Levels Array
-                numFeatureLevels,           // No. of Feature Levels
-                D3D11_SDK_VERSION,          // SDK Version
-                &sd,                        // Swap Chain Description
-                swapChain.GetAddressOf(),   // Swap Chain Address
-                device.GetAddressOf(),      // Device Address
-                nullptr,                    // Ptr to Feature Level
-                context.GetAddressOf()      // Context Address
-            );
-            if ( SUCCEEDED( hr ) )
-                break;
-        }
+        HRESULT hr = D3D11CreateDeviceAndSwapChain(
+            nullptr,                    // IDXGI Adapter
+            D3D_DRIVER_TYPE_HARDWARE,   // Driver Type
+            nullptr,                    // Software Module
+            createDeviceFlags,          // Flags for Runtime Layers
+            nullptr,                    // Feature Levels Array
+            0,                          // No. of Feature Levels
+            D3D11_SDK_VERSION,          // SDK Version
+            &sd,                        // Swap Chain Description
+            swapChain.GetAddressOf(),   // Swap Chain Address
+            device.GetAddressOf(),      // Device Address
+            nullptr,                    // Ptr to Feature Level
+            context.GetAddressOf()      // Context Address
+        );
         COM_ERROR_IF_FAILED( hr, "Failed to create Device and Swap Chain!" );
 
         // create a render target view with back buffer
