@@ -10,8 +10,8 @@ namespace Bind
 	class Viewport : public GraphicsResource
 	{
 	public:
-		Viewport( Graphics& gfx ) : Viewport( gfx, static_cast<FLOAT>( gfx.GetWidth() ), static_cast<FLOAT>( gfx.GetHeight() ) ) {}
-		Viewport( Graphics& gfx, float width, float height )
+		Viewport( Graphics& gfx ) : Viewport( static_cast<FLOAT>( gfx.GetWidth() ), static_cast<FLOAT>( gfx.GetHeight() ) ) {}
+		Viewport( float width, float height )
 		{
 			viewportDesc = CD3D11_VIEWPORT( 0.0f, 0.0f, width, height );
 			viewportDesc.MinDepth = 0.0f;

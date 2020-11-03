@@ -16,6 +16,7 @@
 namespace Bind
 {
 	class Sampler;
+	class Stencil;
 	class Rasterizer;
 }
 
@@ -56,6 +57,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
 	
 	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
+	std::map<std::string, std::shared_ptr<Bind::Stencil>> stencilStates;
 	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
 public:
 	Light light;

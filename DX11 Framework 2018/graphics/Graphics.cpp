@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "Stencil.h"
 #include "Sampler.h"
 #include "Viewport.h"
 #include "Rasterizer.h"
@@ -40,7 +41,7 @@ void Graphics::BeginFrame()
 
 	// set render state
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-	context->OMSetDepthStencilState( depthStencilState.Get(), 0 );
+    stencilStates["Off"]->Bind( *this );
     context->OMSetBlendState( blendState.Get(), NULL, 0xFFFFFFFF );
     rasterizerSolid == true ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
     samplerAnisotropic == true ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );
@@ -60,13 +61,13 @@ void Graphics::RenderFrame()
     // setup sprite masking
     if ( useMask ) 
     {
-        context->OMSetDepthStencilState( depthStencilState_drawMask.Get(), 0 );
+        stencilStates["Mask"]->Bind( *this );
         context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
         context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
         context->PSSetShader( pixelShader_2D_discard.GetShader(), NULL, 0 );
         circleMask == true ? circle.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() ) :
             square.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() );
-        context->OMSetDepthStencilState( depthStencilState_writeMask.Get(), 0 );
+        stencilStates["Write"]->Bind( *this );
     }
 	
     // setup shaders
@@ -273,44 +274,9 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil View!" );
 
         // set depth stencil states
-		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc( CD3D11_DEFAULT{} );
-		depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-		hr = device->CreateDepthStencilState( &depthStencilStateDesc, depthStencilState.GetAddressOf() );
-		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State!" );
-
-		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc_drawMask( CD3D11_DEFAULT{} );
-		depthStencilStateDesc_drawMask.DepthEnable = FALSE;
-		depthStencilStateDesc_drawMask.StencilEnable = TRUE;
-		
-		depthStencilStateDesc_drawMask.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
-		depthStencilStateDesc_drawMask.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilStateDesc_drawMask.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilStateDesc_drawMask.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-
-		depthStencilStateDesc_drawMask.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-		depthStencilStateDesc_drawMask.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilStateDesc_drawMask.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilStateDesc_drawMask.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR_SAT;
-
-		hr = device->CreateDepthStencilState( &depthStencilStateDesc_drawMask, depthStencilState_drawMask.GetAddressOf() );
-		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State for drawing mask!" );
-
-		CD3D11_DEPTH_STENCIL_DESC depthStencilStateDesc_writeMask( CD3D11_DEFAULT{} );
-		depthStencilStateDesc_writeMask.StencilEnable = TRUE;
-		depthStencilStateDesc_writeMask.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-		
-		depthStencilStateDesc_writeMask.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
-		depthStencilStateDesc_writeMask.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilStateDesc_writeMask.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilStateDesc_writeMask.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-
-		depthStencilStateDesc_writeMask.FrontFace.StencilFunc = D3D11_COMPARISON_LESS;
-		depthStencilStateDesc_writeMask.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilStateDesc_writeMask.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		depthStencilStateDesc_writeMask.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-
-		hr = device->CreateDepthStencilState( &depthStencilStateDesc_writeMask, depthStencilState_writeMask.GetAddressOf() );
-		COM_ERROR_IF_FAILED( hr, "Failed to create Depth Stencil State for writing mask!" );
+        stencilStates.emplace( "Off", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Off ) );
+        stencilStates.emplace( "Mask", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Mask ) );
+        stencilStates.emplace( "Write", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Write ) );
 
         // setup the viewport
         std::unique_ptr<Bind::Viewport> viewport = std::make_unique<Bind::Viewport>( *this );
