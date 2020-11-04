@@ -80,6 +80,7 @@ void Graphics::RenderFrame()
 
     // render models
     nanosuit.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
+    mill.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
 
     UINT offset = 0;
     context->IASetVertexBuffers( 0, 1, vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
@@ -268,9 +269,15 @@ bool Graphics::InitializeScene()
     try
     {
         /*   MODELS   */
+        mill.SetScale( 0.1f, 0.1f, 0.1f );
+		if ( !mill.Initialize( "res\\models\\low-poly-mill.fbx", device.Get(), context.Get(), cb_vs_matrix ) )
+			return false;
+
+        nanosuit.SetScale( 0.4f, 0.4f, 0.4f );
 		if ( !nanosuit.Initialize( "res\\models\\nanosuit\\nanosuit.obj", device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
 
+        light.SetScale( 1.0f, 1.0f, 1.0f );
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
 

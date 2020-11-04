@@ -42,6 +42,7 @@ public:
 	Sprite square;
 	Camera2D camera2D;
 	Camera3D camera3D;
+	RenderableGameObject mill;
 	RenderableGameObject nanosuit;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
 private:

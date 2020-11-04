@@ -28,8 +28,6 @@ protected:
 	XMVECTOR vec_left_noY;
 	XMVECTOR vec_right_noY;
 	XMVECTOR vec_backward_noY;
-private:
-
 };
 
 #endif

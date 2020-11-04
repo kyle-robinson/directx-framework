@@ -22,7 +22,8 @@ void RenderableGameObject::Draw( const XMMATRIX& viewMatrix, const XMMATRIX& pro
 
 void RenderableGameObject::UpdateMatrix()
 {
-	worldMatrix = XMMatrixRotationRollPitchYaw( rotation.x, rotation.y, rotation.z ) *
+	worldMatrix = XMMatrixScaling( scale.x, scale.y, scale.y ) *
+		XMMatrixRotationRollPitchYaw( rotation.x, rotation.y, rotation.z ) *
 		XMMatrixTranslation( position.x, position.y, position.z );
 	UpdateDirectionVectors();
 }
