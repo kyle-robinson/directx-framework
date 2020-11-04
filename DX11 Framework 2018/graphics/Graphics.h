@@ -18,6 +18,7 @@ namespace Bind
 	class Sampler;
 	class Stencil;
 	class Blender;
+	class SwapChain;
 	class Rasterizer;
 	class DepthStencil;
 	class RenderTarget;
@@ -49,11 +50,11 @@ private:
 	bool InitializeScene();
 
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
-	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
 
 	std::shared_ptr<Bind::Blender> blendState;
+	std::shared_ptr<Bind::SwapChain> swapChain;
 	std::shared_ptr<Bind::DepthStencil> depthStencil;
 	std::shared_ptr<Bind::RenderTarget> backBuffer;
 	std::shared_ptr<Bind::RenderTarget> renderTarget;

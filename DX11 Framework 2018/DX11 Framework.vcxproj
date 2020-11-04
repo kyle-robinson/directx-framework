@@ -513,6 +513,7 @@
     <ClInclude Include="graphics\Sampler.h" />
     <ClInclude Include="graphics\Shaders.h" />
     <ClInclude Include="graphics\Sprite.h" />
+    <ClInclude Include="graphics\SwapChain.h" />
     <ClInclude Include="graphics\Texture.h" />
     <ClInclude Include="graphics\Vertex.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />

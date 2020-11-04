@@ -3,6 +3,7 @@
 #include "Sampler.h"
 #include "Stencil.h"
 #include "Viewport.h"
+#include "SwapChain.h"
 #include "Rasterizer.h"
 #include "DepthStencil.h"
 #include "RenderTarget.h"
@@ -130,7 +131,7 @@ void Graphics::EndFrame()
     backBuffer->BindAsNull( *this );
     
     // display frame
-	HRESULT hr = swapChain->Present( 1, NULL );
+	HRESULT hr = swapChain->GetSwapChain()->Present( 1, NULL );
 	if ( FAILED( hr ) )
 	{
 		hr == DXGI_ERROR_DEVICE_REMOVED ?
@@ -184,68 +185,21 @@ bool Graphics::InitializeDirectX( HWND hWnd )
 {
     try
     {
-        UINT createDeviceFlags = 0;
-    #ifdef _DEBUG
-        createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-    #endif
-
-        DXGI_SWAP_CHAIN_DESC sd = { 0 };
-        sd.BufferCount = 1;
-        sd.BufferDesc.Width = windowWidth;
-        sd.BufferDesc.Height = windowHeight;
-        sd.BufferDesc.RefreshRate.Numerator = 60;
-        sd.BufferDesc.RefreshRate.Denominator = 1;
-        sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.SampleDesc.Count = 1;
-        sd.SampleDesc.Quality = 0;
-        sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.BufferCount = 1;
-        sd.OutputWindow = hWnd;
-        sd.Windowed = TRUE;
-        sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-        sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
-        HRESULT hr = D3D11CreateDeviceAndSwapChain(
-            nullptr,                    // IDXGI Adapter
-            D3D_DRIVER_TYPE_HARDWARE,   // Driver Type
-            nullptr,                    // Software Module
-            createDeviceFlags,          // Flags for Runtime Layers
-            nullptr,                    // Feature Levels Array
-            0,                          // No. of Feature Levels
-            D3D11_SDK_VERSION,          // SDK Version
-            &sd,                        // Swap Chain Description
-            swapChain.GetAddressOf(),   // Swap Chain Address
-            device.GetAddressOf(),      // Device Address
-            nullptr,                    // Ptr to Feature Level
-            context.GetAddressOf()      // Context Address
-        );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Device and Swap Chain!" );
-
-        // create a render target view with back buffer
-        backBuffer = std::make_shared<Bind::RenderTarget>( *this, swapChain.Get() );
+        swapChain = std::make_shared<Bind::SwapChain>( *this, context.GetAddressOf(), device.GetAddressOf(), hWnd );
+        backBuffer = std::make_shared<Bind::RenderTarget>( *this, swapChain->GetSwapChain() );
         renderTarget = std::make_shared<Bind::RenderTarget>( *this );
-
-        // create depth stencil
         depthStencil = std::make_shared<Bind::DepthStencil>( *this );
+        std::unique_ptr<Bind::Viewport> viewport = std::make_unique<Bind::Viewport>( *this );
+        viewport.get()->Bind( *this );
 
-        // set depth stencil states
+        blendState = std::make_shared<Bind::Blender>( *this );
         stencilStates.emplace( "Off", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Off ) );
         stencilStates.emplace( "Mask", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Mask ) );
         stencilStates.emplace( "Write", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Write ) );
 
-        // setup the viewport
-        std::unique_ptr<Bind::Viewport> viewport = std::make_unique<Bind::Viewport>( *this );
-        viewport.get()->Bind( *this );
-
-        // setup rasterizer states
         rasterizerStates.emplace( "Solid", std::make_shared<Bind::Rasterizer>( *this, true, false ) );
         rasterizerStates.emplace( "Wireframe", std::make_shared<Bind::Rasterizer>( *this, false, true ) );
 
-        // set blend state
-        blendState = std::make_shared<Bind::Blender>( *this );
-
-        // create sampler states
         samplerStates.emplace( "Anisotropic", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
         samplerStates.emplace( "Bilinear", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Bilinear ) );
         samplerStates.emplace( "Point", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Point ) );
