@@ -28,6 +28,7 @@ struct VS_OUTPUT
     float4 outPosition : SV_POSITION;
     float2 outTexCoord : TEXCOORD;
     float3 outNormal : NORMAL;
+    float3 outNormalView : NORMAL_VIEW;
     float3 outWorldPos : WORLD_POSITION;
     float3 outViewPos : VIEW_POSITION;
     float  outFog : FOG;
@@ -36,14 +37,20 @@ struct VS_OUTPUT
 VS_OUTPUT VS( VS_INPUT input )
 {
     VS_OUTPUT output;
-    output.outPosition = mul( float4( input.inPosition, 1.0f ), worldMatrix );
-    output.outPosition = mul( output.outPosition, viewMatrix );
-    output.outFog = saturate( ( fogEnd - output.outPosition.z ) / ( fogEnd - fogStart ) ); // linear fog
-    output.outPosition = mul( output.outPosition, projectionMatrix );
+    
+    float4x4 worldView = mul( worldMatrix, viewMatrix );
+    float4x4 worldViewProj = mul( worldView, projectionMatrix );
+    
+    output.outPosition = mul( float4( input.inPosition, 1.0f ), worldViewProj );
+    output.outWorldPos = (float3)mul( float4( input.inPosition, 1.0f ), worldMatrix );
+    output.outViewPos = (float3)mul( float4( input.inPosition, 1.0f ), worldView );
+    
     output.outTexCoord = input.inTexCoord;
-    output.outNormal = normalize( mul( float4( input.inNormal, 0.0f ), worldMatrix ) );
-    output.outWorldPos = mul( float4( input.inPosition, 1.0f ), worldMatrix );
-    output.outViewPos = mul( float4( input.inPosition, 1.0f ), viewMatrix );
+    output.outNormal = mul( input.inNormal, (float3x3)worldMatrix );
+    output.outNormalView = mul( input.inNormal, (float3x3)worldView );
+    
+    output.outFog = saturate( ( fogEnd - output.outWorldPos.z ) / ( fogEnd - fogStart ) ); // linear fog
+    
     return output;
 }
 
@@ -51,13 +58,13 @@ VS_OUTPUT VS( VS_INPUT input )
 cbuffer LightBuffer : register( b2 )
 {
     float3 ambientLightColor;
-    float ambientLightStrength;
     float3 dynamicLightColor;
-    float dynamicLightStrength;
     float3 specularLightColor;
+    float3 dynamicLightPosition;
+    float ambientLightStrength;
+    float dynamicLightStrength;
     float specularLightIntensity;
     float specularLightPower;
-    float3 dynamicLightPosition;
     float lightConstant;
     float lightLinear;
     float lightQuadratic;
@@ -70,6 +77,7 @@ struct PS_INPUT
     float4 inPosition : SV_POSITION;
     float2 inTexCoord : TEXCOORD;
     float3 inNormal : NORMAL;
+    float3 inNormalView : NORMAL_VIEW;
     float3 inWorldPos : WORLD_POSITION;
     float3 inViewPos : VIEW_POSITION;
     float  inFog : FOG;
@@ -80,28 +88,42 @@ SamplerState samplerState : SAMPLER : register( s0 );
 
 float4 PS( PS_INPUT input ) : SV_TARGET
 {   
-    float3 ambient = ambientLightColor * ambientLightStrength;
+    // light vector data
+    const float3 vToL = dynamicLightPosition - input.inWorldPos;
+    const float distToL = length( vToL );
+    const float3 dirToL = vToL / distToL;
+    
+    // sample from texture
     float3 albedoSample = albedoTexture.Sample( samplerState, input.inTexCoord );
     
     // attenuation
-    float3 vToL = normalize( dynamicLightPosition - input.inWorldPos );
-    float distToL = length( vToL );
-    float attenuation = 1 / ( lightConstant + lightLinear * distToL + lightQuadratic * pow( distToL, 2 ) );
+    const float attenuation = 1.0f / ( lightConstant + lightLinear * distToL + lightQuadratic * ( distToL * distToL ) );
+    
+    // ambient lighting
+    const float3 ambient = ambientLightColor * ambientLightStrength;
     
     // diffuse lighting
-    float3 diffuseIntensity = max( dot( vToL, input.inNormal ), 0 );
-    diffuseIntensity *= attenuation;
-    float3 diffuse = diffuseIntensity * dynamicLightStrength * dynamicLightColor;
+    const float diffuseAmount = attenuation * max( 0.0f, dot( dirToL, input.inNormal ) );
     
     // specular lighting
-    float3 incidence = input.inNormal * dot( vToL, input.inNormal );
-    float3 reflection = incidence * 2.0f - vToL;
-    float3 specular = specularLightColor * specularLightIntensity * attenuation *
-        pow( max( 0.0f, dot( normalize( -reflection ), normalize( input.inViewPos ) ) ), specularLightPower );
+    const float3 incidence = input.inNormalView * dot( vToL, input.inNormalView );
+    const float3 reflection = incidence * 2.0f - vToL;
+    float specularAmount = pow( max( 0.0f, dot( normalize( -reflection ), normalize( input.inViewPos ) ) ), specularLightPower );
+    
+    if ( diffuseAmount <= 0.0f )
+        specularAmount = 0.0f;
+    
+    // calculate lighting
+    const float3 diffuse = dynamicLightColor * dynamicLightStrength * diffuseAmount;
+    const float3 specular = attenuation * ( specularLightColor * specularLightIntensity ) * specularAmount;
+    
+    // final colour
+        float3 finalColor = (ambient + diffuse + specular) * (albedoSample = (useTexture == true) ? albedoSample : 1);
+    
+    // fog factor
+    const float fogValue = input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;
+    finalColor += ( fogEnable == true ) ? fogValue : 0;
     
     // output colour
-    float3 finalColor = saturate( ambient + diffuse + specular ) * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
-    float3 finalColor_fog = input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;
-    finalColor += ( fogEnable == true ) ? finalColor_fog : 0;
-    return float4( finalColor, alphaFactor );
+    return float4( saturate( finalColor ), alphaFactor );
 }

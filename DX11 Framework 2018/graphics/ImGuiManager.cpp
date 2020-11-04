@@ -198,8 +198,8 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
 			    ImGui::ColorEdit3( "Specular", &cb_ps_light.data.specularLightColor.x );
-			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.specularLightIntensity, 0.0f, 10.0f );
-			    ImGui::SliderFloat( "Glossiness", &cb_ps_light.data.specularLightPower, 0.0f, 10.0f );
+			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.specularLightIntensity, 0.0f, 20.0f );
+			    ImGui::SliderFloat( "Glossiness", &cb_ps_light.data.specularLightPower, 0.0f, 20.0f );
             }
             ImGui::PopStyleColor();
 		    ImGui::TreePop();

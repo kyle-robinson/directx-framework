@@ -47,14 +47,14 @@ struct CB_PS_alpha
 
 struct CB_PS_light
 {
-	DirectX::XMFLOAT3 ambientLightColor;
+	alignas( 16 ) DirectX::XMFLOAT3 ambientLightColor;
+	alignas( 16 ) DirectX::XMFLOAT3 dynamicLightColor;
+	alignas( 16 ) DirectX::XMFLOAT3 specularLightColor;
+	alignas( 16 ) DirectX::XMFLOAT3 dynamicLightPosition;
 	float ambientLightStrength;
-	DirectX::XMFLOAT3 dynamicLightColor;
 	float dynamicLightStrength;
-	DirectX::XMFLOAT3 specularLightColor;
 	float specularLightIntensity;
 	float specularLightPower;
-	DirectX::XMFLOAT3 dynamicLightPosition;
 	float lightConstant;
 	float lightLinear;
 	float lightQuadratic;

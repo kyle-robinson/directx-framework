@@ -18,9 +18,9 @@ private:
 	DirectX::XMFLOAT3 ambientColor = XMFLOAT3( 1.0f, 1.0f, 1.0f );
 	float ambientStrength = 0.1f;
 	DirectX::XMFLOAT3 lightColor = { 1.0f, 1.0f, 1.0f };
-	float lightStrength = 1.0f;
+	float lightStrength = 2.0f;
 	DirectX::XMFLOAT3 specularColor = { 1.0f, 1.0f, 1.0f };
-	float specularIntensity = 1.0f;
+	float specularIntensity = 10.0f;
 	float specularPower = 10.0f;
 	float constant = 1.0f;
 	float linear = 0.045f;
