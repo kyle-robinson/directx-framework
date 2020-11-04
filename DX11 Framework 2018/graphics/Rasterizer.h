@@ -36,6 +36,7 @@ namespace Bind
 				rasterizerDesc.FillMode = isSolid ? D3D11_FILL_SOLID : D3D11_FILL_WIREFRAME;
 				rasterizerDesc.CullMode = isTwoSided ? D3D11_CULL_NONE : D3D11_CULL_BACK;
 				HRESULT hr = GetDevice( gfx )->CreateRasterizerState( &rasterizerDesc, &pRasterizer );
+				COM_ERROR_IF_FAILED( hr, "Failed to create static rasterizer state!" );
 			}
 			catch ( COMException& exception )
 			{

@@ -20,6 +20,7 @@ namespace Bind
 	class Blender;
 	class Rasterizer;
 	class DepthStencil;
+	class RenderTarget;
 }
 
 class Graphics
@@ -43,17 +44,17 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> backBuffer;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> nullRenderTarget = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> nullShaderResourceView = nullptr;
-
-	//Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
+	//Microsoft::WRL::ComPtr<ID3D11RenderTargetView> backBuffer;
+	//Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
+	//Microsoft::WRL::ComPtr<ID3D11RenderTargetView> nullRenderTarget = nullptr;
+	//Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> nullShaderResourceView = nullptr;
+	//Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
 	
 	std::shared_ptr<Bind::Blender> blendState;
 	std::shared_ptr<Bind::DepthStencil> depthStencil;
+	std::shared_ptr<Bind::RenderTarget> backBuffer;
+	std::shared_ptr<Bind::RenderTarget> renderTarget;
 	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
 	std::map<std::string, std::shared_ptr<Bind::Stencil>> stencilStates;
 	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;

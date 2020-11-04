@@ -5,6 +5,7 @@
 #include "Viewport.h"
 #include "Rasterizer.h"
 #include "DepthStencil.h"
+#include "RenderTarget.h"
 #include "../resource.h"
 #include <map>
 
@@ -37,8 +38,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 void Graphics::BeginFrame()
 {
 	// clear render target
-    context->OMSetRenderTargets( 1, renderTargetView.GetAddressOf(), depthStencil->GetDepthStencilView() );
-	context->ClearRenderTargetView( renderTargetView.Get(), clearColor );
+    renderTarget->BindAsTexture( *this, depthStencil.get(), clearColor );
     depthStencil->ClearDepthStencil( *this );
 
 	// set render state
@@ -102,12 +102,11 @@ void Graphics::RenderFrame()
 void Graphics::EndFrame()
 {
     // set and clear back buffer
-    context->OMSetRenderTargets( 1, backBuffer.GetAddressOf(), nullptr );
-    context->ClearRenderTargetView( backBuffer.Get(), clearColor );
+    backBuffer->BindAsBuffer( *this, clearColor );
 
     // render to fullscreen texture
     UINT offset = 0;
-    context->PSSetShaderResources( 0, 1, shaderResourceView.GetAddressOf() );
+    context->PSSetShaderResources( 0, 1, renderTarget->GetShaderResourceViewPtr() );
     context->IASetVertexBuffers( 0, 1, vertexBufferFullscreen.GetAddressOf(), vertexBufferFullscreen.StridePtr(), &offset );
     context->IASetInputLayout( vertexShader_full.GetInputLayout() );
     context->IASetIndexBuffer( indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
@@ -127,8 +126,8 @@ void Graphics::EndFrame()
     imgui.EndRender();
     
     // unbind rtv and srv
-    context->OMSetRenderTargets( 1, nullRenderTarget.GetAddressOf(), nullptr );
-    context->PSSetShaderResources( 0, 1, nullShaderResourceView.GetAddressOf() );
+    renderTarget->BindAsNull( *this );
+    backBuffer->BindAsNull( *this );
     
     // display frame
 	HRESULT hr = swapChain->Present( 1, NULL );
@@ -224,45 +223,8 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         COM_ERROR_IF_FAILED( hr, "Failed to create Device and Swap Chain!" );
 
         // create a render target view with back buffer
-        Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
-        hr = swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), (LPVOID*)pBackBuffer.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Back Buffer!" );
-        hr = device->CreateRenderTargetView( pBackBuffer.Get(), nullptr, backBuffer.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Back Buffer!" );
-
-        // create texture resource
-        D3D11_TEXTURE2D_DESC textureDesc = { 0 };
-        textureDesc.Width = windowWidth;
-        textureDesc.Height = windowHeight;
-        textureDesc.MipLevels = 1;
-        textureDesc.ArraySize = 1;
-        textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        textureDesc.SampleDesc.Count = sd.SampleDesc.Count;
-        textureDesc.SampleDesc.Quality = sd.SampleDesc.Quality;
-        textureDesc.Usage = D3D11_USAGE_DEFAULT;
-        textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
-        textureDesc.CPUAccessFlags = 0;
-        textureDesc.MiscFlags = 0;
-        Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
-        hr = device->CreateTexture2D( &textureDesc, nullptr, pTexture.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Texture for Render Target!" );
-
-        // create resource view on texture
-        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-        srvDesc.Format = textureDesc.Format;
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-        srvDesc.Texture2D.MostDetailedMip = 0;
-        srvDesc.Texture2D.MipLevels = 1;
-        hr = device->CreateShaderResourceView( pTexture.Get(), &srvDesc, shaderResourceView.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Shader Resource View!" );
-
-        // create the target view on the texture
-        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-        rtvDesc.Format = textureDesc.Format;
-        rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-        rtvDesc.Texture2D = D3D11_TEX2D_RTV{ 0 };
-        hr = device->CreateRenderTargetView( pTexture.Get(), &rtvDesc, renderTargetView.GetAddressOf() );
-        COM_ERROR_IF_FAILED( hr, "Failed to create Render Target View with Texture!" );
+        backBuffer = std::make_shared<Bind::RenderTarget>( *this, swapChain.Get() );
+        renderTarget = std::make_shared<Bind::RenderTarget>( *this );
 
         // create depth stencil
         depthStencil = std::make_shared<Bind::DepthStencil>( *this );

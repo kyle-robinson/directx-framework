@@ -22,8 +22,9 @@ namespace Bind
 
 				Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 				HRESULT hr = GetDevice( gfx )->CreateTexture2D( &depthStencilDesc, NULL, depthStencilBuffer.GetAddressOf() );
+				COM_ERROR_IF_FAILED( hr, "Failed to create depth stencil texture!" );
 				hr = GetDevice( gfx )->CreateDepthStencilView( depthStencilBuffer.Get(), NULL, depthStencilView.GetAddressOf() );
-				COM_ERROR_IF_FAILED( hr, "Failed to create depth stencil!" );
+				COM_ERROR_IF_FAILED( hr, "Failed to create depth stencil view!" );
 			}
 			catch ( COMException& exception )
 			{
