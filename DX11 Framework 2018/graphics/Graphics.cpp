@@ -8,7 +8,19 @@
 #include "DepthStencil.h"
 #include "RenderTarget.h"
 #include "../resource.h"
+#include <fstream>
 #include <map>
+
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
+
+struct Drawable
+{
+    std::string fileName;
+    float posX, posY, posZ;
+    float scaleX, scaleY, scaleZ;
+};
+std::vector<Drawable> gameObjects;
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -79,12 +91,14 @@ void Graphics::RenderFrame()
 	context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
 
     // render models
-    mill.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
+    for ( unsigned int i = 0; i < renderableObjects.size(); i++ )
+        renderableObjects.at( i ).Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
+    /*mill.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
     home.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
     town.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
     building.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
     lighthouse.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-    nanosuit.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
+    nanosuit.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );*/
 
     UINT offset = 0;
     context->IASetVertexBuffers( 0, 1, vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
@@ -272,8 +286,40 @@ bool Graphics::InitializeScene()
 {
     try
     {
+        json jFile;
+        std::ifstream fileOpen( "res\\objects.json" );
+        fileOpen >> jFile;
+        std::string version = jFile["version"].get<std::string>();
+
+        json objects = jFile["GameObjects"];
+        int size = objects.size();
+
+        for ( unsigned int i = 0; i < size; i++ )
+        {
+            Drawable object;
+            json objectDesc = objects.at( i );
+            object.fileName = objectDesc["File"];
+            object.posX = objectDesc["PosX"];
+            object.posY = objectDesc["PosY"];
+            object.posZ = objectDesc["PosZ"];
+            object.scaleX = objectDesc["ScaleX"];
+            object.scaleY = objectDesc["ScaleY"];
+            object.scaleZ = objectDesc["ScaleZ"];
+            gameObjects.push_back( object );
+        }
+
+        for ( unsigned int i = 0; i < gameObjects.size(); i++ )
+        {
+            RenderableGameObject model;
+            model.SetPosition( DirectX::XMFLOAT3( gameObjects.at( i ).posX, gameObjects.at( i ).posY, gameObjects.at( i ).posZ ) );
+            model.SetScale( gameObjects.at( i ).scaleX, gameObjects.at( i ).scaleY, gameObjects.at( i ).scaleZ );
+            if ( !model.Initialize( "res\\models\\" + gameObjects.at( i ).fileName, device.Get(), context.Get(), cb_vs_matrix ) )
+                return false;
+            renderableObjects.push_back( model );
+        }
+
         /*   MODELS   */
-        mill.SetScale( 0.1f, 0.1f, 0.1f );
+        /*mill.SetScale( 0.1f, 0.1f, 0.1f );
         mill.SetPosition( DirectX::XMFLOAT3( 20.0f, 0.0f, 0.0f ) );
 		if ( !mill.Initialize( "res\\models\\low-poly\\mill.fbx", device.Get(), context.Get(), cb_vs_matrix ) )
 			return false;
@@ -301,7 +347,7 @@ bool Graphics::InitializeScene()
         nanosuit.SetScale( 0.4f, 0.4f, 0.4f );
         nanosuit.SetPosition( DirectX::XMFLOAT3( -60.0f, 0.0f, 0.0f ) );
 		if ( !nanosuit.Initialize( "res\\models\\nanosuit\\nanosuit.obj", device.Get(), context.Get(), cb_vs_matrix ) )
-			return false;
+			return false;*/
 
         light.SetScale( 1.0f, 1.0f, 1.0f );
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )

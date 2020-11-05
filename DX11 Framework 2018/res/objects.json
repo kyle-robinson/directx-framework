@@ -1,0 +1,14 @@
+{
+  "GameObjects": [
+    {
+      "File": "nanosuit\\nanosuit.obj",
+      "PosX": 0.0,
+      "PosY": 0.0,
+      "PosZ": 0.0,
+      "ScaleX": 1.0,
+      "ScaleY": 1.0,
+      "ScaleZ": 1.0
+    }
+  ],
+  "version":  "1.1"
+}

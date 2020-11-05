@@ -48,6 +48,7 @@ public:
 	RenderableGameObject building;
 	RenderableGameObject lighthouse;
 	RenderableGameObject nanosuit;
+	std::vector<RenderableGameObject> renderableObjects;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
 private:
 	bool InitializeDirectX( HWND hWnd );
