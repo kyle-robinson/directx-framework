@@ -5,9 +5,60 @@
       "PosX": 0.0,
       "PosY": 0.0,
       "PosZ": 0.0,
+      "RotX": 0.0,
+      "RotY": 0.0,
+      "RotZ": 0.0,
       "ScaleX": 1.0,
       "ScaleY": 1.0,
       "ScaleZ": 1.0
+    },
+    {
+      "File": "low-poly\\home.fbx",
+      "PosX": 0.0,
+      "PosY": 5.0,
+      "PosZ": 0.0,
+      "RotX": 0.0,
+      "RotY": 0.0,
+      "RotZ": 0.0,
+      "ScaleX": 0.01,
+      "ScaleY": 0.01,
+      "ScaleZ": 0.01
+    },
+    {
+      "File": "low-poly\\town.fbx",
+      "PosX": -172.5,
+      "PosY": 5.0,
+      "PosZ": 62.5,
+      "RotX": 0.0,
+      "RotY": -1.5,
+      "RotZ": 0.0,
+      "ScaleX": 0.05,
+      "ScaleY": 0.05,
+      "ScaleZ": 0.05
+    },
+    {
+      "File": "low-poly\\lighthouse.fbx",
+      "PosX": -125.0,
+      "PosY": -55.25,
+      "PosZ": 40.0,
+      "RotX": 0.0,
+      "RotY": 3.5,
+      "RotZ": 0.0,
+      "ScaleX": 1.0,
+      "ScaleY": 1.0,
+      "ScaleZ": 1.0
+    },
+    {
+      "File": "low-poly\\mill.fbx",
+      "PosX": 40.0,
+      "PosY": -5.5,
+      "PosZ": 100.0,
+      "RotX": 0.0,
+      "RotY": -1.1,
+      "RotZ": 0.0,
+      "ScaleX": 0.5,
+      "ScaleY": 0.5,
+      "ScaleZ": 0.5
     }
   ],
   "version":  "1.1"

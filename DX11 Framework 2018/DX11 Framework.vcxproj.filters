@@ -329,6 +329,9 @@
     <None Include="anicurso.bin">
       <Filter>Resource Files\Cursors</Filter>
     </None>
+    <None Include="res\objects.json">
+      <Filter>Resource Files\Resources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">

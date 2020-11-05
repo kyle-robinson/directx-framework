@@ -48,7 +48,7 @@ public:
 	RenderableGameObject building;
 	RenderableGameObject lighthouse;
 	RenderableGameObject nanosuit;
-	std::vector<RenderableGameObject> renderableObjects;
+	std::vector<RenderableGameObject> renderables;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
 private:
 	bool InitializeDirectX( HWND hWnd );
@@ -93,12 +93,12 @@ private:
 	UINT windowWidth;
 	UINT windowHeight;
 	ImGuiManager imgui;
-	float clearColor[4];
 	bool useMask = false;
 	bool circleMask = true;
 	bool multiView = false;
 	bool rasterizerSolid = true;
 	bool samplerAnisotropic = true;
+	float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
 };
 

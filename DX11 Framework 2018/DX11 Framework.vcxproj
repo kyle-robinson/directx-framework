@@ -533,6 +533,7 @@
     <None Include="anicurso.bin" />
     <None Include="res\cursors\Link Select.ani" />
     <None Include="res\cursors\Normal Select.ani" />
+    <None Include="res\objects.json" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico" />

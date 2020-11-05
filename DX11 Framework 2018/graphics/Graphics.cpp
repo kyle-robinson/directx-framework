@@ -18,9 +18,10 @@ struct Drawable
 {
     std::string fileName;
     float posX, posY, posZ;
+    float rotX, rotY, rotZ;
     float scaleX, scaleY, scaleZ;
 };
-std::vector<Drawable> gameObjects;
+std::vector<Drawable> drawables;
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -88,18 +89,13 @@ void Graphics::RenderFrame()
     // setup shaders
 	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
-	context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
+    context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
 
     // render models
-    for ( unsigned int i = 0; i < renderableObjects.size(); i++ )
-        renderableObjects.at( i ).Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-    /*mill.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-    home.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-    town.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-    building.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-    lighthouse.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-    nanosuit.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );*/
+    for ( unsigned int i = 0; i < renderables.size(); i++ )
+        renderables.at( i ).Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
 
+    // draw cubes
     UINT offset = 0;
     context->IASetVertexBuffers( 0, 1, vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
     context->IASetIndexBuffer( indexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0 );
@@ -286,6 +282,7 @@ bool Graphics::InitializeScene()
 {
     try
     {
+        /*   MODELS   */
         json jFile;
         std::ifstream fileOpen( "res\\objects.json" );
         fileOpen >> jFile;
@@ -296,58 +293,31 @@ bool Graphics::InitializeScene()
 
         for ( unsigned int i = 0; i < size; i++ )
         {
-            Drawable object;
+            Drawable drawable;
             json objectDesc = objects.at( i );
-            object.fileName = objectDesc["File"];
-            object.posX = objectDesc["PosX"];
-            object.posY = objectDesc["PosY"];
-            object.posZ = objectDesc["PosZ"];
-            object.scaleX = objectDesc["ScaleX"];
-            object.scaleY = objectDesc["ScaleY"];
-            object.scaleZ = objectDesc["ScaleZ"];
-            gameObjects.push_back( object );
+            drawable.fileName = objectDesc["File"];
+            drawable.posX = objectDesc["PosX"];
+            drawable.posY = objectDesc["PosY"];
+            drawable.posZ = objectDesc["PosZ"];
+            drawable.rotX = objectDesc["RotX"];
+            drawable.rotY = objectDesc["RotY"];
+            drawable.rotZ = objectDesc["RotZ"];
+            drawable.scaleX = objectDesc["ScaleX"];
+            drawable.scaleY = objectDesc["ScaleY"];
+            drawable.scaleZ = objectDesc["ScaleZ"];
+            drawables.push_back( drawable );
         }
 
-        for ( unsigned int i = 0; i < gameObjects.size(); i++ )
+        for ( unsigned int i = 0; i < drawables.size(); i++ )
         {
             RenderableGameObject model;
-            model.SetPosition( DirectX::XMFLOAT3( gameObjects.at( i ).posX, gameObjects.at( i ).posY, gameObjects.at( i ).posZ ) );
-            model.SetScale( gameObjects.at( i ).scaleX, gameObjects.at( i ).scaleY, gameObjects.at( i ).scaleZ );
-            if ( !model.Initialize( "res\\models\\" + gameObjects.at( i ).fileName, device.Get(), context.Get(), cb_vs_matrix ) )
+            model.SetScale( drawables.at( i ).scaleX, drawables.at( i ).scaleY, drawables.at( i ).scaleZ );
+            if ( !model.Initialize( "res\\models\\" + drawables.at( i ).fileName, device.Get(), context.Get(), cb_vs_matrix ) )
                 return false;
-            renderableObjects.push_back( model );
+            model.SetPosition( DirectX::XMFLOAT3( drawables.at( i ).posX, drawables.at( i ).posY, drawables.at( i ).posZ ) );
+            model.SetRotation( DirectX::XMFLOAT3( drawables.at( i ).rotX, drawables.at( i ).rotY, drawables.at( i ).rotZ ) );
+            renderables.push_back( model );
         }
-
-        /*   MODELS   */
-        /*mill.SetScale( 0.1f, 0.1f, 0.1f );
-        mill.SetPosition( DirectX::XMFLOAT3( 20.0f, 0.0f, 0.0f ) );
-		if ( !mill.Initialize( "res\\models\\low-poly\\mill.fbx", device.Get(), context.Get(), cb_vs_matrix ) )
-			return false;
-
-        home.SetScale( 0.1f, 0.1f, 0.1f );
-        home.SetPosition( DirectX::XMFLOAT3( 40.0f, 0.0f, 0.0f ) );
-		if ( !home.Initialize( "res\\models\\low-poly\\home.fbx", device.Get(), context.Get(), cb_vs_matrix ) )
-			return false;
-
-        town.SetScale( 0.1f, 0.1f, 0.1f );
-        town.SetPosition( DirectX::XMFLOAT3( 60.0f, 0.0f, 0.0f ) );
-		if ( !town.Initialize( "res\\models\\low-poly\\town.fbx", device.Get(), context.Get(), cb_vs_matrix ) )
-			return false;
-
-        building.SetScale( 0.1f, 0.1f, 0.1f );
-        building.SetPosition( DirectX::XMFLOAT3( -20.0f, 0.0f, 0.0f ) );
-		if ( !building.Initialize( "res\\models\\low-poly\\building.fbx", device.Get(), context.Get(), cb_vs_matrix ) )
-			return false;
-
-        lighthouse.SetScale( 0.1f, 0.1f, 0.1f );
-        lighthouse.SetPosition( DirectX::XMFLOAT3( -40.0f, 0.0f, 0.0f ) );
-		if ( !lighthouse.Initialize( "res\\models\\low-poly\\lighthouse.fbx", device.Get(), context.Get(), cb_vs_matrix ) )
-			return false;
-
-        nanosuit.SetScale( 0.4f, 0.4f, 0.4f );
-        nanosuit.SetPosition( DirectX::XMFLOAT3( -60.0f, 0.0f, 0.0f ) );
-		if ( !nanosuit.Initialize( "res\\models\\nanosuit\\nanosuit.obj", device.Get(), context.Get(), cb_vs_matrix ) )
-			return false;*/
 
         light.SetScale( 1.0f, 1.0f, 1.0f );
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )
