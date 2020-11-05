@@ -49,7 +49,7 @@ VS_OUTPUT VS( VS_INPUT input )
     output.outNormal = mul( input.inNormal, (float3x3)worldMatrix );
     output.outNormalView = mul( input.inNormal, (float3x3)worldView );
     
-    output.outFog = saturate( ( fogEnd - output.outWorldPos.z ) / ( fogEnd - fogStart ) ); // linear fog
+    output.outFog = saturate( ( output.outViewPos.z - fogEnd ) / ( fogEnd - fogStart ) ); // linear fog
     
     return output;
 }

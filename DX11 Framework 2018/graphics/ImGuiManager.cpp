@@ -251,8 +251,11 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
     {
         for ( unsigned int i = 0; i < models.size(); i++ )
         {
+            ImGui::PushStyleColor( ImGuiCol_Text, { 0.8f, 1.0f, 0.5f, 1.0f } );
             if ( ImGui::TreeNode( models.at( i ).GetModelName().c_str() ) )
             {
+                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+
                 Drawable object;
                 object.posX = models.at( i ).GetPositionFloat3().x;
                 object.posY = models.at( i ).GetPositionFloat3().y;
@@ -270,8 +273,10 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
                 ImGui::DragFloat3( "Rotation", &rotations.x, 0.1f, -3.0f, 3.0f );
                 models.at( i ).SetRotation( rotations );
 
+                ImGui::PopStyleColor();
                 ImGui::TreePop();
             }
+            ImGui::PopStyleColor();
         }
     } ImGui::End();
 }
