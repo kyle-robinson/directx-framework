@@ -42,14 +42,7 @@ public:
 	Sprite square;
 	Camera2D camera2D;
 	Camera3D camera3D;
-	RenderableGameObject mill;
-	RenderableGameObject home;
-	RenderableGameObject town;
-	RenderableGameObject building;
-	RenderableGameObject lighthouse;
-	RenderableGameObject nanosuit;
 	std::vector<RenderableGameObject> renderables;
-	ConstantBuffer<CB_PS_light> cb_ps_light;
 private:
 	bool InitializeDirectX( HWND hWnd );
 	bool InitializeShaders();
@@ -86,6 +79,7 @@ private:
 	IndexBuffer indexBufferFullscreen;
 
 	ConstantBuffer<CB_VS_fog> cb_vs_fog;
+	ConstantBuffer<CB_PS_light> cb_ps_light;
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
 	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
 	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;

@@ -3,6 +3,7 @@
 #include "Sampler.h"
 #include "Stencil.h"
 #include "Viewport.h"
+#include "ModelData.h"
 #include "SwapChain.h"
 #include "Rasterizer.h"
 #include "DepthStencil.h"
@@ -10,18 +11,6 @@
 #include "../resource.h"
 #include <fstream>
 #include <map>
-
-#include "nlohmann/json.hpp"
-using json = nlohmann::json;
-
-struct Drawable
-{
-    std::string fileName;
-    float posX, posY, posZ;
-    float rotX, rotY, rotZ;
-    float scaleX, scaleY, scaleZ;
-};
-std::vector<Drawable> drawables;
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -139,6 +128,7 @@ void Graphics::EndFrame()
         rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
     imgui.RenderLightWindow( light, cb_ps_light );
     imgui.RenderFogWindow( cb_vs_fog );
+    imgui.RenderModelWindow( renderables );
     imgui.EndRender();
     
     // unbind rtv and srv
@@ -295,6 +285,7 @@ bool Graphics::InitializeScene()
         {
             Drawable drawable;
             json objectDesc = objects.at( i );
+            drawable.modelName = objectDesc["Name"];
             drawable.fileName = objectDesc["File"];
             drawable.posX = objectDesc["PosX"];
             drawable.posY = objectDesc["PosY"];
@@ -316,6 +307,7 @@ bool Graphics::InitializeScene()
                 return false;
             model.SetPosition( DirectX::XMFLOAT3( drawables.at( i ).posX, drawables.at( i ).posY, drawables.at( i ).posZ ) );
             model.SetRotation( DirectX::XMFLOAT3( drawables.at( i ).rotX, drawables.at( i ).rotY, drawables.at( i ).rotZ ) );
+            model.SetModelName( drawables.at( i ).modelName );
             renderables.push_back( model );
         }
 

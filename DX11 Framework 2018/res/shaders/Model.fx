@@ -125,7 +125,7 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     const float3 specular = attenuation * ( specularLightColor * specularLightIntensity ) * specularAmount;
     
     // final colour
-    float3 finalColor = ( ambient + diffuse + specular + directionalLight ) * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
+    float3 finalColor = ( directionalLight ) * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
     
     // fog factor
     const float fogValue = input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;

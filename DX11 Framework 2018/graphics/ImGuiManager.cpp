@@ -1,4 +1,6 @@
 #include "ImGuiManager.h"
+#include "ModelData.h"
+#include "RenderableGameObject.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
@@ -239,6 +241,37 @@ void ImGuiManager::RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog )
             ImGui::ColorEdit3( "Fog Colour", &cb_vs_fog.data.fogColor.x );
             ImGui::SliderFloat( "Start Distance", &cb_vs_fog.data.fogStart, 1.0f, 10.0f );
             ImGui::SliderFloat( "End Distance", &cb_vs_fog.data.fogEnd, 10.0f, 100.0f  );
+        }
+    } ImGui::End();
+}
+
+void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models )
+{    
+    if ( ImGui::Begin( "Models", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    {
+        for ( unsigned int i = 0; i < models.size(); i++ )
+        {
+            if ( ImGui::TreeNode( models.at( i ).GetModelName().c_str() ) )
+            {
+                Drawable object;
+                object.posX = models.at( i ).GetPositionFloat3().x;
+                object.posY = models.at( i ).GetPositionFloat3().y;
+                object.posZ = models.at( i ).GetPositionFloat3().z;
+            
+                DirectX::XMFLOAT3 positions = { object.posX, object.posY, object.posZ };
+                ImGui::DragFloat3( "Position", &positions.x, 2.0f, -200.0f, 200.0f );
+                models.at( i ).SetPosition( positions );
+
+                object.rotX = models.at( i ).GetRotationFloat3().x;
+                object.rotY = models.at( i ).GetRotationFloat3().y;
+                object.rotZ = models.at( i ).GetRotationFloat3().z;
+
+                DirectX::XMFLOAT3 rotations = { object.rotX, object.rotY, object.rotZ };
+                ImGui::DragFloat3( "Rotation", &rotations.x, 0.1f, -3.0f, 3.0f );
+                models.at( i ).SetRotation( rotations );
+
+                ImGui::TreePop();
+            }
         }
     } ImGui::End();
 }

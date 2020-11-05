@@ -313,6 +313,9 @@
     <ClInclude Include="graphics\SwapChain.h">
       <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\ModelData.h">
+      <Filter>Headers\Graphics\ObjectData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11 Framework.rc">

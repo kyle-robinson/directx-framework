@@ -1,6 +1,7 @@
 {
   "GameObjects": [
     {
+      "Name": "Nanosuit",
       "File": "nanosuit\\nanosuit.obj",
       "PosX": 0.0,
       "PosY": 0.0,
@@ -13,6 +14,7 @@
       "ScaleZ": 1.0
     },
     {
+      "Name": "Home",
       "File": "low-poly\\home.fbx",
       "PosX": 0.0,
       "PosY": 5.0,
@@ -25,6 +27,7 @@
       "ScaleZ": 0.01
     },
     {
+      "Name": "Town",
       "File": "low-poly\\town.fbx",
       "PosX": -172.5,
       "PosY": 5.0,
@@ -37,6 +40,7 @@
       "ScaleZ": 0.05
     },
     {
+      "Name": "Lighthouse",
       "File": "low-poly\\lighthouse.fbx",
       "PosX": -125.0,
       "PosY": -55.25,
@@ -49,6 +53,7 @@
       "ScaleZ": 1.0
     },
     {
+      "Name": "Mill",
       "File": "low-poly\\mill.fbx",
       "PosX": 40.0,
       "PosY": -5.5,

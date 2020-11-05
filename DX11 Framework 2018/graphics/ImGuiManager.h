@@ -5,6 +5,9 @@
 #include "Light.h"
 #include <d3d11.h>
 
+struct RenderableGameObject;
+struct Drawable;
+
 class ImGuiManager
 {
 public:
@@ -17,6 +20,7 @@ public:
 		bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView, bool& useMask, bool& circleMask );
 	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light );
 	void RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog );
+	void RenderModelWindow( std::vector<RenderableGameObject>& models );
 private:
 	SYSTEM_INFO siSysInfo;
 };

@@ -20,6 +20,16 @@ const XMFLOAT3& GameObject::GetRotationFloat3() const noexcept
 	return rotation;
 }
 
+void GameObject::SetModelName( const std::string& name ) noexcept
+{
+	modelName = name;
+}
+
+const std::string& GameObject::GetModelName() const noexcept
+{
+	return modelName;
+}
+
 void GameObject::SetPosition( const XMVECTOR& pos ) noexcept
 {
 	XMStoreFloat3( &position, pos );
