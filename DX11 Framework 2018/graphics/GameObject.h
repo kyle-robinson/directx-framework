@@ -11,9 +11,9 @@ public:
 	const XMFLOAT3& GetPositionFloat3() const noexcept;
 	const XMVECTOR& GetRotationVector() const noexcept;
 	const XMFLOAT3& GetRotationFloat3() const noexcept;
-public:
-	void SetModelName( const std::string& name ) noexcept;
 	const std::string& GetModelName() const noexcept;
+	const XMFLOAT3& GetScaleFloat3() const noexcept;
+public:
 	void SetPosition( const XMVECTOR& pos ) noexcept;
 	void SetPosition( const XMFLOAT3& pos ) noexcept;
 	void AdjustPosition( const XMVECTOR& pos ) noexcept;
@@ -22,6 +22,7 @@ public:
 	void SetRotation( const XMFLOAT3& rot ) noexcept;
 	void AdjustRotation( const XMVECTOR& rot ) noexcept;
 	void AdjustRotation( const XMFLOAT3& rot ) noexcept;
+	void SetModelName( const std::string& name ) noexcept;
 	void SetScale( float xScale, float yScale, float zScale = 1.0f );
 protected:
 	virtual void UpdateMatrix();

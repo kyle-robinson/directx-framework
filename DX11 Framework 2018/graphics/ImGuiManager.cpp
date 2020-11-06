@@ -273,6 +273,14 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
                 ImGui::DragFloat3( "Rotation", &rotations.x, 0.1f, -3.0f, 3.0f );
                 models.at( i ).SetRotation( rotations );
 
+                object.scaleX = models.at( i ).GetScaleFloat3().x;
+                object.scaleY = models.at( i ).GetScaleFloat3().y;
+                object.scaleZ = models.at( i ).GetScaleFloat3().z;
+
+                DirectX::XMFLOAT3 scales = { object.scaleX, object.scaleY, object.scaleZ };
+                ImGui::DragFloat3( "Scale", &scales.x, 0.1f, 0.1f, 2.0f );
+                models.at( i ).SetScale( scales.x, scales.y, scales.z );
+
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
             }

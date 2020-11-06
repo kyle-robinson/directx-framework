@@ -20,14 +20,14 @@ const XMFLOAT3& GameObject::GetRotationFloat3() const noexcept
 	return rotation;
 }
 
-void GameObject::SetModelName( const std::string& name ) noexcept
-{
-	modelName = name;
-}
-
 const std::string& GameObject::GetModelName() const noexcept
 {
 	return modelName;
+}
+
+const XMFLOAT3& GameObject::GetScaleFloat3() const noexcept
+{
+	return XMFLOAT3( scale.x, scale.y, scale.z );
 }
 
 void GameObject::SetPosition( const XMVECTOR& pos ) noexcept
@@ -88,6 +88,11 @@ void GameObject::AdjustRotation( const XMFLOAT3& rot ) noexcept
 	rotation.z += rot.z;
 	rotVector = XMLoadFloat3( &rotation );
 	UpdateMatrix();
+}
+
+void GameObject::SetModelName( const std::string& name ) noexcept
+{
+	modelName = name;
 }
 
 void GameObject::SetScale( float xScale, float yScale, float zScale )
