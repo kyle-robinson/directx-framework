@@ -12,6 +12,8 @@ public:
 	void SetConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light );
 	void UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light );
 public:
+	bool usePointLight = false;
+	bool useDirectionalLight = true;
 	bool useTexture = true;
 	float alphaFactor = 1.0f;
 private:

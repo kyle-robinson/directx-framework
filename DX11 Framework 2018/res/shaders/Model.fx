@@ -68,8 +68,10 @@ cbuffer LightBuffer : register( b2 )
     float lightConstant;
     float lightLinear;
     float lightQuadratic;
-    bool useTexture;
     float alphaFactor;
+    bool useTexture;
+    bool usePointLight;
+    bool useDirectionalLight;
 };
 
 struct PS_INPUT
@@ -125,7 +127,12 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     const float3 specular = attenuation * ( specularLightColor * specularLightIntensity ) * specularAmount;
     
     // final colour
-    float3 finalColor = ( directionalLight ) * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
+    float3 combinedColor;
+    if ( usePointLight )
+        combinedColor = ambient + diffuse + specular;
+    if ( useDirectionalLight )
+        combinedColor = directionalLight;
+    float3 finalColor = ( combinedColor ) * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
     
     // fog factor
     const float fogValue = input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;

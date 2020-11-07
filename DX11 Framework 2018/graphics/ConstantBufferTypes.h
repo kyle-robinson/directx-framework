@@ -58,8 +58,10 @@ struct CB_PS_light
 	float lightConstant;
 	float lightLinear;
 	float lightQuadratic;
-	bool useTexture;
 	float alphaFactor;
+	bool useTexture;
+	bool usePointLight;
+	bool useDirectionalLight;
 };
 
 #endif

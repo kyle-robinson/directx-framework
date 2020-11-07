@@ -23,8 +23,10 @@ void Light::SetConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light )
 	constant = cb_ps_light.data.lightConstant;
 	linear = cb_ps_light.data.lightLinear;
 	quadratic = cb_ps_light.data.lightQuadratic;
-	useTexture = cb_ps_light.data.useTexture;
 	alphaFactor = cb_ps_light.data.alphaFactor;
+	useTexture = cb_ps_light.data.useTexture;
+	usePointLight = cb_ps_light.data.usePointLight;
+	useDirectionalLight = cb_ps_light.data.useDirectionalLight;
 }
 
 void Light::UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light )
@@ -40,6 +42,8 @@ void Light::UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light )
 	cb_ps_light.data.lightConstant = constant;
 	cb_ps_light.data.lightLinear = linear;
 	cb_ps_light.data.lightQuadratic = quadratic;
-	cb_ps_light.data.useTexture = useTexture;
 	cb_ps_light.data.alphaFactor = alphaFactor;
+	cb_ps_light.data.useTexture = useTexture;
+	cb_ps_light.data.usePointLight = usePointLight;
+	cb_ps_light.data.useDirectionalLight = useDirectionalLight;
 }
