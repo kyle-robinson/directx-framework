@@ -51,7 +51,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
-	//Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> grassTexture;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> grassTexture;
 
 	std::shared_ptr<Bind::Blender> blendState;
 	std::shared_ptr<Bind::SwapChain> swapChain;
@@ -64,25 +64,25 @@ private:
 
 	VertexShader vertexShader_2D;
 	VertexShader vertexShader_full;
-	//VertexShader vertexShader_quad;
+	VertexShader vertexShader_quad;
 	VertexShader vertexShader_light;
 	VertexShader vertexShader_noLight;
 	VertexShader vertexShader_lightDirect;
 
 	PixelShader pixelShader_2D;
 	PixelShader pixelShader_full;
-	//PixelShader pixelShader_quad;
+	PixelShader pixelShader_quad;
 	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;
 	PixelShader pixelShader_2D_discard;
 	PixelShader pixelShader_lightDirect;
 
 	VertexBuffer<Vertex3D> vertexBufferCube;
-	//VertexBuffer<Vertex3D> vertexBufferQuad;
+	VertexBuffer<Vertex_Pos_Tex> vertexBufferQuad;
 	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
 
 	IndexBuffer indexBufferCube;
-	//IndexBuffer indexBufferQuad;
+	IndexBuffer indexBufferQuad;
 	IndexBuffer indexBufferFullscreen;
 
 	ConstantBuffer<CB_VS_fog> cb_vs_fog;

@@ -121,19 +121,22 @@ void Graphics::RenderFrame()
         context->DrawIndexed( indexBufferCube.IndexCount(), 0, 0 );
     }
 
-    //offset = 0;
-    //context->IASetVertexBuffers( 0, 1, vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
-    //context->IASetIndexBuffer( indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    //context->IASetInputLayout( vertexShader_quad.GetInputLayout() );
-    //cb_vs_matrix.data.worldMatrix = XMMatrixIdentity() * XMMatrixScaling( 50.0f, 50.0f, 1.0f )
-    //    * XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) * XMMatrixTranslation( 0.0f, 4.8f, 0.0f );
-    //if ( !cb_vs_matrix.ApplyChanges() ) return;
-    //context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
-    //context->PSSetShaderResources( 0, 1, grassTexture.GetAddressOf() );
-    //context->DrawIndexed( indexBufferQuad.IndexCount(), 0, 0 );
-
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
 	light.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
+
+    // draw primitives
+    offset = 0;
+    context->VSSetShader( vertexShader_quad.GetShader(), NULL, 0 );
+    context->PSSetShader( pixelShader_quad.GetShader(), NULL, 0 );
+    context->IASetVertexBuffers( 0, 1, vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
+    context->IASetIndexBuffer( indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    context->IASetInputLayout( vertexShader_quad.GetInputLayout() );
+    cb_vs_matrix.data.worldMatrix = XMMatrixIdentity() * XMMatrixScaling( 100.0f, 100.0f, 0.0f )
+        * XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) * XMMatrixTranslation( 0.0f, 4.8f, 0.0f );
+    if ( !cb_vs_matrix.ApplyChanges() ) return;
+    context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+    context->PSSetShaderResources( 0, 1, grassTexture.GetAddressOf() );
+    context->DrawIndexed( indexBufferQuad.IndexCount(), 0, 0 );
 }
 
 void Graphics::EndFrame()
@@ -275,15 +278,15 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
 
         /*   PRIMITIVES   */
-        /*D3D11_INPUT_ELEMENT_DESC layoutPrim[] = {
+        D3D11_INPUT_ELEMENT_DESC layoutPrim[] = {
 		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	    };
 	    numElements = ARRAYSIZE( layoutPrim );
 	    hr = vertexShader_quad.Initialize( device, L"res\\shaders\\Water.fx", layoutPrim, numElements );
-		COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex shader!" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create primitive vertex shader!" );
 	    hr = pixelShader_quad.Initialize( device, L"res\\shaders\\Water.fx" );
-		COM_ERROR_IF_FAILED( hr, "Failed to create quad pixel shader!" );*/
+		COM_ERROR_IF_FAILED( hr, "Failed to create primitive pixel shader!" );
 
         /*   POST-PROCESSING   */
         D3D11_INPUT_ELEMENT_DESC layoutFull[] = {
@@ -391,10 +394,10 @@ bool Graphics::InitializeScene()
         hr = indexBufferCube.Initialize( device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
-        //hr = vertexBufferQuad.Initialize( device.Get(), VTX::verticesQuad_PosTexNrm, ARRAYSIZE( VTX::verticesQuad_PosTexNrm ) );
-        //COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
-        //hr = indexBufferQuad.Initialize( device.Get(), IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
-        //COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
+        hr = vertexBufferQuad.Initialize( device.Get(), VTX::verticesQuad_PosTex, ARRAYSIZE( VTX::verticesQuad_PosTex ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
+        hr = indexBufferQuad.Initialize( device.Get(), IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
 
         hr = vertexBufferFullscreen.Initialize( device.Get(), VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
@@ -405,8 +408,8 @@ bool Graphics::InitializeScene()
         hr = DirectX::CreateWICTextureFromFile( device.Get(), L"res\\textures\\CrashBox.png", nullptr, boxTexture.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create box texture from file!" );
 
-        //hr = DirectX::CreateWICTextureFromFile( device.Get(), L"res\\textures\\grass2.jpg", nullptr, grassTexture.GetAddressOf() );
-        //COM_ERROR_IF_FAILED( hr, "Failed to create grass texture from file!" );
+        hr = DirectX::CreateWICTextureFromFile( device.Get(), L"res\\textures\\grass.jpg", nullptr, grassTexture.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create grass texture from file!" );
 
         /*   CONSTANT BUFFERS   */
         hr = cb_vs_fog.Initialize( device.Get(), context.Get() );
