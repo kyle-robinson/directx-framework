@@ -18,7 +18,7 @@ struct CB_VS_matrix_2D
 
 struct CB_VS_fullscreen
 {
-	bool multiView;
+	alignas( 16 ) bool multiView;
 };
 
 struct CB_VS_fog
@@ -58,13 +58,15 @@ struct CB_PS_light
 	float lightConstant;
 	float lightLinear;
 	float lightQuadratic;
-	float alphaFactor;
-	bool useTexture;
 };
 
 struct CB_PS_lightDirect
 {
 	alignas( 16 ) DirectX::XMFLOAT3 dynamicLightColor;
+};
+
+struct CB_PS_scene
+{
 	float alphaFactor;
 	bool useTexture;
 };

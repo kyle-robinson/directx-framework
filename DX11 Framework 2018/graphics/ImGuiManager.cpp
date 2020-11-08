@@ -37,7 +37,7 @@ void ImGuiManager::EndRender() const noexcept
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 }
 
-void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, Light& light, float clearColor[4],
+void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaFactor, bool& useTexture, float clearColor[4],
     bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView, bool& useMask, bool& circleMask )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
@@ -49,7 +49,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, Light& light,
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
                 ImGui::ColorEdit3( "Clear Color", clearColor );
-                ImGui::SliderFloat( "Blend Factor", &light.alphaFactor, 0.0f, 1.0f );
+                ImGui::SliderFloat( "Blend Factor", &alphaFactor, 0.0f, 1.0f );
 			    
                 static int fillGroup = 0;
 			    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
@@ -60,10 +60,10 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, Light& light,
 
                 static int textureGroup = 0;
                 if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
-                    light.useTexture = true;
+                    useTexture = true;
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
-                    light.useTexture = false;
+                    useTexture = false;
 
                 static int filterGroup = 0;
                 if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )

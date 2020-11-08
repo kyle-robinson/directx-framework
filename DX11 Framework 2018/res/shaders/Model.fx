@@ -68,9 +68,13 @@ cbuffer LightBuffer : register( b2 )
     float lightConstant;
     float lightLinear;
     float lightQuadratic;
+};
+
+cbuffer SceneBuffer : register( b3 )
+{
     float alphaFactor;
     bool useTexture;
-};
+}
 
 struct PS_INPUT
 {

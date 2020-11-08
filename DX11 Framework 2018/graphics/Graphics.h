@@ -81,7 +81,7 @@ private:
 	IndexBuffer indexBufferFullscreen;
 
 	ConstantBuffer<CB_VS_fog> cb_vs_fog;
-	//ConstantBuffer<CB_VS_scene> cb_vs_scene;
+	ConstantBuffer<CB_PS_scene> cb_ps_scene;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
 	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
@@ -92,11 +92,13 @@ private:
 	UINT windowHeight;
 	ImGuiManager imgui;
 	bool useMask = false;
+	bool useTexture = true;
 	bool circleMask = true;
 	bool multiView = false;
 	bool usePointLight = false;
 	bool rasterizerSolid = true;
 	bool samplerAnisotropic = true;
+	float alphaFactor = 1.0f;
 	float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
 };

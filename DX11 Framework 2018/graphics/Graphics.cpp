@@ -69,8 +69,10 @@ void Graphics::BeginFrame()
 	    context->PSSetConstantBuffers( 2, 1, cb_ps_lightDirect.GetAddressOf() );
     }
 
-    //if ( !cb_ps_scene.ApplyChanges() ) return;
-	//context->PSSetConstantBuffers( 3, 1, cb_ps_scene.GetAddressOf() );
+    cb_ps_scene.data.alphaFactor = alphaFactor;
+    cb_ps_scene.data.useTexture = useTexture;
+    if ( !cb_ps_scene.ApplyChanges() ) return;
+	context->PSSetConstantBuffers( 3, 1, cb_ps_scene.GetAddressOf() );
 }
 
 void Graphics::RenderFrame()
@@ -143,13 +145,13 @@ void Graphics::EndFrame()
 
     // display imgui
     imgui.BeginRender();
-    imgui.RenderMainWindow( context.Get(), light, clearColor,
+    imgui.RenderMainWindow( context.Get(), alphaFactor, useTexture, clearColor,
         rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
     imgui.RenderLightWindow( light, cb_ps_light, cb_ps_lightDirect, usePointLight );
     imgui.RenderFogWindow( cb_vs_fog );
     imgui.RenderModelWindow( renderables );
     imgui.EndRender();
-    
+
     // unbind rtv and srv
     renderTarget->BindAsNull( *this );
     backBuffer->BindAsNull( *this );
@@ -398,6 +400,9 @@ bool Graphics::InitializeScene()
 
         hr = cb_ps_lightDirect.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_lightDirect' Constant Buffer!" );
+
+        hr = cb_ps_scene.Initialize( device.Get(), context.Get() );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_scene' Constant Buffer!" );
     }
     catch ( COMException& exception )
     {

@@ -55,9 +55,13 @@ VS_OUTPUT VS( VS_INPUT input )
 cbuffer LightBuffer : register( b2 )
 {
     float3 dynamicLightColor;
+};
+
+cbuffer SceneBuffer : register( b3 )
+{
     float alphaFactor;
     bool useTexture;
-};
+}
 
 struct PS_INPUT
 {

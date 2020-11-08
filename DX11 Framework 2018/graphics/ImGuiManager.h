@@ -16,7 +16,7 @@ public:
 	void Initialize( HWND hWnd, ID3D11Device* device, ID3D11DeviceContext* context ) const noexcept;
 	void BeginRender() const noexcept;
 	void EndRender() const noexcept;
-	void RenderMainWindow( ID3D11DeviceContext* context, Light& light, float clearColor[4],
+	void RenderMainWindow( ID3D11DeviceContext* context, float& alphaFactor, bool& useTexture, float clearColor[4],
 		bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView, bool& useMask, bool& circleMask );
 	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light,
 		ConstantBuffer<CB_PS_lightDirect>& cb_ps_lightDirect, bool& usePointLight );
