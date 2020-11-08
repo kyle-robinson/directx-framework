@@ -32,7 +32,7 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         XMStoreFloat4x4( &worldMatrix, XMMatrixIdentity() );
         worldMatricesCube.push_back( worldMatrix );
     }
-    for ( int i = 0; i < 1000; i++ )
+    for ( int i = 0; i < 400; i++ )
     {
         XMFLOAT4X4 worldMatrix;
         XMStoreFloat4x4( &worldMatrix, XMMatrixIdentity() );
@@ -137,8 +137,6 @@ void Graphics::RenderFrame()
     context->IASetVertexBuffers( 0, 1, vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
     context->IASetIndexBuffer( indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->IASetInputLayout( vertexShader_quad.GetInputLayout() );
-    //cb_vs_matrix.data.worldMatrix = XMMatrixIdentity() * XMMatrixScaling( 100.0f, 100.0f, 0.0f )
-    //    * XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) * XMMatrixTranslation( 0.0f, 4.8f, 0.0f );
     context->PSSetShaderResources( 0, 1, grassTexture.GetAddressOf() );
     for ( int i = 0; i < worldMatricesQuad.size(); i++ )
     {
@@ -222,23 +220,20 @@ void Graphics::Update( float dt )
 
     // quad transformations
     int count = 0;
-    static int size = 5;
-    static int offset = 6;
-    static int widthLimit = 8;
-    static int heightLimit = 60;
-    for ( int width = 0; width < 20; width++ )
+    static int tileSize = 5;
+    static int tileOffset = 6;
+    static int worldOffsetX = 8;
+    static int worldOffsetY = 60;
+    for ( int row = 0; row < 20; row++ )
     {
-        for ( int height = 0; height < 20; height++ )
+        for ( int col = 0; col < 20; col++ )
         {
             XMStoreFloat4x4( &worldMatricesQuad[count],
-                XMMatrixScaling( size, size, 0.0f ) *
+                XMMatrixScaling( tileSize, tileSize, 0.0f ) *
                 XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) *
                 XMMatrixTranslation(
-                    ( width * offset * size ) - ( widthLimit + heightLimit * size ),
-                    4.7f,
-                    ( height * offset * size ) - heightLimit * size
-                )
-            );
+                    ( row * tileOffset * tileSize ) - ( worldOffsetX + worldOffsetY * tileSize ),
+                    4.7f, ( col * tileOffset * tileSize ) - worldOffsetY * tileSize ) );
             count++;
         }
     }
