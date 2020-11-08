@@ -1,12 +1,14 @@
+#pragma pack_matrix( row_major )
+
 cbuffer ConstantBuffer : register( b0 )
 {
-	matrix World;
-	matrix View;
-	matrix Projection;
-    float gTime;
+	float4x4 World;
+	float4x4 View;
+	float4x4 Projection;
+    /*float gTime;
     float waterSpeed;
     float waterAmount;
-    float waterHeight;
+    float waterHeight;*/
 }
 
 // Vertex Shader
@@ -24,13 +26,13 @@ struct VS_OUTPUT
 
 VS_OUTPUT VS( VS_INPUT input )
 {   
-    input.inPos.z = sin( gTime * waterSpeed + ( input.inPos.x * input.inPos.y * waterAmount ) *
-                    cos( input.inPos.x * input.inPos.y * waterAmount ) ) * waterHeight;
+    //input.inPos.z = sin( gTime * waterSpeed + ( input.inPos.x * input.inPos.y * waterAmount ) *
+    //                cos( input.inPos.x * input.inPos.y * waterAmount ) ) * waterHeight;
     
     VS_OUTPUT output;
-    output.outPos = mul( float4( input.inPos, 1.0f ), transpose( World ) );
-    output.outPos = mul( output.outPos, transpose( View ) );
-    output.outPos = mul( output.outPos, transpose( Projection ) );
+    output.outPos = mul( float4( input.inPos, 1.0f ), World );
+    output.outPos = mul( output.outPos, View );
+    output.outPos = mul( output.outPos, Projection );
     output.outTex = input.inTex;
     return output;
 }
