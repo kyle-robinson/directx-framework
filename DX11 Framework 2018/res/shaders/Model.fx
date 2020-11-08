@@ -110,7 +110,7 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     const float diffuseAmount = attenuation * max( 0.0f, dot( dirToL, input.inNormal ) );
     
     // specular lighting
-    const float3 incidence = input.inNormalView * dot( vToL, input.inNormalView );
+    const float3 incidence = input.inNormal * dot( vToL, input.inNormal );
     const float3 reflection = incidence * 2.0f - vToL;
     float specularAmount = pow( max( 0.0f, dot( normalize( -reflection ), normalize( input.inViewPos ) ) ), specularLightPower );
     
