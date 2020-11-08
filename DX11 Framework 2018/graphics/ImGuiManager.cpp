@@ -274,29 +274,19 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
             if ( ImGui::TreeNode( models.at( i ).GetModelName().c_str() ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-
-                Drawable object;
-                object.posX = models.at( i ).GetPositionFloat3().x;
-                object.posY = models.at( i ).GetPositionFloat3().y;
-                object.posZ = models.at( i ).GetPositionFloat3().z;
             
-                DirectX::XMFLOAT3 positions = { object.posX, object.posY, object.posZ };
+                DirectX::XMFLOAT3 positions = { models.at( i ).GetPositionFloat3().x,
+                    models.at( i ).GetPositionFloat3().y, models.at( i ).GetPositionFloat3().z };
                 ImGui::DragFloat3( "Position", &positions.x, 2.0f, -200.0f, 200.0f );
                 models.at( i ).SetPosition( positions );
 
-                object.rotX = models.at( i ).GetRotationFloat3().x;
-                object.rotY = models.at( i ).GetRotationFloat3().y;
-                object.rotZ = models.at( i ).GetRotationFloat3().z;
-
-                DirectX::XMFLOAT3 rotations = { object.rotX, object.rotY, object.rotZ };
+                DirectX::XMFLOAT3 rotations = { models.at( i ).GetRotationFloat3().x,
+                    models.at( i ).GetRotationFloat3().y, models.at( i ).GetRotationFloat3().z };
                 ImGui::DragFloat3( "Rotation", &rotations.x, 0.1f, -3.0f, 3.0f );
                 models.at( i ).SetRotation( rotations );
 
-                object.scaleX = models.at( i ).GetScaleFloat3().x;
-                object.scaleY = models.at( i ).GetScaleFloat3().y;
-                object.scaleZ = models.at( i ).GetScaleFloat3().z;
-
-                DirectX::XMFLOAT3 scales = { object.scaleX, object.scaleY, object.scaleZ };
+                DirectX::XMFLOAT3 scales = { models.at( i ).GetScaleFloat3().x,
+                    models.at( i ).GetScaleFloat3().y, models.at( i ).GetScaleFloat3().z };
                 ImGui::DragFloat3( "Scale", &scales.x, 0.1f, 0.1f, 2.0f );
                 models.at( i ).SetScale( scales.x, scales.y, scales.z );
 
