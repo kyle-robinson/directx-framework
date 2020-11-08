@@ -11,11 +11,11 @@ public:
 		ConstantBuffer<CB_VS_matrix>& cb_vs_vertexshader );
 	void SetConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light );
 	void UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light );
+	void SetConstantBuffer( ConstantBuffer<CB_PS_lightDirect>& cb_ps_lightDirect );
+	void UpdateConstantBuffer( ConstantBuffer<CB_PS_lightDirect>& cb_ps_lightDirect );
 public:
-	bool usePointLight = false;
-	bool useDirectionalLight = true;
-	bool useTexture = true;
 	float alphaFactor = 1.0f;
+	bool useTexture = true;
 private:
 	DirectX::XMFLOAT3 ambientColor = XMFLOAT3( 1.0f, 1.0f, 1.0f );
 	float ambientStrength = 0.1f;
@@ -27,6 +27,8 @@ private:
 	float constant = 1.0f;
 	float linear = 0.045f;
 	float quadratic = 0.0075f;
+private:
+	DirectX::XMFLOAT3 lightColorDirect = { 1.0f, 1.0f, 1.0f };
 };
 
 #endif

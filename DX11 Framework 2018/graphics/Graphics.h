@@ -65,12 +65,14 @@ private:
 	VertexShader vertexShader_full;
 	VertexShader vertexShader_light;
 	VertexShader vertexShader_noLight;
+	VertexShader vertexShader_lightDirect;
 
 	PixelShader pixelShader_2D;
-	PixelShader pixelShader_2D_discard;
 	PixelShader pixelShader_full;
 	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;
+	PixelShader pixelShader_2D_discard;
+	PixelShader pixelShader_lightDirect;
 
 	VertexBuffer<Vertex3D> vertexBufferCube;
 	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
@@ -79,10 +81,12 @@ private:
 	IndexBuffer indexBufferFullscreen;
 
 	ConstantBuffer<CB_VS_fog> cb_vs_fog;
+	//ConstantBuffer<CB_VS_scene> cb_vs_scene;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
 	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
 	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;
+	ConstantBuffer<CB_PS_lightDirect> cb_ps_lightDirect;
 
 	UINT windowWidth;
 	UINT windowHeight;
@@ -90,6 +94,7 @@ private:
 	bool useMask = false;
 	bool circleMask = true;
 	bool multiView = false;
+	bool usePointLight = false;
 	bool rasterizerSolid = true;
 	bool samplerAnisotropic = true;
 	float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };

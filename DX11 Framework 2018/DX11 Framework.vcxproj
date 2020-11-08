@@ -542,6 +542,7 @@
   <ItemGroup>
     <FxCompile Include="res\shaders\Fullscreen.fx" />
     <FxCompile Include="res\shaders\Model.fx" />
+    <FxCompile Include="res\shaders\Model_Directional.fx" />
     <FxCompile Include="res\shaders\Model_NoLight.fx" />
     <FxCompile Include="res\shaders\Normal.fx" />
     <FxCompile Include="res\shaders\Primitive.fx" />

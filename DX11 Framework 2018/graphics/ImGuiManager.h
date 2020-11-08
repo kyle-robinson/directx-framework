@@ -16,9 +16,10 @@ public:
 	void Initialize( HWND hWnd, ID3D11Device* device, ID3D11DeviceContext* context ) const noexcept;
 	void BeginRender() const noexcept;
 	void EndRender() const noexcept;
-	void RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
+	void RenderMainWindow( ID3D11DeviceContext* context, Light& light, float clearColor[4],
 		bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView, bool& useMask, bool& circleMask );
-	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light );
+	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light,
+		ConstantBuffer<CB_PS_lightDirect>& cb_ps_lightDirect, bool& usePointLight );
 	void RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog );
 	void RenderModelWindow( std::vector<RenderableGameObject>& models );
 private:

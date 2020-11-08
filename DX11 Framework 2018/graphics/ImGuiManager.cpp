@@ -37,7 +37,7 @@ void ImGuiManager::EndRender() const noexcept
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 }
 
-void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearColor[4], bool& useTexture, float& alphaFactor,
+void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, Light& light, float clearColor[4],
     bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView, bool& useMask, bool& circleMask )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
@@ -49,7 +49,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
                 ImGui::ColorEdit3( "Clear Color", clearColor );
-                ImGui::SliderFloat( "Blend Factor", &alphaFactor, 0.0f, 1.0f );
+                ImGui::SliderFloat( "Blend Factor", &light.alphaFactor, 0.0f, 1.0f );
 			    
                 static int fillGroup = 0;
 			    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
@@ -60,10 +60,10 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
 
                 static int textureGroup = 0;
                 if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
-                    useTexture = true;
+                    light.useTexture = true;
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
-                    useTexture = false;
+                    light.useTexture = false;
 
                 static int filterGroup = 0;
                 if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
@@ -167,59 +167,78 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float clearCo
     } ImGui::End();
 }
 
-void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light )
+void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light,
+    ConstantBuffer<CB_PS_lightDirect>& cb_ps_lightDirect, bool& usePointLight )
 {
 	if ( ImGui::Begin( "Light Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
 	{
+        static int lightGroup = 0;
+        if ( ImGui::RadioButton( "Directional", &lightGroup, 0 ) )
+            usePointLight = false;
+        ImGui::SameLine();
+        if ( ImGui::RadioButton( "Point", &lightGroup, 1 ) )
+            usePointLight = true;
+        
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
 
-		if ( ImGui::TreeNode( "Ambient Components" ) )
-		{
-            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            {
-			    ImGui::ColorEdit3( "Ambient", &cb_ps_light.data.ambientLightColor.x );
-			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.ambientLightStrength, 0.0f, 1.0f );
+        if ( usePointLight )
+        {
+		    if ( ImGui::TreeNode( "Ambient Components" ) )
+		    {
+                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+                {
+			        ImGui::ColorEdit3( "Ambient", &cb_ps_light.data.ambientLightColor.x );
+			        ImGui::SliderFloat( "Intensity", &cb_ps_light.data.ambientLightStrength, 0.0f, 1.0f );
+                }
+                ImGui::PopStyleColor();
+		        ImGui::TreePop();
             }
-            ImGui::PopStyleColor();
-		    ImGui::TreePop();
-        }
 
-		if ( ImGui::TreeNode( "Diffuse Components" ) )
-		{
-            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            {
-                ImGui::ColorEdit3( "Diffuse", &cb_ps_light.data.dynamicLightColor.x );
-			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.dynamicLightStrength, 0.0f, 10.0f );
+		    if ( ImGui::TreeNode( "Diffuse Components" ) )
+		    {
+                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+                {
+                    ImGui::ColorEdit3( "Diffuse", &cb_ps_light.data.dynamicLightColor.x );
+			        ImGui::SliderFloat( "Intensity", &cb_ps_light.data.dynamicLightStrength, 0.0f, 10.0f );
+                }
+                ImGui::PopStyleColor();
+		        ImGui::TreePop();
             }
-            ImGui::PopStyleColor();
-		    ImGui::TreePop();
-        }
 
-		if ( ImGui::TreeNode( "Specular Components" ) )
-		{
-            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            {
-			    ImGui::ColorEdit3( "Specular", &cb_ps_light.data.specularLightColor.x );
-			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.specularLightIntensity, 0.0f, 20.0f );
-			    ImGui::SliderFloat( "Glossiness", &cb_ps_light.data.specularLightPower, 0.0f, 20.0f );
+		    if ( ImGui::TreeNode( "Specular Components" ) )
+		    {
+                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+                {
+			        ImGui::ColorEdit3( "Specular", &cb_ps_light.data.specularLightColor.x );
+			        ImGui::SliderFloat( "Intensity", &cb_ps_light.data.specularLightIntensity, 0.0f, 20.0f );
+			        ImGui::SliderFloat( "Glossiness", &cb_ps_light.data.specularLightPower, 0.0f, 20.0f );
+                }
+                ImGui::PopStyleColor();
+		        ImGui::TreePop();
             }
-            ImGui::PopStyleColor();
-		    ImGui::TreePop();
-        }
 
-		if ( ImGui::TreeNode( "Attenuation" ) )
-		{
-            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            {
-			    ImGui::SliderFloat( "Constant", &cb_ps_light.data.lightConstant, 0.05f, 10.0f, "%.2f", 4 );
-			    ImGui::SliderFloat( "Linear", &cb_ps_light.data.lightLinear, 0.0001f, 4.0f, "%.4f", 8 );
-			    ImGui::SliderFloat( "Quadratic", &cb_ps_light.data.lightQuadratic, 0.0000001f, 1.0f, "%.7f", 10 );
+		    if ( ImGui::TreeNode( "Attenuation" ) )
+		    {
+                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+                {
+			        ImGui::SliderFloat( "Constant", &cb_ps_light.data.lightConstant, 0.05f, 10.0f, "%.2f", 4 );
+			        ImGui::SliderFloat( "Linear", &cb_ps_light.data.lightLinear, 0.0001f, 4.0f, "%.4f", 8 );
+			        ImGui::SliderFloat( "Quadratic", &cb_ps_light.data.lightQuadratic, 0.0000001f, 1.0f, "%.7f", 10 );
+                }
+                ImGui::PopStyleColor();
+		        ImGui::TreePop();
             }
-            ImGui::PopStyleColor();
-		    ImGui::TreePop();
+            light.SetConstantBuffer( cb_ps_light );
+            light.UpdateConstantBuffer( cb_ps_lightDirect );
         }
-
-        light.SetConstantBuffer( cb_ps_light );
+        if ( !usePointLight )
+        {
+            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+            ImGui::ColorEdit3( "Diffuse", &cb_ps_lightDirect.data.dynamicLightColor.x );
+            ImGui::PopStyleColor();
+            light.SetConstantBuffer( cb_ps_lightDirect );
+            light.UpdateConstantBuffer( cb_ps_light );
+        }
 
         ImGui::PopStyleColor();
 	} ImGui::End();

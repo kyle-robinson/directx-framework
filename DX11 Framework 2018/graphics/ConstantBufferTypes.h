@@ -60,8 +60,13 @@ struct CB_PS_light
 	float lightQuadratic;
 	float alphaFactor;
 	bool useTexture;
-	bool usePointLight;
-	bool useDirectionalLight;
+};
+
+struct CB_PS_lightDirect
+{
+	alignas( 16 ) DirectX::XMFLOAT3 dynamicLightColor;
+	float alphaFactor;
+	bool useTexture;
 };
 
 #endif

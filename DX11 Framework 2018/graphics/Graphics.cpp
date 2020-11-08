@@ -56,9 +56,21 @@ void Graphics::BeginFrame()
 	context->VSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 	context->PSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 
-    light.UpdateConstantBuffer( cb_ps_light );
-	if ( !cb_ps_light.ApplyChanges() ) return;
-	context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
+    if ( usePointLight )
+    {
+        light.UpdateConstantBuffer( cb_ps_light );
+	    if ( !cb_ps_light.ApplyChanges() ) return;
+	    context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
+    }
+    else
+    {
+        light.UpdateConstantBuffer( cb_ps_lightDirect );
+	    if ( !cb_ps_lightDirect.ApplyChanges() ) return;
+	    context->PSSetConstantBuffers( 2, 1, cb_ps_lightDirect.GetAddressOf() );
+    }
+
+    //if ( !cb_ps_scene.ApplyChanges() ) return;
+	//context->PSSetConstantBuffers( 3, 1, cb_ps_scene.GetAddressOf() );
 }
 
 void Graphics::RenderFrame()
@@ -76,9 +88,18 @@ void Graphics::RenderFrame()
     }
 	
     // setup shaders
-	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
-	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
-    context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
+    if ( usePointLight )
+    {
+	    context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
+	    context->IASetInputLayout( vertexShader_light.GetInputLayout() );
+        context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
+    }
+    else
+    {
+        context->VSSetShader( vertexShader_lightDirect.GetShader(), NULL, 0 );
+	    context->IASetInputLayout( vertexShader_lightDirect.GetInputLayout() );
+        context->PSSetShader( pixelShader_lightDirect.GetShader(), NULL, 0 );
+    }
 
     // render models
     for ( unsigned int i = 0; i < renderables.size(); i++ )
@@ -93,9 +114,7 @@ void Graphics::RenderFrame()
     {
         DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
         cb_vs_matrix.data.worldMatrix = worldMatrix;
-        cb_ps_light.data.useTexture = light.useTexture;
         if ( !cb_vs_matrix.ApplyChanges() ) return;
-        if ( !cb_ps_light.ApplyChanges() ) return;
         context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
         context->DrawIndexed( indexBufferCube.IndexCount(), 0, 0 );
     }
@@ -124,9 +143,9 @@ void Graphics::EndFrame()
 
     // display imgui
     imgui.BeginRender();
-    imgui.RenderMainWindow( context.Get(), clearColor, light.useTexture, light.alphaFactor,
+    imgui.RenderMainWindow( context.Get(), light, clearColor,
         rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
-    imgui.RenderLightWindow( light, cb_ps_light );
+    imgui.RenderLightWindow( light, cb_ps_light, cb_ps_lightDirect, usePointLight );
     imgui.RenderFogWindow( cb_vs_fog );
     imgui.RenderModelWindow( renderables );
     imgui.EndRender();
@@ -233,6 +252,12 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create light vertex shader!" );
 	    hr = pixelShader_light.Initialize( device, L"res\\shaders\\Model.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light pixel shader!" );
+
+        hr = vertexShader_lightDirect.Initialize( device, L"res\\shaders\\Model_Directional.fx", layoutModel, numElements );
+		COM_ERROR_IF_FAILED( hr, "Failed to create directional light vertex shader!" );
+	    hr = pixelShader_lightDirect.Initialize( device, L"res\\shaders\\Model_Directional.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create directional light pixel shader!" );
+
 	    hr = pixelShader_noLight.Initialize( device, L"res\\shaders\\Model_NoLight.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
 
@@ -337,8 +362,7 @@ bool Graphics::InitializeScene()
 		light.SetRotation( camera3D.GetRotationFloat3() );    
 
         /*   VERTEX/INDEX   */
-        HRESULT hr = vertexBufferCube.Initialize( device.Get(),
-            VTX::verticesCube_PosTexNrm, ARRAYSIZE( VTX::verticesCube_PosTexNrm ) );
+        HRESULT hr = vertexBufferCube.Initialize( device.Get(), VTX::verticesCube_PosTexNrm, ARRAYSIZE( VTX::verticesCube_PosTexNrm ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
         hr = indexBufferCube.Initialize( device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
@@ -370,7 +394,10 @@ bool Graphics::InitializeScene()
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_fullscreen' Constant Buffer!" );
 
 		hr = cb_ps_light.Initialize( device.Get(), context.Get() );
-		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_pixelshader' Constant Buffer!" );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_light' Constant Buffer!" );
+
+        hr = cb_ps_lightDirect.Initialize( device.Get(), context.Get() );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_lightDirect' Constant Buffer!" );
     }
     catch ( COMException& exception )
     {
