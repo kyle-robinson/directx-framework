@@ -105,6 +105,7 @@ private:
 	bool samplerAnisotropic = true;
 	float alphaFactor = 1.0f;
 	float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
+	std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
 	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
 };
 

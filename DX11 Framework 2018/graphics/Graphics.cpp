@@ -28,9 +28,15 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 
     for ( int i = 0; i < 3; i++ )
     {
-        DirectX::XMFLOAT4X4 worldMatrix;
-        DirectX::XMStoreFloat4x4( &worldMatrix, DirectX::XMMatrixIdentity() );
+        XMFLOAT4X4 worldMatrix;
+        XMStoreFloat4x4( &worldMatrix, XMMatrixIdentity() );
         worldMatricesCube.push_back( worldMatrix );
+    }
+    for ( int i = 0; i < 1000; i++ )
+    {
+        XMFLOAT4X4 worldMatrix;
+        XMStoreFloat4x4( &worldMatrix, XMMatrixIdentity() );
+        worldMatricesQuad.push_back( worldMatrix );
     }
 
     imgui.Initialize( hWnd, device.Get(), context.Get() );
@@ -114,7 +120,7 @@ void Graphics::RenderFrame()
     context->PSSetShaderResources( 0, 1, boxTexture.GetAddressOf() );
     for ( int i = 0; i < worldMatricesCube.size(); i++ )
     {
-        DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4( &worldMatricesCube[i] );
+        XMMATRIX worldMatrix = XMLoadFloat4x4( &worldMatricesCube[i] );
         cb_vs_matrix.data.worldMatrix = worldMatrix;
         if ( !cb_vs_matrix.ApplyChanges() ) return;
         context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
@@ -131,12 +137,16 @@ void Graphics::RenderFrame()
     context->IASetVertexBuffers( 0, 1, vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
     context->IASetIndexBuffer( indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->IASetInputLayout( vertexShader_quad.GetInputLayout() );
-    cb_vs_matrix.data.worldMatrix = XMMatrixIdentity() * XMMatrixScaling( 100.0f, 100.0f, 0.0f )
-        * XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) * XMMatrixTranslation( 0.0f, 4.8f, 0.0f );
-    if ( !cb_vs_matrix.ApplyChanges() ) return;
-    context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+    //cb_vs_matrix.data.worldMatrix = XMMatrixIdentity() * XMMatrixScaling( 100.0f, 100.0f, 0.0f )
+    //    * XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) * XMMatrixTranslation( 0.0f, 4.8f, 0.0f );
     context->PSSetShaderResources( 0, 1, grassTexture.GetAddressOf() );
-    context->DrawIndexed( indexBufferQuad.IndexCount(), 0, 0 );
+    for ( int i = 0; i < worldMatricesQuad.size(); i++ )
+    {
+        cb_vs_matrix.data.worldMatrix = XMLoadFloat4x4( &worldMatricesQuad[i] );
+        if ( !cb_vs_matrix.ApplyChanges() ) return;
+        context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+        context->DrawIndexed( indexBufferQuad.IndexCount(), 0, 0 );
+    }
 }
 
 void Graphics::EndFrame()
@@ -193,22 +203,45 @@ void Graphics::Update( float dt )
 	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
 
     // cube transformations
-    DirectX::XMStoreFloat4x4( &worldMatricesCube[0],
-        DirectX::XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
-        DirectX::XMMatrixRotationZ( timer * 1.5f ) *
-        DirectX::XMMatrixTranslation( 0.0f, 10.0f, 15.0f )
+    XMStoreFloat4x4( &worldMatricesCube[0],
+        XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
+        XMMatrixRotationZ( timer * 1.5f ) *
+        XMMatrixTranslation( 0.0f, 10.0f, 15.0f )
     );
-    DirectX::XMStoreFloat4x4( &worldMatricesCube[1],
-        DirectX::XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
-        DirectX::XMMatrixTranslation( 10.0f, 10.0f, 0.0f ) *
-        DirectX::XMMatrixRotationY( timer )
+    XMStoreFloat4x4( &worldMatricesCube[1],
+        XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
+        XMMatrixTranslation( 10.0f, 10.0f, 0.0f ) *
+        XMMatrixRotationY( timer )
     );
-    DirectX::XMStoreFloat4x4( &worldMatricesCube[2],
-        DirectX::XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
-        DirectX::XMMatrixTranslation( 1.0f, 10.0f, 0.0f ) *
-        DirectX::XMMatrixRotationZ( timer * 1.5f ) *
-        DirectX::XMMatrixTranslation( 0.0f, 7.5f, 0.0f )
+    XMStoreFloat4x4( &worldMatricesCube[2],
+        XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
+        XMMatrixTranslation( 1.0f, 10.0f, 0.0f ) *
+        XMMatrixRotationZ( timer * 1.5f ) *
+        XMMatrixTranslation( 0.0f, 7.5f, 0.0f )
     );
+
+    // quad transformations
+    int count = 0;
+    static int size = 5;
+    static int offset = 6;
+    static int widthLimit = 8;
+    static int heightLimit = 60;
+    for ( int width = 0; width < 20; width++ )
+    {
+        for ( int height = 0; height < 20; height++ )
+        {
+            XMStoreFloat4x4( &worldMatricesQuad[count],
+                XMMatrixScaling( size, size, 0.0f ) *
+                XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) *
+                XMMatrixTranslation(
+                    ( width * offset * size ) - ( widthLimit + heightLimit * size ),
+                    4.7f,
+                    ( height * offset * size ) - heightLimit * size
+                )
+            );
+            count++;
+        }
+    }
 }
 
 UINT Graphics::GetWidth() const noexcept
@@ -357,8 +390,8 @@ bool Graphics::InitializeScene()
             model.SetScale( drawables.at( i ).scaleX, drawables.at( i ).scaleY, drawables.at( i ).scaleZ );
             if ( !model.Initialize( "res\\models\\" + drawables.at( i ).fileName, device.Get(), context.Get(), cb_vs_matrix ) )
                 return false;
-            model.SetPosition( DirectX::XMFLOAT3( drawables.at( i ).posX, drawables.at( i ).posY, drawables.at( i ).posZ ) );
-            model.SetRotation( DirectX::XMFLOAT3( drawables.at( i ).rotX, drawables.at( i ).rotY, drawables.at( i ).rotZ ) );
+            model.SetPosition( XMFLOAT3( drawables.at( i ).posX, drawables.at( i ).posY, drawables.at( i ).posZ ) );
+            model.SetRotation( XMFLOAT3( drawables.at( i ).rotX, drawables.at( i ).rotY, drawables.at( i ).rotZ ) );
             model.SetModelName( drawables.at( i ).modelName );
             renderables.push_back( model );
         }
@@ -405,10 +438,10 @@ bool Graphics::InitializeScene()
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );
 
         /*   TEXTURES   */
-        hr = DirectX::CreateWICTextureFromFile( device.Get(), L"res\\textures\\CrashBox.png", nullptr, boxTexture.GetAddressOf() );
+        hr = CreateWICTextureFromFile( device.Get(), L"res\\textures\\CrashBox.png", nullptr, boxTexture.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create box texture from file!" );
 
-        hr = DirectX::CreateWICTextureFromFile( device.Get(), L"res\\textures\\grass.jpg", nullptr, grassTexture.GetAddressOf() );
+        hr = CreateWICTextureFromFile( device.Get(), L"res\\textures\\grass.jpg", nullptr, grassTexture.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create grass texture from file!" );
 
         /*   CONSTANT BUFFERS   */
