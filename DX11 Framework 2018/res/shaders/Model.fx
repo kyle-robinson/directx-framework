@@ -28,7 +28,6 @@ struct VS_OUTPUT
     float4 outPosition : SV_POSITION;
     float2 outTexCoord : TEXCOORD;
     float3 outNormal : NORMAL;
-    float3 outNormalView : NORMAL_VIEW;
     float3 outWorldPos : WORLD_POSITION;
     float3 outViewPos : VIEW_POSITION;
     float  outFog : FOG;
@@ -47,8 +46,6 @@ VS_OUTPUT VS( VS_INPUT input )
     
     output.outTexCoord = input.inTexCoord;
     output.outNormal = mul( input.inNormal, (float3x3)worldMatrix );
-    output.outNormalView = mul( input.inNormal, (float3x3)worldView );
-    
     output.outFog = saturate( ( output.outViewPos.z - fogEnd ) / ( fogEnd - fogStart ) ); // linear fog
     
     return output;
@@ -69,6 +66,10 @@ cbuffer LightBuffer : register( b2 )
     float lightLinear;
     float lightQuadratic;
     bool usePointLight;
+    float3 directionalLightColor;
+    float3 directionalLightPosition;
+    float directionalLightIntensity;
+    bool useQuad;
 };
 
 cbuffer SceneBuffer : register( b3 )
@@ -82,7 +83,6 @@ struct PS_INPUT
     float4 inPosition : SV_POSITION;
     float2 inTexCoord : TEXCOORD;
     float3 inNormal : NORMAL;
-    float3 inNormalView : NORMAL_VIEW;
     float3 inWorldPos : WORLD_POSITION;
     float3 inViewPos : VIEW_POSITION;
     float  inFog : FOG;
@@ -108,22 +108,22 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     const float3 ambient = ambientLightColor * ambientLightStrength;
     
     // diffuse lighting
-    const float diffuseAmount = attenuation * max( 0.0f, dot( dirToL, input.inNormal ) );
+    const float diffuseAmount = attenuation * max( 0.0f, dot( normalize( dirToL ), input.inNormal ) );
     
     // specular lighting
-    const float3 incidence = input.inNormal * dot( vToL, input.inNormal );
-    const float3 reflection = incidence * 2.0f - vToL;
+    const float3 incidence = input.inNormal * dot( distToL, input.inNormal );
+    const float3 reflection = incidence * 2.0f - distToL;
     float specularAmount = pow( max( 0.0f, dot( normalize( -reflection ), normalize( input.inViewPos ) ) ), specularLightPower );
     
     if ( diffuseAmount <= 0.0f )
         specularAmount = 0.0f;
     
     // directional lighting
-    const float3 toLight = float3( 50.0f, 50.0f, -50.0f ) - input.inWorldPos;
+    const float3 toLight = directionalLightPosition - normalize( input.inViewPos );
     const float distanceToLight = length( toLight );
     const float3 directionToLight = toLight / distanceToLight;
     float NDotL = dot( directionToLight, input.inNormal );
-    float3 directionalLight = dynamicLightColor * saturate( NDotL );
+    float3 directionalLight = directionalLightColor * saturate( NDotL );
     
     // calculate lighting
     const float3 diffuse = dynamicLightColor * dynamicLightStrength * diffuseAmount;
@@ -133,9 +133,11 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     float3 combinedColor = { 0.0f, 0.0f, 0.0f };
     if ( usePointLight )
         combinedColor = ( ambient + diffuse + specular );
-    else
-        combinedColor = directionalLight;
-    float3 finalColor = combinedColor * (albedoSample = (useTexture == true) ? albedoSample : 1);
+    if ( !usePointLight )
+        combinedColor = directionalLight * directionalLightIntensity;
+    if ( useQuad )
+        combinedColor = directionalLight * dynamicLightStrength;
+    float3 finalColor = combinedColor * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
     
     // fog factor
     const float fogValue = input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;

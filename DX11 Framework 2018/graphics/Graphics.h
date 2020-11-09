@@ -76,7 +76,7 @@ private:
 	PixelShader pixelShader_2D_discard;
 
 	VertexBuffer<Vertex3D> vertexBufferCube;
-	VertexBuffer<Vertex_Pos_Tex> vertexBufferQuad;
+	VertexBuffer<Vertex3D> vertexBufferQuad;
 	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
 
 	IndexBuffer indexBufferCube;

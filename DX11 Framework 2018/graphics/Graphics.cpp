@@ -62,6 +62,7 @@ void Graphics::BeginFrame()
 	context->VSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 	context->PSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 
+    cb_ps_light.data.useQuad = false;
     light.UpdateConstantBuffer( cb_ps_light );
 	if ( !cb_ps_light.ApplyChanges() ) return;
 	context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
@@ -109,17 +110,14 @@ void Graphics::RenderFrame()
         context->DrawIndexed( indexBufferCube.IndexCount(), 0, 0 );
     }
 
-	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
-	light.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-
     // draw primitives
     offset = 0;
-    context->VSSetShader( vertexShader_quad.GetShader(), NULL, 0 );
-    context->PSSetShader( pixelShader_quad.GetShader(), NULL, 0 );
     context->IASetVertexBuffers( 0, 1, vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
     context->IASetIndexBuffer( indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    context->IASetInputLayout( vertexShader_quad.GetInputLayout() );
     context->PSSetShaderResources( 0, 1, grassTexture.GetAddressOf() );
+    cb_ps_light.data.useQuad = true;
+    if ( !cb_ps_light.ApplyChanges() ) return;
+    context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
     for ( int i = 0; i < worldMatricesQuad.size(); i++ )
     {
         cb_vs_matrix.data.worldMatrix = XMLoadFloat4x4( &worldMatricesQuad[i] );
@@ -127,6 +125,10 @@ void Graphics::RenderFrame()
         context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
         context->DrawIndexed( indexBufferQuad.IndexCount(), 0, 0 );
     }
+
+	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
+	light.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
+
 }
 
 void Graphics::EndFrame()
@@ -283,17 +285,6 @@ bool Graphics::InitializeShaders()
 	    hr = pixelShader_noLight.Initialize( device, L"res\\shaders\\Model_NoLight.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
 
-        /*   PRIMITIVES   */
-        D3D11_INPUT_ELEMENT_DESC layoutPrim[] = {
-		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	    };
-	    numElements = ARRAYSIZE( layoutPrim );
-	    hr = vertexShader_quad.Initialize( device, L"res\\shaders\\Water.fx", layoutPrim, numElements );
-		COM_ERROR_IF_FAILED( hr, "Failed to create primitive vertex shader!" );
-	    hr = pixelShader_quad.Initialize( device, L"res\\shaders\\Water.fx" );
-		COM_ERROR_IF_FAILED( hr, "Failed to create primitive pixel shader!" );
-
         /*   POST-PROCESSING   */
         D3D11_INPUT_ELEMENT_DESC layoutFull[] = {
 		    { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -400,7 +391,7 @@ bool Graphics::InitializeScene()
         hr = indexBufferCube.Initialize( device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
-        hr = vertexBufferQuad.Initialize( device.Get(), VTX::verticesQuad_PosTex, ARRAYSIZE( VTX::verticesQuad_PosTex ) );
+        hr = vertexBufferQuad.Initialize( device.Get(), VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
         hr = indexBufferQuad.Initialize( device.Get(), IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
