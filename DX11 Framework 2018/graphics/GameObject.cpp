@@ -86,6 +86,13 @@ void GameObject::AdjustRotation( const XMFLOAT3& rot ) noexcept
 	rotation.x += rot.x;
 	rotation.y += rot.y;
 	rotation.z += rot.z;
+
+	if ( rotation.x >= XMConvertToRadians( 90.0f ) )
+		rotation.x = XMConvertToRadians( 90.0f );
+
+	if ( rotation.x <= XMConvertToRadians( -90.0f ) )
+		rotation.x = XMConvertToRadians( -90.0f );
+
 	rotVector = XMLoadFloat3( &rotation );
 	UpdateMatrix();
 }
