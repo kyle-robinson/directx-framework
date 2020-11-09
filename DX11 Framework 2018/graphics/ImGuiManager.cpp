@@ -104,7 +104,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 0.8f, 0.5f, 1.0f } );
 
-            if ( ImGui::TreeNode( "Camera3D Controls" ) )
+            if ( ImGui::TreeNode( "Camera Controls" ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
                 {
@@ -115,7 +115,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
                     ImGui::Text( "E\t\t->\tDownward" );
                     ImGui::Text( "SPACE\t->\tUpward" );
                     ImGui::Text( "SHIFT\t->\tMove Faster" );
-                    ImGui::Text( "RMB  \t->\tRotate Camera3D" );
+                    ImGui::Text( "RMB  \t->\tRotate Camera" );
                 }
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
@@ -125,7 +125,7 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
                 {
-                    ImGui::Text( "C\t\t->\tMove Light to Camera3D" );
+                    ImGui::Text( "C\t\t->\tMove Light to Camera" );
                 }
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
@@ -167,21 +167,20 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
     } ImGui::End();
 }
 
-void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light,
-    ConstantBuffer<CB_PS_lightDirect>& cb_ps_lightDirect, bool& usePointLight )
+void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light )
 {
 	if ( ImGui::Begin( "Light Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
 	{
         static int lightGroup = 0;
         if ( ImGui::RadioButton( "Directional", &lightGroup, 0 ) )
-            usePointLight = false;
+            cb_ps_light.data.usePointLight = false;
         ImGui::SameLine();
         if ( ImGui::RadioButton( "Point", &lightGroup, 1 ) )
-            usePointLight = true;
+            cb_ps_light.data.usePointLight = true;
         
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
 
-        if ( usePointLight )
+        if ( cb_ps_light.data.usePointLight )
         {
 		    if ( ImGui::TreeNode( "Ambient Components" ) )
 		    {
@@ -229,14 +228,12 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 		        ImGui::TreePop();
             }
             light.SetConstantBuffer( cb_ps_light );
-            light.UpdateConstantBuffer( cb_ps_lightDirect );
         }
-        if ( !usePointLight )
+        else
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            ImGui::ColorEdit3( "Diffuse", &cb_ps_lightDirect.data.dynamicLightColor.x );
+            ImGui::ColorEdit3( "Diffuse", &cb_ps_light.data.dynamicLightColor.x );
             ImGui::PopStyleColor();
-            light.SetConstantBuffer( cb_ps_lightDirect );
             light.UpdateConstantBuffer( cb_ps_light );
         }
 

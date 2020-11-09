@@ -62,18 +62,9 @@ void Graphics::BeginFrame()
 	context->VSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 	context->PSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 
-    if ( usePointLight )
-    {
-        light.UpdateConstantBuffer( cb_ps_light );
-	    if ( !cb_ps_light.ApplyChanges() ) return;
-	    context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
-    }
-    else
-    {
-        light.UpdateConstantBuffer( cb_ps_lightDirect );
-	    if ( !cb_ps_lightDirect.ApplyChanges() ) return;
-	    context->PSSetConstantBuffers( 2, 1, cb_ps_lightDirect.GetAddressOf() );
-    }
+    light.UpdateConstantBuffer( cb_ps_light );
+	if ( !cb_ps_light.ApplyChanges() ) return;
+	context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
 
     cb_ps_scene.data.alphaFactor = alphaFactor;
     cb_ps_scene.data.useTexture = useTexture;
@@ -96,18 +87,9 @@ void Graphics::RenderFrame()
     }
 	
     // setup shaders
-    if ( usePointLight )
-    {
-	    context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
-	    context->IASetInputLayout( vertexShader_light.GetInputLayout() );
-        context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
-    }
-    else
-    {
-        context->VSSetShader( vertexShader_lightDirect.GetShader(), NULL, 0 );
-	    context->IASetInputLayout( vertexShader_lightDirect.GetInputLayout() );
-        context->PSSetShader( pixelShader_lightDirect.GetShader(), NULL, 0 );
-    }
+	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
+	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
+    context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
 
     // render models
     for ( unsigned int i = 0; i < renderables.size(); i++ )
@@ -169,7 +151,7 @@ void Graphics::EndFrame()
     imgui.BeginRender();
     imgui.RenderMainWindow( context.Get(), alphaFactor, useTexture, clearColor,
         rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
-    imgui.RenderLightWindow( light, cb_ps_light, cb_ps_lightDirect, usePointLight );
+    imgui.RenderLightWindow( light, cb_ps_light );
     imgui.RenderFogWindow( cb_vs_fog );
     imgui.RenderModelWindow( renderables );
     imgui.EndRender();
@@ -256,6 +238,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         swapChain = std::make_shared<Bind::SwapChain>( *this, context.GetAddressOf(), device.GetAddressOf(), hWnd );
         backBuffer = std::make_shared<Bind::RenderTarget>( *this, swapChain->GetSwapChain() );
         renderTarget = std::make_shared<Bind::RenderTarget>( *this );
+
         depthStencil = std::make_shared<Bind::DepthStencil>( *this );
         std::unique_ptr<Bind::Viewport> viewport = std::make_unique<Bind::Viewport>( *this );
         viewport.get()->Bind( *this );
@@ -296,11 +279,6 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create light vertex shader!" );
 	    hr = pixelShader_light.Initialize( device, L"res\\shaders\\Model.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light pixel shader!" );
-
-        hr = vertexShader_lightDirect.Initialize( device, L"res\\shaders\\Model_Directional.fx", layoutModel, numElements );
-		COM_ERROR_IF_FAILED( hr, "Failed to create directional light vertex shader!" );
-	    hr = pixelShader_lightDirect.Initialize( device, L"res\\shaders\\Model_Directional.fx" );
-		COM_ERROR_IF_FAILED( hr, "Failed to create directional light pixel shader!" );
 
 	    hr = pixelShader_noLight.Initialize( device, L"res\\shaders\\Model_NoLight.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
@@ -458,9 +436,6 @@ bool Graphics::InitializeScene()
 
 		hr = cb_ps_light.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_light' Constant Buffer!" );
-
-        hr = cb_ps_lightDirect.Initialize( device.Get(), context.Get() );
-		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_lightDirect' Constant Buffer!" );
 
         hr = cb_ps_scene.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_scene' Constant Buffer!" );

@@ -67,7 +67,6 @@ private:
 	VertexShader vertexShader_quad;
 	VertexShader vertexShader_light;
 	VertexShader vertexShader_noLight;
-	VertexShader vertexShader_lightDirect;
 
 	PixelShader pixelShader_2D;
 	PixelShader pixelShader_full;
@@ -75,7 +74,6 @@ private:
 	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;
 	PixelShader pixelShader_2D_discard;
-	PixelShader pixelShader_lightDirect;
 
 	VertexBuffer<Vertex3D> vertexBufferCube;
 	VertexBuffer<Vertex_Pos_Tex> vertexBufferQuad;
@@ -91,7 +89,6 @@ private:
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
 	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
 	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;
-	ConstantBuffer<CB_PS_lightDirect> cb_ps_lightDirect;
 
 	UINT windowWidth;
 	UINT windowHeight;
@@ -100,13 +97,12 @@ private:
 	bool useTexture = true;
 	bool circleMask = true;
 	bool multiView = false;
-	bool usePointLight = false;
 	bool rasterizerSolid = true;
 	bool samplerAnisotropic = true;
 	float alphaFactor = 1.0f;
 	float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
-	std::vector<DirectX::XMFLOAT4X4> worldMatricesQuad;
-	std::vector<DirectX::XMFLOAT4X4> worldMatricesCube;
+	std::vector<XMFLOAT4X4> worldMatricesQuad;
+	std::vector<XMFLOAT4X4> worldMatricesCube;
 };
 
 #endif

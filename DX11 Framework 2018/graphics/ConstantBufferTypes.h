@@ -29,22 +29,6 @@ struct CB_VS_fog
 	bool fogEnable;
 };
 
-struct CB_VS_water
-{
-	DirectX::XMMATRIX mWorld;
-	DirectX::XMMATRIX mView;
-	DirectX::XMMATRIX mProjection;
-	float gTime;
-	float waterSpeed;
-	float waterAmount;
-	float waterHeight;
-};
-
-struct CB_PS_alpha
-{
-	float alpha = 1.0f;
-};
-
 struct CB_PS_light
 {
 	alignas( 16 ) DirectX::XMFLOAT3 ambientLightColor;
@@ -58,11 +42,7 @@ struct CB_PS_light
 	float lightConstant;
 	float lightLinear;
 	float lightQuadratic;
-};
-
-struct CB_PS_lightDirect
-{
-	alignas( 16 ) DirectX::XMFLOAT3 dynamicLightColor;
+	bool usePointLight;
 };
 
 struct CB_PS_scene
