@@ -69,6 +69,7 @@ cbuffer LightBuffer : register( b2 )
     float3 directionalLightColor;
     float3 directionalLightPosition;
     float directionalLightIntensity;
+    float quadIntensity;
     bool useQuad;
 };
 
@@ -136,7 +137,7 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     if ( !usePointLight )
         combinedColor = directionalLight * directionalLightIntensity;
     if ( useQuad )
-        combinedColor = directionalLight * dynamicLightStrength;
+        combinedColor = directionalLight * quadIntensity;
     float3 finalColor = combinedColor * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
     
     // fog factor

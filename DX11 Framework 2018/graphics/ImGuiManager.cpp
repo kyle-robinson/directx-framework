@@ -177,6 +177,8 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         ImGui::SameLine();
         if ( ImGui::RadioButton( "Point", &lightGroup, 1 ) )
             cb_ps_light.data.usePointLight = true;
+
+        ImGui::SliderFloat( "Ground Intensity", &cb_ps_light.data.quadIntensity, 0.0f, 1.0f );
         
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
 
@@ -227,15 +229,17 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
                 ImGui::PopStyleColor();
 		        ImGui::TreePop();
             }
-            light.SetConstantBuffer( cb_ps_light );
         }
         else
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            ImGui::ColorEdit3( "Diffuse", &cb_ps_light.data.dynamicLightColor.x );
+            ImGui::ColorEdit3( "Colour", &cb_ps_light.data.directionalLightColor.x );
+            ImGui::DragFloat3( "Position", &cb_ps_light.data.directionalLightPosition.x );
+            ImGui::SliderFloat( "Intensity", &cb_ps_light.data.directionalLightIntensity, 0.0f, 10.0f );
             ImGui::PopStyleColor();
-            light.UpdateConstantBuffer( cb_ps_light );
         }
+        light.SetConstantBuffer( cb_ps_light );
+        light.UpdateConstantBuffer( cb_ps_light );
 
         ImGui::PopStyleColor();
 	} ImGui::End();

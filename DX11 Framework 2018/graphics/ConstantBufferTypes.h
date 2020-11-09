@@ -47,6 +47,7 @@ struct CB_PS_light
 	alignas( 16 ) DirectX::XMFLOAT3 directionalLightColor;
 	alignas( 16 ) DirectX::XMFLOAT3 directionalLightPosition;
 	float directionalLightIntensity;
+	float quadIntensity;
 	bool useQuad;
 };
 
