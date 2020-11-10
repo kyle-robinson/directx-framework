@@ -156,6 +156,7 @@ void Graphics::EndFrame()
     imgui.RenderLightWindow( light, cb_ps_light );
     imgui.RenderFogWindow( cb_vs_fog );
     imgui.RenderModelWindow( renderables );
+    imgui.RenderCameraWindow( camera3D, windowWidth, windowHeight );
     imgui.EndRender();
 
     // unbind rtv and srv
@@ -374,11 +375,10 @@ bool Graphics::InitializeScene()
         square.SetPosition( XMFLOAT3( windowWidth / 2 - square.GetWidth() / 2, windowHeight / 2 - square.GetHeight() / 2, 0 ) );
 
         /*   OBJECTS   */
-        camera2D.SetProjectionValues( static_cast<float>( windowWidth ), static_cast<float>( windowHeight ), 0.0f, 1.0f );
-
+        XMFLOAT2 aspectRatio = { static_cast<float>( windowWidth ), static_cast<float>( windowHeight ) };
+        camera2D.SetProjectionValues( aspectRatio.x, aspectRatio.y, 0.0f, 1.0f );
         camera3D.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
-	    camera3D.SetProjectionValues( 70.0f, static_cast<float>( windowWidth ) / static_cast<float>( windowHeight ),
-		    0.1f, 1000.0f );
+	    camera3D.SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         XMVECTOR lightPosition = camera3D.GetPositionVector();
 		lightPosition += camera3D.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );

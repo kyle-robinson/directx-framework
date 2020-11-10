@@ -11,6 +11,9 @@ Camera3D::Camera3D()
 
 void Camera3D::SetProjectionValues( float fovDegrees, float aspectRatio, float nearZ, float farZ )
 {
+	this->fovDegrees = fovDegrees;
+	this->nearZ = nearZ;
+	this->farZ = farZ;
 	float fovRadians = ( fovDegrees / 360.0f ) * XM_2PI;
 	projection = XMMatrixPerspectiveFovLH( fovRadians, aspectRatio, nearZ, farZ );
 }
@@ -23,6 +26,36 @@ const XMMATRIX& Camera3D::GetViewMatrix() const noexcept
 const XMMATRIX& Camera3D::GetProjectionMatrix() const noexcept
 {
 	return projection;
+}
+
+const float& Camera3D::GetCameraSpeed() const noexcept
+{
+	return cameraSpeed;
+}
+
+void Camera3D::SetCameraSpeed( float newSpeed ) noexcept
+{
+	cameraSpeed = newSpeed;
+}
+
+void Camera3D::UpdateCameraSpeed( float updateSpeed ) noexcept
+{
+	cameraSpeed += updateSpeed;
+}
+
+const float& Camera3D::GetFoVDegrees() const noexcept
+{
+	return fovDegrees;
+}
+
+const float& Camera3D::GetNearZ() const noexcept
+{
+	return nearZ;
+}
+
+const float& Camera3D::GetFarZ() const noexcept
+{
+	return farZ;
 }
 
 void Camera3D::UpdateMatrix()

@@ -3,6 +3,7 @@
 #define IMGUIMANAGER_H
 
 #include "Light.h"
+#include "Camera3D.h"
 #include <d3d11.h>
 
 struct RenderableGameObject;
@@ -21,6 +22,7 @@ public:
 	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light );
 	void RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog );
 	void RenderModelWindow( std::vector<RenderableGameObject>& models );
+	void RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UINT windowHeight );
 private:
 	SYSTEM_INFO siSysInfo;
 };

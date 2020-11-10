@@ -298,3 +298,23 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
         }
     } ImGui::End();
 }
+
+void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UINT windowHeight )
+{
+    if ( ImGui::Begin( "Camera", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    {
+        static float windowWidthF = static_cast<float>( windowWidth );
+        static float windowHeightF = static_cast<float>( windowHeight );
+        static float aspectRatio = windowWidthF / windowHeightF;
+        
+        static float fovDegrees = camera3D.GetFoVDegrees();
+        static float nearZ = camera3D.GetNearZ();
+        static float farZ = camera3D.GetFarZ();
+
+        ImGui::SliderFloat( "FoV", &fovDegrees, 70.0f, 110.0f, "%1.f", 1.5f );
+        ImGui::SliderFloat( "Near Z", &nearZ, 0.01f, farZ - 0.01f, "%.2f", 2.0f );
+        ImGui::SliderFloat( "Far Z", &farZ, nearZ + 0.01f, 1000.0f, "%.2f", 4.0f );
+
+        camera3D.SetProjectionValues( fovDegrees, aspectRatio, nearZ, farZ );
+    } ImGui::End();
+}
