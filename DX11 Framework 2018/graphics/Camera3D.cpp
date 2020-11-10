@@ -58,6 +58,28 @@ const float& Camera3D::GetFarZ() const noexcept
 	return farZ;
 }
 
+void Camera3D::ResetPosition() noexcept
+{
+	position.x = 0.0f;
+	position.y = 9.0f;
+	position.z = -15.0f;
+}
+
+void Camera3D::ResetRotation() noexcept
+{
+	rotation.x = 0.0f;
+	rotation.y = 0.0f;
+	rotation.z = 0.0f;
+}
+
+void Camera3D::ResetProjection( float aspectRatio ) noexcept
+{
+	fovDegrees = 70.0f;
+	nearZ = 0.1f;
+	farZ = 1000.0f;
+	SetProjectionValues( fovDegrees, aspectRatio, nearZ, farZ );
+}
+
 void Camera3D::UpdateMatrix()
 {
 	// update camera target

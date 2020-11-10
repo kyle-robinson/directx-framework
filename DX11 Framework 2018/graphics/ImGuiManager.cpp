@@ -302,19 +302,72 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
 void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UINT windowHeight )
 {
     if ( ImGui::Begin( "Camera", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
-    {
-        static float windowWidthF = static_cast<float>( windowWidth );
-        static float windowHeightF = static_cast<float>( windowHeight );
-        static float aspectRatio = windowWidthF / windowHeightF;
-        
-        static float fovDegrees = camera3D.GetFoVDegrees();
-        static float nearZ = camera3D.GetNearZ();
-        static float farZ = camera3D.GetFarZ();
+    {   
+        if ( ImGui::TreeNode( "Position" ) )
+        {
+            static DirectX::XMFLOAT3 positions = { camera3D.GetPositionFloat3() };
+            ImGui::SliderFloat( "X", &positions.x, -80.0f, 80.0f, "%.1f" );
+            ImGui::SliderFloat( "Y", &positions.y, -80.0f, 80.0f, "%.1f" );
+            ImGui::SliderFloat( "Z", &positions.z, -80.0f, 80.0f, "%.1f" );
 
-        ImGui::SliderFloat( "FoV", &fovDegrees, 70.0f, 110.0f, "%1.f", 1.5f );
-        ImGui::SliderFloat( "Near Z", &nearZ, 0.01f, farZ - 0.01f, "%.2f", 2.0f );
-        ImGui::SliderFloat( "Far Z", &farZ, nearZ + 0.01f, 1000.0f, "%.2f", 4.0f );
+            positions.x = XMConvertToRadians( positions.x );
+            positions.y = XMConvertToRadians( positions.y );
+            positions.z = XMConvertToRadians( positions.z );
 
-        camera3D.SetProjectionValues( fovDegrees, aspectRatio, nearZ, farZ );
+            camera3D.AdjustPosition( positions );
+
+            ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+            if ( ImGui::Button( "Reset Position" ) )
+                camera3D.ResetPosition();
+            ImGui::PopStyleColor();
+
+            ImGui::TreePop();
+        }
+
+        if ( ImGui::TreeNode( "Orientation" ) )
+        {
+            static DirectX::XMFLOAT3 rotations = { camera3D.GetRotationFloat3() };
+            ImGui::SliderFloat( "Pitch", &rotations.x, -1.0f, 1.0f );
+            ImGui::SliderFloat( "Yaw", &rotations.y, -2.0f, 2.0f );
+            ImGui::SliderFloat( "Roll", &rotations.z, -1.0f, 1.0f );
+
+            rotations.x = XMConvertToRadians( rotations.x );
+            rotations.y = XMConvertToRadians( rotations.y );
+            rotations.z = XMConvertToRadians( rotations.z );
+
+            camera3D.AdjustRotation( rotations );
+
+            ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+            if ( ImGui::Button( "Reset Orientation" ) )
+                camera3D.ResetRotation();
+            ImGui::PopStyleColor();
+
+            ImGui::TreePop();
+        }
+
+        if ( ImGui::TreeNode( "Projection" ) )
+        {
+            float fovDegrees = camera3D.GetFoVDegrees();
+            float nearZ = camera3D.GetNearZ();
+            float farZ = camera3D.GetFarZ();
+
+            ImGui::SliderFloat( "FoV", &fovDegrees, 70.0f, 110.0f, "%1.f", 1.5f );
+            ImGui::SliderFloat( "Near Z", &nearZ, 0.01f, farZ - 0.01f, "%.2f", 2.0f );
+            ImGui::SliderFloat( "Far Z", &farZ, nearZ + 0.01f, 1000.0f, "%.2f", 4.0f );
+
+            static float windowWidthF = static_cast<float>( windowWidth );
+            static float windowHeightF = static_cast<float>( windowHeight );
+            static float aspectRatio = windowWidthF / windowHeightF;
+
+            camera3D.SetProjectionValues( fovDegrees, aspectRatio, nearZ, farZ );
+
+            ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+            if ( ImGui::Button( "Reset Projection" ) )
+                camera3D.ResetProjection( aspectRatio );
+            ImGui::PopStyleColor();
+
+            ImGui::TreePop();
+        }
+
     } ImGui::End();
 }
