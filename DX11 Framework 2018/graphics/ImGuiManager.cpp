@@ -43,7 +43,6 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 0.8f, 1.0f, 1.0f } );
-
         if ( ImGui::TreeNode( "Scene Parameters" ) )
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
@@ -103,7 +102,6 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
         if ( ImGui::TreeNode( "Scene Controls" ) )
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 0.8f, 0.5f, 1.0f } );
-
             if ( ImGui::TreeNode( "Camera Controls" ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
@@ -130,7 +128,6 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
             }
-
             ImGui::PopStyleColor();
             ImGui::TreePop();
         }
@@ -162,7 +159,6 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
             ImGui::PopStyleColor();
 		    ImGui::TreePop();
         }
-
         ImGui::PopStyleColor();
     } ImGui::End();
 }
@@ -177,11 +173,9 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         ImGui::SameLine();
         if ( ImGui::RadioButton( "Point", &lightGroup, 1 ) )
             cb_ps_light.data.usePointLight = true;
-
         ImGui::SliderFloat( "Ground Intensity", &cb_ps_light.data.quadIntensity, 0.0f, 1.0f );
         
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
-
         if ( cb_ps_light.data.usePointLight )
         {
 		    if ( ImGui::TreeNode( "Ambient Components" ) )
@@ -240,7 +234,6 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         }
         light.SetConstantBuffer( cb_ps_light );
         light.UpdateConstantBuffer( cb_ps_light );
-
         ImGui::PopStyleColor();
 	} ImGui::End();
 }
@@ -303,12 +296,15 @@ void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UIN
 {
     if ( ImGui::Begin( "Camera", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {   
+        ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
         if ( ImGui::TreeNode( "Position" ) )
         {
+            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+
             static DirectX::XMFLOAT3 positions = { camera3D.GetPositionFloat3() };
-            ImGui::SliderFloat( "X", &positions.x, -80.0f, 80.0f, "%.1f" );
-            ImGui::SliderFloat( "Y", &positions.y, -80.0f, 80.0f, "%.1f" );
-            ImGui::SliderFloat( "Z", &positions.z, -80.0f, 80.0f, "%.1f" );
+            ImGui::SliderFloat( "X", &positions.x, -40.0f, 40.0f, "%.1f" );
+            ImGui::SliderFloat( "Y", &positions.y, -40.0f, 40.0f, "%.1f" );
+            ImGui::SliderFloat( "Z", &positions.z, -40.0f, 40.0f, "%.1f" );
 
             positions.x = XMConvertToRadians( positions.x );
             positions.y = XMConvertToRadians( positions.y );
@@ -322,10 +318,13 @@ void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UIN
             ImGui::PopStyleColor();
 
             ImGui::TreePop();
+            ImGui::PopStyleColor();
         }
 
         if ( ImGui::TreeNode( "Orientation" ) )
         {
+            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+
             static DirectX::XMFLOAT3 rotations = { camera3D.GetRotationFloat3() };
             ImGui::SliderFloat( "Pitch", &rotations.x, -1.0f, 1.0f );
             ImGui::SliderFloat( "Yaw", &rotations.y, -2.0f, 2.0f );
@@ -343,10 +342,13 @@ void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UIN
             ImGui::PopStyleColor();
 
             ImGui::TreePop();
+            ImGui::PopStyleColor();
         }
 
         if ( ImGui::TreeNode( "Projection" ) )
         {
+            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+
             float fovDegrees = camera3D.GetFoVDegrees();
             float nearZ = camera3D.GetNearZ();
             float farZ = camera3D.GetFarZ();
@@ -367,7 +369,8 @@ void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UIN
             ImGui::PopStyleColor();
 
             ImGui::TreePop();
+            ImGui::PopStyleColor();
         }
-
+        ImGui::PopStyleColor();
     } ImGui::End();
 }
