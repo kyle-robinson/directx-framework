@@ -26,6 +26,18 @@ class Graphics
 {
 	friend class GraphicsResource;
 public:
+	struct SceneParameters
+	{
+		bool useMask = false;
+		bool useTexture = true;
+		bool circleMask = true;
+		bool multiView = false;
+		bool rasterizerSolid = true;
+		bool samplerAnisotropic = true;
+		float alphaFactor = 1.0f;
+		float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
+	} sceneParams;
+public:
 	virtual ~Graphics( void ) = default;
 	bool Initialize( HWND hWnd, int width, int height );
 	void BeginFrame();
@@ -90,14 +102,6 @@ private:
 	UINT windowWidth;
 	UINT windowHeight;
 	ImGuiManager imgui;
-	bool useMask = false;
-	bool useTexture = true;
-	bool circleMask = true;
-	bool multiView = false;
-	bool rasterizerSolid = true;
-	bool samplerAnisotropic = true;
-	float alphaFactor = 1.0f;
-	float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
 	std::vector<XMFLOAT4X4> worldMatricesQuad;
 };
 

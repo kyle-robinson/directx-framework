@@ -42,15 +42,15 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 void Graphics::BeginFrame()
 {
 	// clear render target
-    renderTarget->BindAsTexture( *this, depthStencil.get(), clearColor );
+    renderTarget->BindAsTexture( *this, depthStencil.get(), sceneParams.clearColor );
     depthStencil->ClearDepthStencil( *this );
 
 	// set render state
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     stencilStates["Off"]->Bind( *this );
     blendState->Bind( *this );
-    rasterizerSolid == true ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
-    samplerAnisotropic == true ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );
+    sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
+    sceneParams.samplerAnisotropic ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );
 
     // setup constant buffers
     if ( !cb_vs_fog.ApplyChanges() ) return;
@@ -62,8 +62,8 @@ void Graphics::BeginFrame()
 	if ( !cb_ps_light.ApplyChanges() ) return;
 	context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
 
-    cb_ps_scene.data.alphaFactor = alphaFactor;
-    cb_ps_scene.data.useTexture = useTexture;
+    cb_ps_scene.data.alphaFactor = sceneParams.alphaFactor;
+    cb_ps_scene.data.useTexture = sceneParams.useTexture;
     if ( !cb_ps_scene.ApplyChanges() ) return;
 	context->PSSetConstantBuffers( 3, 1, cb_ps_scene.GetAddressOf() );
 }
@@ -71,14 +71,13 @@ void Graphics::BeginFrame()
 void Graphics::RenderFrame()
 {
     // setup sprite masking
-    if ( useMask ) 
+    if ( sceneParams.useMask ) 
     {
         stencilStates["Mask"]->Bind( *this );
         context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
         context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
         context->PSSetShader( pixelShader_2D_discard.GetShader(), NULL, 0 );
-        circleMask == true ? circle.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() ) :
-            square.Draw( camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix() );
+        sceneParams.circleMask ? circle.Draw( camera2D.GetWorldOrthoMatrix() ) : square.Draw( camera2D.GetWorldOrthoMatrix() );
         stencilStates["Write"]->Bind( *this );
     }
 	
@@ -118,7 +117,7 @@ void Graphics::RenderFrame()
 void Graphics::EndFrame()
 {
     // set and clear back buffer
-    backBuffer->BindAsBuffer( *this, clearColor );
+    backBuffer->BindAsBuffer( *this, sceneParams.clearColor );
 
     // render to fullscreen texture
     UINT offset = 0;
@@ -128,15 +127,14 @@ void Graphics::EndFrame()
     context->IASetIndexBuffer( indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->VSSetShader( vertexShader_full.GetShader(), NULL, 0 );
     context->PSSetShader( pixelShader_full.GetShader(), NULL, 0 );
-    cb_vs_fullscreen.data.multiView = multiView;
+    cb_vs_fullscreen.data.multiView = sceneParams.multiView;
     if ( !cb_vs_fullscreen.ApplyChanges() ) return;
     context->VSSetConstantBuffers( 0, 1, cb_vs_fullscreen.GetAddressOf() );
     Bind::Rasterizer::DrawSolid( *this, indexBufferFullscreen.IndexCount() ); // always draw as solid
 
     // display imgui
     imgui.BeginRender();
-    imgui.RenderMainWindow( context.Get(), alphaFactor, useTexture, clearColor,
-        rasterizerSolid, samplerAnisotropic, multiView, useMask, circleMask );
+    imgui.RenderMainWindow( *this, context.Get() );
     imgui.RenderLightWindow( light, cb_ps_light );
     imgui.RenderFogWindow( cb_vs_fog );
     imgui.RenderModelWindow( renderables );

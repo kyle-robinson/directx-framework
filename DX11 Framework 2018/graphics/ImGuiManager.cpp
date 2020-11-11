@@ -1,5 +1,6 @@
 #include "ImGuiManager.h"
 #include "ModelData.h"
+#include "GraphicsResource.h"
 #include "RenderableGameObject.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -37,8 +38,7 @@ void ImGuiManager::EndRender() const noexcept
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 }
 
-void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaFactor, bool& useTexture, float clearColor[4],
-    bool& rasterizerSolid, bool& samplerAnisotropic, bool& multiView, bool& useMask, bool& circleMask )
+void ImGuiManager::RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context )
 {
 	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {
@@ -47,52 +47,52 @@ void ImGuiManager::RenderMainWindow( ID3D11DeviceContext* context, float& alphaF
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             {
-                ImGui::ColorEdit3( "Clear Color", clearColor );
-                ImGui::SliderFloat( "Blend Factor", &alphaFactor, 0.0f, 1.0f );
+                ImGui::ColorEdit3( "Clear Color", gfx.sceneParams.clearColor );
+                ImGui::SliderFloat( "Blend Factor", &gfx.sceneParams.alphaFactor, 0.0f, 1.0f );
 			    
                 static int fillGroup = 0;
 			    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
-				    rasterizerSolid = true;
+                    gfx.sceneParams.rasterizerSolid = true;
 			    ImGui::SameLine();
 			    if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
-                    rasterizerSolid = false;
+                    gfx.sceneParams.rasterizerSolid = false;
 
                 static int textureGroup = 0;
                 if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
-                    useTexture = true;
+                    gfx.sceneParams.useTexture = true;
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
-                    useTexture = false;
+                    gfx.sceneParams.useTexture = false;
 
                 static int filterGroup = 0;
                 if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
-                    samplerAnisotropic = true;
+                    gfx.sceneParams.samplerAnisotropic = true;
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
-                    samplerAnisotropic = false;
+                    gfx.sceneParams.samplerAnisotropic = false;
 
                 static int viewGroup = 0;
                 if ( ImGui::RadioButton( "Normal", &viewGroup, 0 ) )
-                    multiView = false;
+                    gfx.sceneParams.multiView = false;
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Multi-View", &viewGroup, 1 ) )
-                    multiView = true;
+                    gfx.sceneParams.multiView = true;
 
                 static int maskGroup = 0;
                 if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
-                    useMask = false;
+                    gfx.sceneParams.useMask = false;
                 ImGui::SameLine();
                 if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
-                    useMask = true;
+                    gfx.sceneParams.useMask = true;
 
-                if ( useMask )
+                if ( gfx.sceneParams.useMask )
                 {
                     static int maskTypeGroup = 0;
                     if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
-                        circleMask = true;
+                        gfx.sceneParams.circleMask = true;
                     ImGui::SameLine();
                     if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
-                        circleMask = false;
+                        gfx.sceneParams.circleMask = false;
                 }
             }
             ImGui::PopStyleColor();

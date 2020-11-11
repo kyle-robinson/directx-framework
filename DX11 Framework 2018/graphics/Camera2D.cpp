@@ -24,6 +24,11 @@ const XMMATRIX& Camera2D::GetWorldMatrix() const noexcept
 	return worldMatrix;
 }
 
+const XMMATRIX& Camera2D::GetWorldOrthoMatrix() const noexcept
+{
+	return worldMatrix * orthoMatrix;
+}
+
 void Camera2D::UpdateMatrix()
 {
 	XMMATRIX translationOffsetMatrix = XMMatrixTranslation( -position.x, -position.y, 0.0f );
