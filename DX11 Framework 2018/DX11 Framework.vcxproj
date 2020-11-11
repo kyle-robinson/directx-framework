@@ -465,6 +465,7 @@
     <ClCompile Include="graphics\Light.cpp" />
     <ClCompile Include="graphics\Mesh.cpp" />
     <ClCompile Include="graphics\Model.cpp" />
+    <ClCompile Include="graphics\Plane.cpp" />
     <ClCompile Include="graphics\RenderableGameObject.cpp" />
     <ClCompile Include="graphics\Shaders.cpp" />
     <ClCompile Include="graphics\Sprite.cpp" />
@@ -497,6 +498,7 @@
     <ClInclude Include="graphics\Cube.h" />
     <ClInclude Include="graphics\DepthStencil.h" />
     <ClInclude Include="graphics\ModelData.h" />
+    <ClInclude Include="graphics\Plane.h" />
     <ClInclude Include="graphics\RenderTarget.h" />
     <ClInclude Include="graphics\Stencil.h" />
     <ClInclude Include="graphics\GameObject.h" />

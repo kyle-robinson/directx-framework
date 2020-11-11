@@ -27,13 +27,6 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	if ( !InitializeScene() )
 		return false;
 
-    for ( int i = 0; i < 400; i++ )
-    {
-        XMFLOAT4X4 worldMatrix;
-        XMStoreFloat4x4( &worldMatrix, XMMatrixIdentity() );
-        worldMatricesQuad.push_back( worldMatrix );
-    }
-
     imgui.Initialize( hWnd, device.Get(), context.Get() );
 
 	return true;
@@ -90,24 +83,9 @@ void Graphics::RenderFrame()
     for ( unsigned int i = 0; i < renderables.size(); i++ )
         renderables.at( i ).Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
 
-    // draw cubes
+    // draw primitves
     cube.Draw( cb_vs_matrix, boxTexture.Get() );
-
-    // draw primitives
-    UINT offset = 0;
-    context->IASetVertexBuffers( 0, 1, vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
-    context->IASetIndexBuffer( indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    context->PSSetShaderResources( 0, 1, grassTexture.GetAddressOf() );
-    cb_ps_light.data.useQuad = true;
-    if ( !cb_ps_light.ApplyChanges() ) return;
-    context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
-    for ( int i = 0; i < worldMatricesQuad.size(); i++ )
-    {
-        cb_vs_matrix.data.worldMatrix = XMLoadFloat4x4( &worldMatricesQuad[i] );
-        if ( !cb_vs_matrix.ApplyChanges() ) return;
-        context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
-        context->DrawIndexed( indexBufferQuad.IndexCount(), 0, 0 );
-    }
+    plane.Draw( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
 	light.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
@@ -167,28 +145,9 @@ void Graphics::Update( float dt )
 	if ( dwTimeStart == 0 ) dwTimeStart = dwTimeCur;
 	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
 
-    // cube transformations
+    // primitive transformations
     cube.Update( timer );
-
-    // quad transformations
-    int count = 0;
-    static int tileSize = 5;
-    static int tileOffset = 6;
-    static int worldOffsetX = 8;
-    static int worldOffsetY = 60;
-    for ( int row = 0; row < 20; row++ )
-    {
-        for ( int col = 0; col < 20; col++ )
-        {
-            XMStoreFloat4x4( &worldMatricesQuad[count],
-                XMMatrixScaling( tileSize, tileSize, 0.0f ) *
-                XMMatrixRotationX( XMConvertToRadians( 90.0f ) ) *
-                XMMatrixTranslation(
-                    ( row * tileOffset * tileSize ) - ( worldOffsetX + worldOffsetY * tileSize ),
-                    4.7f, ( col * tileOffset * tileSize ) - worldOffsetY * tileSize ) );
-            count++;
-        }
-    }
+    plane.Update();
 }
 
 UINT Graphics::GetWidth() const noexcept
@@ -354,13 +313,9 @@ bool Graphics::InitializeScene()
 
         /*   VERTEX/INDEX   */
         cube.Initialize( context.Get(), device.Get(), 3 );
+        plane.Initialize( context.Get(), device.Get(), 400 );
 
-        HRESULT hr = vertexBufferQuad.Initialize( device.Get(), VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
-        hr = indexBufferQuad.Initialize( device.Get(), IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
-
-        hr = vertexBufferFullscreen.Initialize( device.Get(), VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
+        HRESULT hr = vertexBufferFullscreen.Initialize( device.Get(), VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
         hr = indexBufferFullscreen.Initialize( device.Get(), IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );

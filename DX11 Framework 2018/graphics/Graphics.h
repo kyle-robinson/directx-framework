@@ -4,6 +4,7 @@
 
 #include <map>
 #include "Cube.h"
+#include "Plane.h"
 #include "Sprite.h"
 #include "Shaders.h"
 #include "Camera2D.h"
@@ -48,6 +49,7 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Cube cube;
+	Plane plane;
 	Light light;
 	Sprite circle;
 	Sprite square;
@@ -75,21 +77,16 @@ private:
 
 	VertexShader vertexShader_2D;
 	VertexShader vertexShader_full;
-	VertexShader vertexShader_quad;
 	VertexShader vertexShader_light;
 	VertexShader vertexShader_noLight;
 
 	PixelShader pixelShader_2D;
 	PixelShader pixelShader_full;
-	PixelShader pixelShader_quad;
 	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;
 	PixelShader pixelShader_2D_discard;
 
-	VertexBuffer<Vertex3D> vertexBufferQuad;
 	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
-
-	IndexBuffer indexBufferQuad;
 	IndexBuffer indexBufferFullscreen;
 
 	ConstantBuffer<CB_VS_fog> cb_vs_fog;
@@ -102,7 +99,6 @@ private:
 	UINT windowWidth;
 	UINT windowHeight;
 	ImGuiManager imgui;
-	std::vector<XMFLOAT4X4> worldMatricesQuad;
 };
 
 #endif

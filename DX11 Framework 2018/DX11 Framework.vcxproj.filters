@@ -167,6 +167,9 @@
     <ClCompile Include="graphics\Cube.cpp">
       <Filter>Source\Graphics\Drawables</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\Plane.cpp">
+      <Filter>Source\Graphics\Drawables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -320,6 +323,9 @@
       <Filter>Headers\Graphics\ObjectData</Filter>
     </ClInclude>
     <ClInclude Include="graphics\Cube.h">
+      <Filter>Headers\Graphics\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Plane.h">
       <Filter>Headers\Graphics\Drawables</Filter>
     </ClInclude>
   </ItemGroup>

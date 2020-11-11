@@ -1,8 +1,8 @@
 #include "Cube.h"
-#include "ObjectVertices.h"
 #include "ObjectIndices.h"
+#include "ObjectVertices.h"
 
-bool Cube::Initialize( ID3D11DeviceContext* context, ID3D11Device* device, int cubeAmount ) noexcept
+bool Cube::Initialize( ID3D11DeviceContext* context, ID3D11Device* device, int cubeAmount )
 {
     this->context = context;
     this->cubeAmount = cubeAmount;
@@ -14,7 +14,7 @@ bool Cube::Initialize( ID3D11DeviceContext* context, ID3D11Device* device, int c
         hr = ib_cube.Initialize( device, IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
     }
-    catch( COMException& exception )
+    catch ( COMException& exception )
     {
         ErrorLogger::Log( exception );
         return false;
@@ -24,7 +24,7 @@ bool Cube::Initialize( ID3D11DeviceContext* context, ID3D11Device* device, int c
     {
         XMFLOAT4X4 worldMatrix;
         XMStoreFloat4x4( &worldMatrix, XMMatrixIdentity() );
-        worldMatricesCube.push_back( worldMatrix );
+        worldMatrices.push_back( worldMatrix );
     }
 
     return true;
@@ -36,9 +36,9 @@ void Cube::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ID3D11ShaderResourc
     context->IASetVertexBuffers( 0, 1, vb_cube.GetAddressOf(), vb_cube.StridePtr(), &offset );
     context->IASetIndexBuffer( ib_cube.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->PSSetShaderResources( 0, 1, &texture );
-    for ( int i = 0; i < worldMatricesCube.size(); i++ )
+    for ( int i = 0; i < worldMatrices.size(); i++ )
     {
-        XMMATRIX worldMatrix = XMLoadFloat4x4( &worldMatricesCube[i] );
+        XMMATRIX worldMatrix = XMLoadFloat4x4( &worldMatrices[i] );
         cb_vs_matrix.data.worldMatrix = worldMatrix;
         if ( !cb_vs_matrix.ApplyChanges() ) return;
         context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
@@ -48,17 +48,17 @@ void Cube::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ID3D11ShaderResourc
 
 void Cube::Update( float timer ) noexcept
 {
-    XMStoreFloat4x4( &worldMatricesCube[0],
+    XMStoreFloat4x4( &worldMatrices[0],
         XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
         XMMatrixRotationZ( timer * 1.5f ) *
         XMMatrixTranslation( 0.0f, 10.0f, 15.0f )
     );
-    XMStoreFloat4x4( &worldMatricesCube[1],
+    XMStoreFloat4x4( &worldMatrices[1],
         XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
         XMMatrixTranslation( 10.0f, 10.0f, 0.0f ) *
         XMMatrixRotationY( timer )
     );
-    XMStoreFloat4x4( &worldMatricesCube[2],
+    XMStoreFloat4x4( &worldMatrices[2],
         XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
         XMMatrixTranslation( 1.0f, 10.0f, 0.0f ) *
         XMMatrixRotationZ( timer * 1.5f ) *
