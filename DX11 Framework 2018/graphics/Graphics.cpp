@@ -295,6 +295,7 @@ bool Graphics::InitializeScene()
         /*   OBJECTS   */
         XMFLOAT2 aspectRatio = { static_cast<float>( windowWidth ), static_cast<float>( windowHeight ) };
         camera2D.SetProjectionValues( aspectRatio.x, aspectRatio.y, 0.0f, 1.0f );
+        
         camera3D.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
 	    camera3D.SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 

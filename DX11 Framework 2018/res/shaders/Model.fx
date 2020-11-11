@@ -58,6 +58,9 @@ cbuffer LightBuffer : register( b2 )
     float3 dynamicLightColor;
     float3 specularLightColor;
     float3 dynamicLightPosition;
+    float3 directionalLightColor;
+    float3 directionalLightPosition;
+    
     float ambientLightStrength;
     float dynamicLightStrength;
     float specularLightIntensity;
@@ -65,10 +68,9 @@ cbuffer LightBuffer : register( b2 )
     float lightConstant;
     float lightLinear;
     float lightQuadratic;
-    bool usePointLight;
-    float3 directionalLightColor;
-    float3 directionalLightPosition;
+    
     float directionalLightIntensity;
+    bool usePointLight;
     float quadIntensity;
     bool useQuad;
 };
@@ -138,11 +140,11 @@ float4 PS( PS_INPUT input ) : SV_TARGET
         combinedColor = directionalLight * directionalLightIntensity;
     if ( useQuad )
         combinedColor = directionalLight * quadIntensity;
-    float3 finalColor = combinedColor * ( albedoSample = ( useTexture == true ) ? albedoSample : 1 );
+    float3 finalColor = combinedColor * ( albedoSample = useTexture ? albedoSample : 1 );
     
     // fog factor
-    const float fogValue = input.inFog * finalColor + ( 1.0 - input.inFog ) * fogColor;
-    finalColor += ( fogEnable == true ) ? fogValue : 0;
+    float fogValue = input.inFog * finalColor + ( 1.0 - input.inFog );
+    finalColor += fogEnable ? fogValue * fogColor : 0;
     
     // output colour
     return float4( saturate( finalColor ), alphaFactor );

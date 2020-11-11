@@ -252,8 +252,8 @@ void ImGuiManager::RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog )
         if ( cb_vs_fog.data.fogEnable )
         {
             ImGui::ColorEdit3( "Fog Colour", &cb_vs_fog.data.fogColor.x );
-            ImGui::SliderFloat( "Start Distance", &cb_vs_fog.data.fogStart, 1.0f, 10.0f );
-            ImGui::SliderFloat( "End Distance", &cb_vs_fog.data.fogEnd, 10.0f, 100.0f  );
+            ImGui::SliderFloat( "Start Distance", &cb_vs_fog.data.fogStart, 1.0f, cb_vs_fog.data.fogEnd - 0.1f );
+            ImGui::SliderFloat( "End Distance", &cb_vs_fog.data.fogEnd, cb_vs_fog.data.fogStart + 0.1f, 100.0f  );
         }
     } ImGui::End();
 }

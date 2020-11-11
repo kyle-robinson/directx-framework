@@ -23,18 +23,21 @@ struct CB_VS_fullscreen
 
 struct CB_VS_fog
 {
-	alignas( 16 ) DirectX::XMFLOAT3 fogColor;
-	alignas( 16 ) float fogStart;
-	alignas( 16 ) float fogEnd;
-	alignas( 16 ) bool fogEnable;
+	DirectX::XMFLOAT3 fogColor;
+	float fogEnd;
+	float fogStart;
+	bool fogEnable;
 };
 
 struct CB_PS_light
 {
-	alignas( 16 ) DirectX::XMFLOAT3 ambientLightColor;
-	alignas( 16 ) DirectX::XMFLOAT3 dynamicLightColor;
-	alignas( 16 ) DirectX::XMFLOAT3 specularLightColor;
-	alignas( 16 ) DirectX::XMFLOAT3 dynamicLightPosition;
+	alignas(16) DirectX::XMFLOAT3 ambientLightColor;
+	alignas(16) DirectX::XMFLOAT3 dynamicLightColor;
+	alignas(16) DirectX::XMFLOAT3 specularLightColor;
+	alignas(16) DirectX::XMFLOAT3 dynamicLightPosition;
+	alignas(16) DirectX::XMFLOAT3 directionalLightColor;
+	alignas(16) DirectX::XMFLOAT3 directionalLightPosition;
+
 	float ambientLightStrength;
 	float dynamicLightStrength;
 	float specularLightIntensity;
@@ -42,11 +45,9 @@ struct CB_PS_light
 	float lightConstant;
 	float lightLinear;
 	float lightQuadratic;
-	bool usePointLight;
 
-	alignas( 16 ) DirectX::XMFLOAT3 directionalLightColor;
-	alignas( 16 ) DirectX::XMFLOAT3 directionalLightPosition;
 	float directionalLightIntensity;
+	bool usePointLight;
 	float quadIntensity;
 	bool useQuad;
 };
