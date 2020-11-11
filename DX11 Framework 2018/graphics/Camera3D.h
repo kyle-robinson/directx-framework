@@ -9,6 +9,8 @@ class Camera3D : public GameObject3D
 {
 public:
 	Camera3D();
+	Camera3D( const Camera3D& ) = default;
+	Camera3D& operator=( const Camera3D& ) = default;
 	void SetProjectionValues( float fovDegrees, float aspectRatio, float nearZ, float farZ );
 
 	const XMMATRIX& GetViewMatrix() const noexcept;

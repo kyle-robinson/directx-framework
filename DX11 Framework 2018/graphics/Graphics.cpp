@@ -79,17 +79,18 @@ void Graphics::RenderFrame()
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
     context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
 
+    static Camera3D camera = cameraTop;
+
     // render models
     for ( unsigned int i = 0; i < renderables.size(); i++ )
-        renderables.at( i ).Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
+        renderables.at( i ).Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
 
     // draw primitves
     cube.Draw( cb_vs_matrix, boxTexture.Get() );
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
-	light.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
-
+	light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
 }
 
 void Graphics::EndFrame()
@@ -298,6 +299,9 @@ bool Graphics::InitializeScene()
         
         camera3D.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
 	    camera3D.SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
+
+        cameraTop.SetPosition( XMFLOAT3( 0.0f, 9.0f, -55.0f ) );
+	    cameraTop.SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         XMVECTOR lightPosition = camera3D.GetPositionVector();
 		lightPosition += camera3D.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );

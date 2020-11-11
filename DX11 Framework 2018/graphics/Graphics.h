@@ -48,15 +48,9 @@ public:
 	UINT GetWidth() const noexcept;
 	UINT GetHeight() const noexcept;
 
-	Cube cube;
 	Light light;
-	Sprite circle;
-	Sprite square;
-	Camera2D camera2D;
 	Camera3D camera3D;
-	PlaneInstanced ground;
-	PlaneFullscreen fullscreen;
-	std::vector<RenderableGameObject> renderables;
+	Camera3D cameraTop;
 private:
 	bool InitializeDirectX( HWND hWnd );
 	bool InitializeShaders();
@@ -97,6 +91,14 @@ private:
 	UINT windowWidth;
 	UINT windowHeight;
 	ImGuiManager imgui;
+
+	Cube cube;
+	Sprite circle;
+	Sprite square;
+	Camera2D camera2D;
+	PlaneInstanced ground;
+	PlaneFullscreen fullscreen;
+	std::vector<RenderableGameObject> renderables;
 };
 
 #endif
