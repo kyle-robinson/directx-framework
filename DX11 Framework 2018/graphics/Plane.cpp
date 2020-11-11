@@ -5,12 +5,34 @@
 /// NORMAL PLANE
 bool Plane::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
 {
+    this->context = context;
+
+    try
+    {
+        HRESULT hr = vb_plane.Initialize( device, VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
+        hr = ib_plane.Initialize( device, IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
+    }
+    catch ( COMException& exception )
+    {
+        ErrorLogger::Log( exception );
+        return false;
+    }
+
     return false;
 }
 
-void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix ) noexcept
+void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ID3D11ShaderResourceView* texture ) noexcept
 {
-
+    UINT offset = 0;
+    context->IASetVertexBuffers( 0, 1, vb_plane.GetAddressOf(), vb_plane.StridePtr(), &offset );
+    context->IASetIndexBuffer( ib_plane.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    context->PSSetShaderResources( 0, 1, &texture );
+    cb_vs_matrix.data.worldMatrix = XMMatrixIdentity();
+    if ( !cb_vs_matrix.ApplyChanges() ) return;
+    context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+    context->DrawIndexed( ib_plane.IndexCount(), 0, 0 );
 }
 
 /// INSTANCED PLANE
@@ -22,9 +44,9 @@ bool PlaneInstanced::InitializeInstanced( ID3D11DeviceContext* context, ID3D11De
     try
     {
         HRESULT hr = vb_plane.Initialize( device, VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create instanced quad vertex buffer!" );
         hr = ib_plane.Initialize( device, IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create instanced quad index buffer!" );
     }
     catch ( COMException& exception )
     {
