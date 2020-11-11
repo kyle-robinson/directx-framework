@@ -164,6 +164,9 @@
     <ClCompile Include="graphics\Texture.cpp">
       <Filter>Source\Graphics\Model</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\Cube.cpp">
+      <Filter>Source\Graphics\Drawables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -315,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="graphics\ModelData.h">
       <Filter>Headers\Graphics\ObjectData</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Cube.h">
+      <Filter>Headers\Graphics\Drawables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

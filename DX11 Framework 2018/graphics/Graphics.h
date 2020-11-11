@@ -3,13 +3,11 @@
 #define GRAPHICS_H
 
 #include <map>
+#include "Cube.h"
 #include "Sprite.h"
 #include "Shaders.h"
 #include "Camera2D.h"
-#include "Camera3D.h"
 #include "ImGuiManager.h"
-#include "ObjectIndices.h"
-#include "ObjectVertices.h"
 #include "RenderableGameObject.h"
 #include <dxtk/WICTextureLoader.h>
 
@@ -37,6 +35,7 @@ public:
 	UINT GetWidth() const noexcept;
 	UINT GetHeight() const noexcept;
 
+	Cube cube;
 	Light light;
 	Sprite circle;
 	Sprite square;
@@ -75,11 +74,9 @@ private:
 	PixelShader pixelShader_noLight;
 	PixelShader pixelShader_2D_discard;
 
-	VertexBuffer<Vertex3D> vertexBufferCube;
 	VertexBuffer<Vertex3D> vertexBufferQuad;
 	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
 
-	IndexBuffer indexBufferCube;
 	IndexBuffer indexBufferQuad;
 	IndexBuffer indexBufferFullscreen;
 
@@ -102,7 +99,6 @@ private:
 	float alphaFactor = 1.0f;
 	float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
 	std::vector<XMFLOAT4X4> worldMatricesQuad;
-	std::vector<XMFLOAT4X4> worldMatricesCube;
 };
 
 #endif

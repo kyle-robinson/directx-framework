@@ -34,8 +34,7 @@ public:
 		
 		this->indexCount = indexCount;
 
-		D3D11_BUFFER_DESC indexBufferDesc;
-		ZeroMemory( &indexBufferDesc, sizeof( D3D11_BUFFER_DESC ) );
+		D3D11_BUFFER_DESC indexBufferDesc = { 0 };
 		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 		indexBufferDesc.ByteWidth = sizeof( WORD ) * indexCount;
 		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;

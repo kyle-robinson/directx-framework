@@ -454,6 +454,7 @@
     <ClCompile Include="graphics\Camera2D.cpp" />
     <ClCompile Include="graphics\Camera3D.cpp" />
     <ClCompile Include="graphics\Colour.cpp" />
+    <ClCompile Include="graphics\Cube.cpp" />
     <ClCompile Include="graphics\GameObject.cpp" />
     <ClCompile Include="graphics\GameObject2D.cpp" />
     <ClCompile Include="graphics\GameObject3D.cpp" />
@@ -493,6 +494,7 @@
     <ClInclude Include="graphics\Colour.h" />
     <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\ConstantBufferTypes.h" />
+    <ClInclude Include="graphics\Cube.h" />
     <ClInclude Include="graphics\DepthStencil.h" />
     <ClInclude Include="graphics\ModelData.h" />
     <ClInclude Include="graphics\RenderTarget.h" />

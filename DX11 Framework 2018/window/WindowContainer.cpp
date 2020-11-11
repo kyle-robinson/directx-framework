@@ -6,8 +6,7 @@ WindowContainer::WindowContainer()
 	static bool rawInputInitialized = false;
 	if ( !rawInputInitialized )
 	{
-		RAWINPUTDEVICE rid;
-		ZeroMemory( &rid, sizeof( RAWINPUTDEVICE ) );
+		RAWINPUTDEVICE rid = { 0 };
 		rid.usUsagePage = 0x01;
 		rid.usUsage = 0x02;
 		rid.dwFlags = 0;

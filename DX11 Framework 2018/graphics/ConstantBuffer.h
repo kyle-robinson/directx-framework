@@ -33,8 +33,7 @@ public:
 		
 		this->context = context;
 
-		D3D11_BUFFER_DESC constantBufferDesc;
-		ZeroMemory( &constantBufferDesc, sizeof( D3D11_BUFFER_DESC ) );
+		D3D11_BUFFER_DESC constantBufferDesc = { 0 };
 		constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		constantBufferDesc.ByteWidth = static_cast<UINT>( sizeof( T ) + ( 16 - ( sizeof( T ) % 16 ) ) );
 		constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;

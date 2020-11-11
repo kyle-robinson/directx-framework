@@ -8,9 +8,10 @@
 #include "Rasterizer.h"
 #include "DepthStencil.h"
 #include "RenderTarget.h"
+#include "ObjectIndices.h"
+#include "ObjectVertices.h"
 #include "../resource.h"
 #include <fstream>
-#include <map>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -26,12 +27,6 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	if ( !InitializeScene() )
 		return false;
 
-    for ( int i = 0; i < 3; i++ )
-    {
-        XMFLOAT4X4 worldMatrix;
-        XMStoreFloat4x4( &worldMatrix, XMMatrixIdentity() );
-        worldMatricesCube.push_back( worldMatrix );
-    }
     for ( int i = 0; i < 400; i++ )
     {
         XMFLOAT4X4 worldMatrix;
@@ -97,21 +92,10 @@ void Graphics::RenderFrame()
         renderables.at( i ).Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
 
     // draw cubes
-    UINT offset = 0;
-    context->IASetVertexBuffers( 0, 1, vertexBufferCube.GetAddressOf(), vertexBufferCube.StridePtr(), &offset );
-    context->IASetIndexBuffer( indexBufferCube.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    context->PSSetShaderResources( 0, 1, boxTexture.GetAddressOf() );
-    for ( int i = 0; i < worldMatricesCube.size(); i++ )
-    {
-        XMMATRIX worldMatrix = XMLoadFloat4x4( &worldMatricesCube[i] );
-        cb_vs_matrix.data.worldMatrix = worldMatrix;
-        if ( !cb_vs_matrix.ApplyChanges() ) return;
-        context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
-        context->DrawIndexed( indexBufferCube.IndexCount(), 0, 0 );
-    }
+    cube.Draw( cb_vs_matrix, boxTexture.Get() );
 
     // draw primitives
-    offset = 0;
+    UINT offset = 0;
     context->IASetVertexBuffers( 0, 1, vertexBufferQuad.GetAddressOf(), vertexBufferQuad.StridePtr(), &offset );
     context->IASetIndexBuffer( indexBufferQuad.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->PSSetShaderResources( 0, 1, grassTexture.GetAddressOf() );
@@ -186,22 +170,7 @@ void Graphics::Update( float dt )
 	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
 
     // cube transformations
-    XMStoreFloat4x4( &worldMatricesCube[0],
-        XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
-        XMMatrixRotationZ( timer * 1.5f ) *
-        XMMatrixTranslation( 0.0f, 10.0f, 15.0f )
-    );
-    XMStoreFloat4x4( &worldMatricesCube[1],
-        XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
-        XMMatrixTranslation( 10.0f, 10.0f, 0.0f ) *
-        XMMatrixRotationY( timer )
-    );
-    XMStoreFloat4x4( &worldMatricesCube[2],
-        XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
-        XMMatrixTranslation( 1.0f, 10.0f, 0.0f ) *
-        XMMatrixRotationZ( timer * 1.5f ) *
-        XMMatrixTranslation( 0.0f, 7.5f, 0.0f )
-    );
+    cube.Update( timer );
 
     // quad transformations
     int count = 0;
@@ -386,12 +355,9 @@ bool Graphics::InitializeScene()
 		light.SetRotation( camera3D.GetRotationFloat3() );    
 
         /*   VERTEX/INDEX   */
-        HRESULT hr = vertexBufferCube.Initialize( device.Get(), VTX::verticesCube_PosTexNrm, ARRAYSIZE( VTX::verticesCube_PosTexNrm ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
-        hr = indexBufferCube.Initialize( device.Get(), IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
+        cube.Initialize( context.Get(), device.Get(), 3 );
 
-        hr = vertexBufferQuad.Initialize( device.Get(), VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
+        HRESULT hr = vertexBufferQuad.Initialize( device.Get(), VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
         hr = indexBufferQuad.Initialize( device.Get(), IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
