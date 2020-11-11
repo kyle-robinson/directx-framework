@@ -85,7 +85,7 @@ void Graphics::RenderFrame()
 
     // draw primitves
     cube.Draw( cb_vs_matrix, boxTexture.Get() );
-    plane.Draw( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
+    ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
 	light.Draw( camera3D.GetViewMatrix(), camera3D.GetProjectionMatrix() );
@@ -98,17 +98,9 @@ void Graphics::EndFrame()
     backBuffer->BindAsBuffer( *this, sceneParams.clearColor );
 
     // render to fullscreen texture
-    UINT offset = 0;
     context->PSSetShaderResources( 0, 1, renderTarget->GetShaderResourceViewPtr() );
-    context->IASetVertexBuffers( 0, 1, vertexBufferFullscreen.GetAddressOf(), vertexBufferFullscreen.StridePtr(), &offset );
-    context->IASetInputLayout( vertexShader_full.GetInputLayout() );
-    context->IASetIndexBuffer( indexBufferFullscreen.Get(), DXGI_FORMAT_R16_UINT, 0 );
-    context->VSSetShader( vertexShader_full.GetShader(), NULL, 0 );
-    context->PSSetShader( pixelShader_full.GetShader(), NULL, 0 );
-    cb_vs_fullscreen.data.multiView = sceneParams.multiView;
-    if ( !cb_vs_fullscreen.ApplyChanges() ) return;
-    context->VSSetConstantBuffers( 0, 1, cb_vs_fullscreen.GetAddressOf() );
-    Bind::Rasterizer::DrawSolid( *this, indexBufferFullscreen.IndexCount() ); // always draw as solid
+    fullscreen.SetupBuffers( vertexShader_full, pixelShader_full, cb_vs_fullscreen, sceneParams.multiView );
+    Bind::Rasterizer::DrawSolid( *this, fullscreen.ib_full.IndexCount() ); // always draw as solid
 
     // display imgui
     imgui.BeginRender();
@@ -147,7 +139,7 @@ void Graphics::Update( float dt )
 
     // primitive transformations
     cube.Update( timer );
-    plane.Update();
+    ground.UpdateInstanced( 5, 6, 8, 60 );
 }
 
 UINT Graphics::GetWidth() const noexcept
@@ -313,15 +305,11 @@ bool Graphics::InitializeScene()
 
         /*   VERTEX/INDEX   */
         cube.Initialize( context.Get(), device.Get(), 3 );
-        plane.Initialize( context.Get(), device.Get(), 400 );
-
-        HRESULT hr = vertexBufferFullscreen.Initialize( device.Get(), VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
-        hr = indexBufferFullscreen.Initialize( device.Get(), IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
-        COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );
+        fullscreen.Initialize( context.Get(), device.Get() );
+        ground.InitializeInstanced( context.Get(), device.Get(), 400 );
 
         /*   TEXTURES   */
-        hr = CreateWICTextureFromFile( device.Get(), L"res\\textures\\CrashBox.png", nullptr, boxTexture.GetAddressOf() );
+        HRESULT hr = CreateWICTextureFromFile( device.Get(), L"res\\textures\\CrashBox.png", nullptr, boxTexture.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create box texture from file!" );
 
         hr = CreateWICTextureFromFile( device.Get(), L"res\\textures\\grass.jpg", nullptr, grassTexture.GetAddressOf() );

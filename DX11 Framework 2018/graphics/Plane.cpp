@@ -2,7 +2,19 @@
 #include "ObjectIndices.h"
 #include "ObjectVertices.h"
 
-bool Plane::Initialize( ID3D11DeviceContext* context, ID3D11Device* device, int planeAmount )
+/// NORMAL PLANE
+bool Plane::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
+{
+    return false;
+}
+
+void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix ) noexcept
+{
+
+}
+
+/// INSTANCED PLANE
+bool PlaneInstanced::InitializeInstanced( ID3D11DeviceContext* context, ID3D11Device* device, int planeAmount )
 {
     this->context = context;
     this->planeAmount = planeAmount;
@@ -30,7 +42,7 @@ bool Plane::Initialize( ID3D11DeviceContext* context, ID3D11Device* device, int 
     return true;
 }
 
-void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ConstantBuffer<CB_PS_light>& cb_ps_light,
+void PlaneInstanced::DrawInstanced( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ConstantBuffer<CB_PS_light>& cb_ps_light,
     ID3D11ShaderResourceView* texture ) noexcept
 {
 	UINT offset = 0;
@@ -40,7 +52,7 @@ void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ConstantBuffer<CB_
     cb_ps_light.data.useQuad = true;
     if ( !cb_ps_light.ApplyChanges() ) return;
     context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
-    for ( int i = 0; i < worldMatrices.size(); i++ )
+    for ( int i = 0; i < planeAmount; i++ )
     {
         cb_vs_matrix.data.worldMatrix = XMLoadFloat4x4( &worldMatrices[i] );
         if ( !cb_vs_matrix.ApplyChanges() ) return;
@@ -49,16 +61,12 @@ void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ConstantBuffer<CB_
     }
 }
 
-void Plane::Update() noexcept
+void PlaneInstanced::UpdateInstanced( int tileSize, int tileOffset, int worldOffsetX, int worldOffsetY ) noexcept
 {
     int count = 0;
-    static int tileSize = 5;
-    static int tileOffset = 6;
-    static int worldOffsetX = 8;
-    static int worldOffsetY = 60;
-    for ( int row = 0; row < 20; row++ )
+    for ( int row = 0; row < sqrt( planeAmount ); row++ )
     {
-        for ( int col = 0; col < 20; col++ )
+        for ( int col = 0; col < sqrt( planeAmount ); col++ )
         {
             XMStoreFloat4x4( &worldMatrices[count],
                 XMMatrixScaling( tileSize, tileSize, 0.0f ) *
@@ -69,4 +77,38 @@ void Plane::Update() noexcept
             count++;
         }
     }
+}
+
+/// FULLSCREEN PLANE
+bool PlaneFullscreen::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
+{
+    this->context = context;
+
+    try
+    {
+        HRESULT hr = vb_full.Initialize( device, VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
+        hr = ib_full.Initialize( device, IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );
+    }
+    catch ( COMException& exception )
+    {
+        ErrorLogger::Log( exception );
+        return false;
+    }
+    
+    return true;
+}
+
+void PlaneFullscreen::SetupBuffers( VertexShader& vs_full, PixelShader& ps_full, ConstantBuffer<CB_VS_fullscreen>& cb_vs_full, bool& multiView ) noexcept 
+{
+    UINT offset = 0;
+    context->VSSetShader( vs_full.GetShader(), NULL, 0 );
+    context->PSSetShader( ps_full.GetShader(), NULL, 0 );
+    context->IASetInputLayout( vs_full.GetInputLayout() );
+    context->IASetVertexBuffers( 0, 1, vb_full.GetAddressOf(), vb_full.StridePtr(), &offset );
+    context->IASetIndexBuffer( ib_full.Get(), DXGI_FORMAT_R16_UINT, 0 );
+    cb_vs_full.data.multiView = multiView;
+    if ( !cb_vs_full.ApplyChanges() ) return;
+    context->VSSetConstantBuffers( 0, 1, cb_vs_full.GetAddressOf() );
 }

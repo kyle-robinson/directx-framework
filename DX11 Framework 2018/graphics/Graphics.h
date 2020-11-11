@@ -49,12 +49,13 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Cube cube;
-	Plane plane;
 	Light light;
 	Sprite circle;
 	Sprite square;
 	Camera2D camera2D;
 	Camera3D camera3D;
+	PlaneInstanced ground;
+	PlaneFullscreen fullscreen;
 	std::vector<RenderableGameObject> renderables;
 private:
 	bool InitializeDirectX( HWND hWnd );
@@ -85,9 +86,6 @@ private:
 	PixelShader pixelShader_light;
 	PixelShader pixelShader_noLight;
 	PixelShader pixelShader_2D_discard;
-
-	VertexBuffer<Vertex_Pos> vertexBufferFullscreen;
-	IndexBuffer indexBufferFullscreen;
 
 	ConstantBuffer<CB_VS_fog> cb_vs_fog;
 	ConstantBuffer<CB_PS_scene> cb_ps_scene;
