@@ -42,6 +42,10 @@ void Graphics::BeginFrame()
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     stencilStates["Off"]->Bind( *this );
     blendState->Bind( *this );
+    if ( useFull )
+        viewports["Full"]->Bind( *this );
+    else
+        cameraToUse == "Main" ? viewports["Left"]->Bind( *this ) : viewports["Right"]->Bind( *this );
     sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
     sceneParams.samplerAnisotropic ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );
 
@@ -180,10 +184,12 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         renderTarget = std::make_shared<Bind::RenderTarget>( *this );
 
         depthStencil = std::make_shared<Bind::DepthStencil>( *this );
-        std::unique_ptr<Bind::Viewport> viewport = std::make_unique<Bind::Viewport>( *this );
-        viewport.get()->Bind( *this );
-
         blendState = std::make_shared<Bind::Blender>( *this );
+
+        viewports.emplace( "Full", std::make_shared<Bind::Viewport>( *this, Bind::Viewport::Side::Full ) );
+        viewports.emplace( "Left", std::make_shared<Bind::Viewport>( *this, Bind::Viewport::Side::Left ) );
+        viewports.emplace( "Right", std::make_shared<Bind::Viewport>( *this, Bind::Viewport::Side::Right ) );
+
         stencilStates.emplace( "Off", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Off ) );
         stencilStates.emplace( "Mask", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Mask ) );
         stencilStates.emplace( "Write", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Write ) );

@@ -106,6 +106,12 @@ void Application::Update()
 		gfx.light.SetRotation(gfx.cameras[gfx.cameraToUse]->GetRotationFloat3() );
 	}
 
+	// manage viewports
+	if ( keyboard.KeyIsPressed( VK_UP ) )
+		gfx.useFull = true;
+	if ( keyboard.KeyIsPressed( VK_DOWN ) )
+		gfx.useFull = false;
+
     gfx.Update( dt );
 }
 

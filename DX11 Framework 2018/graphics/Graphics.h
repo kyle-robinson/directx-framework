@@ -17,6 +17,7 @@ namespace Bind
 	class Sampler;
 	class Stencil;
 	class Blender;
+	class Viewport;
 	class SwapChain;
 	class Rasterizer;
 	class DepthStencil;
@@ -49,6 +50,7 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Light light;
+	bool useFull = true;
 	bool cameraCollision = false;
 	std::string cameraToUse = "Main";
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;
@@ -67,6 +69,7 @@ private:
 	std::shared_ptr<Bind::DepthStencil> depthStencil;
 	std::shared_ptr<Bind::RenderTarget> backBuffer;
 	std::shared_ptr<Bind::RenderTarget> renderTarget;
+	std::map<std::string, std::shared_ptr<Bind::Viewport>> viewports;
 	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
 	std::map<std::string, std::shared_ptr<Bind::Stencil>> stencilStates;
 	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
