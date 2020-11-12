@@ -42,10 +42,21 @@ void Graphics::BeginFrame()
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     stencilStates["Off"]->Bind( *this );
     blendState->Bind( *this );
-    if ( useFull )
+    // manage viewports
+    if ( sceneParams.useFull )
         viewports["Full"]->Bind( *this );
-    else
-        cameraToUse == "Main" ? viewports["Left"]->Bind( *this ) : viewports["Right"]->Bind( *this );
+    if ( useLeft )
+    {
+        useLeft = false;
+        cameraToUse = "Main";
+        viewports["Left"]->BindLeft( *this );
+    }
+    if ( useRight )
+    {
+        useRight = false;
+        cameraToUse = "Sub";
+        viewports["Right"]->BindRight( *this );
+    }
     sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
     sceneParams.samplerAnisotropic ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );
 
@@ -66,7 +77,7 @@ void Graphics::BeginFrame()
 }
 
 void Graphics::RenderFrame()
-{
+{   
     // setup sprite masking
     if ( sceneParams.useMask ) 
     {
@@ -82,6 +93,7 @@ void Graphics::RenderFrame()
 	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
     context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
+
 
     // render models
     for ( unsigned int i = 0; i < renderables.size(); i++ )
@@ -159,9 +171,9 @@ void Graphics::Update( float dt )
             ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) +
             ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) *
             ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) <= radius * radius )
-            cameraCollision = true;
+            sceneParams.cameraCollision = true;
         else
-            cameraCollision = false;
+            sceneParams.cameraCollision = false;
     }
 }
 

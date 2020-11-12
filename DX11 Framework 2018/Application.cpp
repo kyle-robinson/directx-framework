@@ -70,7 +70,7 @@ void Application::Update()
 	if ( keyboard.KeyIsPressed( VK_SHIFT ) )
 		gfx.cameras[gfx.cameraToUse]->UpdateCameraSpeed( 0.01f );
 
-	if ( gfx.cameraCollision )
+	if ( gfx.sceneParams.cameraCollision )
 		gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetBackwardVector() *
 			gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
@@ -108,16 +108,31 @@ void Application::Update()
 
 	// manage viewports
 	if ( keyboard.KeyIsPressed( VK_UP ) )
-		gfx.useFull = true;
+		gfx.sceneParams.useFull = true;
 	if ( keyboard.KeyIsPressed( VK_DOWN ) )
-		gfx.useFull = false;
+		gfx.sceneParams.useFull = false;
 
     gfx.Update( dt );
 }
 
 void Application::Render()
 {
-	gfx.BeginFrame();
-	gfx.RenderFrame();
-	gfx.EndFrame();
+	if ( gfx.sceneParams.useFull )
+	{
+		gfx.BeginFrame();
+		gfx.RenderFrame();
+		gfx.EndFrame();
+	}
+	else
+	{
+		gfx.useLeft = true;
+		gfx.BeginFrame();
+		gfx.RenderFrame();
+		gfx.EndFrame();
+
+		gfx.useRight = true;
+		gfx.BeginFrame();
+		gfx.RenderFrame();
+		gfx.EndFrame();
+	}
 }

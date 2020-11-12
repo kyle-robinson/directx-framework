@@ -30,11 +30,13 @@ class Graphics
 public:
 	struct SceneParameters
 	{
+		bool useFull = true;
 		bool useMask = false;
 		bool useTexture = true;
 		bool circleMask = true;
 		bool multiView = false;
 		bool rasterizerSolid = true;
+		bool cameraCollision = false;
 		bool samplerAnisotropic = true;
 		float alphaFactor = 1.0f;
 		float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
@@ -50,10 +52,11 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Light light;
-	bool useFull = true;
-	bool cameraCollision = false;
+	bool useLeft = false;
+	bool useRight = false;
 	std::string cameraToUse = "Main";
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;
+	std::map<std::string, std::shared_ptr<Bind::Viewport>> viewports;
 private:
 	bool InitializeDirectX( HWND hWnd );
 	bool InitializeShaders();
@@ -69,7 +72,6 @@ private:
 	std::shared_ptr<Bind::DepthStencil> depthStencil;
 	std::shared_ptr<Bind::RenderTarget> backBuffer;
 	std::shared_ptr<Bind::RenderTarget> renderTarget;
-	std::map<std::string, std::shared_ptr<Bind::Viewport>> viewports;
 	std::map<std::string, std::shared_ptr<Bind::Sampler>> samplerStates;
 	std::map<std::string, std::shared_ptr<Bind::Stencil>> stencilStates;
 	std::map<std::string, std::shared_ptr<Bind::Rasterizer>> rasterizerStates;
