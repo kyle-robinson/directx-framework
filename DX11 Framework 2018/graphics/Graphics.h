@@ -49,8 +49,8 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Light light;
-	Camera3D camera3D;
-	Camera3D cameraTop;
+	std::string cameraToUse = "Main";
+	std::map<std::string, std::shared_ptr<Camera3D>> cameras;
 private:
 	bool InitializeDirectX( HWND hWnd );
 	bool InitializeShaders();

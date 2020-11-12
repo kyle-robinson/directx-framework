@@ -46,7 +46,7 @@ void Application::Update()
 		{
 			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove )
 			{
-				gfx.camera3D.AdjustRotation(
+				gfx.cameras[gfx.cameraToUse]->AdjustRotation(
 					XMFLOAT3(
 						static_cast<float>( me.GetPosY() ) * 0.005f,
 						static_cast<float>( me.GetPosX() ) * 0.005f,
@@ -57,35 +57,48 @@ void Application::Update()
 		}
 	}
 
-	gfx.camera3D.SetCameraSpeed( 0.002f );
+	// camera to use
+	if ( keyboard.KeyIsPressed( '1' ) )
+		gfx.cameraToUse = "Main";
+	
+	if ( keyboard.KeyIsPressed( '2' ) )
+		gfx.cameraToUse = "Sub";
+
+	// camera movement
+	gfx.cameras[gfx.cameraToUse]->SetCameraSpeed( 0.002f );
 
 	if ( keyboard.KeyIsPressed( VK_SHIFT ) )
-		gfx.camera3D.UpdateCameraSpeed( 0.01f );
+		gfx.cameras[gfx.cameraToUse]->UpdateCameraSpeed( 0.01f );
 
 	if ( keyboard.KeyIsPressed( 'W' ) )
-		gfx.camera3D.AdjustPosition( gfx.camera3D.GetForwardVector() * gfx.camera3D.GetCameraSpeed() * dt );
+		gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetForwardVector() *
+			gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 	if ( keyboard.KeyIsPressed( 'A' ) )
-		gfx.camera3D.AdjustPosition( gfx.camera3D.GetLeftVector() * gfx.camera3D.GetCameraSpeed() * dt );
+		gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetLeftVector() *
+			gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 	if ( keyboard.KeyIsPressed( 'S' ) )
-		gfx.camera3D.AdjustPosition( gfx.camera3D.GetBackwardVector() * gfx.camera3D.GetCameraSpeed() * dt );
+		gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetBackwardVector() *
+			gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 	if ( keyboard.KeyIsPressed( 'D' ) )
-		gfx.camera3D.AdjustPosition( gfx.camera3D.GetRightVector() * gfx.camera3D.GetCameraSpeed() * dt );
+		gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetRightVector() *
+			gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 	if ( keyboard.KeyIsPressed( VK_SPACE ) )
-		gfx.camera3D.AdjustPosition( XMFLOAT3( 0.0f, gfx.camera3D.GetCameraSpeed() * dt, 0.0f ) );
+		gfx.cameras[gfx.cameraToUse]->AdjustPosition( XMFLOAT3( 0.0f, gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
 
 	if ( keyboard.KeyIsPressed( 'E' ) )
-		gfx.camera3D.AdjustPosition( XMFLOAT3( 0.0f, -gfx.camera3D.GetCameraSpeed() * dt, 0.0f ) );
+		gfx.cameras[gfx.cameraToUse]->AdjustPosition( XMFLOAT3( 0.0f, -gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
 
+	// light object position
 	if ( keyboard.KeyIsPressed( 'C' ) )
 	{
-		XMVECTOR lightPosition = gfx.camera3D.GetPositionVector();
-		lightPosition += gfx.camera3D.GetForwardVector();
+		XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
+		lightPosition += gfx.cameras[gfx.cameraToUse]->GetForwardVector();
 		gfx.light.SetPosition( lightPosition );
-		gfx.light.SetRotation( gfx.camera3D.GetRotationFloat3() );
+		gfx.light.SetRotation(gfx.cameras[gfx.cameraToUse]->GetRotationFloat3() );
 	}
 
     gfx.Update( dt );

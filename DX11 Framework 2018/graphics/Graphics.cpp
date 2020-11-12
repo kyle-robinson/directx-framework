@@ -79,18 +79,16 @@ void Graphics::RenderFrame()
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
     context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
 
-    static Camera3D camera = cameraTop;
-
     // render models
     for ( unsigned int i = 0; i < renderables.size(); i++ )
-        renderables.at( i ).Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
+        renderables.at( i ).Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
 
     // draw primitves
     cube.Draw( cb_vs_matrix, boxTexture.Get() );
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
-	light.Draw( camera.GetViewMatrix(), camera.GetProjectionMatrix() );
+	light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
 }
 
 void Graphics::EndFrame()
@@ -109,7 +107,7 @@ void Graphics::EndFrame()
     imgui.RenderLightWindow( light, cb_ps_light );
     imgui.RenderFogWindow( cb_vs_fog );
     imgui.RenderModelWindow( renderables );
-    imgui.RenderCameraWindow( camera3D, windowWidth, windowHeight );
+    imgui.RenderCameraWindow( *cameras[cameraToUse], windowWidth, windowHeight );
     imgui.EndRender();
 
     // unbind rtv and srv
@@ -296,17 +294,19 @@ bool Graphics::InitializeScene()
         /*   OBJECTS   */
         XMFLOAT2 aspectRatio = { static_cast<float>( windowWidth ), static_cast<float>( windowHeight ) };
         camera2D.SetProjectionValues( aspectRatio.x, aspectRatio.y, 0.0f, 1.0f );
-        
-        camera3D.SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
-	    camera3D.SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
-        cameraTop.SetPosition( XMFLOAT3( 0.0f, 9.0f, -55.0f ) );
-	    cameraTop.SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
+        cameras.emplace( "Main", std::make_shared<Camera3D>() );
+        cameras["Main"]->SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
+        cameras["Main"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
-        XMVECTOR lightPosition = camera3D.GetPositionVector();
-		lightPosition += camera3D.GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+        cameras.emplace( "Sub", std::make_shared<Camera3D>() );
+        cameras["Sub"]->SetPosition( XMFLOAT3( 0.0f, 9.0f, -55.0f ) );
+        cameras["Sub"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
+
+        XMVECTOR lightPosition = cameras["Main"]->GetPositionVector();
+		lightPosition += cameras["Main"]->GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 		light.SetPosition( lightPosition );
-		light.SetRotation( camera3D.GetRotationFloat3() );    
+		light.SetRotation( cameras["Main"]->GetRotationFloat3() );    
 
         /*   VERTEX/INDEX   */
         cube.Initialize( context.Get(), device.Get(), 3 );

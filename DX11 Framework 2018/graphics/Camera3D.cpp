@@ -9,6 +9,11 @@ Camera3D::Camera3D()
 	UpdateMatrix();
 }
 
+Camera3D& Camera3D::operator=( Camera3D )
+{
+	return *this;
+}
+
 void Camera3D::SetProjectionValues( float fovDegrees, float aspectRatio, float nearZ, float farZ )
 {
 	this->fovDegrees = fovDegrees;
