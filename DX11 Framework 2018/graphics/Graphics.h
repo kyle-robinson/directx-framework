@@ -49,6 +49,7 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Light light;
+	bool cameraCollision = false;
 	std::string cameraToUse = "Main";
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;
 private:

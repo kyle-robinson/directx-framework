@@ -64,12 +64,17 @@ void Application::Update()
 	if ( keyboard.KeyIsPressed( '2' ) )
 		gfx.cameraToUse = "Sub";
 
-	// camera movement
+	// camera speed
 	gfx.cameras[gfx.cameraToUse]->SetCameraSpeed( 0.002f );
 
 	if ( keyboard.KeyIsPressed( VK_SHIFT ) )
 		gfx.cameras[gfx.cameraToUse]->UpdateCameraSpeed( 0.01f );
 
+	if ( gfx.cameraCollision )
+		gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetBackwardVector() *
+			gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+
+	// camera movement
 	if ( keyboard.KeyIsPressed( 'W' ) )
 		gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetForwardVector() *
 			gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );

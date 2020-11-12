@@ -139,6 +139,26 @@ void Graphics::Update( float dt )
     // primitive transformations
     cube.Update( timer );
     ground.UpdateInstanced( 5, 6, 8, 60 );
+
+    // camera viewing
+    if ( cameraToUse == "Sub" )
+    {
+        XMFLOAT3 positions = renderables.at( 0 ).GetPositionFloat3();
+        positions.x = positions.x + renderables.at( 0 ).GetScaleFloat3().x / 2.0f;
+        positions.y = positions.y + renderables.at( 0 ).GetScaleFloat3().y / 2.0f;
+        positions.z = positions.z + renderables.at( 0 ).GetScaleFloat3().z / 2.0f;
+        static int radius = 20.0f;
+        cameras[cameraToUse]->SetLookAtPos( positions );
+        if ( ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) *
+            ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) +
+            ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) *
+            ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) +
+            ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) *
+            ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) <= radius * radius )
+            cameraCollision = true;
+        else
+            cameraCollision = false;
+    }
 }
 
 UINT Graphics::GetWidth() const noexcept
