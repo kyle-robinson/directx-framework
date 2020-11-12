@@ -269,20 +269,35 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
             
-                DirectX::XMFLOAT3 positions = { models.at( i ).GetPositionFloat3().x,
-                    models.at( i ).GetPositionFloat3().y, models.at( i ).GetPositionFloat3().z };
-                ImGui::DragFloat3( "Position", &positions.x, 2.0f, -200.0f, 200.0f );
-                models.at( i ).SetPosition( positions );
+                // model positions
+                static DirectX::XMFLOAT3 positions = { models.at( i ).GetPositionFloat3() };
+                ImGui::SliderFloat3( "Position", &positions.x, -40.0f, 40.0f, "%.1f" );
 
-                DirectX::XMFLOAT3 rotations = { models.at( i ).GetRotationFloat3().x,
-                    models.at( i ).GetRotationFloat3().y, models.at( i ).GetRotationFloat3().z };
-                ImGui::DragFloat3( "Rotation", &rotations.x, 0.1f, -3.0f, 3.0f );
-                models.at( i ).SetRotation( rotations );
+                positions.x = XMConvertToRadians( positions.x );
+                positions.y = XMConvertToRadians( positions.y );
+                positions.z = XMConvertToRadians( positions.z );
 
-                DirectX::XMFLOAT3 scales = { models.at( i ).GetScaleFloat3().x,
-                    models.at( i ).GetScaleFloat3().y, models.at( i ).GetScaleFloat3().z };
-                ImGui::DragFloat3( "Scale", &scales.x, 0.1f, 0.1f, 2.0f );
-                models.at( i ).SetScale( scales.x, scales.y, scales.z );
+                models.at( i ).AdjustPosition( positions );
+
+                // model rotations
+                static DirectX::XMFLOAT3 rotations = { models.at( i ).GetRotationFloat3() };
+                ImGui::SliderFloat3( "Rotation", &rotations.x, -2.0f, 2.0f, "%.1f" );
+                
+                rotations.x = XMConvertToRadians( rotations.x );
+                rotations.y = XMConvertToRadians( rotations.y );
+                rotations.z = XMConvertToRadians( rotations.z );
+                
+                models.at( i ).AdjustRotation( rotations );
+
+                // model scales
+                static DirectX::XMFLOAT3 scales = { models.at( i ).GetScaleFloat3() };
+                ImGui::SliderFloat3( "Scale", &scales.x, -2.0f, 2.0f, "%.001f" );
+
+                scales.x = XMConvertToRadians( scales.x );
+                scales.y = XMConvertToRadians( scales.y );
+                scales.z = XMConvertToRadians( scales.z );
+
+                models.at( i ).AdjustScale( scales.x, scales.y, scales.z );
 
                 ImGui::PopStyleColor();
                 ImGui::TreePop();

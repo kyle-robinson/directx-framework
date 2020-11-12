@@ -24,6 +24,7 @@ public:
 	void AdjustRotation( const XMFLOAT3& rot ) noexcept;
 	void SetModelName( const std::string& name ) noexcept;
 	void SetScale( float xScale, float yScale, float zScale = 1.0f );
+	void AdjustScale( float xScale, float yScale, float zScale = 1.0f );
 protected:
 	virtual void UpdateMatrix();
 	std::string modelName;
