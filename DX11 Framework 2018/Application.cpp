@@ -108,16 +108,43 @@ void Application::Update()
 
 	// manage viewports
 	if ( keyboard.KeyIsPressed( VK_UP ) )
-		gfx.sceneParams.useFull = true;
+	{
+		gfx.viewportParams.useSplit = false;
+		gfx.viewportParams.useFull = true;
+		gfx.viewportParams.useLeft = false;
+		gfx.viewportParams.useRight = false;
+	}
+
 	if ( keyboard.KeyIsPressed( VK_DOWN ) )
-		gfx.sceneParams.useFull = false;
+	{
+		gfx.viewportParams.useSplit = true;
+		gfx.viewportParams.useFull = false;
+		gfx.viewportParams.useLeft = false;
+		gfx.viewportParams.useRight = false;
+	}
+
+	if ( keyboard.KeyIsPressed( VK_LEFT ) )
+	{
+		gfx.viewportParams.useSplit = false;
+		gfx.viewportParams.useFull = false;
+		gfx.viewportParams.useLeft = true;
+		gfx.viewportParams.useRight = false;
+	}
+	
+	if ( keyboard.KeyIsPressed( VK_RIGHT ) )
+	{
+		gfx.viewportParams.useSplit = false;
+		gfx.viewportParams.useFull = false;
+		gfx.viewportParams.useLeft = false;
+		gfx.viewportParams.useRight = true;
+	}
 
     gfx.Update( dt );
 }
 
 void Application::Render()
 {
-	if ( gfx.sceneParams.useFull )
+	if ( !gfx.viewportParams.useSplit )
 	{
 		gfx.BeginFrame();
 		gfx.RenderFrame();
@@ -125,12 +152,12 @@ void Application::Render()
 	}
 	else
 	{
-		gfx.useLeft = true;
+		gfx.viewportParams.useLeft = true;
 		gfx.BeginFrame();
 		gfx.RenderFrame();
 		gfx.EndFrame();
 
-		gfx.useRight = true;
+		gfx.viewportParams.useRight = true;
 		gfx.BeginFrame();
 		gfx.RenderFrame();
 		gfx.EndFrame();

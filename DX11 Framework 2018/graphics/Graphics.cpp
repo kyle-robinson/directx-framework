@@ -42,20 +42,19 @@ void Graphics::BeginFrame()
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     stencilStates["Off"]->Bind( *this );
     blendState->Bind( *this );
-    // manage viewports
-    if ( sceneParams.useFull )
+    if ( viewportParams.useFull )
         viewports["Full"]->Bind( *this );
-    if ( useLeft )
+    if ( viewportParams.useLeft )
     {
-        useLeft = false;
+        viewportParams.useLeft = false;
         cameraToUse = "Main";
-        viewports["Left"]->BindLeft( *this );
+        viewports["Left"]->Bind( *this );
     }
-    if ( useRight )
+    if ( viewportParams.useRight )
     {
-        useRight = false;
+        viewportParams.useRight = false;
         cameraToUse = "Sub";
-        viewports["Right"]->BindRight( *this );
+        viewports["Right"]->Bind( *this );
     }
     sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
     sceneParams.samplerAnisotropic ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );

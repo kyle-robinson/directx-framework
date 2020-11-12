@@ -30,7 +30,6 @@ class Graphics
 public:
 	struct SceneParameters
 	{
-		bool useFull = true;
 		bool useMask = false;
 		bool useTexture = true;
 		bool circleMask = true;
@@ -41,6 +40,13 @@ public:
 		float alphaFactor = 1.0f;
 		float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
 	} sceneParams;
+	struct ViewportParameters
+	{
+		bool useFull = true;
+		bool useLeft = false;
+		bool useRight = false;
+		bool useSplit = false;
+	} viewportParams;
 public:
 	virtual ~Graphics( void ) = default;
 	bool Initialize( HWND hWnd, int width, int height );
@@ -52,8 +58,6 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Light light;
-	bool useLeft = false;
-	bool useRight = false;
 	std::string cameraToUse = "Main";
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;
 	std::map<std::string, std::shared_ptr<Bind::Viewport>> viewports;
