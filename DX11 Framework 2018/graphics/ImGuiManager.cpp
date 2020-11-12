@@ -163,7 +163,7 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         ImGui::SameLine();
         if ( ImGui::RadioButton( "Point", &lightGroup, 1 ) )
             cb_ps_light.data.usePointLight = true;
-        ImGui::SliderFloat( "Ground Intensity", &cb_ps_light.data.quadIntensity, 0.0f, 1.0f );
+        ImGui::SliderFloat( "Ground", &cb_ps_light.data.quadIntensity, 0.0f, 1.0f );
         
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
         if ( cb_ps_light.data.usePointLight )
@@ -250,52 +250,68 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
             if ( ImGui::TreeNode( models.at( i ).GetModelName().c_str() ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            
-                // model positions
-                static DirectX::XMFLOAT3 positions = { models.at( i ).GetPositionFloat3() };
-                ImGui::SliderFloat3( "Position", &positions.x, -40.0f, 40.0f, "%.1f" );
+                if ( ImGui::TreeNode( "Position" ) )
+                {
+                    static DirectX::XMFLOAT3 positions = { models.at( i ).GetPositionFloat3() };
+                    ImGui::SliderFloat( "X", &positions.x, -40.0f, 40.0f, "%.1f" );
+                    ImGui::SliderFloat( "Y", &positions.y, -40.0f, 40.0f, "%.1f" );
+                    ImGui::SliderFloat( "Z", &positions.z, -40.0f, 40.0f, "%.1f" );
 
-                positions.x = XMConvertToRadians( positions.x );
-                positions.y = XMConvertToRadians( positions.y );
-                positions.z = XMConvertToRadians( positions.z );
+                    positions.x = XMConvertToRadians( positions.x );
+                    positions.y = XMConvertToRadians( positions.y );
+                    positions.z = XMConvertToRadians( positions.z );
 
-                models.at( i ).AdjustPosition( positions );
+                    models.at( i ).AdjustPosition( positions );
 
-                ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
-                if ( ImGui::Button( "Reset Position" ) )
-                    models.at( i ).ResetPosition();
-                ImGui::PopStyleColor();
+                    ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+                    if ( ImGui::Button( "Reset Position" ) )
+                        models.at( i ).ResetPosition();
+                    ImGui::PopStyleColor();
 
-                // model rotations
-                static DirectX::XMFLOAT3 rotations = { models.at( i ).GetRotationFloat3() };
-                ImGui::SliderFloat3( "Rotation", &rotations.x, -2.0f, 2.0f, "%.1f" );
+                    ImGui::TreePop();
+                }
+
+                if ( ImGui::TreeNode( "Orientation" ) )
+                {
+                    static DirectX::XMFLOAT3 rotations = { models.at( i ).GetRotationFloat3() };
+                    ImGui::SliderFloat( "Pitch", &rotations.x, -2.0f, 2.0f, "%.1f" );
+                    ImGui::SliderFloat( "Yaw", &rotations.y, -2.0f, 2.0f, "%.1f" );
+                    ImGui::SliderFloat( "Roll", &rotations.z, -2.0f, 2.0f, "%.1f" );
                 
-                rotations.x = XMConvertToRadians( rotations.x );
-                rotations.y = XMConvertToRadians( rotations.y );
-                rotations.z = XMConvertToRadians( rotations.z );
+                    rotations.x = XMConvertToRadians( rotations.x );
+                    rotations.y = XMConvertToRadians( rotations.y );
+                    rotations.z = XMConvertToRadians( rotations.z );
                 
-                models.at( i ).AdjustRotation( rotations );
+                    models.at( i ).AdjustRotation( rotations );
 
-                ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
-                if ( ImGui::Button( "Reset Rotation" ) )
-                    models.at( i ).ResetRotation();
-                ImGui::PopStyleColor();
+                    ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+                    if ( ImGui::Button( "Reset Rotation" ) )
+                        models.at( i ).ResetRotation();
+                    ImGui::PopStyleColor();
 
-                // model scales
-                static DirectX::XMFLOAT3 scales = { models.at( i ).GetScaleFloat3() };
-                ImGui::SliderFloat3( "Scale", &scales.x, -2.0f, 2.0f, "%.001f" );
+                    ImGui::TreePop();
+                }
 
-                scales.x = XMConvertToRadians( scales.x );
-                scales.y = XMConvertToRadians( scales.y );
-                scales.z = XMConvertToRadians( scales.z );
+                if ( ImGui::TreeNode( "Scaling" ) )
+                {
+                    static DirectX::XMFLOAT3 scales = { models.at( i ).GetScaleFloat3() };
+                    ImGui::SliderFloat( "X", &scales.x, -2.0f, 2.0f, "%.001f" );
+                    ImGui::SliderFloat( "Y", &scales.y, -2.0f, 2.0f, "%.001f" );
+                    ImGui::SliderFloat( "Z", &scales.z, -2.0f, 2.0f, "%.001f" );
 
-                models.at( i ).AdjustScale( scales.x, scales.y, scales.z );
+                    scales.x = XMConvertToRadians( scales.x );
+                    scales.y = XMConvertToRadians( scales.y );
+                    scales.z = XMConvertToRadians( scales.z );
 
-                ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
-                if ( ImGui::Button( "Reset Scale" ) )
-                    models.at( i ).ResetScale();
-                ImGui::PopStyleColor();
+                    models.at( i ).AdjustScale( scales.x, scales.y, scales.z );
 
+                    ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+                    if ( ImGui::Button( "Reset Scale" ) )
+                        models.at( i ).ResetScale();
+                    ImGui::PopStyleColor();
+
+                    ImGui::TreePop();
+                }
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
             }
