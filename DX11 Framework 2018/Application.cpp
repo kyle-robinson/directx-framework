@@ -109,33 +109,25 @@ void Application::Update()
 	// manage viewports
 	if ( keyboard.KeyIsPressed( VK_UP ) )
 	{
-		gfx.viewportParams.useSplit = false;
+		gfx.viewportParams = { 0 };
 		gfx.viewportParams.useFull = true;
-		gfx.viewportParams.useLeft = false;
-		gfx.viewportParams.useRight = false;
 	}
 
 	if ( keyboard.KeyIsPressed( VK_DOWN ) )
 	{
+		gfx.viewportParams = { 0 };
 		gfx.viewportParams.useSplit = true;
-		gfx.viewportParams.useFull = false;
-		gfx.viewportParams.useLeft = false;
-		gfx.viewportParams.useRight = false;
 	}
 
 	if ( keyboard.KeyIsPressed( VK_LEFT ) )
 	{
-		gfx.viewportParams.useSplit = false;
-		gfx.viewportParams.useFull = false;
+		gfx.viewportParams = { 0 };
 		gfx.viewportParams.useLeft = true;
-		gfx.viewportParams.useRight = false;
 	}
 	
 	if ( keyboard.KeyIsPressed( VK_RIGHT ) )
 	{
-		gfx.viewportParams.useSplit = false;
-		gfx.viewportParams.useFull = false;
-		gfx.viewportParams.useLeft = false;
+		gfx.viewportParams = { 0 };
 		gfx.viewportParams.useRight = true;
 	}
 
