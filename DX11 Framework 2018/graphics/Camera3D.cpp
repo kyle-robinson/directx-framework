@@ -63,14 +63,7 @@ const float& Camera3D::GetFarZ() const noexcept
 	return farZ;
 }
 
-void Camera3D::ResetPosition() noexcept
-{
-	position.x = 0.0f;
-	position.y = 9.0f;
-	position.z = -15.0f;
-}
-
-void Camera3D::ResetRotation() noexcept
+void Camera3D::ResetOrientation() noexcept
 {
 	rotation.x = 0.0f;
 	rotation.y = 0.0f;

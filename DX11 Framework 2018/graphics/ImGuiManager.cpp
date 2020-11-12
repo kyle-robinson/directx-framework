@@ -46,54 +46,52 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context
         if ( ImGui::TreeNode( "Scene Parameters" ) )
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            {
-                ImGui::ColorEdit3( "Clear Color", gfx.sceneParams.clearColor );
-                ImGui::SliderFloat( "Blend Factor", &gfx.sceneParams.alphaFactor, 0.0f, 1.0f );
+            ImGui::ColorEdit3( "Clear Color", gfx.sceneParams.clearColor );
+            ImGui::SliderFloat( "Blend Factor", &gfx.sceneParams.alphaFactor, 0.0f, 1.0f );
 			    
-                static int fillGroup = 0;
-			    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
-                    gfx.sceneParams.rasterizerSolid = true;
-			    ImGui::SameLine();
-			    if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
-                    gfx.sceneParams.rasterizerSolid = false;
+            static int fillGroup = 0;
+			if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
+                gfx.sceneParams.rasterizerSolid = true;
+			ImGui::SameLine();
+			if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
+                gfx.sceneParams.rasterizerSolid = false;
 
-                static int textureGroup = 0;
-                if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
-                    gfx.sceneParams.useTexture = true;
+            static int textureGroup = 0;
+            if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
+                gfx.sceneParams.useTexture = true;
+            ImGui::SameLine();
+            if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
+                gfx.sceneParams.useTexture = false;
+
+            static int filterGroup = 0;
+            if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
+                gfx.sceneParams.samplerAnisotropic = true;
+            ImGui::SameLine();
+            if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
+                gfx.sceneParams.samplerAnisotropic = false;
+
+            static int viewGroup = 0;
+            if ( ImGui::RadioButton( "Normal", &viewGroup, 0 ) )
+                gfx.sceneParams.multiView = false;
+            ImGui::SameLine();
+            if ( ImGui::RadioButton( "Multi-View", &viewGroup, 1 ) )
+                gfx.sceneParams.multiView = true;
+
+            static int maskGroup = 0;
+            if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
+                gfx.sceneParams.useMask = false;
+            ImGui::SameLine();
+            if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
+                gfx.sceneParams.useMask = true;
+
+            if ( gfx.sceneParams.useMask )
+            {
+                static int maskTypeGroup = 0;
+                if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
+                    gfx.sceneParams.circleMask = true;
                 ImGui::SameLine();
-                if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
-                    gfx.sceneParams.useTexture = false;
-
-                static int filterGroup = 0;
-                if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
-                    gfx.sceneParams.samplerAnisotropic = true;
-                ImGui::SameLine();
-                if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
-                    gfx.sceneParams.samplerAnisotropic = false;
-
-                static int viewGroup = 0;
-                if ( ImGui::RadioButton( "Normal", &viewGroup, 0 ) )
-                    gfx.sceneParams.multiView = false;
-                ImGui::SameLine();
-                if ( ImGui::RadioButton( "Multi-View", &viewGroup, 1 ) )
-                    gfx.sceneParams.multiView = true;
-
-                static int maskGroup = 0;
-                if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
-                    gfx.sceneParams.useMask = false;
-                ImGui::SameLine();
-                if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
-                    gfx.sceneParams.useMask = true;
-
-                if ( gfx.sceneParams.useMask )
-                {
-                    static int maskTypeGroup = 0;
-                    if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
-                        gfx.sceneParams.circleMask = true;
-                    ImGui::SameLine();
-                    if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
-                        gfx.sceneParams.circleMask = false;
-                }
+                if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
+                    gfx.sceneParams.circleMask = false;
             }
             ImGui::PopStyleColor();
             ImGui::TreePop();
@@ -105,16 +103,14 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context
             if ( ImGui::TreeNode( "Camera Controls" ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                {
-                    ImGui::Text( "W\t\t->\tForward" );
-                    ImGui::Text( "A\t\t->\tLeft" );
-                    ImGui::Text( "S\t\t->\tBackward" );
-                    ImGui::Text( "D\t\t->\tRight" );
-                    ImGui::Text( "E\t\t->\tDownward" );
-                    ImGui::Text( "SPACE\t->\tUpward" );
-                    ImGui::Text( "SHIFT\t->\tMove Faster" );
-                    ImGui::Text( "RMB  \t->\tRotate Camera" );
-                }
+                ImGui::Text( "W\t\t->\tForward" );
+                ImGui::Text( "A\t\t->\tLeft" );
+                ImGui::Text( "S\t\t->\tBackward" );
+                ImGui::Text( "D\t\t->\tRight" );
+                ImGui::Text( "E\t\t->\tDownward" );
+                ImGui::Text( "SPACE\t->\tUpward" );
+                ImGui::Text( "SHIFT\t->\tMove Faster" );
+                ImGui::Text( "RMB  \t->\tRotate Camera" );
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
             }
@@ -122,9 +118,7 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context
             if ( ImGui::TreeNode( "Light Controls" ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                {
-                    ImGui::Text( "C\t\t->\tMove Light to Camera" );
-                }
+                ImGui::Text( "C\t\t->\tMove Light to Camera" );
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
             }
@@ -135,13 +129,11 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context
         if ( ImGui::TreeNode( "Application Info" ) )
 		{
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            {
-			    ImGui::Text( "Processor Type: %u", siSysInfo.dwProcessorType );
-			    ImGui::Text( "Processor Count: %u", siSysInfo.dwNumberOfProcessors );
-			    ImGui::Text( "OEM ID: %u", siSysInfo.dwOemId );
-			    ImGui::NewLine();
-			    ImGui::Text( "Frametime: %.3f / Framerate: (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate );
-            }
+			ImGui::Text( "Processor Type: %u", siSysInfo.dwProcessorType );
+			ImGui::Text( "Processor Count: %u", siSysInfo.dwNumberOfProcessors );
+			ImGui::Text( "OEM ID: %u", siSysInfo.dwOemId );
+			ImGui::NewLine();
+			ImGui::Text( "Frametime: %.3f / Framerate: (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate );
             ImGui::PopStyleColor();
 		    ImGui::TreePop();
         }
@@ -149,13 +141,11 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context
 		if ( ImGui::TreeNode( "Social Links" ) )
 		{
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            {
-			    ImGui::Text( "DirectX Framework by Kyle Robinson" );
-			    ImGui::NewLine();
-			    ImGui::Text( "LinkedIn: linkedin.com/in/kylerobinsongames/" );
-			    ImGui::Text( "Email: kylerobinson456@outlook.com" );
-			    ImGui::Text( "Twitter: @KyleRobinson42" );
-            }
+			ImGui::Text( "DirectX Framework by Kyle Robinson" );
+			ImGui::NewLine();
+			ImGui::Text( "LinkedIn: linkedin.com/in/kylerobinsongames/" );
+			ImGui::Text( "Email: kylerobinson456@outlook.com" );
+			ImGui::Text( "Twitter: @KyleRobinson42" );
             ImGui::PopStyleColor();
 		    ImGui::TreePop();
         }
@@ -181,10 +171,8 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 		    if ( ImGui::TreeNode( "Ambient Components" ) )
 		    {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                {
-			        ImGui::ColorEdit3( "Ambient", &cb_ps_light.data.ambientLightColor.x );
-			        ImGui::SliderFloat( "Intensity", &cb_ps_light.data.ambientLightStrength, 0.0f, 1.0f );
-                }
+			    ImGui::ColorEdit3( "Ambient", &cb_ps_light.data.ambientLightColor.x );
+			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.ambientLightStrength, 0.0f, 1.0f );
                 ImGui::PopStyleColor();
 		        ImGui::TreePop();
             }
@@ -192,10 +180,8 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 		    if ( ImGui::TreeNode( "Diffuse Components" ) )
 		    {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                {
-                    ImGui::ColorEdit3( "Diffuse", &cb_ps_light.data.dynamicLightColor.x );
-			        ImGui::SliderFloat( "Intensity", &cb_ps_light.data.dynamicLightStrength, 0.0f, 10.0f );
-                }
+                ImGui::ColorEdit3( "Diffuse", &cb_ps_light.data.dynamicLightColor.x );
+			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.dynamicLightStrength, 0.0f, 10.0f );
                 ImGui::PopStyleColor();
 		        ImGui::TreePop();
             }
@@ -203,11 +189,9 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 		    if ( ImGui::TreeNode( "Specular Components" ) )
 		    {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                {
-			        ImGui::ColorEdit3( "Specular", &cb_ps_light.data.specularLightColor.x );
-			        ImGui::SliderFloat( "Intensity", &cb_ps_light.data.specularLightIntensity, 0.0f, 20.0f );
-			        ImGui::SliderFloat( "Glossiness", &cb_ps_light.data.specularLightPower, 0.0f, 100.0f );
-                }
+			    ImGui::ColorEdit3( "Specular", &cb_ps_light.data.specularLightColor.x );
+			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.specularLightIntensity, 0.0f, 20.0f );
+			    ImGui::SliderFloat( "Glossiness", &cb_ps_light.data.specularLightPower, 0.0f, 100.0f );
                 ImGui::PopStyleColor();
 		        ImGui::TreePop();
             }
@@ -215,11 +199,9 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 		    if ( ImGui::TreeNode( "Attenuation" ) )
 		    {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                {
-			        ImGui::SliderFloat( "Constant", &cb_ps_light.data.lightConstant, 0.05f, 10.0f, "%.2f", 4 );
-			        ImGui::SliderFloat( "Linear", &cb_ps_light.data.lightLinear, 0.0001f, 4.0f, "%.4f", 8 );
-			        ImGui::SliderFloat( "Quadratic", &cb_ps_light.data.lightQuadratic, 0.0000001f, 1.0f, "%.7f", 10 );
-                }
+			    ImGui::SliderFloat( "Constant", &cb_ps_light.data.lightConstant, 0.05f, 10.0f, "%.2f", 4 );
+			    ImGui::SliderFloat( "Linear", &cb_ps_light.data.lightLinear, 0.0001f, 4.0f, "%.4f", 8 );
+			    ImGui::SliderFloat( "Quadratic", &cb_ps_light.data.lightQuadratic, 0.0000001f, 1.0f, "%.7f", 10 );
                 ImGui::PopStyleColor();
 		        ImGui::TreePop();
             }
@@ -279,6 +261,11 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
 
                 models.at( i ).AdjustPosition( positions );
 
+                ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+                if ( ImGui::Button( "Reset Position" ) )
+                    models.at( i ).ResetPosition();
+                ImGui::PopStyleColor();
+
                 // model rotations
                 static DirectX::XMFLOAT3 rotations = { models.at( i ).GetRotationFloat3() };
                 ImGui::SliderFloat3( "Rotation", &rotations.x, -2.0f, 2.0f, "%.1f" );
@@ -289,6 +276,11 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
                 
                 models.at( i ).AdjustRotation( rotations );
 
+                ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+                if ( ImGui::Button( "Reset Rotation" ) )
+                    models.at( i ).ResetRotation();
+                ImGui::PopStyleColor();
+
                 // model scales
                 static DirectX::XMFLOAT3 scales = { models.at( i ).GetScaleFloat3() };
                 ImGui::SliderFloat3( "Scale", &scales.x, -2.0f, 2.0f, "%.001f" );
@@ -298,6 +290,11 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
                 scales.z = XMConvertToRadians( scales.z );
 
                 models.at( i ).AdjustScale( scales.x, scales.y, scales.z );
+
+                ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
+                if ( ImGui::Button( "Reset Scale" ) )
+                    models.at( i ).ResetScale();
+                ImGui::PopStyleColor();
 
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
@@ -353,7 +350,7 @@ void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UIN
 
             ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
             if ( ImGui::Button( "Reset Orientation" ) )
-                camera3D.ResetRotation();
+                camera3D.ResetOrientation();
             ImGui::PopStyleColor();
 
             ImGui::TreePop();

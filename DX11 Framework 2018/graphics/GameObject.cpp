@@ -20,14 +20,26 @@ const XMFLOAT3& GameObject::GetRotationFloat3() const noexcept
 	return rotation;
 }
 
+const XMFLOAT3& GameObject::GetScaleFloat3() const noexcept
+{
+	return XMFLOAT3( scale.x, scale.y, scale.z );
+}
+
 const std::string& GameObject::GetModelName() const noexcept
 {
 	return modelName;
 }
 
-const XMFLOAT3& GameObject::GetScaleFloat3() const noexcept
+void GameObject::SetModelName( const std::string& name ) noexcept
 {
-	return XMFLOAT3( scale.x, scale.y, scale.z );
+	modelName = name;
+}
+
+/// POSITIONS
+void GameObject::SetInitialPosition( const XMFLOAT3& pos ) noexcept
+{
+	initialPos = pos;
+	SetPosition( pos );
 }
 
 void GameObject::SetPosition( const XMVECTOR& pos ) noexcept
@@ -58,6 +70,19 @@ void GameObject::AdjustPosition( const XMFLOAT3& pos ) noexcept
 	position.z += pos.z;
 	posVector = XMLoadFloat3( &position );
 	UpdateMatrix();
+}
+
+void GameObject::ResetPosition() noexcept
+{
+	position = initialPos;
+	UpdateMatrix();
+}
+
+/// ROTATIONS
+void GameObject::SetInitialRotation( const XMFLOAT3& rot ) noexcept
+{
+	initialRot = rot;
+	SetRotation( rot );
 }
 
 void GameObject::SetRotation( const XMVECTOR& rot ) noexcept
@@ -97,24 +122,36 @@ void GameObject::AdjustRotation( const XMFLOAT3& rot ) noexcept
 	UpdateMatrix();
 }
 
-void GameObject::SetModelName( const std::string& name ) noexcept
+void GameObject::ResetRotation() noexcept
 {
-	modelName = name;
-}
-
-void GameObject::SetScale( float xScale, float yScale, float zScale )
-{
-	scale.x = xScale;
-	scale.y = yScale;
-	scale.z = zScale;
+	rotation = initialRot;
 	UpdateMatrix();
 }
 
-void GameObject::AdjustScale( float xScale, float yScale, float zScale )
+/// SCALE
+void GameObject::SetInitialScale( float xScale, float yScale, float zScale ) noexcept
+{
+	initialScale = { xScale, yScale, zScale };
+	SetScale( xScale, yScale, zScale );
+}
+
+void GameObject::SetScale( float xScale, float yScale, float zScale ) noexcept
+{
+	scale = { xScale, yScale, zScale };
+	UpdateMatrix();
+}
+
+void GameObject::AdjustScale( float xScale, float yScale, float zScale ) noexcept
 {
 	scale.x += xScale;
 	scale.y += yScale;
 	scale.z += zScale;
+	UpdateMatrix();
+}
+
+void GameObject::ResetScale() noexcept
+{
+	scale = initialScale;
 	UpdateMatrix();
 }
 

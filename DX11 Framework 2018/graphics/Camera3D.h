@@ -24,8 +24,7 @@ public:
 	const float& GetNearZ() const noexcept;
 	const float& GetFarZ() const noexcept;
 
-	void ResetPosition() noexcept;
-	void ResetRotation() noexcept;
+	void ResetOrientation() noexcept;
 	void ResetProjection( float aspectRatio ) noexcept;
 private:
 	void UpdateMatrix() override;

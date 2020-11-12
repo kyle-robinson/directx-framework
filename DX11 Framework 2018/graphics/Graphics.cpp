@@ -289,11 +289,11 @@ bool Graphics::InitializeScene()
         for ( unsigned int i = 0; i < drawables.size(); i++ )
         {
             RenderableGameObject model;
-            model.SetScale( drawables.at( i ).scaleX, drawables.at( i ).scaleY, drawables.at( i ).scaleZ );
+            model.SetInitialScale( drawables.at( i ).scaleX, drawables.at( i ).scaleY, drawables.at( i ).scaleZ );
             if ( !model.Initialize( "res\\models\\" + drawables.at( i ).fileName, device.Get(), context.Get(), cb_vs_matrix ) )
                 return false;
-            model.SetPosition( XMFLOAT3( drawables.at( i ).posX, drawables.at( i ).posY, drawables.at( i ).posZ ) );
-            model.SetRotation( XMFLOAT3( drawables.at( i ).rotX, drawables.at( i ).rotY, drawables.at( i ).rotZ ) );
+            model.SetInitialPosition( XMFLOAT3( drawables.at( i ).posX, drawables.at( i ).posY, drawables.at( i ).posZ ) );
+            model.SetInitialRotation( XMFLOAT3( drawables.at( i ).rotX, drawables.at( i ).rotY, drawables.at( i ).rotZ ) );
             model.SetModelName( drawables.at( i ).modelName );
             renderables.push_back( model );
         }
@@ -316,11 +316,11 @@ bool Graphics::InitializeScene()
         camera2D.SetProjectionValues( aspectRatio.x, aspectRatio.y, 0.0f, 1.0f );
 
         cameras.emplace( "Main", std::make_shared<Camera3D>() );
-        cameras["Main"]->SetPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
+        cameras["Main"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
         cameras["Main"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         cameras.emplace( "Sub", std::make_shared<Camera3D>() );
-        cameras["Sub"]->SetPosition( XMFLOAT3( 0.0f, 9.0f, -55.0f ) );
+        cameras["Sub"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -55.0f ) );
         cameras["Sub"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         XMVECTOR lightPosition = cameras["Main"]->GetPositionVector();
