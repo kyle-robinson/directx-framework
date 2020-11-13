@@ -98,12 +98,20 @@ void Application::Update()
 		gfx.cameras[gfx.cameraToUse]->AdjustPosition( XMFLOAT3( 0.0f, -gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
 
 	// light object position
-	if ( keyboard.KeyIsPressed( 'C' ) )
+	XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
+	lightPosition += gfx.cameras[gfx.cameraToUse]->GetForwardVector() / 2;
+	if ( keyboard.KeyIsPressed( 'C' ) || lightStuck )
 	{
-		XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
-		lightPosition += gfx.cameras[gfx.cameraToUse]->GetForwardVector();
+		lightStuck = true;
+		lightPosition += gfx.cameras[gfx.cameraToUse]->GetRightVector() / 2;
+		lightPosition -= { 0.0f, 0.25f, 0.0f, 0.0f };
 		gfx.light.SetPosition( lightPosition );
-		gfx.light.SetRotation(gfx.cameras[gfx.cameraToUse]->GetRotationFloat3() );
+		gfx.light.SetRotation( gfx.cameras[gfx.cameraToUse]->GetRotationVector() );
+	}
+	if ( keyboard.KeyIsPressed( 'X' ) && lightStuck )
+	{
+		lightStuck = false;
+		gfx.light.SetPosition( lightPosition );
 	}
 
 	// manage viewports
