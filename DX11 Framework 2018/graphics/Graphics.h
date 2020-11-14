@@ -58,6 +58,7 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Light light;
+	bool flyCamera = true;
 	std::string cameraToUse = "Main";
 	std::vector<RenderableGameObject> renderables;
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;

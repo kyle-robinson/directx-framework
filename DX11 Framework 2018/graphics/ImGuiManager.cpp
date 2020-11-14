@@ -354,6 +354,16 @@ void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::s
 
             ImGui::EndCombo();
         }
+
+        if ( previewValue == "Main" )
+        {
+            static int cameraGroup = 0;
+            if (ImGui::RadioButton("Fly", &cameraGroup, 0))
+                gfx.flyCamera = true;
+            ImGui::SameLine();
+            if ( ImGui::RadioButton( "Static", &cameraGroup, 1 ) )
+                gfx.flyCamera = false;
+        }
         
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
         if ( ImGui::TreeNode( "Position" ) )

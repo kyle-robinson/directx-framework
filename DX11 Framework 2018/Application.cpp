@@ -115,31 +115,31 @@ void Application::Update()
 
 		if ( keyboard.KeyIsPressed( 'E' ) )
 			gfx.cameras[gfx.cameraToUse]->AdjustPosition( XMFLOAT3( 0.0f, -gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
+
+		if ( !gfx.flyCamera && gfx.cameraToUse == "Main" )
+		{
+			gfx.cameras[gfx.cameraToUse]->SetPosition( XMFLOAT3( gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().x,
+				9.0f, gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().z ) );
+		}
 	}
 	else
 	{
 		// model movement
 		if ( keyboard.KeyIsPressed( 'W' ) )
-			gfx.renderables[0].AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetForwardVector() *
+			gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetBackwardVector() *
 				gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 		if ( keyboard.KeyIsPressed( 'A' ) )
-			gfx.renderables[0].AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetLeftVector() *
+			gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetRightVector() *
 				gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 		if ( keyboard.KeyIsPressed( 'S' ) )
-			gfx.renderables[0].AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetBackwardVector() *
+			gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetForwardVector() *
 				gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 		if ( keyboard.KeyIsPressed( 'D' ) )
-			gfx.renderables[0].AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetRightVector() *
+			gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetLeftVector() *
 				gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
-
-		if ( keyboard.KeyIsPressed( VK_SPACE ) )
-			gfx.renderables[0].AdjustPosition( XMFLOAT3( 0.0f, gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
-
-		if ( keyboard.KeyIsPressed( 'E' ) )
-			gfx.renderables[0].AdjustPosition( XMFLOAT3( 0.0f, -gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
 	}
 
 	// light object position
