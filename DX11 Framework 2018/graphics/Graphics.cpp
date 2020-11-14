@@ -53,7 +53,7 @@ void Graphics::BeginFrame()
     if ( viewportParams.useRight )
     {
         viewportParams.useRight = false;
-        cameraToUse = "Sub";
+        cameraToUse = "Point";
         viewports["Right"]->Bind( *this );
     }
     sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
@@ -156,12 +156,12 @@ void Graphics::Update( float dt )
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
     // camera viewing
-    if ( cameraToUse == "Sub" )
+    if ( cameraToUse == "Point" )
     {
         XMFLOAT3 positions = renderables.at( 0 ).GetPositionFloat3();
-        positions.x = positions.x + renderables.at( 0 ).GetScaleFloat3().x / 2.0f;
-        positions.y = positions.y + renderables.at( 0 ).GetScaleFloat3().y / 2.0f;
-        positions.z = positions.z + renderables.at( 0 ).GetScaleFloat3().z / 2.0f;
+        positions.x *= renderables.at( 0 ).GetScaleFloat3().x;
+        positions.y *= renderables.at( 0 ).GetScaleFloat3().y;
+        positions.z *= renderables.at( 0 ).GetScaleFloat3().z;
         static int radius = 20.0f;
         cameras[cameraToUse]->SetLookAtPos( positions );
         if ( ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) *
@@ -173,6 +173,34 @@ void Graphics::Update( float dt )
             sceneParams.cameraCollision = true;
         else
             sceneParams.cameraCollision = false;
+    }
+
+    if ( cameraToUse == "Third" )
+    {
+        XMFLOAT3 viewing = renderables.at( 0 ).GetPositionFloat3();
+        viewing.x -= 2.5f;
+        viewing.y += 13.0f;
+        cameras[cameraToUse]->SetLookAtPos( viewing );
+        
+        XMFLOAT3 rotations = renderables.at( 0 ).GetRotationFloat3();
+        rotations.y += XMConvertToRadians( 180.0f );
+        cameras[cameraToUse]->SetRotation( rotations );
+
+        XMFLOAT3 positions = renderables.at( 0 ).GetPositionFloat3();
+        XMFLOAT3 leftPos, backPos;
+        XMStoreFloat3( &leftPos, renderables.at( 0 ).GetBackwardVector() * -5.0f );
+        positions.x += leftPos.x;
+        positions.y += leftPos.y;
+        positions.z += leftPos.z;
+
+        XMStoreFloat3( &backPos, renderables.at( 0 ).GetLeftVector() * 2.5f );
+        positions.x += backPos.x;
+        positions.y += backPos.y;
+        positions.z += backPos.z;
+
+        positions.y += 13.0f;
+        cameras[cameraToUse]->SetPosition( positions );
+
     }
 }
 
@@ -336,9 +364,13 @@ bool Graphics::InitializeScene()
         cameras["Main"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
         cameras["Main"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
-        cameras.emplace( "Sub", std::make_shared<Camera3D>() );
-        cameras["Sub"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -55.0f ) );
-        cameras["Sub"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
+        cameras.emplace( "Point", std::make_shared<Camera3D>() );
+        cameras["Point"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -55.0f ) );
+        cameras["Point"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
+
+        cameras.emplace( "Third", std::make_shared<Camera3D>() );
+        cameras["Third"]->SetInitialPosition( renderables.at( 0 ).GetPositionFloat3() );
+        cameras["Third"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         XMVECTOR lightPosition = cameras["Main"]->GetPositionVector();
 		lightPosition += cameras["Main"]->GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );

@@ -46,6 +46,11 @@ const XMVECTOR& GameObject3D::GetRightVector( bool omitY ) noexcept
 	return omitY ? vec_right_noY : vec_right;
 }
 
+const XMVECTOR& GameObject3D::GetUpVector() noexcept
+{
+	return DEFAULT_UP_VECTOR;
+}
+
 void GameObject3D::UpdateMatrix()
 {
 	assert( "UpdateMatrix must be overridden!" && 0 );

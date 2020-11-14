@@ -62,7 +62,10 @@ void Application::Update()
 		gfx.cameraToUse = "Main";
 	
 	if ( keyboard.KeyIsPressed( '2' ) )
-		gfx.cameraToUse = "Sub";
+		gfx.cameraToUse = "Point";
+
+	if ( keyboard.KeyIsPressed( '3' ) )
+		gfx.cameraToUse = "Third";
 
 	// camera speed
 	gfx.cameras[gfx.cameraToUse]->SetCameraSpeed( 0.002f );

@@ -12,6 +12,7 @@ public:
 	const XMVECTOR& GetBackwardVector( bool omitY = false ) noexcept;
 	const XMVECTOR& GetLeftVector( bool omitY = false ) noexcept;
 	const XMVECTOR& GetRightVector( bool omitY = false ) noexcept;
+	const XMVECTOR& GetUpVector() noexcept;
 protected:
 	virtual void UpdateMatrix();
 	void UpdateDirectionVectors();
