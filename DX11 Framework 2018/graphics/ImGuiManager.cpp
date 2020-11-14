@@ -39,61 +39,20 @@ void ImGuiManager::EndRender() const noexcept
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
 }
 
-void ImGuiManager::RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context )
+void ImGuiManager::RenderMainWindow( Graphics& gfx )
 {
-	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+	if ( ImGui::Begin( "Main Window", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 0.8f, 1.0f, 1.0f } );
-        if ( ImGui::TreeNode( "Scene Parameters" ) )
+        if ( ImGui::TreeNode( "Spawn Windows" ) )
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            ImGui::ColorEdit3( "Clear Color", gfx.sceneParams.clearColor );
-            ImGui::SliderFloat( "Blend Factor", &gfx.sceneParams.alphaFactor, 0.0f, 1.0f );
-			    
-            static int fillGroup = 0;
-			if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
-                gfx.sceneParams.rasterizerSolid = true;
-			ImGui::SameLine();
-			if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
-                gfx.sceneParams.rasterizerSolid = false;
-
-            static int textureGroup = 0;
-            if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
-                gfx.sceneParams.useTexture = true;
-            ImGui::SameLine();
-            if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
-                gfx.sceneParams.useTexture = false;
-
-            static int filterGroup = 0;
-            if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
-                gfx.sceneParams.samplerAnisotropic = true;
-            ImGui::SameLine();
-            if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
-                gfx.sceneParams.samplerAnisotropic = false;
-
-            static int viewGroup = 0;
-            if ( ImGui::RadioButton( "Normal", &viewGroup, 0 ) )
-                gfx.sceneParams.multiView = false;
-            ImGui::SameLine();
-            if ( ImGui::RadioButton( "Multi-View", &viewGroup, 1 ) )
-                gfx.sceneParams.multiView = true;
-
-            static int maskGroup = 0;
-            if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
-                gfx.sceneParams.useMask = false;
-            ImGui::SameLine();
-            if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
-                gfx.sceneParams.useMask = true;
-
-            if ( gfx.sceneParams.useMask )
-            {
-                static int maskTypeGroup = 0;
-                if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
-                    gfx.sceneParams.circleMask = true;
-                ImGui::SameLine();
-                if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
-                    gfx.sceneParams.circleMask = false;
-            }
+            ImGui::Checkbox( "Scene", &gfx.spawnWindow.sceneWindow );
+            ImGui::Checkbox( "Lighting", &gfx.spawnWindow.lightWindow );
+            ImGui::Checkbox( "Fog", &gfx.spawnWindow.fogWindow );
+            ImGui::Checkbox( "Models", &gfx.spawnWindow.modelWindow );
+            ImGui::Checkbox( "Cameras", &gfx.spawnWindow.cameraWindow );
+            ImGui::Checkbox( "Viewports", &gfx.spawnWindow.viewportWindow );
             ImGui::PopStyleColor();
             ImGui::TreePop();
         }
@@ -154,9 +113,63 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context
     } ImGui::End();
 }
 
+void ImGuiManager::RenderSceneWindow( Graphics& gfx )
+{
+    if ( ImGui::Begin( "Scene Parameters", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
+    {
+        ImGui::ColorEdit3( "Clear Color", gfx.sceneParams.clearColor );
+        ImGui::SliderFloat( "Blend Factor", &gfx.sceneParams.alphaFactor, 0.0f, 1.0f );
+			    
+        static int fillGroup = 0;
+	    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
+            gfx.sceneParams.rasterizerSolid = true;
+	    ImGui::SameLine();
+	    if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
+            gfx.sceneParams.rasterizerSolid = false;
+
+        static int textureGroup = 0;
+        if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
+            gfx.sceneParams.useTexture = true;
+        ImGui::SameLine();
+        if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
+            gfx.sceneParams.useTexture = false;
+
+        static int filterGroup = 0;
+        if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
+            gfx.sceneParams.samplerAnisotropic = true;
+        ImGui::SameLine();
+        if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
+            gfx.sceneParams.samplerAnisotropic = false;
+
+        static int viewGroup = 0;
+        if ( ImGui::RadioButton( "Normal", &viewGroup, 0 ) )
+            gfx.sceneParams.multiView = false;
+        ImGui::SameLine();
+        if ( ImGui::RadioButton( "Multi-View", &viewGroup, 1 ) )
+            gfx.sceneParams.multiView = true;
+
+        static int maskGroup = 0;
+        if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
+            gfx.sceneParams.useMask = false;
+        ImGui::SameLine();
+        if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
+            gfx.sceneParams.useMask = true;
+
+        if ( gfx.sceneParams.useMask )
+        {
+            static int maskTypeGroup = 0;
+            if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
+                gfx.sceneParams.circleMask = true;
+            ImGui::SameLine();
+            if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
+                gfx.sceneParams.circleMask = false;
+        }
+    } ImGui::End();
+}
+
 void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light )
 {
-	if ( ImGui::Begin( "Light Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+	if ( ImGui::Begin( "Light Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
 	{
         static int lightGroup = 0;
         if ( ImGui::RadioButton( "Directional", &lightGroup, 0 ) )
@@ -227,7 +240,7 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
 
 void ImGuiManager::RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog )
 {
-    if ( ImGui::Begin( "Fog Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    if ( ImGui::Begin( "Fog Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
         static int fogGroup = 0;
         if ( ImGui::RadioButton( "Disable Fog", &fogGroup, 0 ) )
@@ -247,7 +260,7 @@ void ImGuiManager::RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog )
 
 void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models )
 {    
-    if ( ImGui::Begin( "Models", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    if ( ImGui::Begin( "Models", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
         for ( unsigned int i = 0; i < models.size(); i++ )
         {
@@ -327,7 +340,7 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
 
 void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::string& cameraToUse )
 {
-    if ( ImGui::Begin( "Camera", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    if ( ImGui::Begin( "Camera", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {   
         static int active = 0;
         static bool selectedCamera[3];
@@ -446,7 +459,7 @@ void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::s
 
 void ImGuiManager::RenderViewportWindow( Graphics& gfx )
 {
-    if ( ImGui::Begin( "Viewports", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    if ( ImGui::Begin( "Viewports", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
         static int active = 0;
         static bool selectedViewport[4];

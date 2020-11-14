@@ -47,7 +47,16 @@ public:
 		bool useRight = false;
 		bool useSplit = false;
 	} viewportParams;
-public:
+	struct SpawnWindow
+	{
+		bool sceneWindow = false;
+		bool lightWindow = false;
+		bool fogWindow = false;
+		bool modelWindow = false;
+		bool cameraWindow = false;
+		bool viewportWindow = false;
+	} spawnWindow;
+
 	virtual ~Graphics( void ) = default;
 	bool Initialize( HWND hWnd, int width, int height );
 	void BeginFrame();

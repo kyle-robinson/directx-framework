@@ -9,6 +9,7 @@
 
 namespace Bind { class Viewport; }
 struct RenderableGameObject;
+struct SpawnWindow;
 struct Drawable;
 class Graphics;
 
@@ -20,7 +21,8 @@ public:
 	void Initialize( HWND hWnd, ID3D11Device* device, ID3D11DeviceContext* context ) const noexcept;
 	void BeginRender() const noexcept;
 	void EndRender() const noexcept;
-	void RenderMainWindow( Graphics& gfx, ID3D11DeviceContext* context );
+	void RenderMainWindow( Graphics& gfx );
+	void RenderSceneWindow( Graphics& gfx );
 	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light );
 	void RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog );
 	void RenderModelWindow( std::vector<RenderableGameObject>& models );
