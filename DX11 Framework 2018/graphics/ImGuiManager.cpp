@@ -167,16 +167,16 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         ImGui::SliderFloat( "Ground", &cb_ps_light.data.quadIntensity, 0.0f, 1.0f );
         
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
+		if ( ImGui::TreeNode( "Ambient Components" ) )
+		{
+            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+			ImGui::ColorEdit3( "Ambient", &cb_ps_light.data.ambientLightColor.x );
+			ImGui::SliderFloat( "Intensity", &cb_ps_light.data.ambientLightStrength, 0.0f, 1.0f );
+            ImGui::PopStyleColor();
+		    ImGui::TreePop();
+        }
         if ( cb_ps_light.data.usePointLight )
         {
-		    if ( ImGui::TreeNode( "Ambient Components" ) )
-		    {
-                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-			    ImGui::ColorEdit3( "Ambient", &cb_ps_light.data.ambientLightColor.x );
-			    ImGui::SliderFloat( "Intensity", &cb_ps_light.data.ambientLightStrength, 0.0f, 1.0f );
-                ImGui::PopStyleColor();
-		        ImGui::TreePop();
-            }
 
 		    if ( ImGui::TreeNode( "Diffuse Components" ) )
 		    {
@@ -209,11 +209,15 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         }
         else
         {
-            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            ImGui::ColorEdit3( "Colour", &cb_ps_light.data.directionalLightColor.x );
-            ImGui::DragFloat3( "Position", &cb_ps_light.data.directionalLightPosition.x );
-            ImGui::SliderFloat( "Intensity", &cb_ps_light.data.directionalLightIntensity, 0.0f, 10.0f );
-            ImGui::PopStyleColor();
+            if ( ImGui::TreeNode( "Directional Components" ) )
+            {
+                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+                ImGui::ColorEdit3( "Colour", &cb_ps_light.data.directionalLightColor.x );
+                ImGui::DragFloat3( "Position", &cb_ps_light.data.directionalLightPosition.x );
+                ImGui::SliderFloat( "Intensity", &cb_ps_light.data.directionalLightIntensity, 0.0f, 10.0f );
+                ImGui::PopStyleColor();
+                ImGui::TreePop();
+            }
         }
         light.SetConstantBuffer( cb_ps_light );
         light.UpdateConstantBuffer( cb_ps_light );

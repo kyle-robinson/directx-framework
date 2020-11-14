@@ -184,7 +184,9 @@ void Graphics::Update( float dt )
         cameras[cameraToUse]->SetLookAtPos( viewing );
         
         XMFLOAT3 rotations = renderables[0].GetRotationFloat3();
+        rotations.x = -rotations.x;
         rotations.y += XMConvertToRadians( 180.0f );
+        rotations.z = -rotations.z;
         cameras[cameraToUse]->SetRotation( rotations );
 
         XMFLOAT3 leftPos, backPos;

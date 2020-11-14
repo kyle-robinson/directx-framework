@@ -28,7 +28,7 @@ private:
 	bool usePointLight = false;
 private:
 	DirectX::XMFLOAT3 directionalLightColor = { 1.0f, 1.0f, 1.0f };
-	DirectX::XMFLOAT3 directionalLightPosition = { 50.0f, 50.0f, -50.0f };
+	DirectX::XMFLOAT3 directionalLightPosition = { 50.0f, 50.0f, -10.0f };
 	float directionalLightIntensity = 1.0f;
 	float quadIntensity = 1.0f;
 };

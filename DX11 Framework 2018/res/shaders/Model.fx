@@ -137,9 +137,9 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     if ( usePointLight )
         combinedColor = ( ambient + diffuse + specular );
     if ( !usePointLight )
-        combinedColor = directionalLight * directionalLightIntensity;
+        combinedColor = ( ambient + directionalLight ) * directionalLightIntensity;
     if ( useQuad )
-        combinedColor = directionalLight * quadIntensity;
+        combinedColor = quadIntensity;
     float3 finalColor = combinedColor * ( albedoSample = useTexture ? albedoSample : 1 );
     
     // fog factor
