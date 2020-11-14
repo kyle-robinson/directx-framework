@@ -1,4 +1,5 @@
 #include "ImGuiManager.h"
+#include "Viewport.h"
 #include "ModelData.h"
 #include "GraphicsResource.h"
 #include "RenderableGameObject.h"
@@ -425,6 +426,54 @@ void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::s
             ImGui::TreePop();
             ImGui::PopStyleColor();
         }
+        ImGui::PopStyleColor();
+    } ImGui::End();
+}
+
+void ImGuiManager::RenderViewportWindow( Graphics& gfx )
+{
+    if ( ImGui::Begin( "Viewports", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
+    {
+        static int active = 0;
+        static bool selectedViewport[4];
+        static std::string previewValue = "Fullscreen";
+        static const char* viewportList[]{ "Fullscreen", "Left Only", "Right Only", "Split-Screen" };
+        if ( ImGui::BeginCombo( "Active Viewport", previewValue.c_str() ) )
+        {
+            for ( unsigned int i = 0; i < IM_ARRAYSIZE( viewportList ); i++ )
+            {
+                const bool isSelected = i == active;
+                if ( ImGui::Selectable( viewportList[i], isSelected ) )
+                {
+                    active = i;
+                    previewValue = viewportList[i];
+                }
+            }
+
+            switch ( active )
+            {
+                case 0:
+                    gfx.viewportParams = { 0 };
+                    gfx.viewportParams.useFull = true;
+                    break;
+                case 1:
+                    gfx.viewportParams = { 0 };
+                    gfx.viewportParams.useLeft = true;
+                    break;
+                case 2:
+                    gfx.viewportParams = { 0 };
+                    gfx.viewportParams.useRight = true;
+                    break;
+                case 3:
+                    gfx.viewportParams = { 0 };
+                    gfx.viewportParams.useSplit = true;
+                    break;
+            }
+
+            ImGui::EndCombo();
+        }
+        ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 0.1f, 0.1f, 1.0f } );
+        ImGui::TextWrapped( "CAUTION: Split-Screen causes flickering!\n\nThis will become more apparent with lower framerates." );
         ImGui::PopStyleColor();
     } ImGui::End();
 }

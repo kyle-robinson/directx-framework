@@ -5,7 +5,9 @@
 #include "Light.h"
 #include "Camera3D.h"
 #include <d3d11.h>
+#include <map>
 
+namespace Bind { class Viewport; }
 struct RenderableGameObject;
 struct Drawable;
 class Graphics;
@@ -23,6 +25,7 @@ public:
 	void RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog );
 	void RenderModelWindow( std::vector<RenderableGameObject>& models );
 	void RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::string& cameraToUse );
+	void RenderViewportWindow( Graphics& gfx );
 private:
 	SYSTEM_INFO siSysInfo;
 };
