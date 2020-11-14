@@ -160,9 +160,7 @@ void Graphics::Update( float dt )
     if ( cameraToUse == "Point" )
     {
         XMFLOAT3 positions = renderables[0].GetPositionFloat3();
-        positions.x *= renderables[0].GetScaleFloat3().x;
-        positions.y *= renderables[0].GetScaleFloat3().y;
-        positions.z *= renderables[0].GetScaleFloat3().z;
+        positions.y += 10.0f;
         static int radius = 20.0f;
         cameras[cameraToUse]->SetLookAtPos( positions );
         if ( ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) *
