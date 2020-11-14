@@ -59,6 +59,7 @@ public:
 
 	Light light;
 	std::string cameraToUse = "Main";
+	std::vector<RenderableGameObject> renderables;
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;
 	std::map<std::string, std::shared_ptr<Bind::Viewport>> viewports;
 private:
@@ -108,7 +109,6 @@ private:
 	Camera2D camera2D;
 	PlaneInstanced ground;
 	PlaneFullscreen fullscreen;
-	std::vector<RenderableGameObject> renderables;
 };
 
 #endif

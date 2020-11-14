@@ -96,7 +96,7 @@ void Graphics::RenderFrame()
 
     // render models
     for ( unsigned int i = 0; i < renderables.size(); i++ )
-        renderables.at( i ).Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
+        renderables[i].Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
 
     // draw primitves
     cube.Draw( cb_vs_matrix, boxTexture.Get() );
@@ -159,10 +159,10 @@ void Graphics::Update( float dt )
     // camera viewing
     if ( cameraToUse == "Point" )
     {
-        XMFLOAT3 positions = renderables.at( 0 ).GetPositionFloat3();
-        positions.x *= renderables.at( 0 ).GetScaleFloat3().x;
-        positions.y *= renderables.at( 0 ).GetScaleFloat3().y;
-        positions.z *= renderables.at( 0 ).GetScaleFloat3().z;
+        XMFLOAT3 positions = renderables[0].GetPositionFloat3();
+        positions.x *= renderables[0].GetScaleFloat3().x;
+        positions.y *= renderables[0].GetScaleFloat3().y;
+        positions.z *= renderables[0].GetScaleFloat3().z;
         static int radius = 20.0f;
         cameras[cameraToUse]->SetLookAtPos( positions );
         if ( ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) *
@@ -177,31 +177,31 @@ void Graphics::Update( float dt )
     }
 
     if ( cameraToUse == "Third" )
-    {
-        XMFLOAT3 viewing = renderables.at( 0 ).GetPositionFloat3();
+    {   
+        XMFLOAT3 viewing = renderables[0].GetPositionFloat3();
         viewing.x -= 2.5f;
         viewing.y += 13.0f;
         cameras[cameraToUse]->SetLookAtPos( viewing );
         
-        XMFLOAT3 rotations = renderables.at( 0 ).GetRotationFloat3();
+        XMFLOAT3 rotations = renderables[0].GetRotationFloat3();
         rotations.y += XMConvertToRadians( 180.0f );
         cameras[cameraToUse]->SetRotation( rotations );
 
-        XMFLOAT3 positions = renderables.at( 0 ).GetPositionFloat3();
         XMFLOAT3 leftPos, backPos;
-        XMStoreFloat3( &leftPos, renderables.at( 0 ).GetBackwardVector() * -5.0f );
+        XMFLOAT3 positions = renderables[0].GetPositionFloat3();
+
+        XMStoreFloat3( &leftPos, renderables[0].GetBackwardVector() * -5.0f );
         positions.x += leftPos.x;
         positions.y += leftPos.y;
         positions.z += leftPos.z;
 
-        XMStoreFloat3( &backPos, renderables.at( 0 ).GetLeftVector() * 2.5f );
+        XMStoreFloat3( &backPos, renderables[0].GetLeftVector() * 2.5f );
         positions.x += backPos.x;
         positions.y += backPos.y;
         positions.z += backPos.z;
 
         positions.y += 13.0f;
         cameras[cameraToUse]->SetPosition( positions );
-
     }
 }
 
@@ -317,7 +317,7 @@ bool Graphics::InitializeScene()
         for ( unsigned int i = 0; i < size; i++ )
         {
             Drawable drawable;
-            json objectDesc = objects.at( i );
+            json objectDesc = objects[i];
             drawable.modelName = objectDesc["Name"];
             drawable.fileName = objectDesc["File"];
             drawable.posX = objectDesc["PosX"];
@@ -335,12 +335,12 @@ bool Graphics::InitializeScene()
         for ( unsigned int i = 0; i < drawables.size(); i++ )
         {
             RenderableGameObject model;
-            model.SetInitialScale( drawables.at( i ).scaleX, drawables.at( i ).scaleY, drawables.at( i ).scaleZ );
-            if ( !model.Initialize( "res\\models\\" + drawables.at( i ).fileName, device.Get(), context.Get(), cb_vs_matrix ) )
+            model.SetInitialScale( drawables[i].scaleX, drawables[i].scaleY, drawables[i].scaleZ );
+            if ( !model.Initialize( "res\\models\\" + drawables[i].fileName, device.Get(), context.Get(), cb_vs_matrix ) )
                 return false;
-            model.SetInitialPosition( XMFLOAT3( drawables.at( i ).posX, drawables.at( i ).posY, drawables.at( i ).posZ ) );
-            model.SetInitialRotation( XMFLOAT3( drawables.at( i ).rotX, drawables.at( i ).rotY, drawables.at( i ).rotZ ) );
-            model.SetModelName( drawables.at( i ).modelName );
+            model.SetInitialPosition( XMFLOAT3( drawables[i].posX, drawables[i].posY, drawables[i].posZ ) );
+            model.SetInitialRotation( XMFLOAT3( drawables[i].rotX, drawables[i].rotY, drawables[i].rotZ ) );
+            model.SetModelName( drawables[i].modelName );
             renderables.push_back( model );
         }
 
@@ -370,7 +370,7 @@ bool Graphics::InitializeScene()
         cameras["Point"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         cameras.emplace( "Third", std::make_shared<Camera3D>() );
-        cameras["Third"]->SetInitialPosition( renderables.at( 0 ).GetPositionFloat3() );
+        cameras["Third"]->SetInitialPosition( renderables[0].GetPositionFloat3() );
         cameras["Third"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         XMVECTOR lightPosition = cameras["Main"]->GetPositionVector();
