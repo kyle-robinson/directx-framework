@@ -320,10 +320,36 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
     } ImGui::End();
 }
 
-void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UINT windowHeight )
+void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::string& cameraToUse )
 {
     if ( ImGui::Begin( "Camera", FALSE, ImGuiWindowFlags_AlwaysAutoResize ) )
     {   
+        static int active = 0;
+        static bool selectedCamera[3];
+        static std::string previewValue = cameraToUse;
+        static const char* cameraList[]{ "Main", "Point", "Third" };
+        if ( ImGui::BeginCombo( "Active Camera", previewValue.c_str() ) )
+        {
+            for ( unsigned int i = 0; i < IM_ARRAYSIZE( cameraList ); i++ )
+            {
+                const bool isSelected = i == active;
+                if ( ImGui::Selectable( cameraList[i], isSelected ) )
+                {
+                    active = i;
+                    previewValue = cameraList[i];
+                }
+            }
+
+            switch ( active )
+            {
+                case 0: cameraToUse = "Main";  break;
+                case 1: cameraToUse = "Point"; break;
+                case 2: cameraToUse = "Third"; break;
+            }
+
+            ImGui::EndCombo();
+        }
+        
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
         if ( ImGui::TreeNode( "Position" ) )
         {
@@ -385,8 +411,8 @@ void ImGuiManager::RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UIN
             ImGui::SliderFloat( "Near Z", &nearZ, 0.01f, farZ - 0.01f, "%.2f", 2.0f );
             ImGui::SliderFloat( "Far Z", &farZ, nearZ + 0.01f, 1000.0f, "%.2f", 4.0f );
 
-            static float windowWidthF = static_cast<float>( windowWidth );
-            static float windowHeightF = static_cast<float>( windowHeight );
+            static float windowWidthF = static_cast<float>( gfx.GetWidth() );
+            static float windowHeightF = static_cast<float>( gfx.GetHeight() );
             static float aspectRatio = windowWidthF / windowHeightF;
 
             camera3D.SetProjectionValues( fovDegrees, aspectRatio, nearZ, farZ );

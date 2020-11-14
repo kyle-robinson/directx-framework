@@ -22,7 +22,7 @@ public:
 	void RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>& cb_ps_light );
 	void RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog );
 	void RenderModelWindow( std::vector<RenderableGameObject>& models );
-	void RenderCameraWindow( Camera3D& camera3D, UINT windowWidth, UINT windowHeight );
+	void RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::string& cameraToUse );
 private:
 	SYSTEM_INFO siSysInfo;
 };

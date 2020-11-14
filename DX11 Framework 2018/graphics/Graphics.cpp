@@ -122,7 +122,7 @@ void Graphics::EndFrame()
     imgui.RenderLightWindow( light, cb_ps_light );
     imgui.RenderFogWindow( cb_vs_fog );
     imgui.RenderModelWindow( renderables );
-    imgui.RenderCameraWindow( *cameras[cameraToUse], windowWidth, windowHeight );
+    imgui.RenderCameraWindow( *this, *cameras[cameraToUse], cameraToUse );
     imgui.EndRender();
 
     // unbind rtv and srv
