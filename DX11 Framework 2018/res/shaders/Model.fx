@@ -128,6 +128,11 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     float NDotL = dot( directionToLight, input.inNormal );
     float3 directionalLight = directionalLightColor * saturate( NDotL );
     
+    const float3 directionalIncidence = input.inNormal * dot( distanceToLight, input.inNormal );
+    const float3 directionalReflection = directionalIncidence * 2.0f - distanceToLight;
+    float directionalSpecularAmount = pow( max( 0.0f, dot( normalize( -directionalReflection ),
+        normalize( input.inViewPos ) ) ), specularLightPower );
+    
     // calculate lighting
     const float3 diffuse = dynamicLightColor * dynamicLightStrength * diffuseAmount;
     const float3 specular = attenuation * ( specularLightColor * specularLightIntensity ) * specularAmount;
@@ -137,7 +142,7 @@ float4 PS( PS_INPUT input ) : SV_TARGET
     if ( usePointLight )
         combinedColor = ( ambient + diffuse + specular );
     if ( !usePointLight )
-        combinedColor = ( ambient + directionalLight ) * directionalLightIntensity;
+        combinedColor = ( ambient + directionalLight + directionalSpecularAmount ) * directionalLightIntensity;
     if ( useQuad )
         combinedColor = quadIntensity;
     float3 finalColor = combinedColor * ( albedoSample = useTexture ? albedoSample : 1 );
