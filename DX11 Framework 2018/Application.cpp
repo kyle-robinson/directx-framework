@@ -172,18 +172,6 @@ void Application::Update()
 		gfx.viewportParams.useSplit = true;
 	}
 
-	if ( keyboard.KeyIsPressed( VK_LEFT ) )
-	{
-		gfx.viewportParams = { 0 };
-		gfx.viewportParams.useLeft = true;
-	}
-	
-	if ( keyboard.KeyIsPressed( VK_RIGHT ) )
-	{
-		gfx.viewportParams = { 0 };
-		gfx.viewportParams.useRight = true;
-	}
-
     gfx.Update( dt );
 }
 
@@ -200,11 +188,13 @@ void Application::Render()
 		gfx.viewportParams.useLeft = true;
 		gfx.BeginFrame();
 		gfx.RenderFrame();
-		gfx.EndFrame();
 
 		gfx.viewportParams.useRight = true;
 		gfx.BeginFrame();
 		gfx.RenderFrame();
+
+		gfx.viewportParams.useFull = true;
+		gfx.BeginFrame();
 		gfx.EndFrame();
 	}
 }

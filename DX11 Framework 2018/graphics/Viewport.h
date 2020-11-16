@@ -20,14 +20,15 @@ namespace Bind
 		Viewport( Side side, UINT width, UINT height ) : side( side )
 		{
 			viewportDesc = CD3D11_VIEWPORT( 0.0f, 0.0f, width, height );
-			if ( side == Side::Left )
-			{
-				viewportDesc.Width = width / 1.385f;
-			}
 			if ( side == Side::Right )
 			{
-				viewportDesc.TopLeftX = width / 3.3f;
-				viewportDesc.Width = width / 1.385f;
+				viewportDesc.TopLeftX = width / 2.0f;
+				viewportDesc.Width = width / 2.0f;
+			}
+			if ( side == Side::Left )
+			{
+				viewportDesc.TopLeftX = 0.0f;
+				viewportDesc.Width = width / 2.0f;
 			}
 		}
 		void Bind( Graphics& gfx ) noexcept override

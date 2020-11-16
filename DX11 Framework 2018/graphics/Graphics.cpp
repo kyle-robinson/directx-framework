@@ -35,8 +35,11 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 void Graphics::BeginFrame()
 {
 	// clear render target
-    renderTarget->BindAsTexture( *this, depthStencil.get(), sceneParams.clearColor );
-    depthStencil->ClearDepthStencil( *this );
+    if ( ( viewportParams.useLeft && viewportParams.useSplit ) || ( viewportParams.useFull && !viewportParams.useSplit ) )
+    {
+        renderTarget->BindAsTexture( *this, depthStencil.get(), sceneParams.clearColor );
+        depthStencil->ClearDepthStencil( *this );
+    }
 
 	// set render state
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
@@ -92,7 +95,6 @@ void Graphics::RenderFrame()
 	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
     context->PSSetShader( pixelShader_light.GetShader(), NULL, 0 );
-
 
     // render models
     for ( unsigned int i = 0; i < renderables.size(); i++ )
