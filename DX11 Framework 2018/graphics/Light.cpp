@@ -50,3 +50,18 @@ void Light::UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light )
 	cb_ps_light.data.directionalLightIntensity = directionalLightIntensity;
 	cb_ps_light.data.quadIntensity = quadIntensity;
 }
+
+void Light::UpdateLight()
+{
+	if ( !lightStuck )
+	{
+		static float force = 0.0f;
+		if ( this->GetPositionFloat3().y > 5.25f )
+		{
+			force += 0.1f;
+			this->AdjustPosition( XMFLOAT3( 0.0f, -0.1f * force, 0.0f ) );
+		}
+		if ( this->GetPositionFloat3().y <= 5.25f )
+			force = 0.0f;
+	}
+}

@@ -11,6 +11,7 @@ public:
 		ConstantBuffer<CB_VS_matrix>& cb_vs_vertexshader );
 	void SetConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light );
 	void UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light );
+	void UpdateLight();
 public:
 	float alphaFactor = 1.0f;
 	bool useTexture = true;

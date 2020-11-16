@@ -163,6 +163,7 @@ void Graphics::Update( float dt )
 	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
 
     // primitive transformations
+    light.UpdateLight();
     cube.Update( timer );
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
