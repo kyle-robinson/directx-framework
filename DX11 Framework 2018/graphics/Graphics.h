@@ -54,7 +54,6 @@ public:
 		bool fogWindow = false;
 		bool modelWindow = false;
 		bool cameraWindow = false;
-		bool viewportWindow = false;
 	} spawnWindow;
 
 	virtual ~Graphics( void ) = default;

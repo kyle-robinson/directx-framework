@@ -52,7 +52,6 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx )
             ImGui::Checkbox( "Fog", &gfx.spawnWindow.fogWindow );
             ImGui::Checkbox( "Models", &gfx.spawnWindow.modelWindow );
             ImGui::Checkbox( "Cameras", &gfx.spawnWindow.cameraWindow );
-            ImGui::Checkbox( "Viewports", &gfx.spawnWindow.viewportWindow );
             ImGui::PopStyleColor();
             ImGui::TreePop();
         }
@@ -154,12 +153,42 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
         if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
             gfx.sceneParams.samplerAnisotropic = false;
 
-        static int viewGroup = 0;
-        if ( ImGui::RadioButton( "Normal", &viewGroup, 0 ) )
-            gfx.sceneParams.multiView = false;
-        ImGui::SameLine();
-        if ( ImGui::RadioButton( "Multi-View", &viewGroup, 1 ) )
-            gfx.sceneParams.multiView = true;
+        static int active = 0;
+        static bool selectedViewport[3];
+        static std::string previewValue = "Fullscreen";
+        static const char* viewportList[]{ "Fullscreen", "Multi-View", "Split-Screen" };
+        if ( ImGui::BeginCombo( "Viewport Type", previewValue.c_str() ) )
+        {
+            for ( unsigned int i = 0; i < IM_ARRAYSIZE( viewportList ); i++ )
+            {
+                const bool isSelected = i == active;
+                if ( ImGui::Selectable( viewportList[i], isSelected ) )
+                {
+                    active = i;
+                    previewValue = viewportList[i];
+                }
+            }
+
+            switch ( active )
+            {
+                case 0:
+                    gfx.viewportParams = { 0 };
+                    gfx.sceneParams.multiView = false;
+                    gfx.viewportParams.useFull = true;
+                    break;
+                case 1:
+                    gfx.viewportParams = { 0 };
+                    gfx.sceneParams.multiView = true;
+                    break;
+                case 2:
+                    gfx.viewportParams = { 0 };
+                    gfx.sceneParams.multiView = false;
+                    gfx.viewportParams.useSplit = true;
+                    break;
+            }
+
+            ImGui::EndCombo();
+        }
 
         static int maskGroup = 0;
         if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
@@ -466,54 +495,6 @@ void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::s
             ImGui::TreePop();
             ImGui::PopStyleColor();
         }
-        ImGui::PopStyleColor();
-    } ImGui::End();
-}
-
-void ImGuiManager::RenderViewportWindow( Graphics& gfx )
-{
-    if ( ImGui::Begin( "Viewports", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
-    {
-        static int active = 0;
-        static bool selectedViewport[4];
-        static std::string previewValue = "Fullscreen";
-        static const char* viewportList[]{ "Fullscreen", "Left Only", "Right Only", "Split-Screen" };
-        if ( ImGui::BeginCombo( "Active Viewport", previewValue.c_str() ) )
-        {
-            for ( unsigned int i = 0; i < IM_ARRAYSIZE( viewportList ); i++ )
-            {
-                const bool isSelected = i == active;
-                if ( ImGui::Selectable( viewportList[i], isSelected ) )
-                {
-                    active = i;
-                    previewValue = viewportList[i];
-                }
-            }
-
-            switch ( active )
-            {
-                case 0:
-                    gfx.viewportParams = { 0 };
-                    gfx.viewportParams.useFull = true;
-                    break;
-                case 1:
-                    gfx.viewportParams = { 0 };
-                    gfx.viewportParams.useLeft = true;
-                    break;
-                case 2:
-                    gfx.viewportParams = { 0 };
-                    gfx.viewportParams.useRight = true;
-                    break;
-                case 3:
-                    gfx.viewportParams = { 0 };
-                    gfx.viewportParams.useSplit = true;
-                    break;
-            }
-
-            ImGui::EndCombo();
-        }
-        ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 0.1f, 0.1f, 1.0f } );
-        ImGui::TextWrapped( "CAUTION: Split-Screen causes flickering!\n\nThis will become more apparent with lower framerates." );
         ImGui::PopStyleColor();
     } ImGui::End();
 }

@@ -126,7 +126,6 @@ void Graphics::EndFrame()
     if ( spawnWindow.fogWindow ) imgui.RenderFogWindow( cb_vs_fog );
     if ( spawnWindow.modelWindow ) imgui.RenderModelWindow( renderables );
     if ( spawnWindow.cameraWindow ) imgui.RenderCameraWindow( *this, *cameras[cameraToUse], cameraToUse );
-    if ( spawnWindow.viewportWindow ) imgui.RenderViewportWindow( *this );
     imgui.EndRender();
 
     // unbind rtv and srv
