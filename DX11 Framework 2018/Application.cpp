@@ -145,17 +145,17 @@ void Application::Update()
 	// light object position
 	XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
 	lightPosition += gfx.cameras[gfx.cameraToUse]->GetForwardVector() / 2;
-	if ( keyboard.KeyIsPressed( 'C' ) || lightStuck )
+	if ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck )
 	{
-		lightStuck = true;
+		gfx.light.lightStuck = true;
 		lightPosition += gfx.cameras[gfx.cameraToUse]->GetRightVector() / 2;
 		lightPosition -= { 0.0f, 0.25f, 0.0f, 0.0f };
 		gfx.light.SetPosition( lightPosition );
 		gfx.light.SetRotation( gfx.cameras[gfx.cameraToUse]->GetRotationVector() );
 	}
-	if ( keyboard.KeyIsPressed( 'X' ) && lightStuck )
+	if ( keyboard.KeyIsPressed( 'X' ) && gfx.light.lightStuck )
 	{
-		lightStuck = false;
+		gfx.light.lightStuck = false;
 		gfx.light.SetPosition( lightPosition );
 	}
 

@@ -231,8 +231,17 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         ImGui::SameLine();
         if ( ImGui::RadioButton( "Point", &lightGroup, 1 ) )
             cb_ps_light.data.usePointLight = true;
-        ImGui::SliderFloat( "Ground", &cb_ps_light.data.quadIntensity, 0.0f, 1.0f );
         
+        if ( cb_ps_light.data.usePointLight )
+        {
+            static int stickGroup = 0;
+            if ( ImGui::RadioButton( "Unstuck", &stickGroup, 0 ) )
+                light.lightStuck = false;
+            ImGui::SameLine();
+            if ( ImGui::RadioButton( "Stuck", &stickGroup, 1 ) )
+                light.lightStuck = true;
+        }
+
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
 		if ( ImGui::TreeNode( "Ambient Components" ) )
 		{
@@ -244,7 +253,6 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         }
         if ( cb_ps_light.data.usePointLight )
         {
-
 		    if ( ImGui::TreeNode( "Diffuse Components" ) )
 		    {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );

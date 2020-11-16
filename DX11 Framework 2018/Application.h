@@ -19,7 +19,6 @@ public:
 	void Update();
 	void Render();
 private:
-	bool lightStuck = false;
 	float multiplier = 1.0f;
 	float waterSpeed = 0.8f;
 	float waterAmount = 0.01f;
