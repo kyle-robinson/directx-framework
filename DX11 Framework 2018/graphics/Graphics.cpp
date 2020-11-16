@@ -42,25 +42,32 @@ void Graphics::BeginFrame()
     }
 
 	// set render state
+    sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     stencilStates["Off"]->Bind( *this );
     blendState->Bind( *this );
+    // setup viewports
     if ( viewportParams.useFull )
         viewports["Full"]->Bind( *this );
     if ( viewportParams.useLeft )
     {
-        viewportParams.useLeft = false;
         cameraToUse = "Main";
+        viewportParams.useLeft = false;
         viewports["Left"]->Bind( *this );
     }
     if ( viewportParams.useRight )
     {
-        viewportParams.useRight = false;
         cameraToUse = "Point";
+        viewportParams.useRight = false;
         viewports["Right"]->Bind( *this );
     }
-    sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
-    sceneParams.samplerAnisotropic ? samplerStates["Anisotropic"]->Bind( *this ) : samplerStates["Point"]->Bind( *this );
+    // setup sampler
+    if ( samplerParams.useAnisotropic )
+        samplerStates["Anisotropic"]->Bind( *this );
+    else if ( samplerParams.useBilinear )
+        samplerStates["Bilinear"]->Bind( *this );
+    else if ( samplerParams.usePoint )
+        samplerStates["Point"]->Bind( *this );
 
     // setup constant buffers
     if ( !cb_vs_fog.ApplyChanges() ) return;

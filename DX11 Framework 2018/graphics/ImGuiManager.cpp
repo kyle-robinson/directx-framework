@@ -146,30 +146,58 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
         if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
             gfx.sceneParams.useTexture = false;
 
-        static int filterGroup = 0;
-        if ( ImGui::RadioButton( "Anisotropic", &filterGroup, 0 ) )
-            gfx.sceneParams.samplerAnisotropic = true;
-        ImGui::SameLine();
-        if ( ImGui::RadioButton( "Point", &filterGroup, 1 ) )
-            gfx.sceneParams.samplerAnisotropic = false;
-
-        static int active = 0;
-        static bool selectedViewport[3];
-        static std::string previewValue = "Fullscreen";
-        static const char* viewportList[]{ "Fullscreen", "Multi-View", "Split-Screen" };
-        if ( ImGui::BeginCombo( "Viewport Type", previewValue.c_str() ) )
+        static int activeSampler = 0;
+        static bool selectedSampler[3];
+        static std::string previewValueSampler = "Anisotropic";
+        static const char* samplerList[]{ "Anisotropic", "Bilinear", "Point Sampling" };
+        if ( ImGui::BeginCombo( "Sampler Type", previewValueSampler.c_str() ) )
         {
-            for ( unsigned int i = 0; i < IM_ARRAYSIZE( viewportList ); i++ )
+            for ( unsigned int i = 0; i < IM_ARRAYSIZE( samplerList ); i++ )
             {
-                const bool isSelected = i == active;
-                if ( ImGui::Selectable( viewportList[i], isSelected ) )
+                const bool isSelected = i == activeSampler;
+                if ( ImGui::Selectable( samplerList[i], isSelected ) )
                 {
-                    active = i;
-                    previewValue = viewportList[i];
+                    activeSampler = i;
+                    previewValueSampler = samplerList[i];
                 }
             }
 
-            switch ( active )
+            switch ( activeSampler )
+            {
+                case 0:
+                    gfx.samplerParams = { 0 };
+                    gfx.samplerParams.useAnisotropic = true;
+                    break;
+                case 1:
+                    gfx.samplerParams = { 0 };
+                    gfx.samplerParams.useBilinear = true;
+                    break;
+                case 2:
+                    gfx.samplerParams = { 0 };
+                    gfx.samplerParams.usePoint = true;
+                    break;
+            }
+
+            ImGui::EndCombo();
+        }
+
+        static int activeViewport = 0;
+        static bool selectedViewport[3];
+        static std::string previewValueViewport = "Fullscreen";
+        static const char* viewportList[]{ "Fullscreen", "Multi-View", "Split-Screen" };
+        if ( ImGui::BeginCombo( "Viewport Type", previewValueViewport.c_str() ) )
+        {
+            for ( unsigned int i = 0; i < IM_ARRAYSIZE( viewportList ); i++ )
+            {
+                const bool isSelected = i == activeViewport;
+                if ( ImGui::Selectable( viewportList[i], isSelected ) )
+                {
+                    activeViewport = i;
+                    previewValueViewport = viewportList[i];
+                }
+            }
+
+            switch ( activeViewport )
             {
                 case 0:
                     gfx.viewportParams = { 0 };
