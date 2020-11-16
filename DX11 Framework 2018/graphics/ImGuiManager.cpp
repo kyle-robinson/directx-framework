@@ -237,9 +237,16 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
             static int stickGroup = 0;
             if ( ImGui::RadioButton( "Unstuck", &stickGroup, 0 ) )
                 light.lightStuck = false;
-            ImGui::SameLine();
-            if ( ImGui::RadioButton( "Stuck", &stickGroup, 1 ) )
-                light.lightStuck = true;
+
+            if ( light.isEquippable )
+            {
+                ImGui::SameLine();
+                if ( ImGui::RadioButton( "Stuck", &stickGroup, 1 ) )
+                    light.lightStuck = true;
+            }
+
+            if ( !light.isEquippable && !light.lightStuck )
+                ImGui::TextColored( { 1.0f, 0.2f, 0.2f, 1.0f }, "Not within range to equip light!" );
         }
 
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
