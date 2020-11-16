@@ -17,6 +17,8 @@ public:
 	bool useTexture = true;
 	bool lightStuck = false;
 	bool isEquippable = false;
+	bool lightFlicker = false;
+	float flickerAmount = 2.0f;
 private:
 	DirectX::XMFLOAT3 ambientColor = { 1.0f, 1.0f, 1.0f };
 	float ambientStrength = 0.1f;

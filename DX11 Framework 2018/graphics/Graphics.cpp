@@ -12,6 +12,7 @@
 #include "ObjectVertices.h"
 #include "../resource.h"
 #include <fstream>
+#include <cstdlib>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -75,6 +76,8 @@ void Graphics::BeginFrame()
 	context->PSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 
     cb_ps_light.data.useQuad = false;
+    cb_ps_light.data.lightFlicker = light.lightFlicker;
+    cb_ps_light.data.flickerAmount = light.flickerAmount;
     light.UpdateConstantBuffer( cb_ps_light );
 	if ( !cb_ps_light.ApplyChanges() ) return;
 	context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
@@ -231,6 +234,16 @@ void Graphics::Update( float dt )
             light.isEquippable = false;
     }
 
+    // point light flickering
+    static float lightTimer = 200.0f;
+    lightTimer -= 1.0f;
+    if ( lightTimer <= 0.0f )
+        lightTimer = 200.0f;
+    cb_ps_light.data.lightTimer = lightTimer;
+    
+    static float randLightAmount;
+    randLightAmount = ( rand() % 5000 ) + 1;
+    cb_ps_light.data.randLightAmount = randLightAmount;
 }
 
 UINT Graphics::GetWidth() const noexcept

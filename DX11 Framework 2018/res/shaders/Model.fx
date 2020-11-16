@@ -73,6 +73,12 @@ cbuffer LightBuffer : register( b2 )
     bool usePointLight;
     float quadIntensity;
     bool useQuad;
+    float lightTimer;
+    bool lightFlicker;
+    float randLightAmount;
+    bool padding;
+    
+    float flickerAmount;
 };
 
 cbuffer SceneBuffer : register( b3 )
@@ -134,13 +140,18 @@ float4 PS( PS_INPUT input ) : SV_TARGET
         normalize( input.inViewPos ) ) ), specularLightPower );
     
     // calculate lighting
-    const float3 diffuse = dynamicLightColor * dynamicLightStrength * diffuseAmount;
+    float3 diffuse = dynamicLightColor * dynamicLightStrength * diffuseAmount;
     const float3 specular = attenuation * ( specularLightColor * specularLightIntensity ) * specularAmount;
     
     // final color
     float3 combinedColor = { 0.0f, 0.0f, 0.0f };
     if ( usePointLight )
     {
+        if ( lightFlicker )
+        {
+            if ( lightTimer % randLightAmount <= 10.0f )
+                diffuse.rgb *= flickerAmount;
+        }
         combinedColor = ( ambient + diffuse + specular );
         if ( useQuad )
             combinedColor = dynamicLightStrength / 2.0f;

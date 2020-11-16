@@ -288,6 +288,21 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
                 ImGui::PopStyleColor();
 		        ImGui::TreePop();
             }
+
+            if ( ImGui::TreeNode( "Light Flicker" ) )
+            {
+                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
+                static int flickerGroup = 0;
+                if ( ImGui::RadioButton( "Disable", &flickerGroup, 0 ) )
+                    light.lightFlicker = false;
+                ImGui::SameLine();
+                if ( ImGui::RadioButton( "Enable", &flickerGroup, 1 ) )
+                    light.lightFlicker = true;
+
+                ImGui::SliderFloat( "Intensity", &light.flickerAmount, 1.0f, 5.0f );
+                ImGui::PopStyleColor();
+                ImGui::TreePop();
+            }
         }
         else
         {

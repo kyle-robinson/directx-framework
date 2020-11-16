@@ -50,6 +50,12 @@ struct CB_PS_light
 	bool usePointLight;
 	float quadIntensity;
 	bool useQuad;
+	float lightTimer;
+	bool lightFlicker;
+	float randLightAmount;
+	bool padding;
+
+	float flickerAmount;
 };
 
 struct CB_PS_scene
