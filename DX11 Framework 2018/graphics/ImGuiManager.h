@@ -27,6 +27,7 @@ public:
 	void RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog );
 	void RenderModelWindow( std::vector<RenderableGameObject>& models );
 	void RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::string& cameraToUse );
+	void RenderStencilWindow( Graphics& gfx );
 private:
 	SYSTEM_INFO siSysInfo;
 };

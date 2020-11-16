@@ -59,6 +59,7 @@ public:
 		bool fogWindow = false;
 		bool modelWindow = false;
 		bool cameraWindow = false;
+		bool stencilWindow = false;
 	} spawnWindow;
 
 	virtual ~Graphics( void ) = default;
@@ -71,6 +72,8 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Light light;
+	Sprite circle;
+	Sprite square;
 	bool flyCamera = true;
 	std::string cameraToUse = "Main";
 	std::vector<RenderableGameObject> renderables;
@@ -118,8 +121,6 @@ private:
 	ImGuiManager imgui;
 
 	Cube cube;
-	Sprite circle;
-	Sprite square;
 	Camera2D camera2D;
 	PlaneInstanced ground;
 	PlaneFullscreen fullscreen;

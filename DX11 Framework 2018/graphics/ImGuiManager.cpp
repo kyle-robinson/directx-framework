@@ -52,6 +52,7 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx )
             ImGui::Checkbox( "Fog", &gfx.spawnWindow.fogWindow );
             ImGui::Checkbox( "Models", &gfx.spawnWindow.modelWindow );
             ImGui::Checkbox( "Cameras", &gfx.spawnWindow.cameraWindow );
+            ImGui::Checkbox( "Stencils", &gfx.spawnWindow.stencilWindow );
             ImGui::PopStyleColor();
             ImGui::TreePop();
         }
@@ -216,23 +217,6 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
             }
 
             ImGui::EndCombo();
-        }
-
-        static int maskGroup = 0;
-        if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
-            gfx.sceneParams.useMask = false;
-        ImGui::SameLine();
-        if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
-            gfx.sceneParams.useMask = true;
-
-        if ( gfx.sceneParams.useMask )
-        {
-            static int maskTypeGroup = 0;
-            if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
-                gfx.sceneParams.circleMask = true;
-            ImGui::SameLine();
-            if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
-                gfx.sceneParams.circleMask = false;
         }
     } ImGui::End();
 }
@@ -524,5 +508,49 @@ void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::s
             ImGui::PopStyleColor();
         }
         ImGui::PopStyleColor();
+    } ImGui::End();
+}
+
+void ImGuiManager::RenderStencilWindow( Graphics& gfx )
+{
+    if ( ImGui::Begin( "Stencil", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
+    {
+        static int maskGroup = 0;
+        if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
+            gfx.sceneParams.useMask = false;
+        ImGui::SameLine();
+        if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
+            gfx.sceneParams.useMask = true;
+
+        if ( gfx.sceneParams.useMask )
+        {
+            static int maskTypeGroup = 0;
+            if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
+                gfx.sceneParams.circleMask = true;
+            ImGui::SameLine();
+            if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
+                gfx.sceneParams.circleMask = false;
+
+            if ( gfx.sceneParams.circleMask )
+            {
+                static float width = 200.0f;
+                static float height = 200.0f;
+                ImGui::SliderFloat( "Width", &width, 100.0f, gfx.GetWidth(), "%10.f" );
+                ImGui::SliderFloat( "Height", &height, 100.0f, gfx.GetHeight(), "%10.f" );
+                gfx.circle.SetScale( width, height, 1.0f );
+                gfx.circle.SetPosition( XMFLOAT3( gfx.GetWidth() / 2 - gfx.circle.GetWidth() / 2,
+                    gfx.GetHeight() / 2 - gfx.circle.GetHeight() / 2, 0 ) );
+            }
+            else if ( !gfx.sceneParams.circleMask )
+            {
+                static float width = 200.0f;
+                static float height = 200.0f;
+                ImGui::SliderFloat( "Width", &width, 100.0f, gfx.GetWidth(), "%10.f" );
+                ImGui::SliderFloat( "Height", &height, 100.0f, gfx.GetHeight(), "%10.f" );
+                gfx.square.SetScale( width, height, 1.0f );
+                gfx.square.SetPosition( XMFLOAT3( gfx.GetWidth() / 2 - gfx.square.GetWidth() / 2,
+                    gfx.GetHeight() / 2 - gfx.square.GetHeight() / 2, 0 ) );
+            }
+        }
     } ImGui::End();
 }

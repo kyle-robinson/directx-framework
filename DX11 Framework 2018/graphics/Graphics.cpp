@@ -133,6 +133,7 @@ void Graphics::EndFrame()
     if ( spawnWindow.fogWindow ) imgui.RenderFogWindow( cb_vs_fog );
     if ( spawnWindow.modelWindow ) imgui.RenderModelWindow( renderables );
     if ( spawnWindow.cameraWindow ) imgui.RenderCameraWindow( *this, *cameras[cameraToUse], cameraToUse );
+    if ( spawnWindow.stencilWindow ) imgui.RenderStencilWindow( *this );
     imgui.EndRender();
 
     // unbind rtv and srv
@@ -354,11 +355,11 @@ bool Graphics::InitializeScene()
         /*   SPRITES   */
         if ( !circle.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\circle.png", cb_vs_matrix_2d ) )
             return false;
-        circle.SetPosition( XMFLOAT3( windowWidth / 2 - circle.GetWidth() / 2, windowHeight / 2 - circle.GetHeight() / 2, 0 ) );
+        circle.SetInitialPosition( XMFLOAT3( windowWidth / 2 - circle.GetWidth() / 2, windowHeight / 2 - circle.GetHeight() / 2, 0 ) );
 
         if ( !square.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\purpleheart.png", cb_vs_matrix_2d ) )
             return false;
-        square.SetPosition( XMFLOAT3( windowWidth / 2 - square.GetWidth() / 2, windowHeight / 2 - square.GetHeight() / 2, 0 ) );
+        square.SetInitialPosition( XMFLOAT3( windowWidth / 2 - square.GetWidth() / 2, windowHeight / 2 - square.GetHeight() / 2, 0 ) );
 
         /*   OBJECTS   */
         XMFLOAT2 aspectRatio = { static_cast<float>( windowWidth ), static_cast<float>( windowHeight ) };
