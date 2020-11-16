@@ -163,7 +163,6 @@ void Graphics::Update( float dt )
 	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
 
     // primitive transformations
-    light.UpdateLight();
     cube.Update( timer );
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
@@ -214,6 +213,24 @@ void Graphics::Update( float dt )
         positions.y += 13.0f;
         cameras[cameraToUse]->SetPosition( positions );
     }
+
+    // point light equipping
+    light.UpdateLight();
+    if ( cameraToUse == "Main" )
+    {   
+        static int radius = 5.0f;
+        XMFLOAT3 positions = light.GetPositionFloat3();
+        if ( ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) *
+            ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) +
+            ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) *
+            ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) +
+            ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) *
+            ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) <= radius * radius )
+            light.isEquippable = true;
+        else
+            light.isEquippable = false;
+    }
+
 }
 
 UINT Graphics::GetWidth() const noexcept

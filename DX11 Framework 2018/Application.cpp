@@ -145,7 +145,7 @@ void Application::Update()
 	// light object position
 	XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
 	lightPosition += gfx.cameras[gfx.cameraToUse]->GetForwardVector() / 2;
-	if ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck )
+	if ( ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck ) && gfx.light.isEquippable )
 	{
 		gfx.light.lightStuck = true;
 		lightPosition += gfx.cameras[gfx.cameraToUse]->GetRightVector() / 2;

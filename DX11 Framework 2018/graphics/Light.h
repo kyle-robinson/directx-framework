@@ -16,6 +16,7 @@ public:
 	float alphaFactor = 1.0f;
 	bool useTexture = true;
 	bool lightStuck = false;
+	bool isEquippable = false;
 private:
 	DirectX::XMFLOAT3 ambientColor = { 1.0f, 1.0f, 1.0f };
 	float ambientStrength = 0.1f;
