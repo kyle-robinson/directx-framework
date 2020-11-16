@@ -9,9 +9,9 @@ struct Drawable
 {
     std::string modelName;
     std::string fileName;
-    float posX, posY, posZ;
-    float rotX, rotY, rotZ;
-    float scaleX, scaleY, scaleZ;
+    DirectX::XMFLOAT3 position;
+    DirectX::XMFLOAT3 rotation;
+    DirectX::XMFLOAT3 scale;
 };
 std::vector<Drawable> drawables;
 

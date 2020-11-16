@@ -329,26 +329,20 @@ bool Graphics::InitializeScene()
             json objectDesc = objects[i];
             drawable.modelName = objectDesc["Name"];
             drawable.fileName = objectDesc["File"];
-            drawable.posX = objectDesc["PosX"];
-            drawable.posY = objectDesc["PosY"];
-            drawable.posZ = objectDesc["PosZ"];
-            drawable.rotX = objectDesc["RotX"];
-            drawable.rotY = objectDesc["RotY"];
-            drawable.rotZ = objectDesc["RotZ"];
-            drawable.scaleX = objectDesc["ScaleX"];
-            drawable.scaleY = objectDesc["ScaleY"];
-            drawable.scaleZ = objectDesc["ScaleZ"];
+            drawable.position = { objectDesc["PosX"], objectDesc["PosY"], objectDesc["PosZ"] };
+            drawable.rotation = { objectDesc["RotX"], objectDesc["RotY"], objectDesc["RotZ"] };
+            drawable.scale = { objectDesc["ScaleX"], objectDesc["ScaleY"], objectDesc["ScaleZ"] };
             drawables.push_back( drawable );
         }
 
         for ( unsigned int i = 0; i < drawables.size(); i++ )
         {
             RenderableGameObject model;
-            model.SetInitialScale( drawables[i].scaleX, drawables[i].scaleY, drawables[i].scaleZ );
+            model.SetInitialScale( drawables[i].scale.x, drawables[i].scale.y, drawables[i].scale.z );
             if ( !model.Initialize( "res\\models\\" + drawables[i].fileName, device.Get(), context.Get(), cb_vs_matrix ) )
                 return false;
-            model.SetInitialPosition( XMFLOAT3( drawables[i].posX, drawables[i].posY, drawables[i].posZ ) );
-            model.SetInitialRotation( XMFLOAT3( drawables[i].rotX, drawables[i].rotY, drawables[i].rotZ ) );
+            model.SetInitialPosition( drawables[i].position );
+            model.SetInitialRotation( drawables[i].rotation );
             model.SetModelName( drawables[i].modelName );
             renderables.push_back( model );
         }
