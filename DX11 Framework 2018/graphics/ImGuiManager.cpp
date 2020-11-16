@@ -140,12 +140,7 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
 	    if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
             gfx.sceneParams.rasterizerSolid = false;
 
-        static int textureGroup = 0;
-        if ( ImGui::RadioButton( "Enable Textures", &textureGroup, 0 ) )
-            gfx.sceneParams.useTexture = true;
-        ImGui::SameLine();
-        if ( ImGui::RadioButton( "Disable Textures", &textureGroup, 1 ) )
-            gfx.sceneParams.useTexture = false;
+        ImGui::Checkbox( "Enable Textures", &gfx.sceneParams.useTexture );
 
         static int activeSampler = 0;
         static bool selectedSampler[3];
@@ -234,17 +229,8 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         
         if ( cb_ps_light.data.usePointLight )
         {
-            static int stickGroup = 0;
-            if ( ImGui::RadioButton( "Unstuck", &stickGroup, 0 ) )
-                light.lightStuck = false;
-
             if ( light.isEquippable )
-            {
-                ImGui::SameLine();
-                if ( ImGui::RadioButton( "Stuck", &stickGroup, 1 ) )
-                    light.lightStuck = true;
-            }
-
+                ImGui::Checkbox( "Equip Light", &light.lightStuck );
             if ( !light.isEquippable && !light.lightStuck )
                 ImGui::TextColored( { 1.0f, 0.2f, 0.2f, 1.0f }, "Not within range to equip light!" );
         }
@@ -292,13 +278,7 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
             if ( ImGui::TreeNode( "Light Flicker" ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                static int flickerGroup = 0;
-                if ( ImGui::RadioButton( "Disable", &flickerGroup, 0 ) )
-                    light.lightFlicker = false;
-                ImGui::SameLine();
-                if ( ImGui::RadioButton( "Enable", &flickerGroup, 1 ) )
-                    light.lightFlicker = true;
-
+                ImGui::Checkbox( "Flickering Enabled", &light.lightFlicker );
                 ImGui::SliderFloat( "Intensity", &light.flickerAmount, 1.0f, 5.0f );
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
@@ -326,13 +306,7 @@ void ImGuiManager::RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog )
 {
     if ( ImGui::Begin( "Fog Controls", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
-        static int fogGroup = 0;
-        if ( ImGui::RadioButton( "Disable Fog", &fogGroup, 0 ) )
-            cb_vs_fog.data.fogEnable = false;
-        ImGui::SameLine();
-        if ( ImGui::RadioButton( "Enable Fog", &fogGroup, 1 ) )
-            cb_vs_fog.data.fogEnable = true;
-
+        ImGui::Checkbox( "Enable Fog", &cb_vs_fog.data.fogEnable );
         if ( cb_vs_fog.data.fogEnable )
         {
             ImGui::ColorEdit3( "Fog Colour", &cb_vs_fog.data.fogColor.x );
@@ -455,7 +429,7 @@ void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::s
         if ( previewValue == "Main" )
         {
             static int cameraGroup = 0;
-            if (ImGui::RadioButton("Fly", &cameraGroup, 0))
+            if ( ImGui::RadioButton( "Fly", &cameraGroup, 0 ) )
                 gfx.flyCamera = true;
             ImGui::SameLine();
             if ( ImGui::RadioButton( "Static", &cameraGroup, 1 ) )
@@ -545,13 +519,7 @@ void ImGuiManager::RenderStencilWindow( Graphics& gfx )
 {
     if ( ImGui::Begin( "Stencil", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
-        static int maskGroup = 0;
-        if ( ImGui::RadioButton( "Disable Mask", &maskGroup, 0 ) )
-            gfx.sceneParams.useMask = false;
-        ImGui::SameLine();
-        if ( ImGui::RadioButton( "Enable Mask", &maskGroup, 1 ) )
-            gfx.sceneParams.useMask = true;
-
+        ImGui::Checkbox( "Enable Stencil Mask", &gfx.sceneParams.useMask );
         if ( gfx.sceneParams.useMask )
         {
             static int maskTypeGroup = 0;
