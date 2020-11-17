@@ -10,6 +10,8 @@
 #include "Camera2D.h"
 #include "ImGuiManager.h"
 #include "RenderableGameObject.h"
+#include <dxtk/SpriteFont.h>
+#include <dxtk/SpriteBatch.h>
 #include <dxtk/WICTextureLoader.h>
 
 namespace Bind
@@ -124,6 +126,8 @@ private:
 	Camera2D camera2D;
 	PlaneInstanced ground;
 	PlaneFullscreen fullscreen;
+	std::unique_ptr<SpriteFont> spriteFont;
+	std::unique_ptr<SpriteBatch> spriteBatch;
 };
 
 #endif

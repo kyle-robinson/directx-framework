@@ -116,6 +116,15 @@ void Graphics::RenderFrame()
 
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
 	light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
+
+    // render text
+    spriteBatch->Begin();
+    XMFLOAT2 fontPosition = { windowWidth / 2.0f - 130.0f, windowHeight / 2.0f - 20.0f };
+    fontPosition = viewportParams.useSplit ? XMFLOAT2( fontPosition.x / 2.0f - 50.0f, fontPosition.y ) : fontPosition;
+    if ( light.isEquippable && cameraToUse == "Main" && !light.lightStuck )
+        spriteFont->DrawString( spriteBatch.get(), L"Press 'C' to equip light.", fontPosition,
+            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+    spriteBatch->End();
 }
 
 void Graphics::EndFrame()
@@ -281,6 +290,9 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         samplerStates.emplace( "Anisotropic", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
         samplerStates.emplace( "Bilinear", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Bilinear ) );
         samplerStates.emplace( "Point", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Point ) );
+
+        spriteBatch = std::make_unique<SpriteBatch>( context.Get() );
+        spriteFont = std::make_unique<SpriteFont>( device.Get(), L"res\\fonts\\open_sans_ms_16.spritefont" );
     }
     catch ( COMException& exception )
     {
