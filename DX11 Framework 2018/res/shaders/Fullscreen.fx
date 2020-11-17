@@ -11,8 +11,8 @@ struct VS_INPUT
 
 struct VS_OUTPUT
 {
-    float2 outTex : TEXCOORD;
     float4 outPos : SV_POSITION;
+    float2 outTex : TEXCOORD;
 };
 
 VS_OUTPUT VS( VS_INPUT input )
@@ -38,8 +38,8 @@ VS_OUTPUT VS( VS_INPUT input )
 // Pixel Shader
 struct PS_INPUT
 {
-    float2 inTex : TEXCOORD;
     float4 inPos : SV_POSITION;
+    float2 inTex : TEXCOORD;
 };
 
 Texture2D quadTexture : TEXTURE : register( t0 );

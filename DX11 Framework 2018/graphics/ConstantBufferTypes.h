@@ -18,7 +18,7 @@ struct CB_VS_matrix_2D
 
 struct CB_VS_fullscreen
 {
-	alignas( 16 ) bool multiView;
+	alignas(16) bool multiView;
 };
 
 struct CB_VS_fog

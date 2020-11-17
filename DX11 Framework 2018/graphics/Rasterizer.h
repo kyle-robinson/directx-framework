@@ -51,14 +51,12 @@ namespace Bind
 		static void DrawSolid( Graphics& gfx, UINT indexCount ) noexcept
 		{
 			Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizer_Solid;
-			Rasterizer( gfx, pRasterizer_Solid.Get(), true, false );
 			GetContext( gfx )->RSSetState( pRasterizer_Solid.Get() );
 			GetContext( gfx )->DrawIndexed( indexCount, 0, 0 );
 		}
 		static void DrawWireframe( Graphics& gfx, UINT indexCount ) noexcept
 		{
 			Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizer_Wireframe;
-			Rasterizer( gfx, pRasterizer_Wireframe.Get(), false, true );
 			GetContext( gfx )->RSSetState( pRasterizer_Wireframe.Get() );
 			GetContext( gfx )->DrawIndexed( indexCount, 0, 0 );
 		}

@@ -12,7 +12,6 @@
 #include "ObjectVertices.h"
 #include "../resource.h"
 #include <fstream>
-#include <cstdlib>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
 {
@@ -36,7 +35,9 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 void Graphics::BeginFrame()
 {
 	// clear render target
-    if ( ( viewportParams.useLeft && viewportParams.useSplit ) || ( viewportParams.useFull && !viewportParams.useSplit ) )
+    if ( ( viewportParams.useLeft && viewportParams.useSplit ) ||
+        ( viewportParams.useFull && !viewportParams.useSplit ) ||
+        ( sceneParams.multiView && !viewportParams.useSplit ) )
     {
         renderTarget->BindAsTexture( *this, depthStencil.get(), sceneParams.clearColor );
         depthStencil->ClearDepthStencil( *this );
@@ -117,29 +118,6 @@ void Graphics::RenderFrame()
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
 	light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
 
-    // render text
-    spriteBatch->Begin();
-    static XMFLOAT2 fontPositionMode = { windowWidth - 350.0f, 0.0f };
-    static XMFLOAT2 fontPositionLight = { windowWidth / 2.0f - 130.0f, windowHeight / 2.0f - 20.0f };
-    fontPositionLight = viewportParams.useSplit ? XMFLOAT2( fontPositionLight.x / 2.0f - 50.0f, fontPositionLight.y ) : fontPositionLight;
-    if ( gameState != GameState::MENU )
-    {
-        if ( light.isEquippable && cameraToUse == "Main" && !light.lightStuck )
-            spriteFont->DrawString( spriteBatch.get(), L"Press 'C' to equip light.", fontPositionLight,
-                Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
-    }
-    if ( gameState == GameState::PLAY )
-    {
-        spriteFont->DrawString( spriteBatch.get(), L"Press 'F2' to switch to EDIT mode.", fontPositionMode,
-            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
-    }
-    if ( gameState == GameState::EDIT )
-    {
-        spriteFont->DrawString( spriteBatch.get(), L"Press 'F1' to switch to PLAY mode.", fontPositionMode,
-            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
-    }
-    spriteBatch->End();
-
     // render menu
     if ( gameState == GameState::MENU )
     {
@@ -164,14 +142,38 @@ void Graphics::RenderFrame()
 }
 
 void Graphics::EndFrame()
-{
+{   
     // set and clear back buffer
     backBuffer->BindAsBuffer( *this, sceneParams.clearColor );
 
     // render to fullscreen texture
-    context->PSSetShaderResources( 0, 1, renderTarget->GetShaderResourceViewPtr() );
     fullscreen.SetupBuffers( vertexShader_full, pixelShader_full, cb_vs_fullscreen, sceneParams.multiView );
+    context->PSSetShaderResources( 0, 1, renderTarget->GetShaderResourceViewPtr() );
     Bind::Rasterizer::DrawSolid( *this, fullscreen.ib_full.IndexCount() ); // always draw as solid
+
+    // render text
+    spriteBatch->Begin();
+    static XMFLOAT2 fontPositionMode = { windowWidth - 350.0f, 0.0f };
+    if ( gameState != GameState::MENU )
+    {
+        static XMFLOAT2 fontPositionLight;
+        fontPositionLight = { windowWidth / 2.0f - 120.0f, windowHeight / 2.0f - 20.0f };
+        fontPositionLight = viewportParams.useSplit ? XMFLOAT2( fontPositionLight.x / 2.0f - 50.0f, fontPositionLight.y ) : fontPositionLight;
+        if ( light.isEquippable && cameraToUse == "Main" && !light.lightStuck )
+            spriteFont->DrawString( spriteBatch.get(), L"Press 'C' to equip light.", fontPositionLight,
+                Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+    }
+    if ( gameState == GameState::PLAY )
+    {
+        spriteFont->DrawString( spriteBatch.get(), L"Press 'F2' to switch to EDIT mode.", fontPositionMode,
+            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+    }
+    if ( gameState == GameState::EDIT )
+    {
+        spriteFont->DrawString( spriteBatch.get(), L"Press 'F1' to switch to PLAY mode.", fontPositionMode,
+            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+    }
+    spriteBatch->End();
 
     // display imgui
     if ( gameState == GameState::EDIT )
@@ -457,7 +459,7 @@ bool Graphics::InitializeScene()
         camera2D.SetProjectionValues( aspectRatio.x, aspectRatio.y, 0.0f, 1.0f );
 
         cameras.emplace( "Main", std::make_shared<Camera3D>() );
-        cameras["Main"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -15.0f ) );
+        cameras["Main"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -20.0f ) );
         cameras["Main"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         cameras.emplace( "Point", std::make_shared<Camera3D>() );
@@ -469,7 +471,7 @@ bool Graphics::InitializeScene()
         cameras["Third"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         XMVECTOR lightPosition = cameras["Main"]->GetPositionVector() + cameras["Main"]->GetForwardVector();
-		light.SetPosition( XMFLOAT3( XMVectorGetX( lightPosition ), 5.25f, XMVectorGetZ( lightPosition ) ) );
+		light.SetPosition( XMFLOAT3( XMVectorGetX( lightPosition ), 5.25f, XMVectorGetZ( lightPosition ) + 5.0f ) );
 		light.SetRotation( cameras["Main"]->GetRotationFloat3() );    
 
         /*   VERTEX/INDEX   */
