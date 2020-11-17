@@ -30,6 +30,12 @@ class Graphics
 {
 	friend class GraphicsResource;
 public:
+	enum class GameState
+	{
+		MENU,
+		PLAY,
+		EDIT
+	} gameState = GameState::MENU;
 	struct SceneParameters
 	{
 		bool useMask = false;
@@ -77,6 +83,7 @@ public:
 	Sprite circle;
 	Sprite square;
 	bool flyCamera = true;
+	bool menuIsEnabled = true;
 	std::string cameraToUse = "Main";
 	std::vector<RenderableGameObject> renderables;
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;
@@ -123,6 +130,7 @@ private:
 	ImGuiManager imgui;
 
 	Cube cube;
+	Sprite menuBG;
 	Camera2D camera2D;
 	PlaneInstanced ground;
 	PlaneFullscreen fullscreen;

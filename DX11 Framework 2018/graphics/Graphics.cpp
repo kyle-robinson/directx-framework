@@ -100,7 +100,7 @@ void Graphics::RenderFrame()
         sceneParams.circleMask ? circle.Draw( camera2D.GetWorldOrthoMatrix() ) : square.Draw( camera2D.GetWorldOrthoMatrix() );
         stencilStates["Write"]->Bind( *this );
     }
-	
+
     // setup shaders
 	context->VSSetShader( vertexShader_light.GetShader(), NULL, 0 );
 	context->IASetInputLayout( vertexShader_light.GetInputLayout() );
@@ -119,12 +119,42 @@ void Graphics::RenderFrame()
 
     // render text
     spriteBatch->Begin();
-    XMFLOAT2 fontPosition = { windowWidth / 2.0f - 130.0f, windowHeight / 2.0f - 20.0f };
-    fontPosition = viewportParams.useSplit ? XMFLOAT2( fontPosition.x / 2.0f - 50.0f, fontPosition.y ) : fontPosition;
-    if ( light.isEquippable && cameraToUse == "Main" && !light.lightStuck )
-        spriteFont->DrawString( spriteBatch.get(), L"Press 'C' to equip light.", fontPosition,
-            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+    static XMFLOAT2 fontPositionMode = { windowWidth - 350.0f, 0.0f };
+    static XMFLOAT2 fontPositionLight = { windowWidth / 2.0f - 130.0f, windowHeight / 2.0f - 20.0f };
+    fontPositionLight = viewportParams.useSplit ? XMFLOAT2( fontPositionLight.x / 2.0f - 50.0f, fontPositionLight.y ) : fontPositionLight;
+    if ( gameState != GameState::MENU )
+    {
+        if ( light.isEquippable && cameraToUse == "Main" && !light.lightStuck && !menuIsEnabled )
+            spriteFont->DrawString( spriteBatch.get(), L"Press 'C' to equip light.", fontPositionLight,
+                Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+    }
+    if ( gameState == GameState::PLAY )
+    {
+        spriteFont->DrawString( spriteBatch.get(), L"Press 'F2' to switch to EDIT mode.", fontPositionMode,
+            Colors::Green, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+    }
+    if ( gameState == GameState::EDIT )
+    {
+        spriteFont->DrawString( spriteBatch.get(), L"Press 'F1' to switch to PLAY mode.", fontPositionMode,
+            Colors::Red, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+    }
     spriteBatch->End();
+
+    // render menu
+    if ( gameState == GameState::MENU )
+    {
+        static float alphaValue = 0.9f;
+        cb_ps_scene.data.alphaFactor = alphaValue;
+        cb_ps_scene.data.useTexture = sceneParams.useTexture;
+        if ( !cb_ps_scene.ApplyChanges() ) return;
+	    context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
+
+        context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
+        context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
+        context->PSSetShader( pixelShader_2D.GetShader(), NULL, 0 );
+
+        menuBG.Draw( camera2D.GetWorldOrthoMatrix() );
+    }
 }
 
 void Graphics::EndFrame()
@@ -138,15 +168,18 @@ void Graphics::EndFrame()
     Bind::Rasterizer::DrawSolid( *this, fullscreen.ib_full.IndexCount() ); // always draw as solid
 
     // display imgui
-    imgui.BeginRender();
-    imgui.RenderMainWindow( *this );
-    if ( spawnWindow.sceneWindow ) imgui.RenderSceneWindow( *this );
-    if ( spawnWindow.lightWindow ) imgui.RenderLightWindow( light, cb_ps_light );
-    if ( spawnWindow.fogWindow ) imgui.RenderFogWindow( cb_vs_fog );
-    if ( spawnWindow.modelWindow ) imgui.RenderModelWindow( renderables );
-    if ( spawnWindow.cameraWindow ) imgui.RenderCameraWindow( *this, *cameras[cameraToUse], cameraToUse );
-    if ( spawnWindow.stencilWindow ) imgui.RenderStencilWindow( *this );
-    imgui.EndRender();
+    if ( gameState == GameState::EDIT )
+    {
+        imgui.BeginRender();
+        imgui.RenderMainWindow( *this );
+        if ( spawnWindow.sceneWindow ) imgui.RenderSceneWindow( *this );
+        if ( spawnWindow.lightWindow ) imgui.RenderLightWindow( light, cb_ps_light );
+        if ( spawnWindow.fogWindow ) imgui.RenderFogWindow( cb_vs_fog );
+        if ( spawnWindow.modelWindow ) imgui.RenderModelWindow( renderables );
+        if ( spawnWindow.cameraWindow ) imgui.RenderCameraWindow( *this, *cameras[cameraToUse], cameraToUse );
+        if ( spawnWindow.stencilWindow ) imgui.RenderStencilWindow( *this );
+        imgui.EndRender();
+    }
 
     // unbind rtv and srv
     renderTarget->BindAsNull( *this );
@@ -396,6 +429,10 @@ bool Graphics::InitializeScene()
 			return false;
 
         /*   SPRITES   */
+        if ( !menuBG.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\Transparency.png", cb_vs_matrix_2d ) )
+            return false;
+        menuBG.SetInitialPosition( XMFLOAT3( windowWidth / 2 - menuBG.GetWidth() / 2, windowHeight / 2 - menuBG.GetHeight() / 2, 0 ) );
+
         if ( !circle.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\circle.png", cb_vs_matrix_2d ) )
             return false;
         circle.SetInitialPosition( XMFLOAT3( windowWidth / 2 - circle.GetWidth() / 2, windowHeight / 2 - circle.GetHeight() / 2, 0 ) );

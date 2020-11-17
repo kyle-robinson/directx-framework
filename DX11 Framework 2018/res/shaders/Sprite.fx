@@ -26,6 +26,12 @@ VS_OUPUT VS( VS_INPUT input )
 }
 
 // pixel shader
+cbuffer ColorBuffer : register( b1 )
+{
+    float alphaFactor;
+    bool useTexture;
+}
+
 struct PS_INPUT
 {
 	float4 inPosition : SV_POSITION;
@@ -37,5 +43,6 @@ SamplerState samplerState : SAMPLER : register( s0 );
 
 float4 PS( PS_INPUT input ) : SV_TARGET
 {
-    return objTexture.Sample( samplerState, input.inTexCoord );
+    float3 finalColor = useTexture ? objTexture.Sample( samplerState, input.inTexCoord ) : 0.0f;
+    return float4( saturate( finalColor ), alphaFactor );
 }
