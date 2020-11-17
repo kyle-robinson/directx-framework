@@ -137,6 +137,7 @@ void Application::Update()
 			if ( keyboard.KeyIsPressed( 'E' ) )
 				gfx.cameras[gfx.cameraToUse]->AdjustPosition( XMFLOAT3( 0.0f, -gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
 
+			// static camera
 			if ( !gfx.flyCamera && gfx.cameraToUse == "Main" )
 			{
 				gfx.cameras[gfx.cameraToUse]->SetPosition( XMFLOAT3( gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().x,
@@ -161,6 +162,12 @@ void Application::Update()
 			if ( keyboard.KeyIsPressed( 'D' ) )
 				gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetLeftVector() *
 					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+		}
+		// prevent cameras moving under map
+		for ( auto const& x : gfx.cameras )
+		{
+			if ( x.second->GetPositionFloat3().y <= 6.0f )
+				x.second->SetPosition( XMFLOAT3( x.second->GetPositionFloat3().x, 6.0f, x.second->GetPositionFloat3().z ) );
 		}
 
 		// light object position
