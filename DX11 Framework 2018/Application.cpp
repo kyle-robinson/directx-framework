@@ -199,6 +199,12 @@ void Application::Update()
 			gfx.viewportParams = { 0 };
 			gfx.viewportParams.useSplit = true;
 		}
+
+		if ( keyboard.KeyIsPressed( VK_LEFT ) )
+			gfx.controlLeftSide = true;
+
+		if ( keyboard.KeyIsPressed( VK_RIGHT ) )
+			gfx.controlLeftSide = false;
 	}
 
 	gfx.Update( dt );
