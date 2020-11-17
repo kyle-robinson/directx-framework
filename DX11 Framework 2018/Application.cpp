@@ -44,7 +44,7 @@ void Application::Update()
 		Mouse::MouseEvent me = mouse.ReadEvent();
         if ( mouse.IsRightDown() )
 		{
-			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove )
+			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove && gfx.gameState != Graphics::GameState::MENU )
 			{
 				if ( gfx.cameraToUse != "Third" )
 				{
@@ -194,7 +194,7 @@ void Application::Update()
 		}
 	}
 
-    gfx.Update( dt );
+	gfx.Update( dt );
 }
 
 void Application::Render()

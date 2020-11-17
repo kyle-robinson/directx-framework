@@ -124,36 +124,42 @@ void Graphics::RenderFrame()
     fontPositionLight = viewportParams.useSplit ? XMFLOAT2( fontPositionLight.x / 2.0f - 50.0f, fontPositionLight.y ) : fontPositionLight;
     if ( gameState != GameState::MENU )
     {
-        if ( light.isEquippable && cameraToUse == "Main" && !light.lightStuck && !menuIsEnabled )
+        if ( light.isEquippable && cameraToUse == "Main" && !light.lightStuck )
             spriteFont->DrawString( spriteBatch.get(), L"Press 'C' to equip light.", fontPositionLight,
                 Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
     }
     if ( gameState == GameState::PLAY )
     {
         spriteFont->DrawString( spriteBatch.get(), L"Press 'F2' to switch to EDIT mode.", fontPositionMode,
-            Colors::Green, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
     }
     if ( gameState == GameState::EDIT )
     {
         spriteFont->DrawString( spriteBatch.get(), L"Press 'F1' to switch to PLAY mode.", fontPositionMode,
-            Colors::Red, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
     }
     spriteBatch->End();
 
     // render menu
     if ( gameState == GameState::MENU )
     {
-        static float alphaValue = 0.9f;
-        cb_ps_scene.data.alphaFactor = alphaValue;
-        cb_ps_scene.data.useTexture = sceneParams.useTexture;
-        if ( !cb_ps_scene.ApplyChanges() ) return;
-	    context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
-
         context->VSSetShader( vertexShader_2D.GetShader(), NULL, 0 );
         context->IASetInputLayout( vertexShader_2D.GetInputLayout() );
         context->PSSetShader( pixelShader_2D.GetShader(), NULL, 0 );
 
+        cb_ps_scene.data.alphaFactor = 0.9f;
+        cb_ps_scene.data.useTexture = false;
+        if ( !cb_ps_scene.ApplyChanges() ) return;
+	    context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
+
         menuBG.Draw( camera2D.GetWorldOrthoMatrix() );
+
+        cb_ps_scene.data.alphaFactor = 1.0f;
+        cb_ps_scene.data.useTexture = true;
+        if ( !cb_ps_scene.ApplyChanges() ) return;
+	    context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
+
+        menuLogo.Draw( camera2D.GetWorldOrthoMatrix() );
     }
 }
 
@@ -208,7 +214,8 @@ void Graphics::Update( float dt )
 	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
 
     // primitive transformations
-    cube.Update( timer );
+    if ( gameState != GameState::MENU )
+        cube.Update( timer );
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
     // camera viewing
@@ -433,6 +440,10 @@ bool Graphics::InitializeScene()
             return false;
         menuBG.SetInitialPosition( XMFLOAT3( windowWidth / 2 - menuBG.GetWidth() / 2, windowHeight / 2 - menuBG.GetHeight() / 2, 0 ) );
 
+        if ( !menuLogo.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\dx-logo.jpg", cb_vs_matrix_2d ) )
+            return false;
+        menuLogo.SetInitialPosition( XMFLOAT3( windowWidth / 2 - menuLogo.GetWidth() / 2, windowHeight / 2 - menuLogo.GetHeight() / 2, 0 ) );
+
         if ( !circle.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\circle.png", cb_vs_matrix_2d ) )
             return false;
         circle.SetInitialPosition( XMFLOAT3( windowWidth / 2 - circle.GetWidth() / 2, windowHeight / 2 - circle.GetHeight() / 2, 0 ) );
@@ -457,9 +468,8 @@ bool Graphics::InitializeScene()
         cameras["Third"]->SetInitialPosition( renderables[0].GetPositionFloat3() );
         cameras["Third"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
-        XMVECTOR lightPosition = cameras["Main"]->GetPositionVector();
-		lightPosition += cameras["Main"]->GetForwardVector() + XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-		light.SetPosition( lightPosition );
+        XMVECTOR lightPosition = cameras["Main"]->GetPositionVector() + cameras["Main"]->GetForwardVector();
+		light.SetPosition( XMFLOAT3( XMVectorGetX( lightPosition ), 5.25f, XMVectorGetZ( lightPosition ) ) );
 		light.SetRotation( cameras["Main"]->GetRotationFloat3() );    
 
         /*   VERTEX/INDEX   */

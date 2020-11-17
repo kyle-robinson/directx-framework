@@ -83,7 +83,6 @@ public:
 	Sprite circle;
 	Sprite square;
 	bool flyCamera = true;
-	bool menuIsEnabled = true;
 	std::string cameraToUse = "Main";
 	std::vector<RenderableGameObject> renderables;
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;
@@ -131,6 +130,7 @@ private:
 
 	Cube cube;
 	Sprite menuBG;
+	Sprite menuLogo;
 	Camera2D camera2D;
 	PlaneInstanced ground;
 	PlaneFullscreen fullscreen;
