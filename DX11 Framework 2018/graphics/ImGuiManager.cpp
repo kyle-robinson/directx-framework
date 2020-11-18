@@ -141,6 +141,7 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
             gfx.sceneParams.rasterizerSolid = false;
 
         ImGui::Checkbox( "Enable Textures", &gfx.sceneParams.useTexture );
+        ImGui::Checkbox( "Nanosuit Billboarding", &gfx.sceneParams.useBillboarding );
 
         static int activeSampler = 0;
         static bool selectedSampler[3];

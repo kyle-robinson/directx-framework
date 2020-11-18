@@ -44,6 +44,7 @@ public:
 		bool multiView = false;
 		bool rasterizerSolid = true;
 		bool cameraCollision = false;
+		bool useBillboarding = false;
 		float alphaFactor = 1.0f;
 		float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
 	} sceneParams;

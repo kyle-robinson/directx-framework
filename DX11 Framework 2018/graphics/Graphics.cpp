@@ -270,6 +270,13 @@ void Graphics::Update( float dt )
         cameras[cameraToUse]->SetPosition( positions );
     }
 
+    // nanosuit billboarding
+    double angle = atan2( renderables[0].GetPositionFloat3().x - cameras[cameraToUse]->GetPositionFloat3().x,
+        renderables[0].GetPositionFloat3().z - cameras[cameraToUse]->GetPositionFloat3().z ) * ( 180.0 / XM_PI );
+	float rotation = static_cast<float>( angle ) * 0.0174532925f;
+    if ( sceneParams.useBillboarding && cameraToUse != "Third" )
+        renderables[0].SetRotation( XMFLOAT3( 0.0f, rotation, 0.0f ) );
+
     // point light equipping
     light.UpdateLight();
     if ( cameraToUse == "Main" )
