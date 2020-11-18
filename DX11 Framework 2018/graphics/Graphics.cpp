@@ -253,20 +253,14 @@ void Graphics::Update( float dt )
         rotations.z = -rotations.z;
         cameras[cameraToUse]->SetRotation( rotations );
 
-        XMFLOAT3 leftPos, backPos;
+        static XMFLOAT3 leftPos, backPos;
         XMFLOAT3 positions = renderables[0].GetPositionFloat3();
-
         XMStoreFloat3( &leftPos, renderables[0].GetBackwardVector() * -5.0f );
-        positions.x += leftPos.x;
-        positions.y += leftPos.y;
-        positions.z += leftPos.z;
-
         XMStoreFloat3( &backPos, renderables[0].GetLeftVector() * 2.5f );
-        positions.x += backPos.x;
-        positions.y += backPos.y;
-        positions.z += backPos.z;
+        positions.x += leftPos.x + backPos.x;
+        positions.y += leftPos.y + backPos.y + 13.0f;
+        positions.z += leftPos.z + backPos.z;
 
-        positions.y += 13.0f;
         cameras[cameraToUse]->SetPosition( positions );
     }
 
@@ -451,7 +445,7 @@ bool Graphics::InitializeScene()
             return false;
         menuBG.SetInitialPosition( XMFLOAT3( windowWidth / 2 - menuBG.GetWidth() / 2, windowHeight / 2 - menuBG.GetHeight() / 2, 0 ) );
 
-        if ( !menuLogo.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\dx-logo.jpg", cb_vs_matrix_2d ) )
+        if ( !menuLogo.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\dx-logo.png", cb_vs_matrix_2d ) )
             return false;
         menuLogo.SetInitialPosition( XMFLOAT3( windowWidth / 2 - menuLogo.GetWidth() / 2, windowHeight / 2 - menuLogo.GetHeight() / 2, 0 ) );
 

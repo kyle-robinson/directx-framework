@@ -43,12 +43,8 @@ SamplerState samplerState : SAMPLER : register( s0 );
 
 float4 PS( PS_INPUT input ) : SV_TARGET
 {
-    float3 finalColor = objTexture.Sample( samplerState, input.inTexCoord );
+    float4 finalColor = objTexture.Sample( samplerState, input.inTexCoord );
     if ( useTexture )
-    {
-        clip( ( finalColor.r <= 0.5 && finalColor.r >= 0.2 ) ? -1 : 1 );
-        clip( ( finalColor.g <= 0.5 && finalColor.g >= 0.2 ) ? -1 : 1 );
-        clip( ( finalColor.b <= 0.5 && finalColor.b >= 0.2 ) ? -1 : 1 );
-    }
-    return float4( saturate( finalColor ), alphaFactor );
+        clip( finalColor.a < 0.6f ? -1 : 1 );
+    return float4( saturate( (float3)finalColor ), alphaFactor );
 }
