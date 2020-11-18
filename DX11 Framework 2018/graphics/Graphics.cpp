@@ -224,34 +224,11 @@ void Graphics::Update( float dt )
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
     // camera viewing
+    Camera3D::UpdateThirdPerson( cameras["Third"], renderables[0] );
     if ( Collisions::CheckCollision3D( cameras["Point"], renderables[0], 20.0f, 10.0f ) )
         sceneParams.cameraCollision = true;
     else
         sceneParams.cameraCollision = false;
-
-    if ( cameraToUse == "Third" )
-    {   
-        XMFLOAT3 viewing = renderables[0].GetPositionFloat3();
-        viewing.x -= 2.5f;
-        viewing.y += 13.0f;
-        cameras[cameraToUse]->SetLookAtPos( viewing );
-        
-        XMFLOAT3 rotations = renderables[0].GetRotationFloat3();
-        rotations.x = -rotations.x;
-        rotations.y += XMConvertToRadians( 180.0f );
-        rotations.z = -rotations.z;
-        cameras[cameraToUse]->SetRotation( rotations );
-
-        static XMFLOAT3 leftPos, backPos;
-        XMFLOAT3 positions = renderables[0].GetPositionFloat3();
-        XMStoreFloat3( &leftPos, renderables[0].GetBackwardVector() * -5.0f );
-        XMStoreFloat3( &backPos, renderables[0].GetLeftVector() * 2.5f );
-        positions.x += leftPos.x + backPos.x;
-        positions.y += leftPos.y + backPos.y + 13.0f;
-        positions.z += leftPos.z + backPos.z;
-
-        cameras[cameraToUse]->SetPosition( positions );
-    }
 
     // nanosuit billboarding
     double angle = atan2( renderables[0].GetPositionFloat3().x - cameras[cameraToUse]->GetPositionFloat3().x,

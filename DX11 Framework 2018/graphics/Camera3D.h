@@ -26,6 +26,8 @@ public:
 
 	void ResetOrientation() noexcept;
 	void ResetProjection( float aspectRatio ) noexcept;
+
+	static void UpdateThirdPerson( std::shared_ptr<Camera3D>& camera, GameObject3D& model ) noexcept;
 private:
 	void UpdateMatrix() override;
 	XMMATRIX view, projection;
