@@ -6,11 +6,12 @@
 #include "ModelData.h"
 #include "SwapChain.h"
 #include "Rasterizer.h"
+#include "../resource.h"
 #include "DepthStencil.h"
 #include "RenderTarget.h"
 #include "ObjectIndices.h"
 #include "ObjectVertices.h"
-#include "../resource.h"
+#include "../utility/Collisions.h"
 #include <fstream>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
@@ -223,22 +224,10 @@ void Graphics::Update( float dt )
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
     // camera viewing
-    if ( cameraToUse == "Point" )
-    {
-        XMFLOAT3 positions = renderables[0].GetPositionFloat3();
-        positions.y += 10.0f;
-        static int radius = 20.0f;
-        cameras[cameraToUse]->SetLookAtPos( positions );
-        if ( ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) *
-            ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) +
-            ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) *
-            ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) +
-            ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) *
-            ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) <= radius * radius )
-            sceneParams.cameraCollision = true;
-        else
-            sceneParams.cameraCollision = false;
-    }
+    if ( Collisions::CheckCollision3D( cameras["Point"], renderables[0], 20.0f, 10.0f ) )
+        sceneParams.cameraCollision = true;
+    else
+        sceneParams.cameraCollision = false;
 
     if ( cameraToUse == "Third" )
     {   
@@ -271,33 +260,13 @@ void Graphics::Update( float dt )
     if ( sceneParams.useBillboarding && cameraToUse != "Third" )
         renderables[0].SetRotation( XMFLOAT3( 0.0f, rotation, 0.0f ) );
 
-    // point light equipping
-    light.UpdateLight();
-    if ( cameraToUse == "Main" )
-    {   
-        static int radius = 5.0f;
-        XMFLOAT3 positions = light.GetPositionFloat3();
-        if ( ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) *
-            ( cameras[cameraToUse]->GetPositionFloat3().x - positions.x ) +
-            ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) *
-            ( cameras[cameraToUse]->GetPositionFloat3().y - positions.y ) +
-            ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) *
-            ( cameras[cameraToUse]->GetPositionFloat3().z - positions.z ) <= radius * radius )
-            light.isEquippable = true;
-        else
-            light.isEquippable = false;
-    }
-
-    // point light flickering
-    static float lightTimer = 200.0f;
-    lightTimer -= 1.0f;
-    if ( lightTimer <= 0.0f )
-        lightTimer = 200.0f;
-    cb_ps_light.data.lightTimer = lightTimer;
-    
-    static float randLightAmount;
-    randLightAmount = ( rand() % 5000 ) + 1;
-    cb_ps_light.data.randLightAmount = randLightAmount;
+    // point light equipping and flickering
+    light.UpdatePhysics();
+    light.UpdateFlicker( cb_ps_light );
+    if ( Collisions::CheckCollision3D( cameras["Main"], light, 5.0f ) )
+        light.isEquippable = true;
+    else
+        light.isEquippable = false;
 }
 
 UINT Graphics::GetWidth() const noexcept

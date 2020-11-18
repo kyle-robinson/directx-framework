@@ -472,6 +472,7 @@
     <ClCompile Include="graphics\Texture.cpp" />
     <ClCompile Include="keyboard\Keyboard.cpp" />
     <ClCompile Include="mouse\Mouse.cpp" />
+    <ClCompile Include="utility\Collisions.cpp" />
     <ClCompile Include="utility\ErrorLogger.cpp" />
     <ClCompile Include="utility\StringConverter.cpp" />
     <ClCompile Include="utility\Timer.cpp" />
@@ -526,6 +527,7 @@
     <ClInclude Include="keyboard\Keyboard.h" />
     <ClInclude Include="mouse\Mouse.h" />
     <CLInclude Include="resource.h" />
+    <ClInclude Include="utility\Collisions.h" />
     <ClInclude Include="utility\COMException.h" />
     <ClInclude Include="utility\ErrorLogger.h" />
     <ClInclude Include="utility\StringConverter.h" />

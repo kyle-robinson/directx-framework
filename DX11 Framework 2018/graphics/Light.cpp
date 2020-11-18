@@ -51,7 +51,7 @@ void Light::UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light )
 	cb_ps_light.data.quadIntensity = quadIntensity;
 }
 
-void Light::UpdateLight()
+void Light::UpdatePhysics() noexcept
 {
 	if ( !lightStuck )
 	{
@@ -64,4 +64,17 @@ void Light::UpdateLight()
 		if ( this->GetPositionFloat3().y <= 5.25f )
 			force = 0.0f;
 	}
+}
+
+void Light::UpdateFlicker( ConstantBuffer<CB_PS_light>& cb_ps_light ) noexcept
+{
+	static float lightTimer = 200.0f;
+    lightTimer -= 1.0f;
+    if ( lightTimer <= 0.0f )
+        lightTimer = 200.0f;
+    cb_ps_light.data.lightTimer = lightTimer;
+    
+    static float randLightAmount;
+    randLightAmount = ( rand() % 5000 ) + 1;
+    cb_ps_light.data.randLightAmount = randLightAmount;
 }

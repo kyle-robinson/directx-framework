@@ -87,9 +87,6 @@ void Application::Update()
 		// set camera mode
 		if ( gfx.gameState == Graphics::GameState::PLAY )
 			gfx.flyCamera = false;
-
-		if ( gfx.gameState == Graphics::GameState::EDIT )
-			gfx.flyCamera = true;
 		
 		// set camera to use
 		if ( keyboard.KeyIsPressed( '1' ) )
