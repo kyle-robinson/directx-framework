@@ -49,6 +49,7 @@ void Graphics::BeginFrame()
 	context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
     stencilStates["Off"]->Bind( *this );
     blendState->Bind( *this );
+
     // setup viewports
     if ( viewportParams.useFull )
         viewports["Full"]->Bind( *this );
@@ -66,6 +67,7 @@ void Graphics::BeginFrame()
         viewportParams.useRight = false;
         viewports["Right"]->Bind( *this );
     }
+
     // setup sampler
     if ( samplerParams.useAnisotropic )
         samplerStates["Anisotropic"]->Bind( *this );
@@ -132,14 +134,11 @@ void Graphics::RenderFrame()
         cb_ps_scene.data.useTexture = false;
         if ( !cb_ps_scene.ApplyChanges() ) return;
 	    context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
-
         menuBG.Draw( camera2D.GetWorldOrthoMatrix() );
 
-        cb_ps_scene.data.alphaFactor = 1.0f;
         cb_ps_scene.data.useTexture = true;
         if ( !cb_ps_scene.ApplyChanges() ) return;
 	    context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
-
         menuLogo.Draw( camera2D.GetWorldOrthoMatrix() );
     }
 }
@@ -167,15 +166,11 @@ void Graphics::EndFrame()
                 Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
     }
     if ( gameState == GameState::PLAY )
-    {
         spriteFont->DrawString( spriteBatch.get(), L"Press 'F2' to switch to EDIT mode.", fontPositionMode,
             Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
-    }
     if ( gameState == GameState::EDIT )
-    {
         spriteFont->DrawString( spriteBatch.get(), L"Press 'F1' to switch to PLAY mode.", fontPositionMode,
             Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
-    }
     spriteBatch->End();
 
     // display imgui
@@ -212,23 +207,14 @@ void Graphics::Update( float dt )
     // model transformations
     //nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
 
-    static float timer = 0.0f;
-    static DWORD dwTimeStart = 0;
-	DWORD dwTimeCur = GetTickCount64();
-	if ( dwTimeStart == 0 ) dwTimeStart = dwTimeCur;
-	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
-
     // primitive transformations
-    if ( gameState != GameState::MENU )
-        cube.Update( timer );
+    if ( gameState != GameState::MENU ) cube.Update();
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
     // camera viewing
     Camera3D::UpdateThirdPerson( cameras["Third"], renderables[0] );
-    if ( Collisions::CheckCollision3D( cameras["Point"], renderables[0], 20.0f, 10.0f ) )
-        sceneParams.cameraCollision = true;
-    else
-        sceneParams.cameraCollision = false;
+    Collisions::CheckCollision3D( cameras["Point"], renderables[0], 20.0f, 10.0f ) ?
+        sceneParams.cameraCollision = true : sceneParams.cameraCollision = false;
 
     // nanosuit billboarding
     double angle = atan2( renderables[0].GetPositionFloat3().x - cameras[cameraToUse]->GetPositionFloat3().x,
@@ -240,10 +226,7 @@ void Graphics::Update( float dt )
     // point light equipping and flickering
     light.UpdatePhysics();
     light.UpdateFlicker( cb_ps_light );
-    if ( Collisions::CheckCollision3D( cameras["Main"], light, 5.0f ) )
-        light.isEquippable = true;
-    else
-        light.isEquippable = false;
+    Collisions::CheckCollision3D( cameras["Main"], light, 5.0f ) ? light.isEquippable = true : light.isEquippable = false;
 }
 
 UINT Graphics::GetWidth() const noexcept

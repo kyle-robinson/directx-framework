@@ -46,8 +46,14 @@ void Cube::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ID3D11ShaderResourc
     }
 }
 
-void Cube::Update( float timer ) noexcept
+void Cube::Update() noexcept
 {
+    static float timer = 0.0f;
+    static DWORD dwTimeStart = 0;
+	DWORD dwTimeCur = GetTickCount64();
+	if ( dwTimeStart == 0 ) dwTimeStart = dwTimeCur;
+	timer = ( dwTimeCur - dwTimeStart ) / 1000.0f;
+
     XMStoreFloat4x4( &worldMatrices[0],
         XMMatrixScaling( 2.0f, 2.0f, 2.0f ) *
         XMMatrixRotationZ( timer * 1.5f ) *
