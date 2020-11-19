@@ -8,7 +8,7 @@ using namespace DirectX;
 class Camera3D : public GameObject3D
 {
 public:
-	Camera3D();
+	Camera3D( const XMFLOAT3& initialPosition );
 	Camera3D( const Camera3D& ) = default;
 	Camera3D& operator=( Camera3D );
 	void SetProjectionValues( float fovDegrees, float aspectRatio, float nearZ, float farZ );

@@ -390,16 +390,14 @@ bool Graphics::InitializeScene()
         XMFLOAT2 aspectRatio = { static_cast<float>( windowWidth ), static_cast<float>( windowHeight ) };
         camera2D.SetProjectionValues( aspectRatio.x, aspectRatio.y, 0.0f, 1.0f );
 
-        cameras.emplace( "Main", std::make_shared<Camera3D>() );
-        cameras["Main"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -20.0f ) );
+        cameras.emplace( "Main", std::make_shared<Camera3D>( 0.0f, 9.0f, -20.0f ) );
         cameras["Main"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
-        cameras.emplace( "Point", std::make_shared<Camera3D>() );
-        cameras["Point"]->SetInitialPosition( XMFLOAT3( 0.0f, 9.0f, -55.0f ) );
+        cameras.emplace( "Point", std::make_shared<Camera3D>( 0.0f, 9.0f, -55.0f ) );
         cameras["Point"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
-        cameras.emplace( "Third", std::make_shared<Camera3D>() );
-        cameras["Third"]->SetInitialPosition( renderables[0].GetPositionFloat3() );
+        cameras.emplace( "Third", std::make_shared<Camera3D>( renderables[0].GetPositionFloat3().x,
+            renderables[0].GetPositionFloat3().y, renderables[0].GetPositionFloat3().z ) );
         cameras["Third"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         XMVECTOR lightPosition = cameras["Main"]->GetPositionVector() + cameras["Main"]->GetForwardVector();

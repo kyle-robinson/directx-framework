@@ -1,9 +1,9 @@
 #include "Camera3D.h"
 
-Camera3D::Camera3D()
+Camera3D::Camera3D( const XMFLOAT3& initialPosition )
 {
-	position = XMFLOAT3( 0.0f, 0.0f, 0.0f );
-	posVector = XMLoadFloat3( &position );
+	SetInitialPosition( initialPosition );
+	posVector = XMLoadFloat3( &initialPosition );
 	rotation = XMFLOAT3( 0.0f, 0.0f, 0.0f );
 	rotVector = XMLoadFloat3( &rotation );
 	UpdateMatrix();
