@@ -29,9 +29,9 @@ void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ID3D11ShaderResour
     context->IASetVertexBuffers( 0, 1, vb_plane.GetAddressOf(), vb_plane.StridePtr(), &offset );
     context->IASetIndexBuffer( ib_plane.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->PSSetShaderResources( 0, 1, &texture );
-    cb_vs_matrix.data.worldMatrix = XMMatrixIdentity();
-    if ( !cb_vs_matrix.ApplyChanges() ) return;
-    context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+    //cb_vs_matrix.data.worldMatrix = XMMatrixIdentity();
+    //if ( !cb_vs_matrix.ApplyChanges() ) return;
+    //context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
     context->DrawIndexed( ib_plane.IndexCount(), 0, 0 );
 }
 

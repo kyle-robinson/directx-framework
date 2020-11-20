@@ -14,6 +14,8 @@
 #include <dxtk/SpriteBatch.h>
 #include <dxtk/WICTextureLoader.h>
 
+#define CUBE_AMOUNT 3
+
 namespace Bind
 {
 	class Sampler;
@@ -130,7 +132,6 @@ private:
 	UINT windowHeight;
 	ImGuiManager imgui;
 
-	Cube cube;
 	Sprite menuBG;
 	Sprite menuLogo;
 	Camera2D camera2D;
@@ -138,6 +139,7 @@ private:
 	PlaneFullscreen fullscreen;
 	std::unique_ptr<SpriteFont> spriteFont;
 	std::unique_ptr<SpriteBatch> spriteBatch;
+	std::vector<std::unique_ptr<Cube>> cubes;
 };
 
 #endif

@@ -111,7 +111,8 @@ void Graphics::RenderFrame()
         renderables[i].Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
 
     // draw primitves
-    cube.Draw( cb_vs_matrix, boxTexture.Get() );
+    for ( unsigned int i = 0; i < CUBE_AMOUNT; i++ )
+        cubes[i]->Draw( cb_vs_matrix, boxTexture.Get() );
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
 	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
@@ -197,10 +198,11 @@ void Graphics::EndFrame()
 void Graphics::Update( float dt )
 {
     // model transformations
-    //nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
+    //nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) )
 
     // primitive transformations
-    if ( gameState != GameState::MENU ) cube.Update();
+    for ( unsigned int i = 0; i < CUBE_AMOUNT; i++ )
+        cubes[i]->AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
     // camera viewing
@@ -369,7 +371,12 @@ bool Graphics::InitializeScene()
 		light.SetRotation( cameras["Main"]->GetRotationFloat3() );    
 
         /*   VERTEX/INDEX   */
-        cube.Initialize( context.Get(), device.Get(), 3 );
+        for ( unsigned int i = 0; i < CUBE_AMOUNT; i++ )
+        {
+            std::unique_ptr<Cube> cube = std::make_unique<Cube>( context.Get(), device.Get() );
+            cube->SetInitialPosition( XMFLOAT3( -5.0f + ( i * 5.0f ), 9.0f, 0.0f ) );
+            cubes.push_back( std::move( cube ) );
+        }
         fullscreen.Initialize( context.Get(), device.Get() );
         ground.InitializeInstanced( context.Get(), device.Get(), 400 );
 
