@@ -325,8 +325,10 @@ bool Graphics::InitializeScene()
     try
     {
         /*   MODELS   */
-        ModelData::LoadModelData( "res\\objects.json" );
-        ModelData::InitializeModelData( context.Get(), device.Get(), cb_vs_matrix, renderables );
+        if ( !ModelData::LoadModelData( "res\\objects.json" ) )
+            return false;
+        if ( !ModelData::InitializeModelData( context.Get(), device.Get(), cb_vs_matrix, renderables ) )
+            return false;
 
         light.SetScale( 1.0f, 1.0f, 1.0f );
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )

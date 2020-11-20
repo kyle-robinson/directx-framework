@@ -3,6 +3,7 @@
 #define MODELDATA_H
 
 #include <fstream>
+#include <filesystem>
 #include "nlohmann/json.hpp"
 #include "RenderableGameObject.h"
 using json = nlohmann::json;
@@ -20,8 +21,11 @@ std::vector<Drawable> drawables;
 class ModelData
 {
 public:
-    static void LoadModelData( const std::string& filePath )
+    static bool LoadModelData( const std::string& filePath )
     {
+        if ( !std::filesystem::exists( filePath ) )
+            return false;
+
         json jFile;
         std::ifstream fileOpen( filePath.c_str() );
         fileOpen >> jFile;
@@ -41,6 +45,7 @@ public:
             drawable.scale = { objectDesc["ScaleX"], objectDesc["ScaleY"], objectDesc["ScaleZ"] };
             drawables.push_back( drawable );
         }
+        return true;
     }
     static bool InitializeModelData( ID3D11DeviceContext* context, ID3D11Device* device,
         ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, std::vector<RenderableGameObject>& renderables )
@@ -56,6 +61,7 @@ public:
             model.SetModelName( drawables[i].modelName );
             renderables.push_back( model );
         }
+        return true;
     }
 };
 
