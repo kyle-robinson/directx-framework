@@ -288,16 +288,6 @@ bool Graphics::InitializeShaders()
 	    hr = pixelShader_noLight.Initialize( device, L"res\\shaders\\Model_NoLight.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
 
-        /*   POST-PROCESSING   */
-        D3D11_INPUT_ELEMENT_DESC layoutFull[] = {
-		    { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	    };
-        numElements = ARRAYSIZE( layoutFull );
-	    hr = vertexShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx", layoutFull, numElements );
-		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen vertex shader!" );
-	    hr = pixelShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx" );
-		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen pixel shader!" );
-
         /*   SPRITES   */
         D3D11_INPUT_ELEMENT_DESC layoutSprite[] = {
 		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -310,6 +300,16 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D pixel shader!" );
         hr = pixelShader_2D_discard.Initialize( device, L"res\\shaders\\Sprite_Discard.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D discard pixel shader!" );
+        
+        /*   POST-PROCESSING   */
+        D3D11_INPUT_ELEMENT_DESC layoutFull[] = {
+		    { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	    };
+        numElements = ARRAYSIZE( layoutFull );
+	    hr = vertexShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx", layoutFull, numElements );
+		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen vertex shader!" );
+	    hr = pixelShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx" );
+		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen pixel shader!" );
     }
     catch ( COMException& exception )
     {
@@ -325,37 +325,8 @@ bool Graphics::InitializeScene()
     try
     {
         /*   MODELS   */
-        json jFile;
-        std::ifstream fileOpen( "res\\objects.json" );
-        fileOpen >> jFile;
-        std::string version = jFile["version"].get<std::string>();
-
-        json objects = jFile["GameObjects"];
-        int size = objects.size();
-
-        for ( unsigned int i = 0; i < size; i++ )
-        {
-            Drawable drawable;
-            json objectDesc = objects[i];
-            drawable.modelName = objectDesc["Name"];
-            drawable.fileName = objectDesc["File"];
-            drawable.position = { objectDesc["PosX"], objectDesc["PosY"], objectDesc["PosZ"] };
-            drawable.rotation = { objectDesc["RotX"], objectDesc["RotY"], objectDesc["RotZ"] };
-            drawable.scale = { objectDesc["ScaleX"], objectDesc["ScaleY"], objectDesc["ScaleZ"] };
-            drawables.push_back( drawable );
-        }
-
-        for ( unsigned int i = 0; i < drawables.size(); i++ )
-        {
-            RenderableGameObject model;
-            model.SetInitialScale( drawables[i].scale.x, drawables[i].scale.y, drawables[i].scale.z );
-            if ( !model.Initialize( "res\\models\\" + drawables[i].fileName, device.Get(), context.Get(), cb_vs_matrix ) )
-                return false;
-            model.SetInitialPosition( drawables[i].position );
-            model.SetInitialRotation( drawables[i].rotation );
-            model.SetModelName( drawables[i].modelName );
-            renderables.push_back( model );
-        }
+        ModelData::LoadModelData( "res\\objects.json" );
+        ModelData::InitializeModelData( context.Get(), device.Get(), cb_vs_matrix, renderables );
 
         light.SetScale( 1.0f, 1.0f, 1.0f );
 		if ( !light.Initialize( device.Get(), context.Get(), cb_vs_matrix ) )
