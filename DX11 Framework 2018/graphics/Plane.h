@@ -2,8 +2,8 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#include "RenderableGameObject.h"
 #include "Shaders.h"
+#include "RenderableGameObject.h"
 
 class Plane : public RenderableGameObject
 {

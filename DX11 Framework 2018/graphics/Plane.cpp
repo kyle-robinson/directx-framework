@@ -125,9 +125,7 @@ bool PlaneFullscreen::Initialize( ID3D11DeviceContext* context, ID3D11Device* de
 void PlaneFullscreen::SetupBuffers( VertexShader& vs_full, PixelShader& ps_full, ConstantBuffer<CB_VS_fullscreen>& cb_vs_full, bool& multiView ) noexcept 
 {
     UINT offset = 0;
-    context->VSSetShader( vs_full.GetShader(), NULL, 0 );
-    context->PSSetShader( ps_full.GetShader(), NULL, 0 );
-    context->IASetInputLayout( vs_full.GetInputLayout() );
+    Shaders::BindShaders( context, vs_full, ps_full );    
     context->IASetVertexBuffers( 0, 1, vb_full.GetAddressOf(), vb_full.StridePtr(), &offset );
     context->IASetIndexBuffer( ib_full.Get(), DXGI_FORMAT_R16_UINT, 0 );
     cb_vs_full.data.multiView = multiView;

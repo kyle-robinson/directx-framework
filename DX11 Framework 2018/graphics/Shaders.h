@@ -7,8 +7,13 @@
 #include <d3dcompiler.h>
 #include "../utility/ErrorLogger.h"
 
+class VertexShader;
+class PixelShader;
+
 class Shaders
 {
+public:
+	static void BindShaders( ID3D11DeviceContext* context, VertexShader& vs, PixelShader& ps ) noexcept;
 protected:
 	HRESULT CompileShaderFromFile(
 		std::wstring szFileName,

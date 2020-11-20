@@ -46,6 +46,13 @@ HRESULT VertexShader::Initialize( Microsoft::WRL::ComPtr<ID3D11Device>& device, 
 	return hr;
 }
 
+void Shaders::BindShaders( ID3D11DeviceContext* context, VertexShader& vs, PixelShader& ps ) noexcept
+{
+    context->VSSetShader( vs.GetShader(), NULL, 0 );
+	context->IASetInputLayout( vs.GetInputLayout() );
+	context->PSSetShader( ps.GetShader(), NULL, 0 );
+}
+
 ID3D11VertexShader* VertexShader::GetShader() const noexcept
 {
     return shader.Get();
