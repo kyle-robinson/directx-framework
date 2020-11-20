@@ -111,7 +111,7 @@ void Graphics::RenderFrame()
         renderables[i].Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
 
     // draw primitves
-    for ( unsigned int i = 0; i < CUBE_AMOUNT; i++ )
+    for ( unsigned int i = 0; i < cubes.size(); i++ )
         cubes[i]->Draw( cb_vs_matrix, boxTexture.Get() );
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
@@ -201,7 +201,7 @@ void Graphics::Update( float dt )
     //nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) )
 
     // primitive transformations
-    for ( unsigned int i = 0; i < CUBE_AMOUNT; i++ )
+    for ( unsigned int i = 0; i < cubes.size(); i++ )
         cubes[i]->AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
     ground.UpdateInstanced( 5, 6, 8, 60 );
 

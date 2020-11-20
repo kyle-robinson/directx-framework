@@ -161,11 +161,9 @@ void Application::Update()
 					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 		}
 		// prevent cameras moving under map
-		//for ( auto const& x : gfx.cameras )
-		//{
-		//	if ( x.second->GetPositionFloat3().y <= 6.0f )
-		//		x.second->SetPosition( XMFLOAT3( x.second->GetPositionFloat3().x, 6.0f, x.second->GetPositionFloat3().z ) );
-		//}
+		for ( auto const& x : gfx.cameras )
+			if ( x.second->GetPositionFloat3().y <= 6.0f )
+				x.second->SetPosition( XMFLOAT3( x.second->GetPositionFloat3().x, 6.0f, x.second->GetPositionFloat3().z ) );
 
 		// light object position
 		XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
