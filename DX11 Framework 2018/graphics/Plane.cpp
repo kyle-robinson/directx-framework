@@ -13,6 +13,11 @@ bool Plane::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
         COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
         hr = ib_plane.Initialize( device, IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
+
+        SetPosition( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
+        SetRotation( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
+        SetScale( 1.0f, 1.0f );
+        UpdateMatrix();
     }
     catch ( COMException& exception )
     {
@@ -20,7 +25,7 @@ bool Plane::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
         return false;
     }
 
-    return false;
+    return true;
 }
 
 void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ID3D11ShaderResourceView* texture ) noexcept
@@ -29,9 +34,9 @@ void Plane::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ID3D11ShaderResour
     context->IASetVertexBuffers( 0, 1, vb_plane.GetAddressOf(), vb_plane.StridePtr(), &offset );
     context->IASetIndexBuffer( ib_plane.Get(), DXGI_FORMAT_R16_UINT, 0 );
     context->PSSetShaderResources( 0, 1, &texture );
-    //cb_vs_matrix.data.worldMatrix = XMMatrixIdentity();
-    //if ( !cb_vs_matrix.ApplyChanges() ) return;
-    //context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
+    cb_vs_matrix.data.worldMatrix = XMMatrixIdentity() * worldMatrix;
+    if ( !cb_vs_matrix.ApplyChanges() ) return;
+    context->VSSetConstantBuffers( 0, 1, cb_vs_matrix.GetAddressOf() );
     context->DrawIndexed( ib_plane.IndexCount(), 0, 0 );
 }
 

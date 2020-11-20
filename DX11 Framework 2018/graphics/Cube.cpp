@@ -4,6 +4,11 @@
 
 Cube::Cube( ID3D11DeviceContext* context, ID3D11Device* device )
 {
+    Initialize( context, device );
+}
+
+bool Cube::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
+{
     this->context = context;
 
     try
@@ -21,7 +26,10 @@ Cube::Cube( ID3D11DeviceContext* context, ID3D11Device* device )
     catch ( COMException& exception )
     {
         ErrorLogger::Log( exception );
+        return false;
     }
+    
+    return true;
 }
 
 void Cube::Draw( ConstantBuffer<CB_VS_matrix>& cb_vs_matrix, ID3D11ShaderResourceView* texture ) noexcept

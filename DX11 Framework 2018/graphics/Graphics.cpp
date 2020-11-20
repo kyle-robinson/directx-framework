@@ -377,8 +377,10 @@ bool Graphics::InitializeScene()
             cube->SetInitialPosition( XMFLOAT3( -5.0f + ( i * 5.0f ), 9.0f, 0.0f ) );
             cubes.push_back( std::move( cube ) );
         }
-        fullscreen.Initialize( context.Get(), device.Get() );
-        ground.InitializeInstanced( context.Get(), device.Get(), 400 );
+        if ( !fullscreen.Initialize( context.Get(), device.Get() ) )
+            return false;
+        if ( !ground.InitializeInstanced( context.Get(), device.Get(), 400 ) )
+            return false;
 
         /*   TEXTURES   */
         HRESULT hr = CreateWICTextureFromFile( device.Get(), L"res\\textures\\CrashBox.png", nullptr, boxTexture.GetAddressOf() );
