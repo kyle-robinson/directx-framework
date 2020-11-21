@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "imgui/imgui.h"
+#include "utility/Structs.h"
 
 bool Application::Initialize(
 	HINSTANCE hInstance,
@@ -107,7 +108,7 @@ void Application::Update()
 		if ( gfx.cameraToUse != "Third" )
 		{
 			// camera collision
-			if ( gfx.sceneParams.cameraCollision )
+			if ( sceneParams.cameraCollision )
 				gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetBackwardVector() *
 					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
@@ -185,14 +186,14 @@ void Application::Update()
 		// manage viewports
 		if ( keyboard.KeyIsPressed( VK_UP ) )
 		{
-			gfx.viewportParams = { 0 };
-			gfx.viewportParams.useFull = true;
+			viewportParams = { 0 };
+			viewportParams.useFull = true;
 		}
 
 		if ( keyboard.KeyIsPressed( VK_DOWN ) )
 		{
-			gfx.viewportParams = { 0 };
-			gfx.viewportParams.useSplit = true;
+			viewportParams = { 0 };
+			viewportParams.useSplit = true;
 		}
 
 		if ( keyboard.KeyIsPressed( VK_LEFT ) )
@@ -207,7 +208,7 @@ void Application::Update()
 
 void Application::Render()
 {
-	if ( !gfx.viewportParams.useSplit )
+	if ( !viewportParams.useSplit )
 	{
 		gfx.BeginFrame();
 		gfx.RenderFrame();
@@ -215,15 +216,15 @@ void Application::Render()
 	}
 	else
 	{
-		gfx.viewportParams.useLeft = true;
+		viewportParams.useLeft = true;
 		gfx.BeginFrame();
 		gfx.RenderFrame();
 
-		gfx.viewportParams.useRight = true;
+		viewportParams.useRight = true;
 		gfx.BeginFrame();
 		gfx.RenderFrame();
 
-		gfx.viewportParams.useFull = true;
+		viewportParams.useFull = true;
 		gfx.BeginFrame();
 		gfx.EndFrame();
 	}

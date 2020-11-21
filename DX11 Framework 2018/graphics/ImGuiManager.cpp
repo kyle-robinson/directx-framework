@@ -47,12 +47,12 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx )
         if ( ImGui::TreeNode( "Spawn Windows" ) )
         {
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-            ImGui::Checkbox( "Scene", &gfx.spawnWindow.sceneWindow );
-            ImGui::Checkbox( "Lighting", &gfx.spawnWindow.lightWindow );
-            ImGui::Checkbox( "Fog", &gfx.spawnWindow.fogWindow );
-            ImGui::Checkbox( "Models", &gfx.spawnWindow.modelWindow );
-            ImGui::Checkbox( "Cameras", &gfx.spawnWindow.cameraWindow );
-            ImGui::Checkbox( "Stencils", &gfx.spawnWindow.stencilWindow );
+            ImGui::Checkbox( "Scene", &spawnWindow.sceneWindow );
+            ImGui::Checkbox( "Lighting", &spawnWindow.lightWindow );
+            ImGui::Checkbox( "Fog", &spawnWindow.fogWindow );
+            ImGui::Checkbox( "Models", &spawnWindow.modelWindow );
+            ImGui::Checkbox( "Cameras", &spawnWindow.cameraWindow );
+            ImGui::Checkbox( "Stencils", &spawnWindow.stencilWindow );
             ImGui::PopStyleColor();
             ImGui::TreePop();
         }
@@ -130,18 +130,18 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
 {
     if ( ImGui::Begin( "Scene Parameters", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
-        ImGui::ColorEdit3( "Clear Color", gfx.sceneParams.clearColor );
-        ImGui::SliderFloat( "Blend Factor", &gfx.sceneParams.alphaFactor, 0.0f, 1.0f );
+        ImGui::ColorEdit3( "Clear Color", sceneParams.clearColor );
+        ImGui::SliderFloat( "Blend Factor", &sceneParams.alphaFactor, 0.0f, 1.0f );
 			    
         static int fillGroup = 0;
 	    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
-            gfx.sceneParams.rasterizerSolid = true;
+            sceneParams.rasterizerSolid = true;
 	    ImGui::SameLine();
 	    if ( ImGui::RadioButton( "Wireframe", &fillGroup, 1 ) )
-            gfx.sceneParams.rasterizerSolid = false;
+            sceneParams.rasterizerSolid = false;
 
-        ImGui::Checkbox( "Enable Textures", &gfx.sceneParams.useTexture );
-        ImGui::Checkbox( "Nanosuit Billboarding", &gfx.sceneParams.useBillboarding );
+        ImGui::Checkbox( "Enable Textures", &sceneParams.useTexture );
+        ImGui::Checkbox( "Nanosuit Billboarding", &sceneParams.useBillboarding );
 
         static int activeSampler = 0;
         static bool selectedSampler[3];
@@ -162,16 +162,16 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
             switch ( activeSampler )
             {
                 case 0:
-                    gfx.samplerParams = { 0 };
-                    gfx.samplerParams.useAnisotropic = true;
+                    samplerParams = { 0 };
+                    samplerParams.useAnisotropic = true;
                     break;
                 case 1:
-                    gfx.samplerParams = { 0 };
-                    gfx.samplerParams.useBilinear = true;
+                    samplerParams = { 0 };
+                    samplerParams.useBilinear = true;
                     break;
                 case 2:
-                    gfx.samplerParams = { 0 };
-                    gfx.samplerParams.usePoint = true;
+                    samplerParams = { 0 };
+                    samplerParams.usePoint = true;
                     break;
             }
 
@@ -197,18 +197,18 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
             switch ( activeViewport )
             {
                 case 0:
-                    gfx.viewportParams = { 0 };
-                    gfx.sceneParams.multiView = false;
-                    gfx.viewportParams.useFull = true;
+                    viewportParams = { 0 };
+                    sceneParams.multiView = false;
+                    viewportParams.useFull = true;
                     break;
                 case 1:
-                    gfx.viewportParams = { 0 };
-                    gfx.sceneParams.multiView = true;
+                    viewportParams = { 0 };
+                    sceneParams.multiView = true;
                     break;
                 case 2:
-                    gfx.viewportParams = { 0 };
-                    gfx.sceneParams.multiView = false;
-                    gfx.viewportParams.useSplit = true;
+                    viewportParams = { 0 };
+                    sceneParams.multiView = false;
+                    viewportParams.useSplit = true;
                     break;
             }
 
@@ -520,17 +520,17 @@ void ImGuiManager::RenderStencilWindow( Graphics& gfx )
 {
     if ( ImGui::Begin( "Stencil", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
-        ImGui::Checkbox( "Enable Stencil Mask", &gfx.sceneParams.useMask );
-        if ( gfx.sceneParams.useMask )
+        ImGui::Checkbox( "Enable Stencil Mask", &sceneParams.useMask );
+        if ( sceneParams.useMask )
         {
             static int maskTypeGroup = 0;
             if ( ImGui::RadioButton( "Circle", &maskTypeGroup, 0 ) )
-                gfx.sceneParams.circleMask = true;
+                sceneParams.circleMask = true;
             ImGui::SameLine();
             if ( ImGui::RadioButton( "Square", &maskTypeGroup, 1 ) )
-                gfx.sceneParams.circleMask = false;
+                sceneParams.circleMask = false;
 
-            if ( gfx.sceneParams.circleMask )
+            if ( sceneParams.circleMask )
             {
                 static float width = 200.0f;
                 static float height = 200.0f;
@@ -540,7 +540,7 @@ void ImGuiManager::RenderStencilWindow( Graphics& gfx )
                 gfx.circle.SetPosition( XMFLOAT3( gfx.GetWidth() / 2 - gfx.circle.GetWidth() / 2,
                     gfx.GetHeight() / 2 - gfx.circle.GetHeight() / 2, 0 ) );
             }
-            else if ( !gfx.sceneParams.circleMask )
+            else if ( !sceneParams.circleMask )
             {
                 static float width = 200.0f;
                 static float height = 200.0f;

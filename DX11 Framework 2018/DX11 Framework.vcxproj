@@ -537,6 +537,7 @@
     <ClInclude Include="utility\COMException.h" />
     <ClInclude Include="utility\ErrorLogger.h" />
     <ClInclude Include="utility\StringConverter.h" />
+    <ClInclude Include="utility\Structs.h" />
     <ClInclude Include="utility\Timer.h" />
     <ClInclude Include="window\RenderWindow.h" />
     <ClInclude Include="window\WindowContainer.h" />

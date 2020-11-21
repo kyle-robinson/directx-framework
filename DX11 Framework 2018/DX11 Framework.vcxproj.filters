@@ -334,6 +334,9 @@
     <ClInclude Include="utility\Collisions.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="utility\Structs.h">
+      <Filter>Headers\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11 Framework.rc">
