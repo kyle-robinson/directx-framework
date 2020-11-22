@@ -504,6 +504,7 @@
     <ClInclude Include="graphics\ConstantBufferTypes.h" />
     <ClInclude Include="graphics\Cube.h" />
     <ClInclude Include="graphics\DepthStencil.h" />
+    <ClInclude Include="graphics\InputLayout.h" />
     <ClInclude Include="graphics\ModelData.h" />
     <ClInclude Include="graphics\Plane.h" />
     <ClInclude Include="graphics\RenderTarget.h" />

@@ -337,6 +337,9 @@
     <ClInclude Include="utility\Structs.h">
       <Filter>Headers\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\InputLayout.h">
+      <Filter>Headers\Graphics\Bindables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11 Framework.rc">

@@ -6,6 +6,7 @@
 #include "ModelData.h"
 #include "SwapChain.h"
 #include "Rasterizer.h"
+#include "InputLayout.h"
 #include "../resource.h"
 #include "DepthStencil.h"
 #include "RenderTarget.h"
@@ -276,13 +277,7 @@ bool Graphics::InitializeShaders()
     try
     {
         /*   MODELS   */
-        D3D11_INPUT_ELEMENT_DESC layoutModel[] = {
-		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		    { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	    };
-	    UINT numElements = ARRAYSIZE( layoutModel );
-	    HRESULT hr = vertexShader_light.Initialize( device, L"res\\shaders\\Model.fx", layoutModel, numElements );
+        HRESULT hr = vertexShader_light.Initialize( device, L"res\\shaders\\Model.fx", IPL::layoutPosTexNrm, ARRAYSIZE( IPL::layoutPosTexNrm ) );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light vertex shader!" );
 	    hr = pixelShader_light.Initialize( device, L"res\\shaders\\Model.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light pixel shader!" );
@@ -291,12 +286,7 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
 
         /*   SPRITES   */
-        D3D11_INPUT_ELEMENT_DESC layoutSprite[] = {
-		    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	    };
-	    numElements = ARRAYSIZE( layoutSprite );
-	    hr = vertexShader_2D.Initialize( device, L"res\\shaders\\Sprite.fx", layoutSprite, numElements );
+	    hr = vertexShader_2D.Initialize( device, L"res\\shaders\\Sprite.fx", IPL::layoutPosTex, ARRAYSIZE( IPL::layoutPosTex ) );
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D vertex shader!" );
 	    hr = pixelShader_2D.Initialize( device, L"res\\shaders\\Sprite.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D pixel shader!" );
@@ -304,11 +294,7 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D discard pixel shader!" );
         
         /*   POST-PROCESSING   */
-        D3D11_INPUT_ELEMENT_DESC layoutFull[] = {
-		    { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	    };
-        numElements = ARRAYSIZE( layoutFull );
-	    hr = vertexShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx", layoutFull, numElements );
+	    hr = vertexShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx", IPL::layoutPos, ARRAYSIZE( IPL::layoutPos ) );
 		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen vertex shader!" );
 	    hr = pixelShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen pixel shader!" );
