@@ -198,11 +198,11 @@ void Graphics::EndFrame()
 void Graphics::Update( float dt )
 {
     // model transformations
-    //nanosuit.AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) )
+    //nanosuit.AdjustRotation( 0.0f, 0.001f * dt, 0.0f );
 
     // primitive transformations
     for ( unsigned int i = 0; i < cubes.size(); i++ )
-        cubes[i]->AdjustRotation( XMFLOAT3( 0.0f, 0.001f * dt, 0.0f ) );
+        cubes[i]->AdjustRotation( 0.0f, 0.001f * dt, 0.0f );
     ground.UpdateInstanced( 5, 6, 8, 60 );
 
     // camera viewing
@@ -215,7 +215,7 @@ void Graphics::Update( float dt )
         renderables[0].GetPositionFloat3().z - cameras[cameraToUse]->GetPositionFloat3().z ) * ( 180.0 / XM_PI );
 	float rotation = static_cast<float>( angle ) * 0.0174532925f;
     if ( sceneParams.useBillboarding && cameraToUse != "Third" )
-        renderables[0].SetRotation( XMFLOAT3( 0.0f, rotation, 0.0f ) );
+        renderables[0].SetRotation( 0.0f, rotation, 0.0f );
 
     // point light equipping and flickering
     light.UpdatePhysics();
@@ -339,42 +339,42 @@ bool Graphics::InitializeScene()
         /*   SPRITES   */
         if ( !menuBG.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\Transparency.png", cb_vs_matrix_2d ) )
             return false;
-        menuBG.SetInitialPosition( XMFLOAT3( windowWidth / 2 - menuBG.GetWidth() / 2, windowHeight / 2 - menuBG.GetHeight() / 2, 0 ) );
+        menuBG.SetInitialPosition( windowWidth / 2 - menuBG.GetWidth() / 2, windowHeight / 2 - menuBG.GetHeight() / 2, 0 );
 
         if ( !menuLogo.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\dx-logo.png", cb_vs_matrix_2d ) )
             return false;
-        menuLogo.SetInitialPosition( XMFLOAT3( windowWidth / 2 - menuLogo.GetWidth() / 2, windowHeight / 2 - menuLogo.GetHeight() / 2, 0 ) );
+        menuLogo.SetInitialPosition( windowWidth / 2 - menuLogo.GetWidth() / 2, windowHeight / 2 - menuLogo.GetHeight() / 2, 0 );
 
         if ( !circle.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\circle.png", cb_vs_matrix_2d ) )
             return false;
-        circle.SetInitialPosition( XMFLOAT3( windowWidth / 2 - circle.GetWidth() / 2, windowHeight / 2 - circle.GetHeight() / 2, 0 ) );
+        circle.SetInitialPosition( windowWidth / 2 - circle.GetWidth() / 2, windowHeight / 2 - circle.GetHeight() / 2, 0 );
 
         if ( !square.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\purpleheart.png", cb_vs_matrix_2d ) )
             return false;
-        square.SetInitialPosition( XMFLOAT3( windowWidth / 2 - square.GetWidth() / 2, windowHeight / 2 - square.GetHeight() / 2, 0 ) );
+        square.SetInitialPosition( windowWidth / 2 - square.GetWidth() / 2, windowHeight / 2 - square.GetHeight() / 2, 0 );
 
         /*   OBJECTS   */
         XMFLOAT2 aspectRatio = { static_cast<float>( windowWidth ), static_cast<float>( windowHeight ) };
         camera2D.SetProjectionValues( aspectRatio.x, aspectRatio.y, 0.0f, 1.0f );
 
-        cameras.emplace( "Main", std::make_shared<Camera3D>( XMFLOAT3( 0.0f, 9.0f, -20.0f ) ) );
+        cameras.emplace( "Main", std::make_shared<Camera3D>( 0.0f, 9.0f, -20.0f ) );
         cameras["Main"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
-        cameras.emplace( "Point", std::make_shared<Camera3D>( XMFLOAT3( 0.0f, 9.0f, -55.0f ) ) );
+        cameras.emplace( "Point", std::make_shared<Camera3D>( 0.0f, 9.0f, -55.0f ) );
         cameras["Point"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         cameras.emplace( "Third", std::make_shared<Camera3D>( renderables[0].GetPositionFloat3() ) );
         cameras["Third"]->SetProjectionValues( 70.0f, aspectRatio.x / aspectRatio.y, 0.1f, 1000.0f );
 
         XMVECTOR lightPosition = cameras["Main"]->GetPositionVector() + cameras["Main"]->GetForwardVector();
-		light.SetPosition( XMFLOAT3( XMVectorGetX( lightPosition ), 5.25f, XMVectorGetZ( lightPosition ) + 5.0f ) );
+		light.SetPosition( XMVectorGetX( lightPosition ), 5.25f, XMVectorGetZ( lightPosition ) + 5.0f );
 		light.SetRotation( cameras["Main"]->GetRotationFloat3() );    
 
         /*   VERTEX/INDEX   */
         for ( unsigned int i = 0; i < CUBE_AMOUNT; i++ )
         {
             std::unique_ptr<Cube> cube = std::make_unique<Cube>( context.Get(), device.Get() );
-            cube->SetInitialPosition( XMFLOAT3( -5.0f + ( i * 5.0f ), 9.0f, 0.0f ) );
+            cube->SetInitialPosition( -5.0f + ( i * 5.0f ), 9.0f, 0.0f );
             cubes.push_back( std::move( cube ) );
         }
         if ( !fullscreen.Initialize( context.Get(), device.Get() ) )
@@ -392,7 +392,7 @@ bool Graphics::InitializeScene()
         /*   CONSTANT BUFFERS   */
         hr = cb_vs_fog.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_vs_fog' Constant Buffer!" );
-        cb_vs_fog.data.fogColor = XMFLOAT3( 0.2f, 0.2f, 0.2f );
+        cb_vs_fog.data.fogColor = { 0.2f, 0.2f, 0.2f };
         cb_vs_fog.data.fogStart = 10.0f;
         cb_vs_fog.data.fogEnd = 50.0f;
         cb_vs_fog.data.fogEnable = false;

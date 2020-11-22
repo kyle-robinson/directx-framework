@@ -22,7 +22,7 @@ const XMFLOAT3& GameObject::GetRotationFloat3() const noexcept
 
 const XMFLOAT3& GameObject::GetScaleFloat3() const noexcept
 {
-	return XMFLOAT3( scale.x, scale.y, scale.z );
+	return { scale.x, scale.y, scale.z };
 }
 
 const std::string& GameObject::GetModelName() const noexcept
@@ -42,6 +42,11 @@ void GameObject::SetInitialPosition( const XMFLOAT3& pos ) noexcept
 	SetPosition( pos );
 }
 
+void GameObject::SetInitialPosition( float xPos, float yPos, float zPos ) noexcept
+{
+	SetInitialPosition( { xPos, yPos, zPos } );
+}
+
 void GameObject::SetPosition( const XMVECTOR& pos ) noexcept
 {
 	XMStoreFloat3( &position, pos );
@@ -54,6 +59,11 @@ void GameObject::SetPosition( const XMFLOAT3& pos ) noexcept
 	position = pos;
 	posVector = XMLoadFloat3( &position );
 	UpdateMatrix();
+}
+
+void GameObject::SetPosition( float xPos, float yPos, float zPos ) noexcept
+{
+	SetPosition( XMFLOAT3( xPos, yPos, zPos ) );
 }
 
 void GameObject::AdjustPosition( const XMVECTOR& pos ) noexcept
@@ -72,6 +82,11 @@ void GameObject::AdjustPosition( const XMFLOAT3& pos ) noexcept
 	UpdateMatrix();
 }
 
+void GameObject::AdjustPosition( float xPos, float yPos, float zPos ) noexcept
+{
+	AdjustPosition( XMFLOAT3( xPos, yPos, zPos ) );
+}
+
 void GameObject::ResetPosition() noexcept
 {
 	position = initialPos;
@@ -83,6 +98,11 @@ void GameObject::SetInitialRotation( const XMFLOAT3& rot ) noexcept
 {
 	initialRot = rot;
 	SetRotation( rot );
+}
+
+void GameObject::SetInitialRotation( float xRot, float yRot, float zRot ) noexcept
+{
+	SetInitialRotation( { xRot, yRot, zRot } );
 }
 
 void GameObject::SetRotation( const XMVECTOR& rot ) noexcept
@@ -97,6 +117,11 @@ void GameObject::SetRotation( const XMFLOAT3& rot ) noexcept
 	rotation = rot;
 	rotVector = XMLoadFloat3( &rotation );
 	UpdateMatrix();
+}
+
+void GameObject::SetRotation( float xRot, float yRot, float zRot ) noexcept
+{
+	SetRotation( XMFLOAT3( xRot, yRot, zRot ) );
 }
 
 void GameObject::AdjustRotation( const XMVECTOR& rot ) noexcept
@@ -120,6 +145,11 @@ void GameObject::AdjustRotation( const XMFLOAT3& rot ) noexcept
 
 	rotVector = XMLoadFloat3( &rotation );
 	UpdateMatrix();
+}
+
+void GameObject::AdjustRotation( float xRot, float yRot, float zRot ) noexcept
+{
+	AdjustRotation( XMFLOAT3( xRot, yRot, zRot ) );
 }
 
 void GameObject::ResetRotation() noexcept

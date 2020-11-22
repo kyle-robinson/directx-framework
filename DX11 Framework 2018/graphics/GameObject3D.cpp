@@ -23,7 +23,12 @@ void GameObject3D::SetLookAtPos( XMFLOAT3 lookAtPos ) noexcept
 	if ( lookAtPos.z > 0.0f )
 		yaw += XM_PI;
 
-	SetRotation( XMFLOAT3( pitch, yaw, 0.0f ) );
+	SetRotation( pitch, yaw, 0.0f );
+}
+
+void GameObject3D::SetLookAtPos( float xPos, float yPos, float zPos ) noexcept
+{
+	SetLookAtPos( { xPos, yPos, zPos } );
 }
 
 const XMVECTOR& GameObject3D::GetForwardVector( bool omitY ) noexcept

@@ -50,21 +50,17 @@ void Application::Update()
 				if ( gfx.cameraToUse != "Third" )
 				{
 					gfx.cameras[gfx.cameraToUse]->AdjustRotation(
-						XMFLOAT3(
-							static_cast<float>( me.GetPosY() ) * 0.005f,
-							static_cast<float>( me.GetPosX() ) * 0.005f,
-							0.0f
-						)
+						static_cast<float>( me.GetPosY() ) * 0.005f,
+						static_cast<float>( me.GetPosX() ) * 0.005f,
+						0.0f
 					);
 				}
 				else
 				{
 					gfx.renderables[0].AdjustRotation(
-						XMFLOAT3(
-							0.0f,
-							static_cast<float>( me.GetPosX() ) * 0.005f,
-							0.0f
-						)
+						0.0f,
+						static_cast<float>( me.GetPosX() ) * 0.005f,
+						0.0f
 					);
 				}
 			}
@@ -130,16 +126,16 @@ void Application::Update()
 					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 			if ( keyboard.KeyIsPressed( VK_SPACE ) )
-				gfx.cameras[gfx.cameraToUse]->AdjustPosition( XMFLOAT3( 0.0f, gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
+				gfx.cameras[gfx.cameraToUse]->AdjustPosition( 0.0f, gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f );
 
 			if ( keyboard.KeyIsPressed( 'E' ) )
-				gfx.cameras[gfx.cameraToUse]->AdjustPosition( XMFLOAT3( 0.0f, -gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f ) );
+				gfx.cameras[gfx.cameraToUse]->AdjustPosition( 0.0f, -gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f );
 
 			// static camera
 			if ( !gfx.flyCamera && gfx.cameraToUse == "Main" )
 			{
-				gfx.cameras[gfx.cameraToUse]->SetPosition( XMFLOAT3( gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().x,
-					9.0f, gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().z ) );
+				gfx.cameras[gfx.cameraToUse]->SetPosition( gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().x,
+					9.0f, gfx.cameras[gfx.cameraToUse]->GetPositionFloat3().z );
 			}
 		}
 		else
@@ -164,7 +160,7 @@ void Application::Update()
 		// prevent cameras moving under map
 		for ( auto const& x : gfx.cameras )
 			if ( x.second->GetPositionFloat3().y <= 6.0f )
-				x.second->SetPosition( XMFLOAT3( x.second->GetPositionFloat3().x, 6.0f, x.second->GetPositionFloat3().z ) );
+				x.second->SetPosition( x.second->GetPositionFloat3().x, 6.0f, x.second->GetPositionFloat3().z );
 
 		// light object position
 		XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();

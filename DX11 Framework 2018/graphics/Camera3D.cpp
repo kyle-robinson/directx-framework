@@ -4,10 +4,12 @@ Camera3D::Camera3D( const XMFLOAT3& initialPosition )
 {
 	SetInitialPosition( initialPosition );
 	posVector = XMLoadFloat3( &initialPosition );
-	rotation = XMFLOAT3( 0.0f, 0.0f, 0.0f );
+	rotation = { 0.0f, 0.0f, 0.0f };
 	rotVector = XMLoadFloat3( &rotation );
 	UpdateMatrix();
 }
+
+Camera3D::Camera3D( float xPos, float yPos, float zPos ) : Camera3D( XMFLOAT3( xPos, yPos, zPos ) ) { }
 
 Camera3D& Camera3D::operator=( Camera3D )
 {

@@ -537,8 +537,8 @@ void ImGuiManager::RenderStencilWindow( Graphics& gfx )
                 ImGui::SliderFloat( "Width", &width, 100.0f, gfx.GetWidth(), "%10.f" );
                 ImGui::SliderFloat( "Height", &height, 100.0f, gfx.GetHeight(), "%10.f" );
                 gfx.circle.SetScale( width, height, 1.0f );
-                gfx.circle.SetPosition( XMFLOAT3( gfx.GetWidth() / 2 - gfx.circle.GetWidth() / 2,
-                    gfx.GetHeight() / 2 - gfx.circle.GetHeight() / 2, 0 ) );
+                gfx.circle.SetPosition( gfx.GetWidth() / 2 - gfx.circle.GetWidth() / 2,
+                    gfx.GetHeight() / 2 - gfx.circle.GetHeight() / 2, 0 );
             }
             else if ( !sceneParams.circleMask )
             {
@@ -547,8 +547,8 @@ void ImGuiManager::RenderStencilWindow( Graphics& gfx )
                 ImGui::SliderFloat( "Width", &width, 100.0f, gfx.GetWidth(), "%10.f" );
                 ImGui::SliderFloat( "Height", &height, 100.0f, gfx.GetHeight(), "%10.f" );
                 gfx.square.SetScale( width, height, 1.0f );
-                gfx.square.SetPosition( XMFLOAT3( gfx.GetWidth() / 2 - gfx.square.GetWidth() / 2,
-                    gfx.GetHeight() / 2 - gfx.square.GetHeight() / 2, 0 ) );
+                gfx.square.SetPosition( gfx.GetWidth() / 2 - gfx.square.GetWidth() / 2,
+                    gfx.GetHeight() / 2 - gfx.square.GetHeight() / 2, 0 );
             }
         }
     } ImGui::End();

@@ -8,6 +8,7 @@ class GameObject3D : public GameObject
 {
 public:
 	void SetLookAtPos( XMFLOAT3 lookAtPos ) noexcept;
+	void SetLookAtPos( float xPos, float yPos, float zPos ) noexcept;
 	const XMVECTOR& GetForwardVector( bool omitY = false ) noexcept;
 	const XMVECTOR& GetBackwardVector( bool omitY = false ) noexcept;
 	const XMVECTOR& GetLeftVector( bool omitY = false ) noexcept;
