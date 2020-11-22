@@ -499,6 +499,7 @@
     <ClInclude Include="graphics\Blender.h" />
     <ClInclude Include="graphics\Camera2D.h" />
     <ClInclude Include="graphics\Camera3D.h" />
+    <ClInclude Include="graphics\CameraMove.h" />
     <ClInclude Include="graphics\Colour.h" />
     <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\ConstantBufferTypes.h" />

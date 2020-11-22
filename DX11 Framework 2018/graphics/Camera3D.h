@@ -3,6 +3,7 @@
 #define CAMERA_H
 
 #include "GameObject3D.h"
+#include "RenderableGameObject.h"
 using namespace DirectX;
 
 class Camera3D : public GameObject3D

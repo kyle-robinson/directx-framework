@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "imgui/imgui.h"
 #include "utility/Structs.h"
+#include "graphics/CameraMove.h"
 
 bool Application::Initialize(
 	HINSTANCE hInstance,
@@ -68,17 +69,17 @@ void Application::Update()
 	}
 
 	// manage menu system
-	if ( keyboard.KeyIsPressed( VK_RETURN ) )
+	if ( keyboard.KeyIsPressed( VK_RETURN ) && gfx.gameState == Graphics::GameState::MENU )
 		gfx.gameState = Graphics::GameState::PLAY;
 
 	// camera to use
 	if ( gfx.gameState != Graphics::GameState::MENU )
 	{
-		// setup state
-		if ( keyboard.KeyIsPressed( VK_F1 ) )
+		// set game state
+		if ( keyboard.KeyIsPressed( VK_F1 ) && gfx.gameState != Graphics::GameState::MENU )
 			gfx.gameState = Graphics::GameState::PLAY;
 
-		if ( keyboard.KeyIsPressed( VK_F2 ) )
+		if ( keyboard.KeyIsPressed( VK_F2 ) && gfx.gameState != Graphics::GameState::MENU )
 			gfx.gameState = Graphics::GameState::EDIT;
 
 		// set camera mode
@@ -104,32 +105,28 @@ void Application::Update()
 		if ( gfx.cameraToUse != "Third" )
 		{
 			// camera collision
-			if ( sceneParams.cameraCollision )
+			if ( sceneParams.cameraCollision && gfx.cameraToUse == "Third" )
 				gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetBackwardVector() *
 					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
 			// camera movement
 			if ( keyboard.KeyIsPressed( 'W' ) )
-				gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetForwardVector() *
-					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+				CameraMove::MoveForward( gfx.cameras[gfx.cameraToUse], dt );
 
 			if ( keyboard.KeyIsPressed( 'A' ) )
-				gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetLeftVector() *
-					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+				CameraMove::MoveLeft( gfx.cameras[gfx.cameraToUse], dt );
 
 			if ( keyboard.KeyIsPressed( 'S' ) )
-				gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetBackwardVector() *
-					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+				CameraMove::MoveBackward( gfx.cameras[gfx.cameraToUse], dt );
 
 			if ( keyboard.KeyIsPressed( 'D' ) )
-				gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetRightVector() *
-					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+				CameraMove::MoveRight( gfx.cameras[gfx.cameraToUse], dt );
 
 			if ( keyboard.KeyIsPressed( VK_SPACE ) )
-				gfx.cameras[gfx.cameraToUse]->AdjustPosition( 0.0f, gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f );
+				CameraMove::MoveUp( gfx.cameras[gfx.cameraToUse], dt );
 
 			if ( keyboard.KeyIsPressed( 'E' ) )
-				gfx.cameras[gfx.cameraToUse]->AdjustPosition( 0.0f, -gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt, 0.0f );
+				CameraMove::MoveDown( gfx.cameras[gfx.cameraToUse], dt );
 
 			// static camera
 			if ( !gfx.flyCamera && gfx.cameraToUse == "Main" )
@@ -142,21 +139,18 @@ void Application::Update()
 		{
 			// model movement
 			if ( keyboard.KeyIsPressed( 'W' ) )
-				gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetBackwardVector() *
-					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+				CameraMove::MoveForward( gfx.cameras[gfx.cameraToUse], gfx.renderables[0], dt );
 
 			if ( keyboard.KeyIsPressed( 'A' ) )
-				gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetRightVector() *
-					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+				CameraMove::MoveLeft( gfx.cameras[gfx.cameraToUse], gfx.renderables[0], dt );
 
 			if ( keyboard.KeyIsPressed( 'S' ) )
-				gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetForwardVector() *
-					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+				CameraMove::MoveBackward( gfx.cameras[gfx.cameraToUse], gfx.renderables[0], dt );
 
 			if ( keyboard.KeyIsPressed( 'D' ) )
-				gfx.renderables[0].AdjustPosition( gfx.renderables[0].GetLeftVector() *
-					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
+				CameraMove::MoveRight( gfx.cameras[gfx.cameraToUse], gfx.renderables[0], dt );
 		}
+
 		// prevent cameras moving under map
 		for ( auto const& x : gfx.cameras )
 			if ( x.second->GetPositionFloat3().y <= 6.0f )
@@ -173,6 +167,7 @@ void Application::Update()
 			gfx.light.SetPosition( lightPosition );
 			gfx.light.SetRotation( gfx.cameras[gfx.cameraToUse]->GetRotationVector() );
 		}
+
 		if ( keyboard.KeyIsPressed( 'X' ) && gfx.light.lightStuck )
 		{
 			gfx.light.lightStuck = false;

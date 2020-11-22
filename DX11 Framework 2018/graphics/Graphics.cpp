@@ -198,9 +198,6 @@ void Graphics::EndFrame()
 
 void Graphics::Update( float dt )
 {
-    // model transformations
-    //nanosuit.AdjustRotation( 0.0f, 0.001f * dt, 0.0f );
-
     // primitive transformations
     for ( unsigned int i = 0; i < cubes.size(); i++ )
         cubes[i]->AdjustRotation( 0.0f, 0.001f * dt, 0.0f );
