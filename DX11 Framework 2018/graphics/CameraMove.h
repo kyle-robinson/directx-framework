@@ -46,12 +46,12 @@ public:
 
 	static void MoveBackward( std::shared_ptr<Camera3D>& camera, RenderableGameObject& object, float dt ) noexcept
 	{
-		object.AdjustPosition( object.GetBackwardVector() * camera->GetCameraSpeed() * dt );
+		object.AdjustPosition( object.GetForwardVector() * camera->GetCameraSpeed() * dt );
 	}
 
 	static void MoveLeft( std::shared_ptr<Camera3D>& camera, RenderableGameObject& object, float dt ) noexcept
 	{
-		camera->AdjustPosition( camera->GetRightVector() * camera->GetCameraSpeed() * dt );
+		object.AdjustPosition( object.GetRightVector() * camera->GetCameraSpeed() * dt );
 	}
 
 	static void MoveRight( std::shared_ptr<Camera3D>& camera, RenderableGameObject& object, float dt ) noexcept
