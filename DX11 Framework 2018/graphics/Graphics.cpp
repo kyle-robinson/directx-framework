@@ -116,8 +116,20 @@ void Graphics::RenderFrame()
         cubes[i]->Draw( cb_vs_matrix, boxTexture.Get() );
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
-	context->PSSetShader( pixelShader_noLight.GetShader(), NULL, 0 );
+    // point light with outlining
+    stencilStates["Write"]->Bind( *this );
+    light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
+    
+    Shaders::BindShaders( context.Get(), vertexShader_color, pixelShader_color );
+    light.SetScale( 1.2f, 1.2f, 1.2f );
+    stencilStates["Mask"]->Bind( *this );
+    light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
+    
+    Shaders::BindShaders( context.Get(), vertexShader_light, pixelShader_noLight );
+    light.SetScale( 1.0f, 1.0f, 1.0f );
+    stencilStates["Off"]->Bind( *this );
 	light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
+
 
     // render menu
     if ( gameState == GameState::MENU )
@@ -278,9 +290,13 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create light vertex shader!" );
 	    hr = pixelShader_light.Initialize( device, L"res\\shaders\\Model.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create light pixel shader!" );
-
 	    hr = pixelShader_noLight.Initialize( device, L"res\\shaders\\Model_NoLight.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create no light pixel shader!" );
+
+        hr = vertexShader_color.Initialize( device, L"res\\shaders\\Primitive.fx", IPL::layoutPosCol, ARRAYSIZE( IPL::layoutPosCol ) );
+        COM_ERROR_IF_FAILED( hr, "Failed to create colour vertex shader!" );
+        hr = pixelShader_color.Initialize( device, L"res\\shaders\\Primitive.fx" );
+        COM_ERROR_IF_FAILED( hr, "Failed to create colour pixel shader!" );
 
         /*   SPRITES   */
 	    hr = vertexShader_2D.Initialize( device, L"res\\shaders\\Sprite.fx", IPL::layoutPosTex, ARRAYSIZE( IPL::layoutPosTex ) );
