@@ -140,8 +140,8 @@ void Graphics::RenderFrame()
 	light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
 
 
-    // render menu
-    if ( gameState == GameState::MENU )
+    // menu systems
+    if ( gameState == GameState::MENU || gameState == GameState::HELP )
     {
         Shaders::BindShaders( context.Get(), vertexShader_2D, pixelShader_2D );
 
@@ -151,10 +151,34 @@ void Graphics::RenderFrame()
 	    context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
         menuBG.Draw( camera2D.GetWorldOrthoMatrix() );
 
-        cb_ps_scene.data.useTexture = true;
-        if ( !cb_ps_scene.ApplyChanges() ) return;
-	    context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
-        menuLogo.Draw( camera2D.GetWorldOrthoMatrix() );
+        // render main menu
+        if ( gameState == GameState::MENU )
+        {
+            cb_ps_scene.data.useTexture = true;
+            if ( !cb_ps_scene.ApplyChanges() ) return;
+	        context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
+            menuLogo.Draw( camera2D.GetWorldOrthoMatrix() );
+        }
+
+        // render help menu
+        if ( gameState == GameState::HELP )
+        {
+            cb_ps_scene.data.useTexture = true;
+            if ( !cb_ps_scene.ApplyChanges() ) return;
+	        context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
+            switch ( menuPage )
+            {
+            case 0:
+                menuCamera.Draw( camera2D.GetWorldOrthoMatrix() );
+                break;
+            case 1:
+                menuLight.Draw( camera2D.GetWorldOrthoMatrix() );
+                break;
+            case 2:
+                menuScene.Draw( camera2D.GetWorldOrthoMatrix() );
+                break;
+            }
+        }
     }
 }
 
@@ -171,7 +195,7 @@ void Graphics::EndFrame()
     // render text
     spriteBatch->Begin();
     static XMFLOAT2 fontPositionMode = { windowWidth - 350.0f, 0.0f };
-    if ( gameState != GameState::MENU )
+    if ( gameState != GameState::MENU && gameState != GameState::HELP )
     {
         static XMFLOAT2 fontPositionLight;
         fontPositionLight = { windowWidth / 2.0f - 120.0f, windowHeight / 2.0f - 20.0f };
@@ -179,6 +203,8 @@ void Graphics::EndFrame()
         if ( lightParams.isEquippable && cameraToUse == "Main" && !lightParams.lightStuck )
             spriteFont->DrawString( spriteBatch.get(), L"Press 'C' to equip light.", fontPositionLight,
                 Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
+        spriteFont->DrawString( spriteBatch.get(), L"Hold 'Tab' to view help menu.", XMFLOAT2( windowWidth / 2.0f - 150.0f, 0.0f  ),
+            Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
     }
     if ( gameState == GameState::PLAY )
         spriteFont->DrawString( spriteBatch.get(), L"Press 'F2' to switch to EDIT mode.", fontPositionMode,
@@ -352,6 +378,18 @@ bool Graphics::InitializeScene()
         if ( !menuLogo.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\dx-logo-new.png", cb_vs_matrix_2d ) )
             return false;
         menuLogo.SetInitialPosition( windowWidth / 2 - menuLogo.GetWidth() / 2, windowHeight / 2 - menuLogo.GetHeight() / 2, 0 );
+
+        if ( !menuLight.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\point-light.png", cb_vs_matrix_2d ) )
+            return false;
+        menuLight.SetInitialPosition( windowWidth / 2 - menuLight.GetWidth() / 2, windowHeight / 2 - menuLight.GetHeight() / 2, 0 );
+
+        if ( !menuCamera.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\camera.png", cb_vs_matrix_2d ) )
+            return false;
+        menuCamera.SetInitialPosition( windowWidth / 2 - menuCamera.GetWidth() / 2, windowHeight / 2 - menuCamera.GetHeight() / 2, 0 );
+
+        if ( !menuScene.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\scene.png", cb_vs_matrix_2d ) )
+            return false;
+        menuScene.SetInitialPosition( windowWidth / 2 - menuScene.GetWidth() / 2, windowHeight / 2 - menuScene.GetHeight() / 2, 0 );
 
         if ( !circle.Initialize( device.Get(), context.Get(), 256, 256, "res\\textures\\circle.png", cb_vs_matrix_2d ) )
             return false;

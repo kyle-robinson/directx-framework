@@ -100,11 +100,34 @@ void Application::Update()
 	if ( gfx.gameState != Graphics::GameState::MENU )
 	{
 		// set game state
-		if ( keyboard.KeyIsPressed( VK_F1 ) && gfx.gameState != Graphics::GameState::MENU )
+		if ( keyboard.KeyIsPressed( VK_F1 ) )
 			gfx.gameState = Graphics::GameState::PLAY;
 
-		if ( keyboard.KeyIsPressed( VK_F2 ) && gfx.gameState != Graphics::GameState::MENU )
+		if ( keyboard.KeyIsPressed( VK_F2 ) )
 			gfx.gameState = Graphics::GameState::EDIT;
+
+		// instruction menu
+		static bool paused = false;
+		if ( paused )
+		{
+			paused = false;
+			if ( !keyboard.KeyIsPressed( VK_TAB ) )
+				gfx.gameState = Graphics::GameState::PLAY;
+		}
+		else if ( !paused )
+		{
+			paused = true;
+			if ( keyboard.KeyIsPressed( VK_TAB ) )
+			{
+				gfx.gameState = Graphics::GameState::HELP;
+				if ( keyboard.KeyIsPressed( '1' ) || keyboard.KeyIsPressed( VK_NUMPAD1 ) )
+					gfx.menuPage = 0;
+				if ( keyboard.KeyIsPressed( '2' ) || keyboard.KeyIsPressed( VK_NUMPAD2 ) )
+					gfx.menuPage = 1;
+				if ( keyboard.KeyIsPressed( '3' ) || keyboard.KeyIsPressed( VK_NUMPAD3 ) )
+					gfx.menuPage = 2;
+			}
+		}
 
 		// set camera mode
 		if ( gfx.gameState == Graphics::GameState::PLAY )

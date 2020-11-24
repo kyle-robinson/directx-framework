@@ -38,7 +38,8 @@ public:
 	{
 		MENU,
 		PLAY,
-		EDIT
+		EDIT,
+		HELP
 	} gameState = GameState::MENU;
 
 	virtual ~Graphics( void ) = default;
@@ -51,6 +52,7 @@ public:
 	UINT GetHeight() const noexcept;
 
 	Light light;
+	int menuPage;
 	Sprite circle;
 	Sprite square;
 	bool flyCamera = true;
@@ -106,6 +108,9 @@ private:
 
 	Sprite menuBG;
 	Sprite menuLogo;
+	Sprite menuLight;
+	Sprite menuScene;
+	Sprite menuCamera;
 	Camera2D camera2D;
 	PlaneInstanced ground;
 	PlaneFullscreen fullscreen;
