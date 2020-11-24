@@ -106,27 +106,18 @@ void Application::Update()
 		if ( keyboard.KeyIsPressed( VK_F2 ) )
 			gfx.gameState = Graphics::GameState::EDIT;
 
+		if ( keyboard.KeyIsPressed( VK_F3 ) )
+			gfx.gameState = Graphics::GameState::HELP;
+
 		// instruction menu
-		static bool paused = false;
-		if ( paused )
+		if ( gfx.gameState == Graphics::GameState::HELP )
 		{
-			paused = false;
-			if ( !keyboard.KeyIsPressed( VK_TAB ) )
-				gfx.gameState = Graphics::GameState::PLAY;
-		}
-		else if ( !paused )
-		{
-			paused = true;
-			if ( keyboard.KeyIsPressed( VK_TAB ) )
-			{
-				gfx.gameState = Graphics::GameState::HELP;
-				if ( keyboard.KeyIsPressed( '1' ) || keyboard.KeyIsPressed( VK_NUMPAD1 ) )
-					gfx.menuPage = 0;
-				if ( keyboard.KeyIsPressed( '2' ) || keyboard.KeyIsPressed( VK_NUMPAD2 ) )
-					gfx.menuPage = 1;
-				if ( keyboard.KeyIsPressed( '3' ) || keyboard.KeyIsPressed( VK_NUMPAD3 ) )
-					gfx.menuPage = 2;
-			}
+			if ( keyboard.KeyIsPressed( '1' ) || keyboard.KeyIsPressed( VK_NUMPAD1 ) )
+				gfx.menuPage = 0;
+			if ( keyboard.KeyIsPressed( '2' ) || keyboard.KeyIsPressed( VK_NUMPAD2 ) )
+				gfx.menuPage = 1;
+			if ( keyboard.KeyIsPressed( '3' ) || keyboard.KeyIsPressed( VK_NUMPAD3 ) )
+				gfx.menuPage = 2;
 		}
 
 		// set camera mode
@@ -134,13 +125,13 @@ void Application::Update()
 			gfx.flyCamera = false;
 		
 		// set camera to use
-		if ( keyboard.KeyIsPressed( '1' ) )
+		if ( keyboard.KeyIsPressed( '1' ) && gfx.gameState != Graphics::GameState::HELP )
 			gfx.cameraToUse = "Main";
 	
-		if ( keyboard.KeyIsPressed( '2' ) )
+		if ( keyboard.KeyIsPressed( '2' ) && gfx.gameState != Graphics::GameState::HELP )
 			gfx.cameraToUse = "Point";
 
-		if ( keyboard.KeyIsPressed( '3' ) )
+		if ( keyboard.KeyIsPressed( '3' ) && gfx.gameState != Graphics::GameState::HELP )
 			gfx.cameraToUse = "Third";
 
 		// camera speed
