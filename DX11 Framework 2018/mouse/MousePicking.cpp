@@ -18,8 +18,8 @@ void MousePicking::UpdateMatrices( XMMATRIX viewMatrix, XMMATRIX projectionMatri
 
 bool MousePicking::TestIntersection( int mouseX, int mouseY, GameObject3D object )
 {
-	XMMATRIX invProj = XMMatrixInverse( nullptr, viewMatrix );
-	XMMATRIX invView = XMMatrixInverse( nullptr, projectionMatrix );
+	XMMATRIX invProj = XMMatrixInverse( nullptr, projectionMatrix );
+	XMMATRIX invView = XMMatrixInverse( nullptr, viewMatrix );
 
 	// move the mouse cursor coordinates into the -1 to +1 range.
 	float pointX = ( 2.0f * static_cast<float>( mouseX ) ) / static_cast<float>( width ) - 1.0f;
@@ -40,17 +40,17 @@ bool MousePicking::TestIntersection( int mouseX, int mouseY, GameObject3D object
 	BoundingSphere bs;
 	bs.Center = object.GetPositionFloat3();
 	
-	float maxRadius = 0;
+	float maxRadius = 0.0f;
 	if ( fabs( object.GetScaleFloat3().x > maxRadius ) )
 		maxRadius = fabs( object.GetScaleFloat3().x );
 	if ( fabs( object.GetScaleFloat3().y > maxRadius ) )
 		maxRadius = fabs( object.GetScaleFloat3().y );
 	if ( fabs( object.GetScaleFloat3().z > maxRadius ) )
 		maxRadius = fabs( object.GetScaleFloat3().z );
-	bs.Radius = maxRadius * 2.0f;
+	bs.Radius = maxRadius * 0.5f;
 
 	// check for intersection between sphere and ray
-	float distance = 0.0f;
+	float distance = 1000.0f;
 	if ( bs.Intersects( rayOri, rayDir, distance ) )
 		return true;
 

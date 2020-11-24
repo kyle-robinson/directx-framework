@@ -44,6 +44,12 @@ void Application::Update()
 	while ( !mouse.EventBufferIsEmpty() )
 	{
 		Mouse::MouseEvent me = mouse.ReadEvent();
+		std::string outMsg = "X: ";
+		outMsg += std::to_string( me.GetPosX() );
+		outMsg += ", Y: ";
+		outMsg += std::to_string( me.GetPosY() );
+		outMsg += "\n";
+		OutputDebugStringA( outMsg.c_str() );
         if ( mouse.IsRightDown() )
 		{
 			if ( me.GetType() == Mouse::MouseEvent::EventType::RawMove && gfx.gameState != Graphics::GameState::MENU )
@@ -69,7 +75,7 @@ void Application::Update()
 		if( me.GetType() == Mouse::MouseEvent::EventType::LPress && gfx.gameState != Graphics::GameState::MENU )
 		{
 			gfx.mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
-			if ( gfx.mousePick.TestIntersection( mouse.GetPosX(), mouse.GetPosY(), gfx.light ) && gfx.light.isEquippable )
+			if ( gfx.mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) )
 				gfx.light.lightIntersection = true;
 		}
 	}
@@ -163,7 +169,7 @@ void Application::Update()
 		// light object position
 		XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
 		lightPosition += gfx.cameras[gfx.cameraToUse]->GetForwardVector() / 2;
-		if ( ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck || gfx.light.lightIntersection ) && gfx.light.isEquippable )
+		if ( ( ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck ) && gfx.light.isEquippable ) || gfx.light.lightIntersection )
 		{
 			gfx.light.lightStuck = true;
 			gfx.light.lightIntersection = false;
