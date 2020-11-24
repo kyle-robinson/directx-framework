@@ -66,12 +66,11 @@ void Application::Update()
 				}
 			}
 		}
-		if( me.GetType() == Mouse::MouseEvent::EventType::LPress )
+		if( me.GetType() == Mouse::MouseEvent::EventType::LPress && gfx.gameState != Graphics::GameState::MENU )
 		{
 			gfx.mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
-			gfx.mousePick.TestIntersection( mouse.GetPosX(), mouse.GetPosY() );
-			if ( gfx.mousePick.RaySphereIntersect( gfx.light.GetPositionFloat3() ) )
-				exit( -1 );
+			if ( gfx.mousePick.TestIntersection( mouse.GetPosX(), mouse.GetPosY(), gfx.light ) && gfx.light.isEquippable )
+				gfx.light.lightIntersection = true;
 		}
 	}
 
@@ -164,9 +163,10 @@ void Application::Update()
 		// light object position
 		XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
 		lightPosition += gfx.cameras[gfx.cameraToUse]->GetForwardVector() / 2;
-		if ( ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck ) && gfx.light.isEquippable )
+		if ( ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck || gfx.light.lightIntersection ) && gfx.light.isEquippable )
 		{
 			gfx.light.lightStuck = true;
+			gfx.light.lightIntersection = false;
 			lightPosition += gfx.cameras[gfx.cameraToUse]->GetRightVector() / 2;
 			lightPosition -= { 0.0f, 0.25f, 0.0f, 0.0f };
 			gfx.light.SetPosition( lightPosition );

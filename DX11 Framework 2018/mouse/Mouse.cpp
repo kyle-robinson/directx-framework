@@ -71,7 +71,6 @@ void Mouse::OnMiddleReleased( int x, int y ) noexcept
 
 void Mouse::OnWheelUp( int x, int y ) noexcept
 {
-	MouseEvent mouseEvent( MouseEvent::WheelUp, x, y );
 	eventBuffer.push( MouseEvent( MouseEvent::EventType::WheelUp, x, y ) );
 }
 
