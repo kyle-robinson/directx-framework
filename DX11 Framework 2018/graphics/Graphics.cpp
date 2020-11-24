@@ -349,7 +349,7 @@ bool Graphics::InitializeScene()
             return false;
         menuBG.SetInitialPosition( windowWidth / 2 - menuBG.GetWidth() / 2, windowHeight / 2 - menuBG.GetHeight() / 2, 0 );
 
-        if ( !menuLogo.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\dx-logo.png", cb_vs_matrix_2d ) )
+        if ( !menuLogo.Initialize( device.Get(), context.Get(), windowWidth, windowHeight, "res\\textures\\dx-logo-new.png", cb_vs_matrix_2d ) )
             return false;
         menuLogo.SetInitialPosition( windowWidth / 2 - menuLogo.GetWidth() / 2, windowHeight / 2 - menuLogo.GetHeight() / 2, 0 );
 
