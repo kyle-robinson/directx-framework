@@ -13,15 +13,6 @@ public:
 	void UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light );
 	void UpdatePhysics() noexcept;
 	void UpdateFlicker( ConstantBuffer<CB_PS_light>& cb_ps_light ) noexcept;
-public:
-	float alphaFactor = 1.0f;
-	bool useTexture = true;
-	bool lightStuck = false;
-	bool lightHover = false;
-	bool isEquippable = false;
-	bool lightFlicker = false;
-	float flickerAmount = 2.0f;
-	bool lightIntersection = false;
 private:
 	DirectX::XMFLOAT3 ambientColor = { 1.0f, 1.0f, 1.0f };
 	float ambientStrength = 0.1f;

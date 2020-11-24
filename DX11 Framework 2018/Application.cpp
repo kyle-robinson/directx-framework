@@ -76,16 +76,16 @@ void Application::Update()
 		{
 			gfx.mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
 			if ( gfx.mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) )
-				gfx.light.lightIntersection = true;
+				lightParams.lightIntersection = true;
 		}
 		if( me.GetType() == Mouse::MouseEvent::EventType::Move && gfx.gameState != Graphics::GameState::MENU )
 		{
 			gfx.mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
 			if ( gfx.mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) )
-				gfx.light.lightHover = true;
+				lightParams.lightHover = true;
 		}
 		else
-			gfx.light.lightHover = false;
+			lightParams.lightHover = false;
 	}
 
 	// manage menu system
@@ -177,20 +177,20 @@ void Application::Update()
 		// light object position
 		XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
 		lightPosition += gfx.cameras[gfx.cameraToUse]->GetForwardVector() / 2;
-		if ( ( ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck ) && gfx.light.isEquippable ) || gfx.light.lightIntersection )
+		if ( ( ( keyboard.KeyIsPressed( 'C' ) || lightParams.lightStuck ) && lightParams.isEquippable ) || lightParams.lightIntersection )
 		{
-			gfx.light.lightStuck = true;
-			gfx.light.lightHover = false;
-			gfx.light.lightIntersection = false;
+			lightParams.lightStuck = true;
+			lightParams.lightHover = false;
+			lightParams.lightIntersection = false;
 			lightPosition += gfx.cameras[gfx.cameraToUse]->GetRightVector() / 2;
 			lightPosition -= { 0.0f, 0.25f, 0.0f, 0.0f };
 			gfx.light.SetPosition( lightPosition );
 			gfx.light.SetRotation( gfx.cameras[gfx.cameraToUse]->GetRotationVector() );
 		}
 
-		if ( keyboard.KeyIsPressed( 'X' ) && gfx.light.lightStuck )
+		if ( keyboard.KeyIsPressed( 'X' ) && lightParams.lightStuck )
 		{
-			gfx.light.lightStuck = false;
+			lightParams.lightStuck = false;
 			gfx.light.SetPosition( lightPosition );
 		}
 

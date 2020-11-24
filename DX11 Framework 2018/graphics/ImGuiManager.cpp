@@ -230,9 +230,9 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         
         if ( cb_ps_light.data.usePointLight )
         {
-            if ( light.isEquippable )
-                ImGui::Checkbox( "Equip Light", &light.lightStuck );
-            if ( !light.isEquippable && !light.lightStuck )
+            if ( lightParams.isEquippable )
+                ImGui::Checkbox( "Equip Light", &lightParams.lightStuck );
+            if ( !lightParams.isEquippable && !lightParams.lightStuck )
                 ImGui::TextColored( { 1.0f, 0.2f, 0.2f, 1.0f }, "Not within range to equip light!" );
         }
 
@@ -279,8 +279,8 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
             if ( ImGui::TreeNode( "Light Flicker" ) )
             {
                 ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                ImGui::Checkbox( "Flickering Enabled", &light.lightFlicker );
-                ImGui::SliderFloat( "Intensity", &light.flickerAmount, 1.0f, 5.0f );
+                ImGui::Checkbox( "Flickering Enabled", &lightParams.lightFlicker );
+                ImGui::SliderFloat( "Intensity", &lightParams.flickerAmount, 1.0f, 5.0f );
                 ImGui::PopStyleColor();
                 ImGui::TreePop();
             }

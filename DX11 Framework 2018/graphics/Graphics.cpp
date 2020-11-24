@@ -85,8 +85,8 @@ void Graphics::BeginFrame()
 	context->PSSetConstantBuffers( 1, 1, cb_vs_fog.GetAddressOf() );
 
     cb_ps_light.data.useQuad = false;
-    cb_ps_light.data.lightFlicker = light.lightFlicker;
-    cb_ps_light.data.flickerAmount = light.flickerAmount;
+    cb_ps_light.data.lightFlicker = lightParams.lightFlicker;
+    cb_ps_light.data.flickerAmount = lightParams.flickerAmount;
     light.UpdateConstantBuffer( cb_ps_light );
 	if ( !cb_ps_light.ApplyChanges() ) return;
 	context->PSSetConstantBuffers( 2, 1, cb_ps_light.GetAddressOf() );
@@ -119,7 +119,7 @@ void Graphics::RenderFrame()
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
     // point light with outlining
-    if ( light.lightHover )
+    if ( lightParams.lightHover )
     {
         stencilStates["Write"]->Bind( *this );
         light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
@@ -172,7 +172,7 @@ void Graphics::EndFrame()
         static XMFLOAT2 fontPositionLight;
         fontPositionLight = { windowWidth / 2.0f - 120.0f, windowHeight / 2.0f - 20.0f };
         fontPositionLight = viewportParams.useSplit ? XMFLOAT2( fontPositionLight.x / 2.0f - 50.0f, fontPositionLight.y ) : fontPositionLight;
-        if ( light.isEquippable && cameraToUse == "Main" && !light.lightStuck )
+        if ( lightParams.isEquippable && cameraToUse == "Main" && !lightParams.lightStuck )
             spriteFont->DrawString( spriteBatch.get(), L"Press 'C' to equip light.", fontPositionLight,
                 Colors::White, 0.0f, XMFLOAT2( 0.0f, 0.0f ), XMFLOAT2( 1.0f, 1.0f ) );
     }
@@ -235,7 +235,7 @@ void Graphics::Update( float dt )
     // point light equipping and flickering
     light.UpdatePhysics();
     light.UpdateFlicker( cb_ps_light );
-    Collisions::CheckCollision3D( cameras["Main"], light, 5.0f ) ? light.isEquippable = true : light.isEquippable = false;
+    Collisions::CheckCollision3D( cameras["Main"], light, 5.0f ) ? lightParams.isEquippable = true : lightParams.isEquippable = false;
 }
 
 UINT Graphics::GetWidth() const noexcept

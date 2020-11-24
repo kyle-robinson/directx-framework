@@ -31,6 +31,11 @@ VS_OUTPUT VS( VS_INPUT input )
 }
 
 // pixel shader
+cbuffer ColorBuffer : register( b1 )
+{
+    float3 outlineColor;
+}
+
 struct PS_INPUT
 {
     float4 inPos : SV_POSITION;

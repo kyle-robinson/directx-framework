@@ -1,4 +1,5 @@
 #include "Light.h"
+#include "../utility/Structs.h"
 
 bool Light::Initialize( ID3D11Device* device, ID3D11DeviceContext* context,
 	ConstantBuffer<CB_VS_matrix>& cb_vs_vertexshader )
@@ -53,7 +54,7 @@ void Light::UpdateConstantBuffer( ConstantBuffer<CB_PS_light>& cb_ps_light )
 
 void Light::UpdatePhysics() noexcept
 {
-	if ( !lightStuck )
+	if ( !lightParams.lightStuck )
 	{
 		static float force = 0.0f;
 		if ( this->GetPositionFloat3().y > 5.25f )
