@@ -173,6 +173,9 @@
     <ClCompile Include="utility\Collisions.cpp">
       <Filter>Source\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="mouse\MousePicking.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -342,6 +345,9 @@
     </ClInclude>
     <ClInclude Include="graphics\CameraMove.h">
       <Filter>Headers\Graphics\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="mouse\MousePicking.h">
+      <Filter>Headers\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

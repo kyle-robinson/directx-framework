@@ -66,6 +66,13 @@ void Application::Update()
 				}
 			}
 		}
+		if( me.GetType() == Mouse::MouseEvent::EventType::LPress )
+		{
+			gfx.mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
+			gfx.mousePick.TestIntersection( mouse.GetPosX(), mouse.GetPosY() );
+			if ( gfx.mousePick.RaySphereIntersect( gfx.light.GetPositionFloat3() ) )
+				exit( -1 );
+		}
 	}
 
 	// manage menu system

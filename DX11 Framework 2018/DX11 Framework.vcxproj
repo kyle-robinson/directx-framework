@@ -478,6 +478,7 @@
     <ClCompile Include="graphics\Texture.cpp" />
     <ClCompile Include="keyboard\Keyboard.cpp" />
     <ClCompile Include="mouse\Mouse.cpp" />
+    <ClCompile Include="mouse\MousePicking.cpp" />
     <ClCompile Include="utility\Collisions.cpp" />
     <ClCompile Include="utility\ErrorLogger.cpp" />
     <ClCompile Include="utility\StringConverter.cpp" />
@@ -534,6 +535,7 @@
     <ClInclude Include="graphics\Viewport.h" />
     <ClInclude Include="keyboard\Keyboard.h" />
     <ClInclude Include="mouse\Mouse.h" />
+    <ClInclude Include="mouse\MousePicking.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="utility\Collisions.h" />
     <ClInclude Include="utility\COMException.h" />

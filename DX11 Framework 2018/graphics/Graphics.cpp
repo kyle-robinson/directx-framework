@@ -21,15 +21,17 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
 	windowHeight = height;
 
 	if ( !InitializeDirectX( hWnd ) )
-		return false;
+        return false;
 
 	if ( !InitializeShaders() )
-		return false;
+        return false;
 
 	if ( !InitializeScene() )
-		return false;
+        return false;
 
     imgui.Initialize( hWnd, device.Get(), context.Get() );
+
+    mousePick.Initialize( cameras["Main"]->GetViewMatrix(), cameras["Main"]->GetProjectionMatrix(), width, height );
 
 	return true;
 }
@@ -367,7 +369,7 @@ bool Graphics::InitializeScene()
 
         XMVECTOR lightPosition = cameras["Main"]->GetPositionVector() + cameras["Main"]->GetForwardVector();
 		light.SetPosition( XMVectorGetX( lightPosition ), 5.25f, XMVectorGetZ( lightPosition ) + 5.0f );
-		light.SetRotation( cameras["Main"]->GetRotationFloat3() );    
+		light.SetRotation( cameras["Main"]->GetRotationFloat3() );
 
         /*   VERTEX/INDEX   */
         for ( unsigned int i = 0; i < CUBE_AMOUNT; i++ )
