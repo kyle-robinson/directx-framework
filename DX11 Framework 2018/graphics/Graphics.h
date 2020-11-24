@@ -57,7 +57,6 @@ public:
 	Sprite square;
 	bool flyCamera = true;
 	MousePicking mousePick;
-	bool controlLeftSide = false;
 	std::string cameraToUse = "Main";
 	std::vector<RenderableGameObject> renderables;
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;

@@ -57,7 +57,7 @@ void Graphics::BeginFrame()
     if ( viewportParams.useFull )
         viewports["Full"]->Bind( *this );
     if ( viewportParams.useFull && viewportParams.useSplit )
-        cameraToUse = controlLeftSide ? "Main" : "Point";
+        cameraToUse = viewportParams.controlLeftSide ? "Main" : "Point";
     if ( viewportParams.useLeft )
     {
         cameraToUse = "Main";

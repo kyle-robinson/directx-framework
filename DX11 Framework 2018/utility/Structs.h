@@ -21,6 +21,7 @@ struct ViewportParameters
 	bool useLeft = false;
 	bool useRight = false;
 	bool useSplit = false;
+	bool controlLeftSide = true;
 } viewportParams;
 
 struct SamplerParameters

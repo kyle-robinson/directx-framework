@@ -226,10 +226,10 @@ void Application::Update()
 		}
 
 		if ( keyboard.KeyIsPressed( VK_LEFT ) )
-			gfx.controlLeftSide = true;
+			viewportParams.controlLeftSide = true;
 
 		if ( keyboard.KeyIsPressed( VK_RIGHT ) )
-			gfx.controlLeftSide = false;
+			viewportParams.controlLeftSide = false;
 	}
 
 	gfx.Update( dt );

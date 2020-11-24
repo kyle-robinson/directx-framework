@@ -1,4 +1,5 @@
 #include "MousePicking.h"
+#include "../utility/Structs.h"
 #include "../graphics/GameObject3D.h"
 #include <DirectXCollision.h>
 
@@ -21,8 +22,13 @@ bool MousePicking::TestIntersection( int mouseX, int mouseY, GameObject3D object
 	XMMATRIX invProj = XMMatrixInverse( nullptr, projectionMatrix );
 	XMMATRIX invView = XMMatrixInverse( nullptr, viewMatrix );
 
-	// move the mouse cursor coordinates into the -1 to +1 range.
-	float pointX = ( 2.0f * static_cast<float>( mouseX ) ) / static_cast<float>( width ) - 1.0f;
+	// move the mouse cursor coordinates into the -1 to +1 range
+	static float widthToUse;
+	if ( viewportParams.useSplit && viewportParams.controlLeftSide )
+		widthToUse = static_cast<float>( width ) * 0.5f;
+	else
+		widthToUse = static_cast<float>( width );
+	float pointX = ( 2.0f * static_cast<float>( mouseX ) ) / widthToUse - 1.0f;
 	float pointY = 1.0f - ( 2.0f * static_cast<float>( mouseY ) ) / static_cast<float>( height );
 
 	XMVECTOR eyePos, dummy;
@@ -39,7 +45,7 @@ bool MousePicking::TestIntersection( int mouseX, int mouseY, GameObject3D object
 	// generate bounding sphere
 	BoundingSphere bs;
 	bs.Center = object.GetPositionFloat3();
-	
+		
 	float maxRadius = 0.0f;
 	if ( fabs( object.GetScaleFloat3().x > maxRadius ) )
 		maxRadius = fabs( object.GetScaleFloat3().x );
