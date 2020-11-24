@@ -64,4 +64,9 @@ struct CB_PS_scene
 	bool useTexture;
 };
 
+struct CB_PS_outline
+{
+	alignas(16) DirectX::XMFLOAT3 outlineColor;
+};
+
 #endif

@@ -96,6 +96,7 @@ private:
 	ConstantBuffer<CB_PS_scene> cb_ps_scene;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
 	ConstantBuffer<CB_VS_matrix> cb_vs_matrix;
+	ConstantBuffer<CB_PS_outline> cb_ps_outline;
 	ConstantBuffer<CB_VS_matrix_2D> cb_vs_matrix_2d;
 	ConstantBuffer<CB_VS_fullscreen> cb_vs_fullscreen;
 

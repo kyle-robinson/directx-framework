@@ -551,5 +551,10 @@ void ImGuiManager::RenderStencilWindow( Graphics& gfx )
                     gfx.GetHeight() / 2 - gfx.square.GetHeight() / 2, 0 );
             }
         }
+
+        ImGui::Separator();
+
+        ImGui::ColorEdit3( "Light Stencil", &outlineParams.outlineColor.x );
+        ImGui::SliderFloat( "Scale", &outlineParams.outlineSize, 1.0f, 2.0f, "%.1f" );
     } ImGui::End();
 }

@@ -121,11 +121,15 @@ void Graphics::RenderFrame()
     // point light with outlining
     if ( lightParams.lightHover )
     {
+        cb_ps_outline.data.outlineColor = outlineParams.outlineColor;
+        if ( !cb_ps_outline.ApplyChanges() ) return;
+	    context->PSSetConstantBuffers( 1, 1, cb_ps_outline.GetAddressOf() );
+
         stencilStates["Write"]->Bind( *this );
         light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
     
         Shaders::BindShaders( context.Get(), vertexShader_color, pixelShader_color );
-        light.SetScale( 1.3f, 1.3f, 1.3f );
+        light.SetScale( outlineParams.outlineSize, outlineParams.outlineSize, outlineParams.outlineSize );
         stencilStates["Mask"]->Bind( *this );
         light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
     }
@@ -415,6 +419,9 @@ bool Graphics::InitializeScene()
 
         hr = cb_ps_scene.Initialize( device.Get(), context.Get() );
 		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_scene' Constant Buffer!" );
+
+        hr = cb_ps_outline.Initialize( device.Get(), context.Get() );
+		COM_ERROR_IF_FAILED( hr, "Failed to initialize 'cb_ps_ouline' Constant Buffer!" );
     }
     catch ( COMException& exception )
     {
