@@ -1,5 +1,6 @@
 #pragma pack_matrix( row_major )
 
+// vertex shader
 cbuffer ConstantBuffer : register( b0 )
 {
 	float4x4 worldMatrix;
@@ -7,7 +8,6 @@ cbuffer ConstantBuffer : register( b0 )
     float4x4 projectionMatrix;
 }
 
-// vertex shader
 struct VS_INPUT
 {
     float3 inPos : POSITION;
@@ -21,10 +21,7 @@ struct VS_OUTPUT
 };
 
 VS_OUTPUT VS( VS_INPUT input )
-{
-    //input.inPos.xy += 0.5f * sin( input.inPos.x ) * sin( 3.0f * gTime ); 
-    //input.inPos.z *= 0.6f + 0.4f * sin( 2.0f * gTime );
-    
+{    
     VS_OUTPUT output;
     output.outPos = mul( float4( input.inPos, 1.0f ), worldMatrix );
     output.outPos = mul( output.outPos, viewMatrix );
@@ -42,5 +39,5 @@ struct PS_INPUT
 
 float4 PS( PS_INPUT input ) : SV_TARGET
 {
-    return float4( 1.0f, 0.0f, 0.0f, 1.0f );
+    return float4( outlineColor, 1.0f );
 }

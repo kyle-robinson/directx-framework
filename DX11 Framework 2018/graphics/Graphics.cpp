@@ -119,13 +119,16 @@ void Graphics::RenderFrame()
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
 
     // point light with outlining
-    stencilStates["Write"]->Bind( *this );
-    light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
+    if ( light.lightHover )
+    {
+        stencilStates["Write"]->Bind( *this );
+        light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
     
-    Shaders::BindShaders( context.Get(), vertexShader_color, pixelShader_color );
-    light.SetScale( 1.2f, 1.2f, 1.2f );
-    stencilStates["Mask"]->Bind( *this );
-    light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
+        Shaders::BindShaders( context.Get(), vertexShader_color, pixelShader_color );
+        light.SetScale( 1.3f, 1.3f, 1.3f );
+        stencilStates["Mask"]->Bind( *this );
+        light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
+    }
     
     Shaders::BindShaders( context.Get(), vertexShader_light, pixelShader_noLight );
     light.SetScale( 1.0f, 1.0f, 1.0f );

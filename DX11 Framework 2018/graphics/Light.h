@@ -17,6 +17,7 @@ public:
 	float alphaFactor = 1.0f;
 	bool useTexture = true;
 	bool lightStuck = false;
+	bool lightHover = false;
 	bool isEquippable = false;
 	bool lightFlicker = false;
 	float flickerAmount = 2.0f;

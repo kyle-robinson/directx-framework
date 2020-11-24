@@ -78,6 +78,14 @@ void Application::Update()
 			if ( gfx.mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) )
 				gfx.light.lightIntersection = true;
 		}
+		if( me.GetType() == Mouse::MouseEvent::EventType::Move && gfx.gameState != Graphics::GameState::MENU )
+		{
+			gfx.mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
+			if ( gfx.mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) )
+				gfx.light.lightHover = true;
+		}
+		else
+			gfx.light.lightHover = false;
 	}
 
 	// manage menu system
@@ -172,6 +180,7 @@ void Application::Update()
 		if ( ( ( keyboard.KeyIsPressed( 'C' ) || gfx.light.lightStuck ) && gfx.light.isEquippable ) || gfx.light.lightIntersection )
 		{
 			gfx.light.lightStuck = true;
+			gfx.light.lightHover = false;
 			gfx.light.lightIntersection = false;
 			lightPosition += gfx.cameras[gfx.cameraToUse]->GetRightVector() / 2;
 			lightPosition -= { 0.0f, 0.25f, 0.0f, 0.0f };
