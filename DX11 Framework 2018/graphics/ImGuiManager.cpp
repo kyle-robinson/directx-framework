@@ -57,48 +57,6 @@ void ImGuiManager::RenderMainWindow( Graphics& gfx )
             ImGui::TreePop();
         }
 
-        if ( ImGui::TreeNode( "Scene Controls" ) )
-        {
-            ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 0.8f, 0.5f, 1.0f } );
-            if ( ImGui::TreeNode( "Camera Controls" ) )
-            {
-                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                ImGui::Text( "W\t\t->\tForward" );
-                ImGui::Text( "A\t\t->\tLeft" );
-                ImGui::Text( "S\t\t->\tBackward" );
-                ImGui::Text( "D\t\t->\tRight" );
-                ImGui::Text( "E\t\t->\tDownward" );
-                ImGui::Text( "SPACE\t->\tUpward" );
-                ImGui::Text( "SHIFT\t->\tMove Faster" );
-                ImGui::Text( "RMB  \t->\tRotate Camera" );
-                ImGui::Text( "1    \t->\tSwitch to Camera 1" );
-                ImGui::Text( "2    \t->\tSwitch to Camera 2" );
-                ImGui::Text( "3    \t->\tSwitch to Camera 3" );
-                ImGui::PopStyleColor();
-                ImGui::TreePop();
-            }
-            if ( ImGui::TreeNode( "Light Controls" ) )
-            {
-                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                ImGui::Text( "C\t\t->\tStick Light to Camera" );
-                ImGui::Text( "X\t\t->\tUnstick Light from Camera" );
-                ImGui::PopStyleColor();
-                ImGui::TreePop();
-            }
-            if ( ImGui::TreeNode( "Viewport Controls" ) )
-            {
-                ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
-                ImGui::Text( "Up   \t->\tFullscreen viewport" );
-                ImGui::Text( "Left \t->\tLeft viewport only" );
-                ImGui::Text( "Right\t->\tRight viewport only" );
-                ImGui::Text( "Down \t->\tSplit-screen mode" );
-                ImGui::PopStyleColor();
-                ImGui::TreePop();
-            }
-            ImGui::PopStyleColor();
-            ImGui::TreePop();
-        }
-
         if ( ImGui::TreeNode( "Application Info" ) )
 		{
             ImGui::PushStyleColor( ImGuiCol_Text, { 1.0f, 1.0f, 1.0f, 1.0f } );
