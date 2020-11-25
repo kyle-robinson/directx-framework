@@ -70,6 +70,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> boxTexture;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> grassTexture;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> starsTexture;
 
 	std::shared_ptr<Bind::Blender> blendState;
 	std::shared_ptr<Bind::SwapChain> swapChain;
@@ -84,12 +85,14 @@ private:
 	VertexShader vertexShader_full;
 	VertexShader vertexShader_color;
 	VertexShader vertexShader_light;
+	VertexShader vertexShader_skybox;
 	VertexShader vertexShader_noLight;
 
 	PixelShader pixelShader_2D;
 	PixelShader pixelShader_full;
 	PixelShader pixelShader_color;
 	PixelShader pixelShader_light;
+	PixelShader pixelShader_skybox;
 	PixelShader pixelShader_noLight;
 	PixelShader pixelShader_2D_discard;
 
@@ -113,6 +116,7 @@ private:
 	Camera2D camera2D;
 	PlaneInstanced ground;
 	PlaneFullscreen fullscreen;
+	std::unique_ptr<Cube> skybox;
 	std::unique_ptr<SpriteFont> spriteFont;
 	std::unique_ptr<SpriteBatch> spriteBatch;
 	std::vector<std::unique_ptr<Cube>> cubes;

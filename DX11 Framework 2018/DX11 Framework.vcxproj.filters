@@ -378,9 +378,6 @@
     <FxCompile Include="res\shaders\Primitive.fx">
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="res\shaders\Water.fx">
-      <Filter>Resource Files\Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="res\shaders\Normal.fx">
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
@@ -397,6 +394,9 @@
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="res\shaders\Sprite_Discard.fx">
+      <Filter>Resource Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="res\shaders\Cubemap.fx">
       <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

@@ -30,7 +30,6 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         return false;
 
     imgui.Initialize( hWnd, device.Get(), context.Get() );
-
     mousePick.Initialize( cameras["Main"]->GetViewMatrix(), cameras["Main"]->GetProjectionMatrix(), width, height );
 
 	return true;
@@ -180,6 +179,17 @@ void Graphics::RenderFrame()
             }
         }
     }
+
+    // render cubemap
+    if ( cb_ps_light.data.usePointLight )
+    {
+        Shaders::BindShaders( context.Get(), vertexShader_light, pixelShader_light );
+        skybox->SetScale( 500.0f, 500.0f, 500.0f );
+        skybox->SetPosition( cameras[cameraToUse]->GetPositionFloat3() );
+        rasterizerStates["Cubemap"]->Bind( *this );
+        skybox->Draw( cb_vs_matrix, starsTexture.Get() );
+        sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
+    }
 }
 
 void Graphics::EndFrame()
@@ -298,6 +308,7 @@ bool Graphics::InitializeDirectX( HWND hWnd )
         stencilStates.emplace( "Write", std::make_shared<Bind::Stencil>( *this, Bind::Stencil::Mode::Write ) );
 
         rasterizerStates.emplace( "Solid", std::make_shared<Bind::Rasterizer>( *this, true, false ) );
+        rasterizerStates.emplace( "Cubemap", std::make_shared<Bind::Rasterizer>( *this, true, true ) );
         rasterizerStates.emplace( "Wireframe", std::make_shared<Bind::Rasterizer>( *this, false, true ) );
 
         samplerStates.emplace( "Anisotropic", std::make_shared<Bind::Sampler>( *this, Bind::Sampler::Type::Anisotropic ) );
@@ -423,8 +434,12 @@ bool Graphics::InitializeScene()
             cube->SetInitialPosition( -5.0f + ( i * 5.0f ), 9.0f, 0.0f );
             cubes.push_back( std::move( cube ) );
         }
+
+        skybox = std::make_unique<Cube>( context.Get(), device.Get() );
+
         if ( !fullscreen.Initialize( context.Get(), device.Get() ) )
             return false;
+
         if ( !ground.InitializeInstanced( context.Get(), device.Get(), 400 ) )
             return false;
 
@@ -434,6 +449,9 @@ bool Graphics::InitializeScene()
 
         hr = CreateWICTextureFromFile( device.Get(), L"res\\textures\\grass.jpg", nullptr, grassTexture.GetAddressOf() );
         COM_ERROR_IF_FAILED( hr, "Failed to create grass texture from file!" );
+
+        hr = CreateWICTextureFromFile( device.Get(), L"res\\textures\\stars.jpg", nullptr, starsTexture.GetAddressOf() );
+        COM_ERROR_IF_FAILED( hr, "Failed to create stars texture from file!" );
 
         /*   CONSTANT BUFFERS   */
         hr = cb_vs_fog.Initialize( device.Get(), context.Get() );
