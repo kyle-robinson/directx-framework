@@ -116,7 +116,7 @@ void Graphics::RenderFrame()
     for ( unsigned int i = 0; i < cubes.size(); i++ )
         cubes[i]->Draw( cb_vs_matrix, boxTexture.Get() );
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
-
+    
     // point light with outlining
     if ( lightParams.lightHover )
     {
@@ -135,9 +135,7 @@ void Graphics::RenderFrame()
     
     Shaders::BindShaders( context.Get(), vertexShader_light, pixelShader_noLight );
     light.SetScale( 1.0f, 1.0f, 1.0f );
-    stencilStates["Off"]->Bind( *this );
 	light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
-
 
     // menu systems
     if ( gameState == GameState::MENU || gameState == GameState::HELP )
@@ -186,6 +184,7 @@ void Graphics::RenderFrame()
         Shaders::BindShaders( context.Get(), vertexShader_light, pixelShader_light );
         skybox->SetScale( 500.0f, 500.0f, 500.0f );
         skybox->SetPosition( cameras[cameraToUse]->GetPositionFloat3() );
+        stencilStates["Off"]->Bind( *this );
         rasterizerStates["Cubemap"]->Bind( *this );
         skybox->Draw( cb_vs_matrix, starsTexture.Get() );
         sceneParams.rasterizerSolid ? rasterizerStates["Solid"]->Bind( *this ) : rasterizerStates["Wireframe"]->Bind( *this );
