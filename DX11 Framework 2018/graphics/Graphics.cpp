@@ -30,7 +30,6 @@ bool Graphics::Initialize( HWND hWnd, int width, int height )
         return false;
 
     imgui.Initialize( hWnd, device.Get(), context.Get() );
-    mousePick.Initialize( cameras["Main"]->GetViewMatrix(), cameras["Main"]->GetProjectionMatrix(), width, height );
 
 	return true;
 }

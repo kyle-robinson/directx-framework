@@ -3,6 +3,7 @@
 #define APPLICATION_H
 
 #include "window/WindowContainer.h"
+#include "mouse/MousePicking.h"
 #include "utility/Timer.h"
 
 class Application : public WindowContainer
@@ -19,12 +20,8 @@ public:
 	void Update();
 	void Render();
 private:
-	float multiplier = 1.0f;
-	float waterSpeed = 0.8f;
-	float waterAmount = 0.01f;
-	float waterHeight = 0.5f;
-private:
 	Timer timer;
+	MousePicking mousePick;
 };
 
 #endif

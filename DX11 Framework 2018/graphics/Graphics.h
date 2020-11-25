@@ -11,7 +11,6 @@
 #include "ImGuiManager.h"
 #include "../utility/Structs.h"
 #include "RenderableGameObject.h"
-#include "../mouse/MousePicking.h"
 #include <dxtk/SpriteFont.h>
 #include <dxtk/SpriteBatch.h>
 #include <dxtk/WICTextureLoader.h>
@@ -56,7 +55,6 @@ public:
 	Sprite circle;
 	Sprite square;
 	bool flyCamera = true;
-	MousePicking mousePick;
 	std::string cameraToUse = "Main";
 	std::vector<RenderableGameObject> renderables;
 	std::map<std::string, std::shared_ptr<Camera3D>> cameras;

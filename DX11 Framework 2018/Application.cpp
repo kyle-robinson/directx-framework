@@ -19,6 +19,8 @@ bool Application::Initialize(
 	if ( !gfx.Initialize( renderWindow.GetHWND(), width, height ) )
 		return false;
 
+	mousePick.Initialize( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix(), width, height );
+
 	return true;
 }
 
@@ -75,8 +77,8 @@ void Application::Update()
 		}
 		if( me.GetType() == Mouse::MouseEvent::EventType::LPress && gfx.gameState != Graphics::GameState::MENU )
 		{
-			gfx.mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
-			if ( gfx.mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) && !lightParams.lightStuck )
+			mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
+			if ( mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) && !lightParams.lightStuck )
 			{
 				lightParams.lightIntersection = true;
 				PlaySound( TEXT( "res\\audio\\pickup.wav" ), NULL, SND_FILENAME || SND_ASYNC );
@@ -84,8 +86,8 @@ void Application::Update()
 		}
 		if( me.GetType() == Mouse::MouseEvent::EventType::Move && gfx.gameState != Graphics::GameState::MENU )
 		{
-			gfx.mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
-			if ( gfx.mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) )
+			mousePick.UpdateMatrices( gfx.cameras["Main"]->GetViewMatrix(), gfx.cameras["Main"]->GetProjectionMatrix() );
+			if ( mousePick.TestIntersection( me.GetPosX(), me.GetPosY(), gfx.light ) )
 				lightParams.lightHover = true;
 		}
 		else
