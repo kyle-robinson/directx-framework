@@ -134,12 +134,6 @@
     <ClCompile Include="graphics\ImGuiManager.cpp">
       <Filter>Source\Graphics\Bindables</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\Camera3D.cpp">
-      <Filter>Source\Graphics\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\Camera2D.cpp">
-      <Filter>Source\Graphics\Drawables</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\Sprite.cpp">
       <Filter>Source\Graphics\Drawables</Filter>
     </ClCompile>
@@ -175,6 +169,12 @@
     </ClCompile>
     <ClCompile Include="mouse\MousePicking.cpp">
       <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Camera3D.cpp">
+      <Filter>Source\Graphics\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Camera2D.cpp">
+      <Filter>Source\Graphics\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,12 +274,6 @@
     <ClInclude Include="graphics\Sprite.h">
       <Filter>Headers\Graphics\Drawables</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\Camera2D.h">
-      <Filter>Headers\Graphics\Drawables</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Camera3D.h">
-      <Filter>Headers\Graphics\Drawables</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\Light.h">
       <Filter>Headers\Graphics\Drawables</Filter>
     </ClInclude>
@@ -343,11 +337,17 @@
     <ClInclude Include="graphics\InputLayout.h">
       <Filter>Headers\Graphics\Bindables</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\CameraMove.h">
-      <Filter>Headers\Graphics\Drawables</Filter>
-    </ClInclude>
     <ClInclude Include="mouse\MousePicking.h">
       <Filter>Headers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\CameraMove.h">
+      <Filter>Headers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Camera3D.h">
+      <Filter>Headers\Graphics\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Camera2D.h">
+      <Filter>Headers\Graphics\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

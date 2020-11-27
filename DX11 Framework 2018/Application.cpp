@@ -145,7 +145,7 @@ void Application::Update()
 		if ( gfx.cameraToUse != "Third" )
 		{
 			// camera collision
-			if ( sceneParams.cameraCollision && gfx.cameraToUse == "Third" )
+			if ( sceneParams.cameraCollision && gfx.cameraToUse == "Point" )
 				gfx.cameras[gfx.cameraToUse]->AdjustPosition( gfx.cameras[gfx.cameraToUse]->GetBackwardVector() *
 					gfx.cameras[gfx.cameraToUse]->GetCameraSpeed() * dt );
 
@@ -189,10 +189,39 @@ void Application::Update()
 				CameraMove::MoveRight( gfx.cameras[gfx.cameraToUse], gfx.renderables[0], dt );
 		}
 
-		// prevent cameras moving under map
-		for ( auto const& x : gfx.cameras )
-			if ( x.second->GetPositionFloat3().y <= 6.0f )
-				x.second->SetPosition( x.second->GetPositionFloat3().x, 6.0f, x.second->GetPositionFloat3().z );
+		// camera world collisions
+		for ( auto const& cam : gfx.cameras )
+		{
+			// y world collisions
+			if ( cam.second->GetPositionFloat3().y <= 6.0f )
+				cam.second->SetPosition( cam.second->GetPositionFloat3().x, 6.0f, cam.second->GetPositionFloat3().z );
+			if ( cam.second->GetPositionFloat3().y >= 30.0f )
+				cam.second->SetPosition( cam.second->GetPositionFloat3().x, 30.0f, cam.second->GetPositionFloat3().z );
+
+			// x world colliisons
+			if ( cam.second->GetPositionFloat3().x <= -125.0f )
+				cam.second->SetPosition( -125.0f, cam.second->GetPositionFloat3().y, cam.second->GetPositionFloat3().z );
+			if ( cam.second->GetPositionFloat3().x >= 50.0f )
+				cam.second->SetPosition( 50.0f, cam.second->GetPositionFloat3().y, cam.second->GetPositionFloat3().z );
+
+			// z world collisions
+			if ( cam.second->GetPositionFloat3().z <= -100.0f )
+				cam.second->SetPosition( cam.second->GetPositionFloat3().x, cam.second->GetPositionFloat3().y, -100.0f );
+			if ( cam.second->GetPositionFloat3().z >= 50.0f )
+				cam.second->SetPosition( cam.second->GetPositionFloat3().x, cam.second->GetPositionFloat3().y, 50.0f );
+		}
+
+		// third person x world collisions
+		if ( gfx.renderables[0].GetPositionFloat3().x >= 50.0f )
+			gfx.renderables[0].SetPosition( 50.0f, gfx.renderables[0].GetPositionFloat3().y, gfx.renderables[0].GetPositionFloat3().z );
+		if ( gfx.renderables[0].GetPositionFloat3().x <= -125.0f )
+			gfx.renderables[0].SetPosition( -125.0f, gfx.renderables[0].GetPositionFloat3().y, gfx.renderables[0].GetPositionFloat3().z );
+
+		// third person z world collisions
+		if ( gfx.renderables[0].GetPositionFloat3().z >= 50.0f )
+			gfx.renderables[0].SetPosition( gfx.renderables[0].GetPositionFloat3().x, gfx.renderables[0].GetPositionFloat3().y, 50.0f );
+		if ( gfx.renderables[0].GetPositionFloat3().z <= -100.0f )
+			gfx.renderables[0].SetPosition( gfx.renderables[0].GetPositionFloat3().x, gfx.renderables[0].GetPositionFloat3().y, -100.0f );
 
 		// light object position
 		XMVECTOR lightPosition = gfx.cameras[gfx.cameraToUse]->GetPositionVector();
