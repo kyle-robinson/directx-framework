@@ -5,6 +5,19 @@ A framework create using DirectX 11 that allows for the simple creation of graph
 
 <img src="directx-framework.jpg" alt="DirectX Framework Thumbnail" border="10" />
 
+## List of Features
+
+- [x] Dynamic Point Lighting
+- [x] Directional Lighting
+- [x] Fog System
+- [x] Stencil Masking
+- [x] Mouse Picking
+- [x] Stencil Outlining
+- [x] Split-Screen
+- [x] Camera System
+- [x] Billboarding
+- [x] Model Manipulation
+
 ---
 
 ### Credits
