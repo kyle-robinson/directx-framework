@@ -22,7 +22,7 @@ A framework create using DirectX 11 that allows for the simple creation of graph
 
 ### Credits
         
-        Source Code:
+        Code Reference:
                     https://www.youtube.com/channel/UC5Lxe7GAsk_f8qMBsNmlOJg
                     https://www.youtube.com/playlist?list=PLcacUGyBsOIBlGyQQWzp6D1Xn6ZENx9Y2
                     
