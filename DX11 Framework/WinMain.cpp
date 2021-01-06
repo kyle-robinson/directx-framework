@@ -9,7 +9,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     HRESULT hr = CoInitialize( NULL );
 
     Application theApp;
-	if ( theApp.Initialize( hInstance, "DX11 Framework", "TutorialWindowClass", 1920, 1080 ) )
+	if ( theApp.Initialize( hInstance, "DX11 Framework", "TutorialWindowClass", 1280, 720 ) )
 	{
         while ( theApp.ProcessMessages() == true )
         {

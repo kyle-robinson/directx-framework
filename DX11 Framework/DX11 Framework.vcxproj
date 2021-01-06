@@ -537,6 +537,7 @@
     <ClInclude Include="mouse\Mouse.h" />
     <ClInclude Include="mouse\MousePicking.h" />
     <CLInclude Include="resource.h" />
+    <ClInclude Include="utility\Billboarding.h" />
     <ClInclude Include="utility\Collisions.h" />
     <ClInclude Include="utility\COMException.h" />
     <ClInclude Include="utility\ErrorLogger.h" />

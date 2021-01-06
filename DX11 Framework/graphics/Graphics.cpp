@@ -13,6 +13,7 @@
 #include "ObjectIndices.h"
 #include "ObjectVertices.h"
 #include "../utility/Collisions.h"
+#include "../utility/Billboarding.h"
 #include <fstream>
 
 bool Graphics::Initialize( HWND hWnd, int width, int height )
@@ -264,9 +265,7 @@ void Graphics::Update( float dt )
         sceneParams.cameraCollision = true : sceneParams.cameraCollision = false;
 
     // nanosuit billboarding
-    double angle = atan2( renderables[0].GetPositionFloat3().x - cameras[cameraToUse]->GetPositionFloat3().x,
-        renderables[0].GetPositionFloat3().z - cameras[cameraToUse]->GetPositionFloat3().z ) * ( 180.0 / XM_PI );
-	float rotation = static_cast<float>( angle ) * 0.0174532925f;
+    float rotation = Billboarding::BillboardModel( cameras[cameraToUse], renderables[0] );
     if ( sceneParams.useBillboarding && cameraToUse != "Third" )
         renderables[0].SetRotation( 0.0f, rotation, 0.0f );
 

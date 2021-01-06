@@ -349,6 +349,9 @@
     <ClInclude Include="graphics\Camera2D.h">
       <Filter>Headers\Graphics\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="utility\Billboarding.h">
+      <Filter>Headers\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11 Framework.rc">
