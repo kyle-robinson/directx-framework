@@ -549,6 +549,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="anicurso.bin" />
+    <None Include="ClassDiagram.cd" />
     <None Include="res\cursors\Link Select.ani" />
     <None Include="res\cursors\Normal Select.ani" />
     <None Include="res\objects.json" />

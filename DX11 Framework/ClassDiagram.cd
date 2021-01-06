@@ -1,0 +1,2251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Application" Collapsed="true">
+    <Position X="5.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAAAAAEAAAAAFAAAAAAAAA=</HashCode>
+      <FileName>Application.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RenderWindow" Collapsed="true">
+    <Position X="31" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAQQAQEAAIAYAAAAEAAAAQgIAAAAAAAI=</HashCode>
+      <FileName>window\RenderWindow.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WindowContainer" Collapsed="true">
+    <Position X="5.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAggAAAIAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>window\WindowContainer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Graphics" Collapsed="true">
+    <Position X="32.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AISSMUqCBACkCTACBuIASIBAQgIAQIPSAgGiEMIgbJs=</HashCode>
+      <FileName>graphics\Graphics.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GraphicsResource" Collapsed="true">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAIAAAAAAAAAAAAAAAAAAAAgAACAAAAAAAAA=</HashCode>
+      <FileName>graphics\GraphicsResource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Colour" Collapsed="true">
+    <Position X="25.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAkgAQAAAAAQAAAAAAAAAAAAAhKBEAAAA=</HashCode>
+      <FileName>graphics\Colour.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mesh" Collapsed="true">
+    <Position X="39.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAASAAAAAEAAAgAAAAAAAAAAABgAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>graphics\Mesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model" Collapsed="true">
+    <Position X="24" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIACAAACAAAQAwAAAAAIAAAAgAAABCACBAAAAAAAAEA=</HashCode>
+      <FileName>graphics\Model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Texture" Collapsed="true">
+    <Position X="34.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAAAAAAAAAgAAAAAAAAAAgAAABAgEAAAIAAAAAgAA=</HashCode>
+      <FileName>graphics\Texture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConstantBuffer&lt;T&gt;" Collapsed="true">
+    <Position X="29.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAQBAAAAAAAKAAAAAAAAAAAFQAAAAAAA=</HashCode>
+      <FileName>graphics\ConstantBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImGuiManager" Collapsed="true">
+    <Position X="34.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAACAAEAQBAAIBAAAAAACEQAAAAAABAAAEAAAE=</HashCode>
+      <FileName>graphics\ImGuiManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IndexBuffer" Collapsed="true">
+    <Position X="36.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQBAAAAAEAAAAQAAAAEAAAFAAAAAAAA=</HashCode>
+      <FileName>graphics\IndexBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Shaders" Collapsed="true">
+    <Position X="1.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Shaders.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VertexShader" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAABAAAAAACAABAAEAAACA=</HashCode>
+      <FileName>graphics\Shaders.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PixelShader" Collapsed="true">
+    <Position X="2.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAQAAAAAAAAAABAAAAAAAAABAAEAAAAA=</HashCode>
+      <FileName>graphics\Shaders.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VertexBuffer&lt;T&gt;" Collapsed="true">
+    <Position X="38" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQBAAQAAAAEAEAAAAQAAAAFgAAAAEAA=</HashCode>
+      <FileName>graphics\VertexBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera2D" Collapsed="true">
+    <Position X="3.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAEAAAAEAAAQAACBAIAAAAAAAAAE=</HashCode>
+      <FileName>graphics\Camera2D.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera3D" Collapsed="true">
+    <Position X="5.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAECIAAEAAAAAAAAAAQAAIAACQACMggISEggAIAAAA=</HashCode>
+      <FileName>graphics\Camera3D.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject" Collapsed="true">
+    <Position X="9" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABBAABACAgAAAAEAAKAoAACAIAIQgkBKJAAQoAoAAA=</HashCode>
+      <FileName>graphics\GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject2D" Collapsed="true">
+    <Position X="2.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>graphics\GameObject2D.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject3D" Collapsed="true">
+    <Position X="11.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAREAAAEYAAAJAACABSIAAAAQiAAJAAEAEAAAAA=</HashCode>
+      <FileName>graphics\GameObject3D.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RenderableGameObject" Collapsed="true">
+    <Position X="12.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAwAAAAAAAAEAAAAAAAAAIAAAAAAIAAA=</HashCode>
+      <FileName>graphics\RenderableGameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cube" Collapsed="true">
+    <Position X="8" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIACAAAgAAAQAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Cube.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Plane" Collapsed="true">
+    <Position X="10.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAwAAAAAAAAAACAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Plane.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlaneInstanced" Collapsed="true">
+    <Position X="12.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAiAAAAAAAAAAAEAAAAAAAACAEEgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Plane.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlaneFullscreen" Collapsed="true">
+    <Position X="14.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAQAAgAAIAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>graphics\Plane.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Light" Collapsed="true">
+    <Position X="17" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABACgIABISAAAAAAAAIAEIAgAAAAVgAIECEAAAA=</HashCode>
+      <FileName>graphics\Light.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sprite" Collapsed="true">
+    <Position X="1.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQAAAAAAAAwAAAAAAAAFAAAAQAgAAIAAAAEAAQAA=</HashCode>
+      <FileName>graphics\Sprite.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ModelData" Collapsed="true">
+    <Position X="25.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>graphics\ModelData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Collisions" Collapsed="true">
+    <Position X="24" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>utility\Collisions.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="COMException" Collapsed="true">
+    <Position X="27.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>utility\COMException.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ErrorLogger" Collapsed="true">
+    <Position X="31" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>utility\ErrorLogger.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StringConverter" Collapsed="true">
+    <Position X="32.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAEAAAAE=</HashCode>
+      <FileName>utility\StringConverter.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Timer" Collapsed="true">
+    <Position X="36.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAACAACAAAABgAAAAAAAAAAAgAAAAIAAAAAAEAAA=</HashCode>
+      <FileName>utility\Timer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraMove" Collapsed="true">
+    <Position X="5.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAABAAAAEAAAAIQAAAAAAAAAA=</HashCode>
+      <FileName>graphics\CameraMove.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Keyboard" Collapsed="true">
+    <Position X="38" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAwoiAAAAAEQAAACAAAAQAAwAAIAgQCAAAAAAFAAAQA=</HashCode>
+      <FileName>keyboard\Keyboard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mouse" Collapsed="true">
+    <Position X="27.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAARAEICAQAAAgAEEAAUAwAADIAAAABAABgAAQAaAA=</HashCode>
+      <FileName>mouse\Mouse.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MousePicking" Collapsed="true">
+    <Position X="29.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAQQAQAAAAgAgAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>mouse\MousePicking.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::Sampler" Collapsed="true">
+    <Position X="1.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAIAAAAAAAAEAAAAAAAABAAAQAAACAAAAAAA=</HashCode>
+      <FileName>graphics\Sampler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::Stencil" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAQACAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Stencil.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::Blender" Collapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAABAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Blender.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::Viewport" Collapsed="true">
+    <Position X="8" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgEAAAAAEAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Viewport.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::SwapChain" Collapsed="true">
+    <Position X="10.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAACAAAACAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>graphics\SwapChain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::Rasterizer" Collapsed="true">
+    <Position X="12.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAggAAAAAAAAACAAAACAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Rasterizer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::DepthStencil" Collapsed="true">
+    <Position X="14.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAEABAAAAQAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\DepthStencil.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bind::RenderTarget" Collapsed="true">
+    <Position X="17" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAgAAAAACAAAAAIAEAAAAAACAAAgAAAgEIAAAAAAA=</HashCode>
+      <FileName>graphics\RenderTarget.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="ImGuiStyleVarInfo" Collapsed="true">
+    <Position X="36.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAQAAAAAAgAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiResizeGripDef" Collapsed="true">
+    <Position X="24" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAABAAAAAiAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiResizeBorderDef" Collapsed="true">
+    <Position X="39.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAgIAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImFontBuildSrcData" Collapsed="true">
+    <Position X="32.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAQABAAAAGAAAAAAAAAAAAAAAgIAAAAAACAAAoAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_draw.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImFontBuildDstData" Collapsed="true">
+    <Position X="31" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAACAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_draw.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="VERTEX_CONSTANT_BUFFER" Collapsed="true">
+    <Position X="38" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_impl_dx11.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiPlotArrayGetterData" Collapsed="true">
+    <Position X="34.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAQAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_widgets.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImVec2" Collapsed="true">
+    <Position X="39.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAEAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImVec4" Collapsed="true">
+    <Position X="25.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAhgAQAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImNewWrapper" Collapsed="true">
+    <Position X="32.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImVector&lt;T&gt;" Collapsed="true">
+    <Position X="27.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFAAACECABBAgEAABMMIBACSAAEAABIACQEkAAACACA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiStyle" Collapsed="true">
+    <Position X="32.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YQQYBAEEAAAAnIEAAAoAABAJEGQYCBJEAAAEgQAEIBE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiIO" Collapsed="true">
+    <Position X="36.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>cPNgSDAIIC4EAYApgQh5RmyBEEUgmVwwFaohgAKICCk=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiInputTextCallbackData" Collapsed="true">
+    <Position X="1.5" Y="23.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQIARAACAAASAggAAEAAAAAAAAAAAAAAEQAgAAAIAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiSizeCallbackData" Collapsed="true">
+    <Position X="29.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAACAAgAAAAAAAAAIAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiPayload" Collapsed="true">
+    <Position X="32.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAQAIIAEAEACAAAAABAAAAAABAABAQAAABAAAg=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiOnceUponAFrame" Collapsed="true">
+    <Position X="31" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiTextFilter" Collapsed="true">
+    <Position X="25.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAgCAEIAAAAAAgAAAgAAAAAAAAABAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiTextBuffer" Collapsed="true">
+    <Position X="24" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIgAAACAAAAAAAEAIAAAAQSBAEAAAIAAAEAAAAAAAg=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiStorage" Collapsed="true">
+    <Position X="31" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACACAgAACgAAgAIAAAAAACAAAAAAVAAAAAAAADAAYA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiListClipper" Collapsed="true">
+    <Position X="39.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAgIAgAIAAAggAAAAAAAAAAgAEAAAIAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImColor" Collapsed="true">
+    <Position X="27.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAIABgAAAAAAg=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImDrawCmd" Collapsed="true">
+    <Position X="31" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAABBAAAAAJACAAAAEAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImDrawVert" Collapsed="true">
+    <Position X="24" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImDrawChannel" Collapsed="true">
+    <Position X="29.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImDrawListSplitter" Collapsed="true">
+    <Position X="39.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAEAAAIAAAAAAAQAQQAIQAABAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImDrawList" Collapsed="true">
+    <Position X="36.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAxgdaKEAGQyIAEREIB2AKAgQBgESAAAyKAkMVcioQA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImDrawData" Collapsed="true">
+    <Position X="32.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAGAABIAAAAAAAQQFAAAAAAAAAAIAAAAAAJABAACA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImFontConfig" Collapsed="true">
+    <Position X="34.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQgAABAAAAgAAAAAGAgBAwAARAAAAEAAAAAgABAIAk=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImFontGlyph" Collapsed="true">
+    <Position X="36.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAgAIABEgAaYAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImFontGlyphRangesBuilder" Collapsed="true">
+    <Position X="38" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACBAAAAAAUAAAAAAAAQAAEAAABECAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImFontAtlasCustomRect" Collapsed="true">
+    <Position X="29.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAABAAgAAAAAAAAAEAAAAAAAAEBAAAAIAACYAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImFontAtlas" Collapsed="true">
+    <Position X="27.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQyBAEoAAGAJAAACBIAMBACUAABggIBAAADgBRJ4KE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImFont" Collapsed="true">
+    <Position X="25.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ASEiYKAAIBAAAAQIAAIACgcAIgEAAAIggIYQgMCBEAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImVec1" Collapsed="true">
+    <Position X="38" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImVec2ih" Collapsed="true">
+    <Position X="24" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAABgAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImRect" Collapsed="true">
+    <Position X="36.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQIBABAAABCAAQiAEAAAAAFA4RAAAAQAAAAEAEIQAAQ=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImBitVector" Collapsed="true">
+    <Position X="24" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAACAAAAAAAAAAAAAAEAAgAAAAABAAgA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImPool&lt;T&gt;" Collapsed="true">
+    <Position X="34.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAIAAAAQABAAAACQAAAABAAAAAAAAAACAABCCEBQAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImChunkStream&lt;T&gt;" Collapsed="true">
+    <Position X="25.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAAACAAAAQAAAAIAAAAASCAAAAgAAAAAAAAAEAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImDrawListSharedData" Collapsed="true">
+    <Position X="38" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAABBAAACEAAAgAFADAAAAAAAAAAAAAKAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImDrawDataBuilder" Collapsed="true">
+    <Position X="34.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAQBAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiDataTypeTempStorage" Collapsed="true">
+    <Position X="31" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiDataTypeInfo" Collapsed="true">
+    <Position X="29.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAACEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiColorMod" Collapsed="true">
+    <Position X="39.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiStyleMod" Collapsed="true">
+    <Position X="34.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiGroupData" Collapsed="true">
+    <Position X="32.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAgIAAAACAAAACAAAAAAAAAAIAQAAAAAAQQAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiMenuColumns" Collapsed="true">
+    <Position X="24" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAQEAAAAAAAAAAAAAAAUAAAACCBAAAAACAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiInputTextState" Collapsed="true">
+    <Position X="34.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAEBAAQAKEAhAkAAIACCAAAYQQAAUAVAABAAAAAAgE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiPopupData" Collapsed="true">
+    <Position X="36.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAABAAAQAAABAAAAAAAAgiACAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiNavMoveResult" Collapsed="true">
+    <Position X="25.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAMAAAAAAQEAgAAAAAAAAAAAAAAAAAAAAAAACABICAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiNextWindowData" Collapsed="true">
+    <Position X="29.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAABAQAMABgAQAAAAQAAAEAAAACAAAEAEAAAEgAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiNextItemData" Collapsed="true">
+    <Position X="27.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAACAAEAAEAAAAAAQAAAAAEAIAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiShrinkWidthItem" Collapsed="true">
+    <Position X="27.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiPtrOrIndex" Collapsed="true">
+    <Position X="38" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiColumnData" Collapsed="true">
+    <Position X="24" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABABgAgAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiColumns" Collapsed="true">
+    <Position X="25.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQDEAAAAAAhAgAgAGAACQABAAAgAAAAACAAAhAAAE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiWindowSettings" Collapsed="true">
+    <Position X="29.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAgAAAAAAAAAAAAACAAAAACAAAAAAEBAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiSettingsHandler" Collapsed="true">
+    <Position X="25.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICAAAEABAAAAAAAAAAAABAAAAAAAABAgAAAAAAEMAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiContext" Collapsed="true">
+    <Position X="27.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>cB/5ege8QGnEiYYaJM/PgoSfmDXvi93X7V1JE+Zv/b8=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiWindowTempData" Collapsed="true">
+    <Position X="31" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEDFhhABCAGBYKAEgAAICAAEAoEBAAgUCCgaEACACA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiWindow" Collapsed="true">
+    <Position X="27.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BxQghAABARIRwgRoxijHoRQAAyTYY2so5QChYAgGOB4=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiLastItemDataBackup" Collapsed="true">
+    <Position X="38" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAABAABAAAAAAAABACAAAAEAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiTabItem" Collapsed="true">
+    <Position X="39.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABBAAAAAAAgAAEAAQQAEAAAAAAAAAAAAAAQAAAgAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ImGuiTabBar" Collapsed="true">
+    <Position X="38" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAEELSCgAAEAAAAAIAAIIEASEBFAFCAAAAQAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbrp_context" Collapsed="true">
+    <Position X="38" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAgAAEACQAQAAAAAAAAQQAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_rectpack.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbrp_node" Collapsed="true">
+    <Position X="39.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAIAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_rectpack.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbrp_rect" Collapsed="true">
+    <Position X="24" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAhgCAAAAgA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_rectpack.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0062_3" Collapsed="true">
+    <Position X="17.5" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_rectpack.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0063_1" Collapsed="true">
+    <Position X="13.5" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAEAACAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0063_2" Collapsed="true">
+    <Position X="9.5" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAEAIAAAAAoAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0063_3" Collapsed="true">
+    <Position X="20.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gIIAAEAAABAAAAEEAAAAAAAQAAAAAIAAhAAAABAACAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0063_4" Collapsed="true">
+    <Position X="5.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAIAAAABAAACAAAAAAEAAEAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0063_5" Collapsed="true">
+    <Position X="17.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAQAAEACAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_1" Collapsed="true">
+    <Position X="17.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAIAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_2" Collapsed="true">
+    <Position X="16.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABgAACAASAAAQAQAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_3" Collapsed="true">
+    <Position X="1.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIRgAACAQQgAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_4" Collapsed="true">
+    <Position X="13.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAQAAAAAAAAAAABgAACAASAAAQAQAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbtt_pack_context" Collapsed="true">
+    <Position X="34.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAUAQAAAAABAAAAEAAgAAAAAAAECIAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbtt_fontinfo" Collapsed="true">
+    <Position X="32.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CCAAAAAEiAQAiBAAAQgABAQAAAAACAAAAQAQAIAgAEA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_5" Collapsed="true">
+    <Position X="9.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAEAAoAAAAAAAAAAAAABAAAAAAAgAAAAAAAEAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_7" Collapsed="true">
+    <Position X="13.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAABAAAAAABgAAACgAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_8" Collapsed="true">
+    <Position X="5.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAQAkAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_15" Collapsed="true">
+    <Position X="1.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAALAAABAAAEAgEAAAAAAAAAAABiACAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbtt__hheap_chunk" Collapsed="true">
+    <Position X="31" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbtt__hheap" Collapsed="true">
+    <Position X="29.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAIIAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbtt__edge" Collapsed="true">
+    <Position X="27.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAABgAACAAQAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="stbtt__active_edge" Collapsed="true">
+    <Position X="25.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIABAAAAQAAAAAAAAAAAAAABAAAIBFAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_16" Collapsed="true">
+    <Position X="9.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_17" Collapsed="true">
+    <Position X="24" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAQAAAAAAAAAAAAQAAAABgAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_0064_18" Collapsed="true">
+    <Position X="25.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CB_VS_matrix" Collapsed="true">
+    <Position X="36.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAgEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\ConstantBufferTypes.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CB_VS_matrix_2D" Collapsed="true">
+    <Position X="38" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\ConstantBufferTypes.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CB_VS_fullscreen" Collapsed="true">
+    <Position X="34.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\ConstantBufferTypes.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CB_VS_fog" Collapsed="true">
+    <Position X="32.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAABAAAAAA=</HashCode>
+      <FileName>graphics\ConstantBufferTypes.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CB_PS_light" Collapsed="true">
+    <Position X="27.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAJAIAACAAAJBDQAAACBAAAAAAAgAADCGAACAAQCAAA=</HashCode>
+      <FileName>graphics\ConstantBufferTypes.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CB_PS_scene" Collapsed="true">
+    <Position X="31" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>graphics\ConstantBufferTypes.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CB_PS_outline" Collapsed="true">
+    <Position X="29.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\ConstantBufferTypes.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Drawable" Collapsed="true">
+    <Position X="39.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAIAACAAAAAAAACEAAAAAAAAA=</HashCode>
+      <FileName>graphics\ModelData.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex3D" Collapsed="true">
+    <Position X="31" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAIAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>graphics\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex2D" Collapsed="true">
+    <Position X="29.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>graphics\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex_Pos_Col" Collapsed="true">
+    <Position X="24" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex_Pos_Tex" Collapsed="true">
+    <Position X="27.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>graphics\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex_Pos_Nrm" Collapsed="true">
+    <Position X="25.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex_Pos" Collapsed="true">
+    <Position X="39.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SceneParameters" Collapsed="true">
+    <Position X="34.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAgAIACAAAAAABAAIAAIEgAAA=</HashCode>
+      <FileName>utility\Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ViewportParameters" Collapsed="true">
+    <Position X="32.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAgAAAAAEAAAAAAAAAAAAAACAAIAAAAAAAA=</HashCode>
+      <FileName>utility\Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SamplerParameters" Collapsed="true">
+    <Position X="32.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAIAAACAAAA=</HashCode>
+      <FileName>utility\Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SpawnWindow" Collapsed="true">
+    <Position X="36.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAEABAAAABAAAAAAAAAAQAAAAAQAAA=</HashCode>
+      <FileName>utility\Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="LightParameters" Collapsed="true">
+    <Position X="29.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAJAAAAAQEAABAAAAAAAgAIAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>utility\Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="StencilOutline" Collapsed="true">
+    <Position X="36.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>utility\Structs.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MousePoint" Collapsed="true">
+    <Position X="31" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>mouse\Mouse.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="PROCESS_DPI_AWARENESS" Collapsed="true">
+    <Position X="21.5" Y="24.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_impl_win32.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="MONITOR_DPI_TYPE" Collapsed="true">
+    <Position X="21.5" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_impl_win32.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="PFN_SetProcessDpiAwareness" Collapsed="true">
+    <Position X="24" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_impl_win32.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="PFN_GetDpiForMonitor" Collapsed="true">
+    <Position X="39.75" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_impl_win32.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="PFN_SetThreadDpiAwarenessContext" Collapsed="true">
+    <Position X="25.75" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_impl_win32.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiCol" Collapsed="true">
+    <Position X="39.75" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiCond" Collapsed="true">
+    <Position X="29.25" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiDataType" Collapsed="true">
+    <Position X="32.75" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiDir" Collapsed="true">
+    <Position X="34.5" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiKey" Collapsed="true">
+    <Position X="32.75" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiNavInput" Collapsed="true">
+    <Position X="27.5" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiMouseButton" Collapsed="true">
+    <Position X="38" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiMouseCursor" Collapsed="true">
+    <Position X="39.75" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiStyleVar" Collapsed="true">
+    <Position X="25.75" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImDrawCornerFlags" Collapsed="true">
+    <Position X="27.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImDrawListFlags" Collapsed="true">
+    <Position X="31" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImFontAtlasFlags" Collapsed="true">
+    <Position X="34.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiBackendFlags" Collapsed="true">
+    <Position X="36.25" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiButtonFlags" Collapsed="true">
+    <Position X="38" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiColorEditFlags" Collapsed="true">
+    <Position X="24" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiConfigFlags" Collapsed="true">
+    <Position X="31" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiComboFlags" Collapsed="true">
+    <Position X="27.5" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiDragDropFlags" Collapsed="true">
+    <Position X="36.25" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiFocusedFlags" Collapsed="true">
+    <Position X="39.75" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiHoveredFlags" Collapsed="true">
+    <Position X="24" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiInputTextFlags" Collapsed="true">
+    <Position X="27.5" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiKeyModFlags" Collapsed="true">
+    <Position X="34.5" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiPopupFlags" Collapsed="true">
+    <Position X="34.5" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiSelectableFlags" Collapsed="true">
+    <Position X="36.25" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiTabBarFlags" Collapsed="true">
+    <Position X="27.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiTabItemFlags" Collapsed="true">
+    <Position X="29.25" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiTreeNodeFlags" Collapsed="true">
+    <Position X="34.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiWindowFlags" Collapsed="true">
+    <Position X="36.25" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImTextureID" Collapsed="true">
+    <Position X="29.25" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiID" Collapsed="true">
+    <Position X="25.75" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiInputTextCallback" Collapsed="true">
+    <Position X="21.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiSizeCallback" Collapsed="true">
+    <Position X="39.75" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImWchar16" Collapsed="true">
+    <Position X="38" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImWchar32" Collapsed="true">
+    <Position X="21.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImWchar" Collapsed="true">
+    <Position X="21.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImS8" Collapsed="true">
+    <Position X="27.5" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImU8" Collapsed="true">
+    <Position X="36.25" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImS16" Collapsed="true">
+    <Position X="39.75" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImU16" Collapsed="true">
+    <Position X="31" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImS32" Collapsed="true">
+    <Position X="24" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImU32" Collapsed="true">
+    <Position X="32.75" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImS64" Collapsed="true">
+    <Position X="25.75" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImU64" Collapsed="true">
+    <Position X="34.5" Y="22.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiTextEditCallback" Collapsed="true">
+    <Position X="21.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiTextEditCallbackData" Collapsed="true">
+    <Position X="1.5" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImDrawCallback" Collapsed="true">
+    <Position X="25.75" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImDrawIdx" Collapsed="true">
+    <Position X="29.25" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiLayoutType" Collapsed="true">
+    <Position X="36.25" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiColumnsFlags" Collapsed="true">
+    <Position X="25.75" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiDragFlags" Collapsed="true">
+    <Position X="38" Y="19.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiItemFlags" Collapsed="true">
+    <Position X="29.25" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiItemStatusFlags" Collapsed="true">
+    <Position X="31" Y="20" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiNavHighlightFlags" Collapsed="true">
+    <Position X="25.75" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiNavDirSourceFlags" Collapsed="true">
+    <Position X="24" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiNavMoveFlags" Collapsed="true">
+    <Position X="29.25" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiNextItemDataFlags" Collapsed="true">
+    <Position X="31" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiNextWindowDataFlags" Collapsed="true">
+    <Position X="32.75" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiSeparatorFlags" Collapsed="true">
+    <Position X="38" Y="20.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiSliderFlags" Collapsed="true">
+    <Position X="24" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiTextFlags" Collapsed="true">
+    <Position X="31" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImGuiTooltipFlags" Collapsed="true">
+    <Position X="32.75" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImFileHandle" Collapsed="true">
+    <Position X="32.75" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="ImPoolIdx" Collapsed="true">
+    <Position X="38" Y="21.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbrp_coord" Collapsed="true">
+    <Position X="27.5" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_rectpack.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbrp__findresult" Collapsed="true">
+    <Position X="17.5" Y="22.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_rectpack.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="StbUndoRecord" Collapsed="true">
+    <Position X="13.5" Y="22.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="StbUndoState" Collapsed="true">
+    <Position X="9.5" Y="22.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="STB_TexteditState" Collapsed="true">
+    <Position X="20.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="StbTexteditRow" Collapsed="true">
+    <Position X="5.5" Y="20.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="StbFindState" Collapsed="true">
+    <Position X="17.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_textedit.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_uint8" Collapsed="true">
+    <Position X="25.75" Y="23.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_int8" Collapsed="true">
+    <Position X="38" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_uint16" Collapsed="true">
+    <Position X="39.75" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_int16" Collapsed="true">
+    <Position X="34.5" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_uint32" Collapsed="true">
+    <Position X="24" Y="23.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_int32" Collapsed="true">
+    <Position X="36.25" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt__check_size32" Collapsed="true">
+    <Position X="31" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt__check_size16" Collapsed="true">
+    <Position X="29.25" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt__buf" Collapsed="true">
+    <Position X="17.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_bakedchar" Collapsed="true">
+    <Position X="13.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_aligned_quad" Collapsed="true">
+    <Position X="1.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_packedchar" Collapsed="true">
+    <Position X="13.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_pack_range" Collapsed="true">
+    <Position X="9.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt_vertex" Collapsed="true">
+    <Position X="13.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt__bitmap" Collapsed="true">
+    <Position X="5.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt__test_oversample_pow2" Collapsed="true">
+    <Position X="32.75" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt__csctx" Collapsed="true">
+    <Position X="1.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="stbtt__point" Collapsed="true">
+    <Position X="9.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="BYTE" Collapsed="true">
+    <Position X="24" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\Colour.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="WORD" Collapsed="true">
+    <Position X="27.5" Y="23.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>graphics\ObjectIndices.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="__unnamed_enum_005e_1" Collapsed="true">
+    <Position X="21.5" Y="22.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAIAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_impl_win32.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_005e_2" Collapsed="true">
+    <Position X="21.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAACAAAAAAAAAAAAAQAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_impl_win32.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiWindowFlags_" Collapsed="true">
+    <Position X="31" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAYQACAQIhAAIggglAAAEQAgBAiAQAAEAABBAAg=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiInputTextFlags_" Collapsed="true">
+    <Position X="25.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQUACAAQAAAAQAAAAAFAQBAgAAAASFYIAAAgAACAEA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiTreeNodeFlags_" Collapsed="true">
+    <Position X="27.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAokAECAAAAAAAAQAgAAEAAAAABSAgAQAAQAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiPopupFlags_" Collapsed="true">
+    <Position X="39.75" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAIAAAAAYAACAAAAAAAAgAAAAQAAIIAAAAIAAE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiSelectableFlags_" Collapsed="true">
+    <Position X="25.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAQAAAAAIAAAAAAAAAAAAAAAAAAgAAASAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiComboFlags_" Collapsed="true">
+    <Position X="39.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAACAAACIAAAAABAAAABAMIA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiTabBarFlags_" Collapsed="true">
+    <Position X="34.5" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAgAAAAAAAEAAEQAAAAAAAAAIYAEAAIAAAAAE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiTabItemFlags_" Collapsed="true">
+    <Position X="38" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAEAAAAAiAAAAAAAAAAgAAAAABAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiFocusedFlags_" Collapsed="true">
+    <Position X="36.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEBCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiHoveredFlags_" Collapsed="true">
+    <Position X="38" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAgAAARAAAAAJAAAAIAAAAAAAAAIAAAAAAAEAAQA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiDragDropFlags_" Collapsed="true">
+    <Position X="32.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEAAAAAAgAAAAAACCAAAAAAQAIAAAAAAAgAgIACAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiDataType_" Collapsed="true">
+    <Position X="27.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAABYAAAAAAAAAAAAAAAAAIAAAAAAAEAAAAAAACAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiDir_" Collapsed="true">
+    <Position X="31" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAADAAAAAAAAAACAABAAAAAAQAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiKey_" Collapsed="true">
+    <Position X="31" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAcIUAoQAiJCAAAgAAAAAEAAAAQAAQAAAACAAAAAI=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiKeyModFlags_" Collapsed="true">
+    <Position X="32.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAQAAAgAEAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiNavInput_" Collapsed="true">
+    <Position X="29.25" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAIACGABAAgCQAQAAAAAAAAgAFACAgBAAAACAEQSAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiConfigFlags_" Collapsed="true">
+    <Position X="25.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAiAAAAAAAAAAAAYAAAAAAAAAAgAAQAEQAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiBackendFlags_" Collapsed="true">
+    <Position X="29.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAABABAAAAAAAoAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiCol_" Collapsed="true">
+    <Position X="34.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AiUgQ7AAABAMRERAQgBAEACh0GAkAABAmEAAAalECIA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiStyleVar_" Collapsed="true">
+    <Position X="32.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBAwAAAQgAUQAQABDQAAAgAAADQgAgBBAAgAAAAAQAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiButtonFlags_" Collapsed="true">
+    <Position X="31" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAEAAAACAQAAAAAAAAAAAAAAAAAAAAAAAAACQAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiColorEditFlags_" Collapsed="true">
+    <Position X="36.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAgAECQARAkCARCAiEAAQIjAAAEAAPAABAAADAAAQ=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiMouseButton_" Collapsed="true">
+    <Position X="38" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAEAAAAAAAAAAAAAAAQAAAAAAAEAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiMouseCursor_" Collapsed="true">
+    <Position X="39.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQAAAAAAAAAAAAAIoAAAiAAAAggIAAAAAAAAIAAABAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiCond_" Collapsed="true">
+    <Position X="24" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEACAgQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImDrawCornerFlags_" Collapsed="true">
+    <Position X="39.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAggAIBBgAAQAAAAAAAAAAAAAAAAAAAAAAQE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImDrawListFlags_" Collapsed="true">
+    <Position X="24" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAggAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAQAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImFontAtlasFlags_" Collapsed="true">
+    <Position X="25.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiItemFlags_" Collapsed="true">
+    <Position X="27.5" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAABQIABAAhAAAAAAAAAAAAAABAgAAAAAAQA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiItemStatusFlags_" Collapsed="true">
+    <Position X="29.25" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AggEAAAAAAwAABAAAAAAAAACAAEEEAAAAAAAAACAAAg=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiButtonFlagsPrivate_" Collapsed="true">
+    <Position X="32.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgABQAAIBQAADkAgAACAAAAAAAAAAAIAABKAAAAAE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiSliderFlags_" Collapsed="true">
+    <Position X="31" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiDragFlags_" Collapsed="true">
+    <Position X="34.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiSelectableFlagsPrivate_" Collapsed="true">
+    <Position X="27.5" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAIAgAAAAAIAAAAACAAAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiTreeNodeFlagsPrivate_" Collapsed="true">
+    <Position X="29.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiSeparatorFlags_" Collapsed="true">
+    <Position X="29.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAAAgAAAAACAAAAAAAAAAIA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiTextFlags_" Collapsed="true">
+    <Position X="24" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiTooltipFlags_" Collapsed="true">
+    <Position X="25.75" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiLayoutType_" Collapsed="true">
+    <Position X="34.5" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiLogType" Collapsed="true">
+    <Position X="36.25" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABCAAAAAAAAAAAAAAAAAACAAAAAIABAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiAxis" Collapsed="true">
+    <Position X="27.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAIAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiPlotType" Collapsed="true">
+    <Position X="38" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiInputSource" Collapsed="true">
+    <Position X="24" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAKAAAgAAAAAAAAAAAAUAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiInputReadMode" Collapsed="true">
+    <Position X="39.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAQABAQAAABAAAACA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiNavHighlightFlags_" Collapsed="true">
+    <Position X="27.5" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAEAAAAAAAAAAAAEAAAAAAEAAAAAAgAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiNavDirSourceFlags_" Collapsed="true">
+    <Position X="24" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAABACAAAAAAAAAAAACA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiNavMoveFlags_" Collapsed="true">
+    <Position X="32.75" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACIAAAAAAAQAAECAAAAQAAAAAAAAIAAAAABAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiNavForward" Collapsed="true">
+    <Position X="25.75" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAACAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiNavLayer" Collapsed="true">
+    <Position X="31" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAABAAgAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiPopupPositionPolicy" Collapsed="true">
+    <Position X="24" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiDataTypePrivate_" Collapsed="true">
+    <Position X="29.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAACgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiNextWindowDataFlags_" Collapsed="true">
+    <Position X="36.25" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAQAAAQAAIEAAEBQAAAAAAE=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiNextItemDataFlags_" Collapsed="true">
+    <Position X="34.5" Y="16" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAQAAAAAAAAAQAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiColumnsFlags_" Collapsed="true">
+    <Position X="38" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAEAAAAAAAAAAAAAAAAEAAAAAQAAAAAAAAACA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiTabBarFlagsPrivate_" Collapsed="true">
+    <Position X="36.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAgAAAIAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ImGuiTabItemFlagsPrivate_" Collapsed="true">
+    <Position X="39.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imgui_internal.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0062_1" Collapsed="true">
+    <Position X="24" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAIAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_rectpack.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0062_2" Collapsed="true">
+    <Position X="25.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_rectpack.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0064_6" Collapsed="true">
+    <Position X="36.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAQAAAAAAAAAAAAAAAQAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0064_9" Collapsed="true">
+    <Position X="38" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAIAIAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0064_10" Collapsed="true">
+    <Position X="27.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIEAAAAAAAAAAAQAAAAQAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0064_11" Collapsed="true">
+    <Position X="29.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAAAAAAACEAAACAAAAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0064_12" Collapsed="true">
+    <Position X="31" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAQECAAIAAAACAAAAAAAAAAEAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0064_13" Collapsed="true">
+    <Position X="32.75" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAIAAQAGAIAAAAACAAAAAACAAQAAAMAIAAAA=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="__unnamed_enum_0064_14" Collapsed="true">
+    <Position X="34.5" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAIACAgAAAAAIAAQAAACAAAAQAAgCIEgQ=</HashCode>
+      <FileName>D:\OneDrive - Staffordshire University\GitHub\Further-Games-and-Graphics\DX11 Framework\External\imgui\imstb_truetype.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TextureStorageType" Collapsed="true">
+    <Position X="32.75" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAkEhAAA=</HashCode>
+      <FileName>graphics\Texture.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -368,6 +368,9 @@
     <None Include="res\objects.json">
       <Filter>Resource Files\Resources</Filter>
     </None>
+    <None Include="ClassDiagram.cd">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico">
