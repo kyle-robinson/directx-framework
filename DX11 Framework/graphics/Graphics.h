@@ -47,8 +47,8 @@ public:
 	void RenderFrame();
 	void EndFrame();
 	void Update( float dt );
-	UINT GetWidth() const noexcept;
-	UINT GetHeight() const noexcept;
+	UINT GetWidth() const noexcept { return windowWidth; }
+	UINT GetHeight() const noexcept { return windowHeight; }
 
 	Light light;
 	int menuPage;

@@ -165,15 +165,9 @@ void Graphics::RenderFrame()
 	        context->PSSetConstantBuffers( 1, 1, cb_ps_scene.GetAddressOf() );
             switch ( menuPage )
             {
-            case 0:
-                menuCamera.Draw( camera2D.GetWorldOrthoMatrix() );
-                break;
-            case 1:
-                menuLight.Draw( camera2D.GetWorldOrthoMatrix() );
-                break;
-            case 2:
-                menuScene.Draw( camera2D.GetWorldOrthoMatrix() );
-                break;
+                case 0: menuCamera.Draw( camera2D.GetWorldOrthoMatrix() ); break;
+                case 1: menuLight.Draw( camera2D.GetWorldOrthoMatrix() ); break;
+                case 2: menuScene.Draw( camera2D.GetWorldOrthoMatrix() ); break;
             }
         }
     }
@@ -273,16 +267,6 @@ void Graphics::Update( float dt )
     light.UpdatePhysics();
     light.UpdateFlicker( cb_ps_light );
     Collisions::CheckCollision3D( cameras["Main"], light, 5.0f ) ? lightParams.isEquippable = true : lightParams.isEquippable = false;
-}
-
-UINT Graphics::GetWidth() const noexcept
-{
-    return windowWidth;
-}
-
-UINT Graphics::GetHeight() const noexcept
-{
-    return windowHeight;
 }
 
 bool Graphics::InitializeDirectX( HWND hWnd )
