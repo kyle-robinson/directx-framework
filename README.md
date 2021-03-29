@@ -1,6 +1,6 @@
 # Graphics Framework
 
-A graphics framework create using DirectX 11 that allows for the simple creation of graphics by means of the system architecture and an entity-component system.<br/>
+A graphics framework created using DirectX 11 that allows for the simple creation of graphics by means of the system architecture and an entity-component system.<br/>
 
 <!-- *Created with reference to <a href="https://www.youtube.com/channel/UC5Lxe7GAsk_f8qMBsNmlOJg">Jpres</a>'s DirectX Programming Tutorials* -->
 *- Click image to view on YouTube -*
