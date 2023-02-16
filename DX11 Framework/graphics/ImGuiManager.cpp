@@ -3,6 +3,7 @@
 #include "ModelData.h"
 #include "GraphicsResource.h"
 #include "RenderableGameObject.h"
+#include "../utility/Structs.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
@@ -90,7 +91,7 @@ void ImGuiManager::RenderSceneWindow( Graphics& gfx )
     {
         ImGui::ColorEdit3( "Clear Color", sceneParams.clearColor );
         ImGui::SliderFloat( "Blend Factor", &sceneParams.alphaFactor, 0.0f, 1.0f );
-			    
+
         static int fillGroup = 0;
 	    if ( ImGui::RadioButton( "Solid", &fillGroup, 0 ) )
             sceneParams.rasterizerSolid = true;
@@ -185,7 +186,7 @@ void ImGuiManager::RenderLightWindow( Light& light, ConstantBuffer<CB_PS_light>&
         ImGui::SameLine();
         if ( ImGui::RadioButton( "Point", &lightGroup, 1 ) )
             cb_ps_light.data.usePointLight = true;
-        
+
         if ( cb_ps_light.data.usePointLight )
         {
             if ( lightParams.isEquippable )
@@ -276,7 +277,7 @@ void ImGuiManager::RenderFogWindow( ConstantBuffer<CB_VS_fog>& cb_vs_fog )
 }
 
 void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models )
-{    
+{
     if ( ImGui::Begin( "Models", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
     {
         for ( unsigned int i = 0; i < models.size(); i++ )
@@ -312,11 +313,11 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
                     ImGui::SliderFloat( "Pitch", &rotations.x, -2.0f, 2.0f, "%.1f" );
                     ImGui::SliderFloat( "Yaw", &rotations.y, -2.0f, 2.0f, "%.1f" );
                     ImGui::SliderFloat( "Roll", &rotations.z, -2.0f, 2.0f, "%.1f" );
-                
+
                     rotations.x = XMConvertToRadians( rotations.x );
                     rotations.y = XMConvertToRadians( rotations.y );
                     rotations.z = XMConvertToRadians( rotations.z );
-                
+
                     models[i].AdjustRotation( rotations );
 
                     ImGui::PushStyleColor( ImGuiCol_Button, ImVec4( 1.0f, 0.5f, 0.5f, 1.0f ) );
@@ -358,7 +359,7 @@ void ImGuiManager::RenderModelWindow( std::vector<RenderableGameObject>& models 
 void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::string& cameraToUse )
 {
     if ( ImGui::Begin( "Camera", FALSE, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove ) )
-    {   
+    {
         static int active = 0;
         static bool selectedCamera[3];
         static std::string previewValue = cameraToUse;
@@ -394,7 +395,7 @@ void ImGuiManager::RenderCameraWindow( Graphics& gfx, Camera3D& camera3D, std::s
             if ( ImGui::RadioButton( "Fly", &cameraGroup, 1 ) )
                 gfx.flyCamera = true;
         }
-        
+
         ImGui::PushStyleColor( ImGuiCol_Text, { 0.5f, 1.0f, 0.8f, 1.0f } );
         if ( ImGui::TreeNode( "Position" ) )
         {

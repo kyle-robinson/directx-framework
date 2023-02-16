@@ -12,6 +12,7 @@
 #include "RenderTarget.h"
 #include "ObjectIndices.h"
 #include "ObjectVertices.h"
+#include "../utility/Structs.h"
 #include "../utility/Collisions.h"
 #include "../utility/Billboarding.h"
 #include <fstream>
@@ -97,9 +98,9 @@ void Graphics::BeginFrame()
 }
 
 void Graphics::RenderFrame()
-{   
+{
     // setup sprite masking
-    if ( sceneParams.useMask ) 
+    if ( sceneParams.useMask )
     {
         Shaders::BindShaders( context.Get(), vertexShader_2D, pixelShader_2D_discard );
         stencilStates["Mask"]->Bind( *this );
@@ -116,7 +117,7 @@ void Graphics::RenderFrame()
     for ( unsigned int i = 0; i < cubes.size(); i++ )
         cubes[i]->Draw( cb_vs_matrix, boxTexture.Get() );
     ground.DrawInstanced( cb_vs_matrix, cb_ps_light, grassTexture.Get() );
-    
+
     // point light with outlining
     if ( lightParams.lightHover )
     {
@@ -126,13 +127,13 @@ void Graphics::RenderFrame()
 
         stencilStates["Write"]->Bind( *this );
         light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
-    
+
         Shaders::BindShaders( context.Get(), vertexShader_color, pixelShader_color );
         light.SetScale( outlineParams.outlineSize, outlineParams.outlineSize, outlineParams.outlineSize );
         stencilStates["Mask"]->Bind( *this );
         light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
     }
-    
+
     Shaders::BindShaders( context.Get(), vertexShader_light, pixelShader_noLight );
     light.SetScale( 1.0f, 1.0f, 1.0f );
 	light.Draw( cameras[cameraToUse]->GetViewMatrix(), cameras[cameraToUse]->GetProjectionMatrix() );
@@ -186,7 +187,7 @@ void Graphics::RenderFrame()
 }
 
 void Graphics::EndFrame()
-{   
+{
     // set and clear back buffer
     backBuffer->BindAsBuffer( *this, sceneParams.clearColor );
 
@@ -234,7 +235,7 @@ void Graphics::EndFrame()
     // unbind rtv and srv
     renderTarget->BindAsNull( *this );
     backBuffer->BindAsNull( *this );
-    
+
     // display frame
 	HRESULT hr = swapChain->GetSwapChain()->Present( 1, NULL );
 	if ( FAILED( hr ) )
@@ -332,7 +333,7 @@ bool Graphics::InitializeShaders()
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D pixel shader!" );
         hr = pixelShader_2D_discard.Initialize( device, L"res\\shaders\\Sprite_Discard.fx" );
 		COM_ERROR_IF_FAILED( hr, "Failed to create 2D discard pixel shader!" );
-        
+
         /*   POST-PROCESSING   */
 	    hr = vertexShader_full.Initialize( device, L"res\\shaders\\Fullscreen.fx", IPL::layoutPos, ARRAYSIZE( IPL::layoutPos ) );
 		COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen vertex shader!" );
@@ -344,7 +345,7 @@ bool Graphics::InitializeShaders()
         ErrorLogger::Log( exception );
         return false;
     }
-	
+
 	return true;
 }
 

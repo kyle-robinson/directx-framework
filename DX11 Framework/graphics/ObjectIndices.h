@@ -6,22 +6,6 @@ typedef unsigned short WORD;
 
 namespace IDX
 {
-    WORD indicesLightCube[] =
-    {
-        23, 22, 20,
-        22, 21, 20,
-        19, 18, 16,
-        18, 17, 16,
-        15, 14, 12,
-        14, 13, 12,
-        11, 10, 8,
-        10, 9, 8,
-        7, 6, 4,
-        6, 5, 4,
-        3, 2, 0,
-        2, 1, 0
-    };
-
     WORD indicesCube[] =
     {
         0, 1, 2,    // side 1
@@ -46,18 +30,6 @@ namespace IDX
         1, 3, 4,
         3, 2, 4,
         2, 0, 4,
-    };
-
-    WORD indicesQuad[] =
-    {
-        0, 1, 3,
-        1, 2, 3
-    };
-
-    WORD indicesFullscreen[] =
-    {
-        0, 1, 2,
-        1, 3, 2
     };
 }
 

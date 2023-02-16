@@ -16,7 +16,7 @@ struct Drawable
     DirectX::XMFLOAT3 rotation;
     DirectX::XMFLOAT3 scale;
 };
-std::vector<Drawable> drawables;
+static std::vector<Drawable> drawables;
 
 class ModelData
 {

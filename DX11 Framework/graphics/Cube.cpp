@@ -1,6 +1,47 @@
 #include "Cube.h"
-#include "ObjectIndices.h"
-#include "ObjectVertices.h"
+
+Vertex3D verticesCube_PosTexNrm[] = {
+        { { -0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f }, { 0.0f,  1.0f,  0.0f } }, // +Y (top face)
+        { {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f }, { 0.0f,  1.0f,  0.0f } },
+        { {  0.5f,  0.5f,  0.5f }, { 1.0f, 1.0f }, { 0.0f,  1.0f,  0.0f } },
+        { { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f }, { 0.0f,  1.0f,  0.0f } },
+        { { -0.5f, -0.5f,  0.5f }, { 0.0f, 0.0f }, { 0.0f, -1.0f,  0.0f } }, // -Y (bottom face)
+        { {  0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f }, { 0.0f, -1.0f,  0.0f } },
+        { {  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f }, { 0.0f, -1.0f,  0.0f } },
+        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f }, { 0.0f, -1.0f,  0.0f } },
+        { {  0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }, { 1.0f,  0.0f,  0.0f } }, // +X (right face)
+        { {  0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f }, { 1.0f,  0.0f,  0.0f } },
+        { {  0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f }, { 1.0f,  0.0f,  0.0f } },
+        { {  0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f }, { 1.0f,  0.0f,  0.0f } },
+        { { -0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f }, { 1.0f,  0.0f,  0.0f } }, // -X (left face)
+        { { -0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f }, { 1.0f,  0.0f,  0.0f } },
+        { { -0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f }, { 1.0f,  0.0f,  0.0f } },
+        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f }, { 1.0f,  0.0f,  0.0f } },
+        { { -0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f }, { 0.0f,  0.0f,  1.0f } }, // +Z (front face)
+        { {  0.5f,  0.5f,  0.5f }, { 1.0f, 0.0f }, { 0.0f,  0.0f,  1.0f } },
+        { {  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f }, { 0.0f,  0.0f,  1.0f } },
+        { { -0.5f, -0.5f,  0.5f }, { 0.0f, 1.0f }, { 0.0f,  0.0f,  1.0f } },
+        { {  0.5f,  0.5f, -0.5f }, { 0.0f, 0.0f }, { 0.0f,  0.0f, -1.0f } }, // -Z (back face)
+        { { -0.5f,  0.5f, -0.5f }, { 1.0f, 0.0f }, { 0.0f,  0.0f, -1.0f } },
+        { { -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f }, { 0.0f,  0.0f, -1.0f } },
+        { {  0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f }, { 0.0f,  0.0f, -1.0f } }
+};
+
+WORD indicesLightCube[] =
+{
+    23, 22, 20,
+    22, 21, 20,
+    19, 18, 16,
+    18, 17, 16,
+    15, 14, 12,
+    14, 13, 12,
+    11, 10, 8,
+    10, 9, 8,
+    7, 6, 4,
+    6, 5, 4,
+    3, 2, 0,
+    2, 1, 0
+};
 
 Cube::Cube( ID3D11DeviceContext* context, ID3D11Device* device )
 {
@@ -13,9 +54,9 @@ bool Cube::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
 
     try
     {
-        HRESULT hr = vb_cube.Initialize( device, VTX::verticesCube_PosTexNrm, ARRAYSIZE( VTX::verticesCube_PosTexNrm ) );
+        HRESULT hr = vb_cube.Initialize( device, verticesCube_PosTexNrm, ARRAYSIZE( verticesCube_PosTexNrm ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube vertex buffer!" );
-        hr = ib_cube.Initialize( device, IDX::indicesLightCube, ARRAYSIZE( IDX::indicesLightCube ) );
+        hr = ib_cube.Initialize( device, indicesLightCube, ARRAYSIZE( indicesLightCube ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create cube index buffer!" );
 
         SetPosition( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
@@ -28,7 +69,7 @@ bool Cube::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
         ErrorLogger::Log( exception );
         return false;
     }
-    
+
     return true;
 }
 

@@ -9,7 +9,6 @@
 #include "Shaders.h"
 #include "Camera2D.h"
 #include "ImGuiManager.h"
-#include "../utility/Structs.h"
 #include "RenderableGameObject.h"
 #include <dxtk/SpriteFont.h>
 #include <dxtk/SpriteBatch.h>

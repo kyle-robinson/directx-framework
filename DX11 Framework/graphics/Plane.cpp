@@ -1,6 +1,18 @@
 #include "Plane.h"
-#include "ObjectIndices.h"
-#include "ObjectVertices.h"
+
+Vertex3D verticesQuad[] =
+{
+    { { -3.0f,  3.0f, 0.0f }, { 0.0f, 0.0f }, { 0.0f, -1.0f, 0.0f } },
+    { {  3.0f,  3.0f, 0.0f }, { 1.0f, 0.0f }, { 0.0f, -1.0f, 0.0f } },
+    { {  3.0f, -3.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, -1.0f, 0.0f } },
+    { { -3.0f, -3.0f, 0.0f }, { 0.0f, 1.0f }, { 0.0f, -1.0f, 0.0f } }
+};
+
+WORD indicesQuad[] =
+{
+    0, 1, 3,
+    1, 2, 3
+};
 
 /// NORMAL PLANE
 bool Plane::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
@@ -9,9 +21,9 @@ bool Plane::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
 
     try
     {
-        HRESULT hr = vb_plane.Initialize( device, VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
+        HRESULT hr = vb_plane.Initialize( device, verticesQuad, ARRAYSIZE( verticesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad vertex buffer!" );
-        hr = ib_plane.Initialize( device, IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
+        hr = ib_plane.Initialize( device, indicesQuad, ARRAYSIZE( indicesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create quad index buffer!" );
 
         SetPosition( XMFLOAT3( 0.0f, 0.0f, 0.0f ) );
@@ -48,9 +60,9 @@ bool PlaneInstanced::InitializeInstanced( ID3D11DeviceContext* context, ID3D11De
 
     try
     {
-        HRESULT hr = vb_plane.Initialize( device, VTX::verticesQuad, ARRAYSIZE( VTX::verticesQuad ) );
+        HRESULT hr = vb_plane.Initialize( device, verticesQuad, ARRAYSIZE( verticesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create instanced quad vertex buffer!" );
-        hr = ib_plane.Initialize( device, IDX::indicesQuad, ARRAYSIZE( IDX::indicesQuad ) );
+        hr = ib_plane.Initialize( device, indicesQuad, ARRAYSIZE( indicesQuad ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create instanced quad index buffer!" );
     }
     catch ( COMException& exception )
@@ -107,15 +119,29 @@ void PlaneInstanced::UpdateInstanced( int tileSize, int tileOffset, int worldOff
 }
 
 /// FULLSCREEN PLANE
+Vertex_Pos verticesFullscreen[] =
+{
+    { { -1.0f,  1.0f } },
+    { {  1.0f,  1.0f } },
+    { { -1.0f, -1.0f } },
+    { {  1.0f, -1.0f } },
+};
+
+WORD indicesFullscreen[] =
+{
+    0, 1, 2,
+    1, 3, 2
+};
+
 bool PlaneFullscreen::Initialize( ID3D11DeviceContext* context, ID3D11Device* device )
 {
     this->context = context;
 
     try
     {
-        HRESULT hr = vb_full.Initialize( device, VTX::verticesFullscreen, ARRAYSIZE( VTX::verticesFullscreen ) );
+        HRESULT hr = vb_full.Initialize( device, verticesFullscreen, ARRAYSIZE( verticesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad vertex buffer!" );
-        hr = ib_full.Initialize( device, IDX::indicesFullscreen, ARRAYSIZE( IDX::indicesFullscreen ) );
+        hr = ib_full.Initialize( device, indicesFullscreen, ARRAYSIZE( indicesFullscreen ) );
         COM_ERROR_IF_FAILED( hr, "Failed to create fullscreen quad index buffer!" );
     }
     catch ( COMException& exception )
@@ -123,14 +149,14 @@ bool PlaneFullscreen::Initialize( ID3D11DeviceContext* context, ID3D11Device* de
         ErrorLogger::Log( exception );
         return false;
     }
-    
+
     return true;
 }
 
-void PlaneFullscreen::SetupBuffers( VertexShader& vs_full, PixelShader& ps_full, ConstantBuffer<CB_VS_fullscreen>& cb_vs_full, bool& multiView ) noexcept 
+void PlaneFullscreen::SetupBuffers( VertexShader& vs_full, PixelShader& ps_full, ConstantBuffer<CB_VS_fullscreen>& cb_vs_full, bool& multiView ) noexcept
 {
     UINT offset = 0;
-    Shaders::BindShaders( context, vs_full, ps_full );    
+    Shaders::BindShaders( context, vs_full, ps_full );
     context->IASetVertexBuffers( 0, 1, vb_full.GetAddressOf(), vb_full.StridePtr(), &offset );
     context->IASetIndexBuffer( ib_full.Get(), DXGI_FORMAT_R16_UINT, 0 );
     cb_vs_full.data.multiView = multiView;

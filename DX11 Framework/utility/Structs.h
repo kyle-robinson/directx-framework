@@ -13,7 +13,8 @@ struct SceneParameters
 	bool useBillboarding = false;
 	float alphaFactor = 1.0f;
 	float clearColor[4] = { 0.0f, 0.75f, 1.0f, 1.0f };
-} sceneParams;
+};
+static SceneParameters sceneParams;
 
 struct ViewportParameters
 {
@@ -22,14 +23,16 @@ struct ViewportParameters
 	bool useRight = false;
 	bool useSplit = false;
 	bool controlLeftSide = true;
-} viewportParams;
+};
+static ViewportParameters viewportParams;
 
 struct SamplerParameters
 {
 	bool useAnisotropic = true;
 	bool useBilinear = false;
 	bool usePoint = false;
-} samplerParams;
+};
+static SamplerParameters samplerParams;
 
 struct SpawnWindow
 {
@@ -39,7 +42,8 @@ struct SpawnWindow
 	bool modelWindow = false;
 	bool cameraWindow = false;
 	bool stencilWindow = false;
-} spawnWindow;
+};
+static SpawnWindow spawnWindow;
 
 struct LightParameters
 {
@@ -51,12 +55,14 @@ struct LightParameters
 	bool lightFlicker = false;
 	float flickerAmount = 2.0f;
 	bool lightIntersection = false;
-} lightParams;
+};
+static LightParameters lightParams;
 
 struct StencilOutline
 {
 	XMFLOAT3 outlineColor = { 1.0f, 0.0f, 0.0f };
 	float outlineSize = 1.3f;
-} outlineParams;
+};
+static StencilOutline outlineParams;
 
 #endif
