@@ -94,28 +94,28 @@
     <GenerateManifest>true</GenerateManifest>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)/External/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\External\lib;$(SolutionDir)\External\lib\x86\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\External\lib;$(SolutionDir)\External\lib\_x86\_Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)/External/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\External\lib;$(SolutionDir)\External\lib\x64\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\External\lib;$(SolutionDir)\External\lib\_x64\_Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x86;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)/External/;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\External\lib;$(SolutionDir)\External\lib\x86\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\External\lib;$(SolutionDir)\External\lib\_x86\_Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'">
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x64;$(DXSDK_DIR)Utilities\bin\x86;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)/External/;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\External\lib;$(SolutionDir)\External\lib\x64\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\External\lib;$(SolutionDir)\External\lib\_x64\_Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
     <LinkIncremental>false</LinkIncremental>
