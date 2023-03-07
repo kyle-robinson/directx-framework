@@ -11,7 +11,7 @@
 A graphics framework created using DirectX 11 that allows for the simple creation of graphics by means of the system architecture and an entity-component system.<br/>
 
 <!-- *Created with reference to <a href="https://www.youtube.com/channel/UC5Lxe7GAsk_f8qMBsNmlOJg">Jpres</a>'s DirectX Programming Tutorials* -->
-*- Click <a href="https://youtu.be/_9_MtRrjU20" target="_blank">here</a> to view on YouTube -*
+*- Click <a href="https://kyle-robinson.github.io/html/directx-framework" target="_blank">here</a> to view project on website -*
 
 <img src="directx-framework.jpg" alt="DirectX Framework Thumbnail" border="10" />
 
