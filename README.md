@@ -5,6 +5,8 @@
 [![MSBuild-Release](https://github.com/kyle-robinson/directx-framework/actions/workflows/msbuild-release.yml/badge.svg)](https://github.com/kyle-robinson/directx-framework/actions/workflows/msbuild-release.yml)
 &nbsp;
 [![CodeQL](https://github.com/kyle-robinson/directx-framework/actions/workflows/codeql.yml/badge.svg)](https://github.com/kyle-robinson/directx-framework/actions/workflows/codeql.yml)
+&nbsp;
+<img src="https://img.shields.io/static/v1?label=University&message=Year 2&color=49a1e5&style=flat&logo=nintendogamecube&logoColor=CCCCCC" />
 
 A graphics framework created using DirectX 11 that allows for the simple creation of graphics by means of the system architecture and an entity-component system.<br/>
 
